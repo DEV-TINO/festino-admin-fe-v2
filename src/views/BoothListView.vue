@@ -1,0 +1,63 @@
+<script setup>
+import IconBoothList from '@/components/icons/IconBoothList.vue';
+import BoothList from '@/components/booths/BoothRow.vue';
+import { onMounted, ref } from 'vue';
+
+import { useBoothList } from '@/stores/booths/boothList';
+import { storeToRefs } from 'pinia';
+import router from '@/router';
+
+const useBoothListStore = useBoothList();
+const { boothList } = storeToRefs(useBoothListStore);
+
+const handleClickBoothCreate = () => {
+  router.push({ name: 'BoothCreate' });
+};
+
+onMounted(() => {
+  useBoothListStore.getAllBoothList();
+});
+</script>
+
+<template>
+  <div class="flex flex-col px-4 gap-[40px] min-w-[630px] pb-20">
+    <!-- Booth header -->
+    <div class="flex justify-between pt-[50px] lg:pt-[100px] min-w-[350px]">
+      <div class="flex items-center gap-4">
+        <IconBoothList />
+        <div class="text-primary-900 text-4xl font-semibold">부스리스트</div>
+      </div>
+      <div class="flex gap-4">
+        <button
+          class="hover:bg-primary-900-dark w-[80px] h-[48px] rounded-xl text-xl lg:w-[106px] lg:h-[53px] flex items-center justify-center text-white lg:text-3xl bg-primary-900 lg:rounded-[20px] cursor-pointer select-none"
+          type="button"
+          @click="handleClickBoothCreate()"
+        >
+          등록
+        </button>
+      </div>
+    </div>
+
+    <!-- Booth Body -->
+    <div class="w-full flex flex-col h-full shadow-primary rounded-b-[20px]">
+      <!-- Header -->
+      <div
+        class="text-xs lg:text-xl font-semibold h-[70px] w-full bg-primary-700 rounded-t-[20px] flex justify-between gap-4 flex-nowrap overflow-x-auto items-center px-4 lg:px-[60px]"
+      >
+        <div class="text-nowrap min-w-[21px] w-[21px] lg:min-w-[35px] text-center">번호</div>
+        <div class="text-balance break-keep min-w-[75px] w-[75px] lg:min-w-[130px] text-center">관리자 카테고리</div>
+        <div class="text-balance min-w-[42px] w-[70px] lg:min-w-[70px] lg:w-[140px] text-center">부스이름</div>
+        <div class="text-balance min-w-[42px] w-[70px] lg:min-w-[70px] lg:w-[140px] text-center">운영시간</div>
+        <div class="text-balance w-fit lg:min-w-[70px] lg:w-[70px] text-center">예약가능</div>
+        <div class="text-balance w-fit lg:min-w-[70px] lg:w-[70px] text-center">오픈</div>
+        <div class="text-balance w-fit lg:min-w-[70px] lg:w-[70px] text-center">주문가능</div>
+        <div class="text-balance text-center w-[60px] lg:w-[100px]">부스정보</div>
+      </div>
+
+      <!-- Body -->
+      <BoothList v-for="(booth, index) in boothList" :key="booth.id" :boothIndex="index + 1" :boothInfo="booth" />
+    </div>
+  </div>
+</template>
+
+<style lang="scss" scoped></style>

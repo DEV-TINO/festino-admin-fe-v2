@@ -1,0 +1,719 @@
+<script setup>
+import IconBoothEdit from '@/components/icons/IconBoothEdit.vue';
+import IconBoothListToggle from '@/components/icons/IconBoothListToggle.vue';
+import IconFileUpload from '@/components/icons/IconFileUpload.vue';
+import router from '@/router';
+import { useBoothDetail } from '@/stores/booths/boothDetail';
+import { storeToRefs } from 'pinia';
+import { onMounted, ref } from 'vue';
+import { ADMIN_CATEGORY, MENU_TYPE } from '@/utils/constants';
+import { alertError, api, imagesUpload } from '@/utils/api';
+import IconRadio from '@/components/icons/IconRadio.vue';
+import { useMenuModal } from '@/stores/menu/menuModal';
+import { useUser } from '@/stores/user';
+
+const props = defineProps({
+  boothId: String,
+});
+
+const boothDetailStore = useBoothDetail();
+const useUserStore = useUser();
+const { isAdmin } = storeToRefs(useUserStore);
+
+const { init, reset, deleteMenu, createMenu, addDeleteMenu, patchMenu } = boothDetailStore;
+const { boothInfo, menuList, createMenuList, deleteMenuList, boothType, patchMenuList, originalMenuList } =
+  storeToRefs(boothDetailStore);
+
+const menuModalStore = useMenuModal();
+const { openModal } = menuModalStore;
+
+const serviceHours = ref('');
+
+const fileUrls = ref([]);
+
+const isSubmit = ref(false);
+const isOpen = ref(false);
+
+const useReservation = ref(false);
+const useCoupon = ref(false);
+const useOrder = ref(false);
+
+const handleFileinput = (event) => {
+  const files = event.target.files;
+  handleFiles(files);
+};
+
+const handleFiles = async (files) => {
+  if (files.length > 0) {
+    const urls = await imagesUpload(files);
+    fileUrls.value = [...fileUrls.value, ...urls];
+  }
+};
+
+const setBackgroundImage = (url) => {
+  return {
+    backgroundImage: `url(${url})`,
+  };
+};
+
+const handleDragStartBoothImage = (event, index) => {
+  event.dataTransfer.setData('text/plain', index);
+};
+
+const handleDropBoothImage = (event, dropIndex) => {
+  const dragIndex = event.dataTransfer.getData('text/plain');
+  const item = fileUrls.value.splice(dragIndex, 1)[0];
+  fileUrls.value.splice(dropIndex, 0, item);
+};
+
+const handleDragStartMenu = (event, index) => {
+  event.dataTransfer.setData('text/plain', index);
+};
+
+const handleDropMenu = (event, dropIndex) => {
+  const dragIndex = event.dataTransfer.getData('text/plain');
+  const item = menuList.value.splice(dragIndex, 1)[0];
+  menuList.value.splice(dropIndex, 0, item);
+};
+
+const handleInputAdminName = (event) => {
+  boothInfo.value.adminName = event.target.value;
+};
+
+const handleInputAdminCategory = (event) => {
+  boothInfo.value.adminCategory = event.target.value;
+};
+
+const handleInputBoothName = (event) => {
+  boothInfo.value.boothName = event.target.value;
+};
+
+const handleInputServiceHours = (event) => {
+  serviceHours.value = event.target.value;
+};
+
+const handleInputBoothIntro = (event) => {
+  boothInfo.value.boothIntro = event.target.value;
+};
+
+const handleClickDeleteMenu = async ({ menuIndex, menuId }) => {
+  addDeleteMenu(menuId);
+  menuList.value.splice(menuIndex, 1);
+};
+
+const handleClickSubmit = async () => {
+  if (isSubmit.value) return;
+
+  isSubmit.value = true;
+
+  if (
+    !boothInfo.value.adminName.length ||
+    !boothInfo.value.boothName.length ||
+    !serviceHours.value.length ||
+    !boothInfo.value.boothIntro.length
+  ) {
+    return;
+  }
+  const pattern = /^([01]?[0-9]|2[0-3]):[0-5][0-9]\s*~\s*([01]?[0-9]|2[0-4]):([0-5][0-9]|60)$/;
+
+  if (!pattern.test(serviceHours.value.trim())) {
+    alert('올바른 운영시간을 입력해주세요. 예: 00:00 ~ 24:00');
+    return;
+  }
+
+  const [startTime, endTime] = serviceHours.value.split('~').map((time) => time.trim());
+
+  boothInfo.value.openTime = startTime;
+  boothInfo.value.closeTime = endTime;
+  boothInfo.value.boothImage = fileUrls.value;
+  boothInfo.value.isOpen = isOpen.value;
+
+  console.log('[Submit]', boothInfo.value);
+
+  let newBoothId = '';
+
+  const saveBoothUrl = `/admin/booth/${ADMIN_CATEGORY[boothInfo.value.adminCategory]}`;
+
+  const baseBoothInfo = {
+    boothName: boothInfo.value.boothName,
+    adminName: boothInfo.value.adminName,
+    adminCategory: boothInfo.value.adminCategory,
+    openTime: boothInfo.value.openTime,
+    closeTime: boothInfo.value.closeTime,
+    boothIntro: boothInfo.value.boothIntro,
+    boothImage: boothInfo.value.boothImage,
+    location: '',
+    isOpen: boothInfo.value.isOpen,
+  };
+
+  // Make Booth or Patch
+  if (props.boothId) {
+    if (ADMIN_CATEGORY[boothInfo.value.adminCategory] === 'night') {
+      try {
+        const nightSaveBoothResponse = await api.put(saveBoothUrl, {
+          ...baseBoothInfo,
+          boothId: props.boothId,
+          isOrder: useOrder.value,
+          isReservation: useReservation.value,
+        });
+        const nightSaveBoothData = nightSaveBoothResponse.data;
+        console.log(nightSaveBoothData);
+        if (nightSaveBoothData.success) {
+          newBoothId = nightSaveBoothData.boothId;
+        } else {
+          alert('부스 정보를 저장하는데 실패했습니다.');
+          return;
+        }
+      } catch (error) {
+        console.error(error);
+        alertError(error);
+      }
+    } else if (ADMIN_CATEGORY[boothInfo.value.adminCategory] === 'day') {
+      try {
+        const daySaveBoothResponse = await api.put(saveBoothUrl, {
+          ...baseBoothInfo,
+          boothId: props.boothId,
+        });
+        const daySaveBoothData = daySaveBoothResponse.data;
+        console.log(daySaveBoothData);
+        if (daySaveBoothData.success) {
+          newBoothId = daySaveBoothData.boothId;
+        } else {
+          alert('부스 정보를 저장하는데 실패했습니다.');
+          return;
+        }
+      } catch (error) {
+        console.error(error);
+        alertError(error);
+      }
+    } else if (ADMIN_CATEGORY[boothInfo.value.adminCategory] === 'food') {
+      try {
+        const foodSaveBoothResponse = await api.put(saveBoothUrl, {
+          ...baseBoothInfo,
+          boothId: props.boothId,
+        });
+
+        const foodSaveBoothData = foodSaveBoothResponse.data;
+        console.log(foodSaveBoothData);
+        if (foodSaveBoothData.success) {
+          newBoothId = foodSaveBoothData.boothId;
+        } else {
+          alert('부스 정보를 저장하는데실패했습니다.');
+          return;
+        }
+      } catch (error) {
+        console.error(error);
+        alertError(error);
+      }
+    } else {
+      alert('부스 카테고리를 선택해주세요.');
+      return;
+    }
+  } else {
+    if (ADMIN_CATEGORY[boothInfo.value.adminCategory] === 'night') {
+      try {
+        const nightSaveBoothResponse = await api.post(saveBoothUrl, {
+          ...baseBoothInfo,
+          isOrder: useOrder.value,
+          isReservation: useReservation.value,
+        });
+        const nightSaveBoothData = nightSaveBoothResponse.data;
+        console.log(nightSaveBoothData);
+        if (nightSaveBoothData.success) {
+          newBoothId = nightSaveBoothData.boothId;
+        } else {
+          alert('부스 정보를 저장하는데 실패했습니다.');
+          return;
+        }
+      } catch (error) {
+        console.error(error);
+        alertError(error);
+      }
+    } else if (ADMIN_CATEGORY[boothInfo.value.adminCategory] === 'day') {
+      try {
+        const daySaveBoothResponse = await api.post(saveBoothUrl, {
+          ...baseBoothInfo,
+        });
+        const daySaveBoothData = daySaveBoothResponse.data;
+        console.log(daySaveBoothData);
+        if (daySaveBoothData.success) {
+          newBoothId = daySaveBoothData.boothId;
+        } else {
+          alert('부스 정보를 저장하는데 실패했습니다.');
+          return;
+        }
+      } catch (error) {
+        console.error(error);
+        alertError(error);
+      }
+    } else if (ADMIN_CATEGORY[boothInfo.value.adminCategory] === 'food') {
+      try {
+        const foodSaveBoothResponse = await api.post(saveBoothUrl, {
+          ...baseBoothInfo,
+        });
+
+        const foodSaveBoothData = foodSaveBoothResponse.data;
+        console.log(foodSaveBoothData);
+        if (foodSaveBoothData.success) {
+          newBoothId = foodSaveBoothData.boothId;
+        } else {
+          alert('부스 정보를 저장하는데실패했습니다.');
+          return;
+        }
+      } catch (error) {
+        console.error(error);
+        alertError(error);
+      }
+    } else {
+      alert('부스 카테고리를 선택해주세요.');
+      return;
+    }
+  }
+
+  boothInfo.value.boothId = newBoothId;
+
+  menuList.value.forEach((menu) => {
+    const findPatchMenu = patchMenuList.value.find((patchMenu) => patchMenu.menuId === menu.menuId);
+    const findCreateMenu = createMenuList.value.find((createMenu) => createMenu.menuName === menu.menuName);
+
+    if (findPatchMenu) {
+      findPatchMenu.isSoldOut = menu.isSoldOut;
+    }
+    if (findCreateMenu) {
+      findCreateMenu.isSoldOut = menu.isSoldOut;
+    }
+  });
+
+  console.log('[Submit] MenuList', menuList.value);
+  console.log('[Submit] CreateMenuList', createMenuList.value);
+  console.log('[Submit] DeleteMenuList', deleteMenuList.value);
+  console.log('[Submit] PatchMenuList', patchMenuList.value);
+
+  const menuModifyResults = await Promise.allSettled([
+    ...deleteMenuList.value.map(async (menuId) => {
+      return await deleteMenu(menuId);
+    }),
+    ...patchMenuList.value.map(async (menu) => {
+      return await patchMenu(menu);
+    }),
+    ...createMenuList.value.map(async (menu) => {
+      return await createMenu(menu);
+    }),
+  ]);
+
+  console.log('[MenuModifyResults]', menuModifyResults);
+
+  console.log('[Submit] originalMenuList', originalMenuList.value);
+
+  const isSoldOutModifiyResults = await Promise.allSettled([
+    ...originalMenuList.value
+      .map(async (originalMenu) => {
+        const findMenu = menuList.value.find((menu) => menu.menuId === originalMenu.menuId);
+        if (findMenu) {
+          if (findMenu.isSoldOut !== originalMenu.isSoldOut) {
+            return await api.put('/admin/menu/sold-out', {
+              menuId: findMenu.menuId,
+              isSoldOut: originalMenu.isSoldOut,
+              boothId: boothInfo.value.boothId,
+            });
+          }
+        }
+      })
+      .filter((result) => result),
+  ]);
+
+  console.log('[isSoldOutModifiyResults]', isSoldOutModifiyResults);
+
+  isSubmit.value = false;
+  router.push(`/booth/${boothInfo.value.boothId}`);
+};
+
+onMounted(async () => {
+  console.log('[BoothEditView] onMounted');
+  reset();
+  if (props.boothId) {
+    const condition = await init(props.boothId);
+    if (condition) {
+      fileUrls.value = [...boothInfo.value.boothImage];
+      serviceHours.value = `${boothInfo.value.openTime} ~ ${boothInfo.value.closeTime}`;
+      isOpen.value = boothInfo.value.isOpen;
+      console.log('[BoothEditView] MenuList', menuList.value);
+
+      if (boothType.value === 'night') {
+        useReservation.value = boothInfo.value.isReservation;
+        useOrder.value = boothInfo.value.isOrder;
+      }
+    } else {
+      alert('부스 정보를 불러오는데 실패했습니다.');
+      router.push({ name: 'BoothLists' });
+    }
+  }
+});
+</script>
+
+<template>
+  <!-- Booth Edit -->
+  <div class="flex flex-col px-4 gap-[40px] min-w-[500px] pb-20">
+    <form @submit.prevent="handleClickSubmit()">
+      <div class="flex justify-between pt-[50px] lg:pt-[100pt] min-w-[350px] pb-[40px]">
+        <!-- Booth Header -->
+        <div class="flex items-center gap-4">
+          <IconBoothEdit />
+          <div class="text-primary-900 text-4xl font-semibold">부스 정보 관리</div>
+        </div>
+      </div>
+      <div
+        class="bg-white rounded-[20px] w-full h-auto px-4 py-4 pb-12 gap-10 lg:py-[60px] lg:px-[60px] lg:gap-[60px] flex flex-col"
+      >
+        <!-- 부스 정보 -->
+        <div class="flex flex-col gap-[20px] w-full">
+          <div
+            class="w-[137px] h-[61px] rounded-2xl flex items-center justify-center bg-primary-700 text-primary-900 text-2xl font-semibold"
+          >
+            부스 정보
+          </div>
+
+          <div
+            class="bg-primary-700 rounded-[20px] w-full py-4 px-4 lg:py-[40px] lg:px-[60px] flex flex-col gap-[30px] xl:gap-[20px]"
+          >
+            <!-- 학과명 -->
+            <div class="flex gap-2 flex-wrap xl:flex-nowrap">
+              <div class="w-[85px] flex items-center justify-start">학과명</div>
+              <div class="relative w-full">
+                <input
+                  class="w-full xl:w-[390px] h-[60px] border border-gray-500 rounded-2xl px-[20px] focus:border-primary-900"
+                  type="text"
+                  maxlength="100"
+                  placeholder="학과명을 입력하세요."
+                  @input="handleInputAdminName($event)"
+                  :value="boothInfo?.adminName ?? ''"
+                />
+                <div
+                  v-if="!boothInfo?.adminName && isSubmit"
+                  class="absolute left-0 xl:left-4 top-[62px] text-xs text-red-600"
+                >
+                  * 학과명을 입력해주세요.
+                </div>
+              </div>
+            </div>
+
+            <!-- 부스 타입 -->
+            <div class="flex flex-wrap xl:flex-nowrap gap-2 xl:gap-0">
+              <div class="w-[85px] flex items-center justify-start">부스 타입</div>
+              <div class="relative w-full xl:w-[390px]">
+                <select
+                  :disabled="!isAdmin"
+                  class="appearance-none w-full xl:w-[390px] h-[60px] border border-gray-500 rounded-2xl px-[20px] focus:border-primary-900"
+                  @input="handleInputAdminCategory($event)"
+                  :value="boothInfo.adminCategory"
+                >
+                  <option value="주간부스">주간부스</option>
+                  <option value="야간부스">야간부스</option>
+                  <option value="푸드트럭">푸드트럭</option>
+                </select>
+                <div class="pointer-events-none absolute inset-y-0 right-2 flex items-center px-2 text-gray-700">
+                  <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                    <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                  </svg>
+                </div>
+              </div>
+            </div>
+
+            <!-- 부스이름 -->
+            <div class="flex gap-2 flex-wrap xl:flex-nowrap">
+              <div class="w-[85px] flex items-center justify-start">부스 이름</div>
+              <div class="relative w-full">
+                <input
+                  class="w-full h-[60px] border border-gray-500 rounded-2xl px-[20px] focus:border-primary-900"
+                  type="text"
+                  maxlength="100"
+                  placeholder="학과명을 입력하세요."
+                  @input="handleInputBoothName($event)"
+                  :value="boothInfo?.boothName ?? ''"
+                />
+                <div
+                  v-if="!boothInfo?.boothName && isSubmit"
+                  class="absolute left-0 xl:left-4 top-[62px] text-xs text-red-600"
+                >
+                  * 부스 부스 이름을 작성해주세요
+                </div>
+              </div>
+            </div>
+
+            <!-- 운영시간 -->
+            <div class="flex gap-2 flex-wrap xl:flex-nowrap items-center">
+              <div class="w-[85px] flex items-center justify-start">운영 시간</div>
+              <div class="w-full flex items-center gap-2">
+                <div class="relative w-fit">
+                  <input
+                    class="xl:w-[520px] h-[60px] border border-gray-500 rounded-xl px-[20px] focus:border-primary-900"
+                    type="text"
+                    maxlength="100"
+                    placeholder="예시) 17:00 ~ 24:00"
+                    @input="handleInputServiceHours($event)"
+                    :value="serviceHours"
+                  />
+                  <div
+                    v-if="!serviceHours && isSubmit"
+                    class="absolute left-0 xl:left-4 top-[62px] text-xs text-red-600"
+                  >
+                    * 운영시간을 작성해주세요.
+                  </div>
+                </div>
+                <IconBoothListToggle :is-active="isOpen" @click="isOpen = !isOpen" />
+              </div>
+            </div>
+
+            <!-- 부스소개 -->
+            <div class="flex w-full gap-2 flex-wrap xl:flex-nowrap">
+              <div class="w-[85px] flex items-center justify-start">학과 소개</div>
+              <div class="relative w-full">
+                <textarea
+                  class="w-full h-[150px] xl:h-[300px] border-[1px] border-gray-500 rounded-xl px-[20px] py-[20px] focus:border-primary-900 resize-none"
+                  type="text"
+                  maxlength="300"
+                  placeholder="학과 소개를 작성해주세요."
+                  @input="handleInputBoothIntro($event)"
+                  :value="boothInfo?.boothIntro ?? ''"
+                ></textarea>
+
+                <div
+                  v-if="!boothInfo?.boothIntro && isSubmit"
+                  class="absolute left-0 xl:left-4 top-[152px] xl:top-[302px] text-xs text-red-600"
+                >
+                  * 학과 소개를 작성해주세요.
+                </div>
+              </div>
+            </div>
+
+            <!-- 부스 이미지 -->
+            <div class="flex w-full gap-2 flex-wrap xl:flex-nowrap">
+              <div class="flex-shrink-0 xl:w-[85px] flex items-center justify-start w-full">부스 이미지</div>
+              <label
+                v-if="fileUrls.length === 0"
+                for="dropzone-file"
+                class="flex flex-col items-center justify-center w-full h-[150px] xl:h-[300px] border-dashed border-gray-500 bg-gray-200 rounded-[20px] border-[1px] cursor-pointer hover:bg-slate-200"
+              >
+                <IconFileUpload />
+
+                <p class="mb-2 text-sm text-gray-500">부스 사진을 등록해주세요.</p>
+                <p class="text-xs text-gray-500">최대 10장까지 첨부 가능</p>
+                <input
+                  type="file"
+                  id="dropzone-file"
+                  class="hidden"
+                  @input="handleFileinput($event)"
+                  multiple
+                  accept="image/*.jpg, image/*.jpeg, image/*.png, image/*.gif"
+                />
+              </label>
+              <div v-if="fileUrls.length > 0" class="flex grow flex-col items-center justify-center overflow-x-auto">
+                <div class="text-red-500 w-full flex justify-end cursor-pointer">
+                  <div @click="fileUrls = []">reset</div>
+                </div>
+                <div class="w-full overflow-x-auto">
+                  <div class="w-full flex gap-4">
+                    <div
+                      v-for="(urls, urlIndex) in fileUrls"
+                      :key="urlIndex"
+                      :style="setBackgroundImage(urls)"
+                      class="flex-shrink-0 w-[150px] h-[150px] xl:w-[300px] xl:h-[300px] rounded-[20px] bg-cover bg-no-repeat bg-center border-2 border-gray-300 bg-white hover:border-primary-900"
+                      draggable="true"
+                      @dragstart="handleDragStartBoothImage($event, urlIndex)"
+                      @dragover.prevent
+                      @dragenter.prevent
+                      @drop="handleDropBoothImage($event, urlIndex)"
+                    ></div>
+                    <label
+                      v-if="fileUrls.length < 10"
+                      for="dropzone-file"
+                      class="flex-shrink-0 flex flex-col items-center justify-center w-[150px] xl:w-[300px] h-[150px] xl:h-[300px] border-dashed border-gray-500 bg-gray-200 rounded-[20px] border-[1px] cursor-pointer hover:bg-slate-200"
+                    >
+                      <IconFileUpload />
+
+                      <p class="mb-2 text-sm text-gray-500">부스 사진을 등록해주세요.</p>
+                      <p class="text-xs text-gray-500">최대 10장까지 첨부 가능</p>
+                      <input
+                        type="file"
+                        id="dropzone-file"
+                        class="hidden"
+                        @input="handleFileinput($event)"
+                        multiple
+                        accept="image/*.jpg, image/*.jpeg, image/*.png, image/*.gif"
+                      />
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 메뉴 정보 -->
+        <div v-if="ADMIN_CATEGORY[boothInfo.adminCategory] === 'night'" class="flex flex-col gap-[20px] w-full">
+          <div
+            class="w-[137px] h-[61px] rounded-2xl flex items-center justify-center bg-primary-700 text-primary-900 text-2xl font-semibold"
+          >
+            메뉴 정보
+          </div>
+          <div class="bg-primary-700 rounded-[20px] w-full lg:py-[40px] lg:px-[60px] px-4 py-4 flex flex-col">
+            <div class="grid gap-4 grid-cols-1 xl:grid-cols-2">
+              <div
+                v-for="(menu, menuIndex) in menuList"
+                :key="menuIndex"
+                class="h-[220px] rounded-[20px] flex text-2xl font-bold px-[25px] py-[25px] gap-[28px] bg-white hover:border-primary-900 border"
+                draggable="true"
+                @dragstart="handleDragStartMenu($event, menuIndex)"
+                @dragover.prevent
+                @dragenter.prevent
+                @drop="handleDropMenu($event, menuIndex)"
+              >
+                <div
+                  class="hidden md:block w-[180px] h-[180px] bg-contain bg-no-repeat bg-center bg-white rounded-xl flex-shrink-0 border-gray-200 border"
+                  :style="setBackgroundImage(menu.menuImage)"
+                ></div>
+                <div class="flex flex-col w-full justify-between">
+                  <div class="flex flex-col w-full">
+                    <!-- Menu header -->
+                    <div class="flex justify-between items-center h-[29px] w-full min-w-fit">
+                      <div class="text-2xl font-semibold text-secondary-700 text-nowrap">
+                        {{ menu.menuName }}
+                      </div>
+                      <div class="gap-[12px] items-center text-sm flex flex-shrink-0 justify-end grow">
+                        <div
+                          class="w-[80px] h-[29px] rounded-full bg-secondary-300 items-center 2xl:flex hidden justify-center text-secondary-700"
+                        >
+                          {{ MENU_TYPE[menu.menuType] }}
+                        </div>
+                        <button
+                          class="w-[53px] h-[29px] rounded-full flex items-center justify-center bg-primary-800 text-primary-900"
+                          type="button"
+                          @click="openModal(menu)"
+                        >
+                          수정
+                        </button>
+                        <button
+                          class="w-[53px] h-[29px] lg:max-xl:flex rounded-full 2xl:flex hidden items-center justify-center bg-danger-light text-danger"
+                          type="button"
+                          @click="
+                            handleClickDeleteMenu({
+                              menuIndex: menuIndex,
+                              menuId: menu.menuId,
+                            })
+                          "
+                        >
+                          삭제
+                        </button>
+                      </div>
+                    </div>
+                    <!-- Menu Body -->
+                    <p
+                      class="pt-[12px] pb-[12px] h-[78px] text-secondary-700-light font-normal text-base break-all text-wrap line-clamp-3"
+                    >
+                      {{ menu.menuDescription }}
+                    </p>
+                  </div>
+                  <!-- Menu Footer -->
+                  <div class="flex justify-between items-center w-full">
+                    <div class="text-secondary-700 font-bold text-2xl">
+                      {{ menu.menuPrice }}<span class="text-secondary-700-light font-normal text-2xl">원</span>
+                    </div>
+                    <IconBoothListToggle :is-active="!menu.isSoldOut" @click="menu.isSoldOut = !menu.isSoldOut" />
+                  </div>
+                </div>
+              </div>
+              <div
+                class="h-[220px] bg-gray-200 rounded-[20px] border border-dashed border-gray-500 flex flex-col items-center justify-center text-gray-500 cursor-pointer"
+                @click="openModal({})"
+              >
+                <div class="font-semibold text-6xl">+</div>
+                <div>메뉴 추가하기</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 예약기능 사용 여부 -->
+        <div
+          v-if="ADMIN_CATEGORY[boothInfo.adminCategory] === 'night'"
+          class="flex gap-6 md:gap-[40px] items-center flex-wrap"
+        >
+          <div class="w-[232px] h-[60px]">
+            <div
+              class="w-[226px] h-[60px] rounded-2xl text-primary-900 flex items-center justify-center font-semibold text-2xl bg-primary-700 px-[24px]"
+            >
+              예약기능 사용 여부
+            </div>
+          </div>
+          <div class="flex gap-[28px]">
+            <div
+              class="flex items-center justify-center gap-2 flex-shrink-0 cursor-pointer"
+              @click="useReservation = true"
+            >
+              <IconRadio :is-active="useReservation" />
+              <div class="text-secondary-900 text-xl font-semibold">사용 동의</div>
+            </div>
+            <div
+              class="flex items-center justify-center gap-2 flex-shrink-0 cursor-pointer"
+              @click="useReservation = false"
+            >
+              <IconRadio :is-active="!useReservation" />
+              <div class="text-secondary-900 text-xl font-semibold">사용 비동의</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 쿠폰 진행 여부 -->
+        <div v-if="false" class="flex gap-6 md:gap-[40px] items-center flex-wrap">
+          <div class="w-[232px] h-[60px]">
+            <div
+              class="w-[184px] h-[60px] rounded-2xl text-primary-900 flex items-center justify-center font-semibold text-2xl bg-primary-700 px-[24px]"
+            >
+              쿠폰 진행 여부
+            </div>
+          </div>
+          <div class="flex gap-[28px]">
+            <div class="flex items-center justify-center gap-2 flex-shrink-0 cursor-pointer" @click="useCoupon = true">
+              <IconRadio :is-active="useCoupon" />
+              <div class="text-secondary-900 text-xl font-semibold">사용 동의</div>
+            </div>
+            <div class="flex items-center justify-center gap-2 flex-shrink-0 cursor-pointer" @click="useCoupon = false">
+              <IconRadio :is-active="!useCoupon" />
+              <div class="text-secondary-900 text-xl font-semibold">사용 비동의</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 주문 기능 사용 여부 -->
+        <div
+          v-if="ADMIN_CATEGORY[boothInfo.adminCategory] === 'night'"
+          class="flex gap-6 md:gap-[40px] items-center flex-wrap"
+        >
+          <div
+            class="w-[232px] h-[60px] rounded-2xl text-primary-900 flex items-center justify-center font-semibold text-2xl bg-primary-700 px-[24px]"
+          >
+            주문 기능 사용 여부
+          </div>
+          <div class="flex gap-[28px]">
+            <div class="flex items-center justify-center gap-2 flex-shrink-0 cursor-pointer" @click="useOrder = true">
+              <IconRadio :is-active="useOrder" />
+              <div class="text-secondary-900 text-xl font-semibold">사용 동의</div>
+            </div>
+            <div class="flex items-center justify-center gap-2 flex-shrink-0 cursor-pointer" @click="useOrder = false">
+              <IconRadio :is-active="!useOrder" />
+              <div class="text-secondary-900 text-xl font-semibold">사용 비동의</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex justify-end items-center gap-4 pt-[40px]">
+        <!-- TODO: Check does it need? -->
+        <!-- <button type="button" class="is-button is-outlined w-[120px] h-[60px] text-3xl">삭제</button> -->
+        <button type="submit" class="is-button w-[120px] h-[60px] text-3xl">등록</button>
+      </div>
+    </form>
+  </div>
+</template>
+
+<style lang="scss" scoped></style>

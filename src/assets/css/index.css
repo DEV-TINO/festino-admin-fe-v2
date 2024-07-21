@@ -1,0 +1,32 @@
+/* Tailwind */
+@import './tailwind.css';
+
+/* Fonts */
+@import './jalnan2.css';
+@import './pretendardvariable.css';
+
+html {
+  margin: 0px;
+  padding: 0px;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
+html::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
+body {
+  margin: 0px;
+  padding: 0px;
+  font-family: 'Pretendard Variable';
+  background-color: #f5f5f5;
+}
+
+.is-button {
+  @apply rounded-[20px] bg-primary-900 text-white font-semibold text-lg hover:bg-primary-900-dark;
+}
+
+.is-button.is-outlined {
+  @apply border-[1px] border-primary-900 bg-white text-primary-900 hover:bg-gray-100;
+}
