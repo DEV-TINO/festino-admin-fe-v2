@@ -51,11 +51,11 @@ const router = createRouter({
       name: 'Mobile',
       component: () => import('../layouts/MobileLayout.vue'),
       children: [
-        // {
-        //   path: '',
-        //   name: 'MobileMain',
-        //   component: () => import('../views/mobiles/MobileLoginView.vue'),
-        // },
+        {
+          path: '',
+          name: 'MobileMain',
+          component: () => import('../views/mobiles/MobileMainView.vue'),
+        },
         {
           path: 'login',
           name: 'MobileLogin',
