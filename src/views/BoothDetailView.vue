@@ -59,6 +59,7 @@ const handleClickSoldOut = async (menu) => {
 };
 
 const handleClickBoothOpen = async () => {
+  console.log('[BoothDetailView] handleClickBoothOpen, isOpen:', boothInfo.value.isOpen);
   const response = await api.put(`/admin/booth/${ADMIN_CATEGORY[boothInfo.value.adminCategory]}/open`, {
     boothId: boothInfo.value.boothId,
     isOpen: boothInfo.value.isOpen,
@@ -67,7 +68,7 @@ const handleClickBoothOpen = async () => {
   const data = response.data;
 
   if (data.success) {
-    boothInfo.value.isOpen = data.isOpen;
+    boothInfo.value.isOpen = data.openInfo.isOpen;
   } else {
     alertError(data.message);
   }
