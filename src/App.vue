@@ -1,10 +1,11 @@
 <script setup>
-import { ref, watch } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import NavBar from './components/NavBar.vue';
 import Footer from './components/Footer.vue';
 
 import { useRoute } from 'vue-router';
 import ModalView from './views/ModalView.vue';
+import { useUser } from './stores/user';
 
 const route = useRoute();
 

@@ -20,6 +20,7 @@ const handleClickBoothCreate = () => {
 
 onMounted(() => {
   useBoothListStore.getAllBoothList();
+  useUserStore.isUserOwnBooth();
 });
 </script>
 
