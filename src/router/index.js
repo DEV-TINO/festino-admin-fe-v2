@@ -66,8 +66,8 @@ const adminPages = [''];
 
 // Auth Guard
 router.beforeEach(async (to, from) => {
-  console.log(to);
-  console.log(from);
+  console.log('auth guard to : ', to);
+  console.log('auth guard from : ', from);
 
   const { isUserVaild } = useUser();
 
@@ -93,6 +93,8 @@ router.beforeEach(async (to, from) => {
 
 // Booth Guard
 router.beforeEach(async (to, from) => {
+  console.log('booth guard to : ', to);
+  console.log('booth guard from : ', from);
   if (to.name === 'BoothDetail' || to.name === 'BoothEdit') {
     console.log(isUUID(to.params.boothId));
     if (isUUID(to.params.boothId)) return true;
@@ -108,7 +110,8 @@ router.beforeEach(async (to, from) => {
 
 // Mobile Guard
 router.beforeEach((to, from) => {
-  console.log('mobile guard', to, from);
+  console.log('mobile guard to : ', to);
+  console.log('mobile guard from : ', from);
   if (to.path.includes('mobile') && to.name === 'NotFound') {
     //Mobile Error Page
     return {
