@@ -49,13 +49,15 @@ const adminPages = [''];
 
 // Auth Guard
 router.beforeEach(async (to, from) => {
-  const { isUserVaild } = useUser();
+  const { isUserVaild, isUserOwnBooth } = useUser();
 
   if (publicPages.includes(to.name)) {
     return true;
   }
 
   const { isAdmin, isValidate } = await isUserVaild();
+  await isUserOwnBooth();
+
   if (!isValidate) {
     return { name: 'Login' };
   }
@@ -74,8 +76,11 @@ router.beforeEach(async (to, from) => {
 router.beforeEach(async (to, from) => {
   if (to.name === 'BoothDetail' || to.name === 'BoothEdit') {
     console.log(isUUID(to.params.boothId));
-    if (isUUID(to.params.boothId)) return true;
-    else {
+    const { isUserOwnBooth } = useUser();
+    const isOwn = await isUserOwnBooth(to.params.boothId);
+    if (isOwn) {
+      return true;
+    } else {
       return {
         name: 'NotFound',
       };

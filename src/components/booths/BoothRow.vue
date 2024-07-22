@@ -4,10 +4,14 @@ import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
 
 import { useBoothPopup } from '@/stores/booths/boothPopup';
 import { useBoothList } from '@/stores/booths/boothList';
+import { useUser } from '@/stores/user';
+import { storeToRefs } from 'pinia';
 
 // Pinia Store
 const { openPopup } = useBoothPopup();
 const { handleClickBoothDetail } = useBoothList();
+const useUserStore = useUser();
+const { userOwnBoothId, isAdmin } = storeToRefs(useUserStore);
 
 // Props
 const props = defineProps({
@@ -30,6 +34,11 @@ const updateWindowWidth = () => {
 
 // Handlers
 const handleClickBoothOpen = () => {
+  if (!isAdmin.value && props.boothInfo.boothId !== userOwnBoothId.value) {
+    alert('본인 부스가 아닙니다.');
+    return;
+  }
+
   openPopup({
     type: 'open',
     boothInfo: props.boothInfo,
@@ -37,6 +46,11 @@ const handleClickBoothOpen = () => {
 };
 
 const handleClickBoothOrder = () => {
+  if (!isAdmin.value && props.boothInfo.boothId !== userOwnBoothId.value) {
+    alert('본인 부스가 아닙니다.');
+    return;
+  }
+
   openPopup({
     type: 'order',
     boothInfo: props.boothInfo,
@@ -44,6 +58,11 @@ const handleClickBoothOrder = () => {
 };
 
 const handleClickBoothReservation = () => {
+  if (!isAdmin.value && props.boothInfo.boothId !== userOwnBoothId.value) {
+    alert('본인 부스가 아닙니다.');
+    return;
+  }
+
   openPopup({
     type: 'reservation',
     boothInfo: props.boothInfo,
