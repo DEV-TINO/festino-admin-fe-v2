@@ -18,7 +18,7 @@ const handleClickBoothCreate = () => {
   router.push({ name: 'BoothCreate' });
 };
 
-onMounted(() => {
+onMounted(async () => {
   useBoothListStore.getAllBoothList();
   useUserStore.isUserOwnBooth();
 });

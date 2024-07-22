@@ -3,7 +3,7 @@ import { useUser } from '@/stores/user';
 import NotFoundView from '../views/error/NotFoundView.vue';
 import { isUUID } from '@/utils/utils';
 
-import BoothListView from '../views/BoothListView.vue';
+import BoothListView from '../views/booth/BoothListView.vue';
 import LoginView from '../views/LoginView.vue';
 
 const router = createRouter({
@@ -17,19 +17,24 @@ const router = createRouter({
     {
       path: '/booth/create',
       name: 'BoothCreate',
-      component: () => import('../views/BoothEditView.vue'),
+      component: () => import('../views/booth/BoothEditView.vue'),
     },
     {
       path: '/booth/:boothId/edit',
       name: 'BoothEdit',
-      component: () => import('../views/BoothEditView.vue'),
+      component: () => import('../views/booth/BoothEditView.vue'),
       props: true,
     },
     {
       path: '/booth/:boothId',
       name: 'BoothDetail',
-      component: () => import('../views/BoothDetailView.vue'),
+      component: () => import('../views/booth/BoothDetailView.vue'),
       props: true,
+    },
+    {
+      path: '/reserve',
+      name: 'Tabling',
+      component: () => import('../views/reserve/TablingView.vue'),
     },
     {
       path: '/login',

@@ -5,7 +5,7 @@ import Footer from './components/Footer.vue';
 
 import { useRoute } from 'vue-router';
 import ModalView from './views/ModalView.vue';
-import { useUser } from './stores/user';
+import { initFlowbite } from 'flowbite';
 
 const route = useRoute();
 
@@ -17,6 +17,10 @@ const updateNavBarVisibility = () => {
 };
 
 watch(() => route.name, updateNavBarVisibility);
+
+onMounted(() => {
+  initFlowbite();
+});
 </script>
 
 <template>
