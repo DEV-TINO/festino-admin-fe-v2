@@ -49,9 +49,6 @@ const adminPages = [''];
 
 // Auth Guard
 router.beforeEach(async (to, from) => {
-  console.log(to);
-  console.log(from);
-
   const { isUserVaild } = useUser();
 
   if (publicPages.includes(to.name)) {

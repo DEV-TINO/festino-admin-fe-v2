@@ -43,22 +43,6 @@ export const imagesUpload = async (files) => {
   }
 };
 
-export const isUserVaild = async () => {
-  try {
-    const response = await api.post('/admin/user/role');
-    return {
-      validate: response.data.success,
-      role: response.data.role,
-    };
-  } catch (e) {
-    alertError('User Validate Error, Please try Login again!');
-    return {
-      validate: false,
-      role: false,
-    };
-  }
-};
-
 export const alertError = (errorMessage) => {
   alert(`${errorMessage}, 관리자에게 문의하세요.`);
 };

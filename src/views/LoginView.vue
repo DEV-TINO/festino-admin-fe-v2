@@ -46,10 +46,6 @@ const handleClickSubmit = async () => {
     return;
   }
 };
-
-onMounted(() => {
-  // logout();
-});
 </script>
 
 <template>

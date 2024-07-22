@@ -1,4 +1,4 @@
-import { alertError, api, isUserVaild } from '@/utils/api';
+import { alertError, api } from '@/utils/api';
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
 
@@ -79,8 +79,6 @@ export const useUser = defineStore('user', () => {
       isAdmin.value = false;
       isValidate.value = false;
       logout();
-      // alertError('Login Error, Please try Login again');
-      // alertError(error);
       return false;
     }
   };
@@ -88,7 +86,6 @@ export const useUser = defineStore('user', () => {
   const logout = async () => {
     try {
       const response = await api.post('/admin/user/logout');
-      console.log(response.data);
       isAdmin.value = false;
       isValidate.value = false;
     } catch (error) {

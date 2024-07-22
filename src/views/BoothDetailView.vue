@@ -83,11 +83,11 @@ onMounted(async () => {
   if (props.boothId) {
     const condition = await init(props.boothId);
     if (!condition) {
-      alertError('부스 정보를 불러오는데 실패했습니다.');
+      alert('부스 정보를 불러오는데 실패했습니다.');
       router.push({ name: 'BoothList' });
     }
   } else {
-    alertError('부스 정보를 불러오는데 실패했습니다.');
+    alert('부스 정보를 불러오는데 실패했습니다.');
     router.push({ name: 'BoothList' });
   }
 });
