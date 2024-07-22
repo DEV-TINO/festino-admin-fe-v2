@@ -6,16 +6,21 @@ import { onMounted, ref } from 'vue';
 import { useBoothList } from '@/stores/booths/boothList';
 import { storeToRefs } from 'pinia';
 import router from '@/router';
+import { useUser } from '@/stores/user';
 
 const useBoothListStore = useBoothList();
+const useUserStore = useUser();
+
+const { isAdmin } = storeToRefs(useUserStore);
 const { boothList } = storeToRefs(useBoothListStore);
 
 const handleClickBoothCreate = () => {
   router.push({ name: 'BoothCreate' });
 };
 
-onMounted(() => {
+onMounted(async () => {
   useBoothListStore.getAllBoothList();
+  useUserStore.isUserOwnBooth();
 });
 </script>
 
@@ -29,6 +34,7 @@ onMounted(() => {
       </div>
       <div class="flex gap-4">
         <button
+          v-if="isAdmin"
           class="hover:bg-primary-900-dark w-[80px] h-[48px] rounded-xl text-xl lg:w-[106px] lg:h-[53px] flex items-center justify-center text-white lg:text-3xl bg-primary-900 lg:rounded-[20px] cursor-pointer select-none"
           type="button"
           @click="handleClickBoothCreate()"
@@ -42,7 +48,7 @@ onMounted(() => {
     <div class="w-full flex flex-col h-full shadow-primary rounded-b-[20px]">
       <!-- Header -->
       <div
-        class="text-xs lg:text-xl font-semibold h-[70px] w-full bg-primary-700 rounded-t-[20px] flex justify-between gap-4 flex-nowrap overflow-x-auto items-center px-4 lg:px-[60px]"
+        class="text-xs lg:text-xl font-semibold h-[70px] w-full bg-primary-700 rounded-[20px] flex justify-between gap-4 flex-nowrap overflow-x-auto items-center px-4 lg:px-[60px]"
       >
         <div class="text-nowrap min-w-[21px] w-[21px] lg:min-w-[35px] text-center">번호</div>
         <div class="text-balance break-keep min-w-[75px] w-[75px] lg:min-w-[130px] text-center">관리자 카테고리</div>

@@ -9,12 +9,12 @@ import IconNotFound from '@/components/icons/IconNotFound.vue';
     <div class="flex gap-10">
       <router-link
         to="/"
-        class="is-button w-48 h-16 text-2xl text-center mt-4 flex items-center justify-center rounded-lg"
+        class="is-button w-48 h-16 text-2xl text-center mt-4 flex items-center justify-center rounded-lg mb-4"
         >홈으로 돌아가기</router-link
       >
       <router-link
         to="/mobile"
-        class="is-button w-48 h-16 text-2xl text-center mt-4 flex items-center justify-center rounded-lg"
+        class="is-button w-48 h-16 text-2xl text-center mt-4 flex items-center justify-center rounded-lg mb-4"
         >모바일로 돌아가기</router-link
       >
     </div>

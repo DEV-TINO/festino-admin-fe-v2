@@ -45,3 +45,9 @@ export const MENU_TYPE = {
   MAINMENU: '메인 메뉴',
   SUBMENU: '서브 메뉴',
 };
+
+export const RESERVE_TYPE = {
+  reserve: '예약',
+  cancel: '삭제',
+  complete: '완료',
+};

@@ -1,4 +1,5 @@
-import { alertError, api, isUserVaild } from '@/utils/api';
+import { alertError, api } from '@/utils/api';
+import { isUUID } from '@/utils/utils';
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
 
@@ -8,6 +9,8 @@ export const useUser = defineStore('user', () => {
 
   const userId = ref('');
   const password = ref('');
+
+  const userOwnBoothId = ref('');
 
   const isValidate = ref(false);
   const isAdmin = ref(false);
@@ -50,6 +53,30 @@ export const useUser = defineStore('user', () => {
     }
   };
 
+  const isUserOwnBooth = async (boothId) => {
+    if (!isUUID(boothId)) return false;
+
+    if (isAdmin.value) return true;
+
+    try {
+      const response = await api.get('/admin/user/booth');
+      const data = response.data;
+
+      if (data.success) {
+        userOwnBoothId.value = data.boothId;
+        console.log(userOwnBoothId.value);
+        return boothId === userOwnBoothId.value;
+      } else {
+        userOwnBoothId.value = '';
+        return false;
+      }
+    } catch (e) {
+      userOwnBoothId.value = '';
+      console.error(e);
+      return false;
+    }
+  };
+
   const login = async () => {
     try {
       const response = await api.post('/admin/user/login', {
@@ -69,6 +96,7 @@ export const useUser = defineStore('user', () => {
         errorMessage.value = message;
         isAdmin.value = false;
         isValidate.value = false;
+        userOwnBoothId.value = '';
       }
       return isSuccess;
     } catch (error) {
@@ -78,9 +106,8 @@ export const useUser = defineStore('user', () => {
 
       isAdmin.value = false;
       isValidate.value = false;
+      userOwnBoothId.value = '';
       logout();
-      // alertError('Login Error, Please try Login again');
-      // alertError(error);
       return false;
     }
   };
@@ -88,12 +115,13 @@ export const useUser = defineStore('user', () => {
   const logout = async () => {
     try {
       const response = await api.post('/admin/user/logout');
-      console.log(response.data);
       isAdmin.value = false;
       isValidate.value = false;
+      userOwnBoothId.value = '';
     } catch (error) {
       isAdmin.value = false;
       isValidate.value = false;
+      userOwnBoothId.value = '';
       alertError(error);
     }
   };
@@ -107,7 +135,9 @@ export const useUser = defineStore('user', () => {
     password,
     isValidate,
     isAdmin,
+    userOwnBoothId,
     isUserVaild,
+    isUserOwnBooth,
     setUserId,
     setPassword,
     setIsError,

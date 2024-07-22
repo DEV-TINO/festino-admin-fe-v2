@@ -6,13 +6,13 @@ import { useRoute } from 'vue-router';
 import router from '@/router';
 
 const { logout } = useUser();
-const { isAdmin } = storeToRefs(useUser());
+const { isAdmin, userOwnBoothId } = storeToRefs(useUser());
 const isOpenMenu = ref(false);
 
 const route = useRoute();
 
 const boothActive = ref(false);
-const tableActive = ref(false);
+const reserveActive = ref(false);
 const orderActive = ref(false);
 const registerActive = ref(false);
 const userActive = ref(false);
@@ -34,6 +34,14 @@ const handleClickBooth = () => {
   router.push('/');
 };
 
+const handleClickReserve = () => {
+  console.log('Reserve clicked');
+  console.log('userOwnBoothId:', userOwnBoothId.value);
+  router.push({
+    name: 'Tabling',
+  });
+};
+
 const handleClickLogout = () => {
   console.log('Logout clicked');
   logout();
@@ -42,7 +50,7 @@ const handleClickLogout = () => {
 
 const updateActive = () => {
   boothActive.value = route.path === '/' || route.path.startsWith('/booth');
-  tableActive.value = route.path.startsWith('/table');
+  reserveActive.value = route.path.startsWith('/reserve');
   orderActive.value = route.path.startsWith('/order');
   registerActive.value = route.path.startsWith('/register');
   userActive.value = route.path.startsWith('/user');
@@ -70,7 +78,8 @@ watch(() => route.name, updateActive, {
       </div>
       <div
         class="hover:text-primary-900 hover:font-semibold cursor-pointer hidden sm:block"
-        :class="setActiveClass(tableActive)"
+        :class="setActiveClass(reserveActive)"
+        @click="handleClickReserve()"
       >
         테이블링
       </div>
@@ -117,7 +126,8 @@ watch(() => route.name, updateActive, {
           </div>
           <div
             class="w-24 h-8 flex items-center justify-center text-sm hover:text-primary-900 hover:bg-slate-50 cursor-pointer"
-            :class="setActiveClass(tableActive)"
+            :class="setActiveClass(reserveActive)"
+            @click="handleClickReserve()"
           >
             테이블링
           </div>

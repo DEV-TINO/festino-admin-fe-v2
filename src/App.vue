@@ -5,6 +5,7 @@ import Footer from './components/Footer.vue';
 
 import { useRoute } from 'vue-router';
 import ModalView from './views/ModalView.vue';
+import { initFlowbite } from 'flowbite';
 
 const route = useRoute();
 
@@ -22,6 +23,10 @@ const checkIsMobile = () => {
 
 watch(() => route.name, updateNavBarVisibility);
 watch(() => route.name, checkIsMobile);
+
+onMounted(() => {
+  initFlowbite();
+});
 </script>
 
 <template>
