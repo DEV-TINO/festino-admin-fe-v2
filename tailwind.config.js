@@ -27,6 +27,9 @@ export default {
           DEFAULT: '#F00E00',
           light: 'rgba(240, 12, 0, 0.12)',
         },
+        success: {
+          DEFAULT: '#66CF55',
+        },
       },
       backgroundColor: {
         primary: {
@@ -40,6 +43,7 @@ export default {
           },
           700: {
             DEFAULT: 'rgba(0, 115, 240, 0.08)',
+            light: 'rgba(0, 155, 250, 0.05)',
           },
         },
         secondary: {
@@ -67,6 +71,7 @@ export default {
           },
           700: {
             light: 'rgba(0, 115, 240, 0.12)',
+            DEFAULT: 'rgba(0, 115, 240, 0.16)',
           },
         },
         secondary: {

@@ -39,6 +39,7 @@ const useCoupon = ref(false);
 const useOrder = ref(false);
 
 const handleFileinput = (event) => {
+  if (isSubmit.value) return;
   const files = event.target.files;
   handleFiles(files);
 };
@@ -57,46 +58,56 @@ const setBackgroundImage = (url) => {
 };
 
 const handleDragStartBoothImage = (event, index) => {
+  if (isSubmit.value) return;
   event.dataTransfer.setData('text/plain', index);
 };
 
 const handleDropBoothImage = (event, dropIndex) => {
+  if (isSubmit.value) return;
   const dragIndex = event.dataTransfer.getData('text/plain');
   const item = fileUrls.value.splice(dragIndex, 1)[0];
   fileUrls.value.splice(dropIndex, 0, item);
 };
 
 const handleDragStartMenu = (event, index) => {
+  if (isSubmit.value) return;
   event.dataTransfer.setData('text/plain', index);
 };
 
 const handleDropMenu = (event, dropIndex) => {
+  if (isSubmit.value) return;
   const dragIndex = event.dataTransfer.getData('text/plain');
   const item = menuList.value.splice(dragIndex, 1)[0];
   menuList.value.splice(dropIndex, 0, item);
 };
 
 const handleInputAdminName = (event) => {
+  if (isSubmit.value) return;
   boothInfo.value.adminName = event.target.value;
 };
 
 const handleInputAdminCategory = (event) => {
+  if (isSubmit.value) return;
   boothInfo.value.adminCategory = event.target.value;
 };
 
 const handleInputBoothName = (event) => {
+  if (isSubmit.value) return;
   boothInfo.value.boothName = event.target.value;
 };
 
 const handleInputServiceHours = (event) => {
+  if (isSubmit.value) return;
   serviceHours.value = event.target.value;
 };
 
 const handleInputBoothIntro = (event) => {
+  if (isSubmit.value) return;
   boothInfo.value.boothIntro = event.target.value;
 };
 
 const handleClickDeleteMenu = async ({ menuIndex, menuId }) => {
+  if (isSubmit.value) return;
   addDeleteMenu(menuId);
   menuList.value.splice(menuIndex, 1);
 };
@@ -387,6 +398,7 @@ onMounted(async () => {
                   placeholder="학과명을 입력하세요."
                   @input="handleInputAdminName($event)"
                   :value="boothInfo?.adminName ?? ''"
+                  :disabled="isSubmit"
                 />
                 <div
                   v-if="!boothInfo?.adminName && isSubmit"
@@ -402,7 +414,7 @@ onMounted(async () => {
               <div class="w-[85px] flex items-center justify-start">부스 타입</div>
               <div class="relative w-full xl:w-[390px]">
                 <select
-                  :disabled="!isAdmin"
+                  :disabled="!isAdmin || isSubmit"
                   class="appearance-none w-full xl:w-[390px] h-[60px] border border-gray-500 rounded-2xl px-[20px] focus:border-primary-900"
                   @input="handleInputAdminCategory($event)"
                   :value="boothInfo.adminCategory"
@@ -430,6 +442,7 @@ onMounted(async () => {
                   placeholder="학과명을 입력하세요."
                   @input="handleInputBoothName($event)"
                   :value="boothInfo?.boothName ?? ''"
+                  :disabled="isSubmit"
                 />
                 <div
                   v-if="!boothInfo?.boothName && isSubmit"
@@ -452,6 +465,7 @@ onMounted(async () => {
                     placeholder="예시) 17:00 ~ 24:00"
                     @input="handleInputServiceHours($event)"
                     :value="serviceHours"
+                    :disabled="isSubmit"
                   />
                   <div
                     v-if="!serviceHours && isSubmit"
@@ -475,6 +489,7 @@ onMounted(async () => {
                   placeholder="학과 소개를 작성해주세요."
                   @input="handleInputBoothIntro($event)"
                   :value="boothInfo?.boothIntro ?? ''"
+                  :disabled="isSubmit"
                 ></textarea>
 
                 <div
@@ -505,6 +520,7 @@ onMounted(async () => {
                   @input="handleFileinput($event)"
                   multiple
                   accept="image/*.jpg, image/*.jpeg, image/*.png, image/*.gif"
+                  :disabled="isSubmit"
                 />
               </label>
               <div v-if="fileUrls.length > 0" class="flex grow flex-col items-center justify-center overflow-x-auto">
@@ -518,7 +534,7 @@ onMounted(async () => {
                       :key="urlIndex"
                       :style="setBackgroundImage(urls)"
                       class="flex-shrink-0 w-[150px] h-[150px] xl:w-[300px] xl:h-[300px] rounded-[20px] bg-cover bg-no-repeat bg-center border-2 border-gray-300 bg-white hover:border-primary-900"
-                      draggable="true"
+                      :draggable="!isSubmit"
                       @dragstart="handleDragStartBoothImage($event, urlIndex)"
                       @dragover.prevent
                       @dragenter.prevent
@@ -540,6 +556,7 @@ onMounted(async () => {
                         @input="handleFileinput($event)"
                         multiple
                         accept="image/*.jpg, image/*.jpeg, image/*.png, image/*.gif"
+                        :disabled="isSubmit"
                       />
                     </label>
                   </div>
@@ -562,7 +579,7 @@ onMounted(async () => {
                 v-for="(menu, menuIndex) in menuList"
                 :key="menuIndex"
                 class="h-[220px] rounded-[20px] flex text-2xl font-bold px-[25px] py-[25px] gap-[28px] bg-white hover:border-primary-900 border"
-                draggable="true"
+                :draggable="!isSubmit"
                 @dragstart="handleDragStartMenu($event, menuIndex)"
                 @dragover.prevent
                 @dragenter.prevent
