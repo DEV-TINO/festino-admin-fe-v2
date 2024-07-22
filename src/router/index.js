@@ -46,10 +46,27 @@ const router = createRouter({
       name: 'NotFound',
       component: NotFoundView,
     },
+    {
+      path: '/mobile',
+      name: 'Mobile',
+      component: () => import('../layouts/MobileLayout.vue'),
+      children: [
+        // {
+        //   path: '',
+        //   name: 'MobileMain',
+        //   component: () => import('../views/mobiles/MobileLoginView.vue'),
+        // },
+        {
+          path: 'login',
+          name: 'MobileLogin',
+          component: () => import('../views/mobiles/MobileLoginView.vue'),
+        },
+      ],
+    },
   ],
 });
 
-const publicPages = ['Login'];
+const publicPages = ['Login', 'MobileLogin'];
 const adminPages = [''];
 
 // Auth Guard
@@ -64,7 +81,8 @@ router.beforeEach(async (to, from) => {
   await isUserOwnBooth();
 
   if (!isValidate) {
-    return { name: 'Login' };
+    if (from.name.includes('Mobile')) return { name: 'MobileLogin' };
+    else return { name: 'Login' };
   }
 
   if (adminPages.includes(to.name) && isAdmin) return true;
@@ -92,6 +110,17 @@ router.beforeEach(async (to, from) => {
     }
   } else {
     return true;
+  }
+});
+
+// Mobile Guard
+router.beforeEach((to, from) => {
+  console.log('mobile guard', to, from);
+  if (to.path.includes('mobile') && to.name === 'NotFound') {
+    //Mobile Error Page
+    return {
+      name: 'MobileLogin',
+    };
   }
 });
 
