@@ -79,6 +79,10 @@ export default {
             DEFAULT: 'rgba(204, 204,204, 0.28)',
           },
         },
+        danger: {
+          DEFAULT: '#F00E00',
+          light: 'rgba(240, 12, 0, 0.12)',
+        },
       },
       fontSize: {
         '3xl': '1.75rem',

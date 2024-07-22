@@ -226,9 +226,9 @@ onMounted(async () => {
               </div>
               <div
                 v-if="menuList.length === 0"
-                class="h-[220px] bg-danger-light rounded-[20px] border flex flex-col items-center justify-center text-gray-500 cursor-pointer"
+                class="col-span-2 h-[220px] border-danger rounded-[20px] border flex flex-col items-center justify-center bg-white"
               >
-                <div class="text-4xl text-danger">메뉴가 없습니다</div>
+                <div class="text-4xl text-danger">메뉴를 등록해주세요.</div>
                 <!-- <div>메뉴 추가하기</div> -->
               </div>
             </div>

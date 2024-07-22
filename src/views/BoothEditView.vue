@@ -525,7 +525,12 @@ onMounted(async () => {
               </label>
               <div v-if="fileUrls.length > 0" class="flex grow flex-col items-center justify-center overflow-x-auto">
                 <div class="text-red-500 w-full flex justify-end cursor-pointer">
-                  <div @click="fileUrls = []">reset</div>
+                  <div
+                    @click="fileUrls = []"
+                    class="w-12 h-6 rounded border-danger bg-white text-danger flex items-center justify-center border"
+                  >
+                    reset
+                  </div>
                 </div>
                 <div class="w-full overflow-x-auto">
                   <div class="w-full flex gap-4">
