@@ -95,7 +95,7 @@ const handleClickSubmit = async () => {
           <button class="text-2xl is-button w-full h-[77px] flex items-center justify-center" type="submit">
             완료
           </button>
-          <div class="text-lg text-secondary-900 underline cursor-pointer" @click="logout()">로그인이 안돼시나요?</div>
+          <div class="text-lg text-secondary-900 underline cursor-pointer" @click="logout()">Cannot Login?</div>
         </div>
       </div>
     </form>
