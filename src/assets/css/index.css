@@ -30,3 +30,11 @@ body {
 .is-button.is-outlined {
   @apply border-[1px] border-primary-900 bg-white text-primary-900 hover:bg-gray-100;
 }
+
+.is-button.is-danger {
+  @apply bg-danger hover:bg-danger-dark text-white !important;
+}
+
+.is-button.is-danger.is-outlined {
+  @apply border-[1px] border-danger bg-white text-danger hover:bg-gray-100 !important;
+}

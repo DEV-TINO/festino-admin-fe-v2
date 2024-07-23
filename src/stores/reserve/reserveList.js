@@ -1,3 +1,4 @@
+import { alertError, api } from '@/utils/api';
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
 
@@ -13,13 +14,79 @@ export const useReserveList = defineStore('reserveList', () => {
     });
   };
 
-  const getReserveList = async ({ boothId, type }) => {};
+  const getReserveList = async ({ boothId, type }) => {
+    try {
+      const response = await api.get(`/admin/reservation/${type}/booth/${boothId}`);
+      const data = response.data;
+      if (data.success) {
+        reserveList.value = data.reservationInfo.reservationList;
+      } else {
+        reserveList.value = [];
+      }
+    } catch (error) {
+      console.error(error);
+      alertError(error);
+    }
+  };
 
   const getDeleteReserveList = async (boothId) => {};
 
-  const confirmReserve = async (reserve) => {};
+  const confirmReserve = async ({ boothId, reserveId }) => {
+    try {
+      const response = await api.put('/admin/reservation/complete', {
+        boothId: boothId,
+        reservationId: reserveId,
+      });
+      const data = response.data;
+      return data.success;
+    } catch (error) {
+      console.error(error);
+      alertError(error);
+      return false;
+    }
+  };
 
-  const deleteReserve = async (reserve) => {};
+  const deleteReserve = async ({ boothId, reserveId }) => {
+    try {
+      const response = await api.delete('/admin/reservation', {
+        data: {
+          boothId: boothId,
+          reservationId: reserveId,
+        },
+      });
+      const data = response.data;
+      return data.success;
+    } catch (error) {
+      console.error(error);
+      alertError(error);
+      return false;
+    }
+  };
 
-  const restoreReserve = async (reserve) => {};
+  const restoreReserve = async ({ boothId, reserveId }) => {
+    try {
+      const response = await api.put('/admin/reservation/restore', {
+        boothId: boothId,
+        reservationId: reserveId,
+      });
+      const data = response.data;
+      return data.success;
+    } catch (error) {
+      console.error(error);
+      alertError(error);
+      return false;
+    }
+  };
+
+  return {
+    reserveList,
+    deleteReserveList,
+    searchKeyword,
+    getFilteredReserveList,
+    getReserveList,
+    getDeleteReserveList,
+    confirmReserve,
+    deleteReserve,
+    restoreReserve,
+  };
 });
