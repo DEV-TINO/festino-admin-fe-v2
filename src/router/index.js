@@ -81,7 +81,7 @@ router.beforeEach(async (to, from) => {
   await isUserOwnBooth();
 
   if (!isValidate) {
-    if (from.name.includes('Mobile')) return { name: 'MobileLogin' };
+    if (from.name?.includes('Mobile')) return { name: 'MobileLogin' };
     else return { name: 'Login' };
   }
 
