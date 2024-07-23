@@ -60,6 +60,7 @@ export default {
         danger: {
           DEFAULT: '#F00E00',
           light: 'rgba(240, 12, 0, 0.12)',
+          dark: '#BC0B00',
         },
       },
       borderColor: {
