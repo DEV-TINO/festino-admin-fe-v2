@@ -23,7 +23,7 @@ onMounted(async () => {
 
 const handleClickAdminMenu = (type) => {
   if (type === 'booth') {
-    router.push({ name: '' });
+    router.push({ name: 'MobileBooth' });
   }
   if (type === 'reserve') {
     router.push({ name: '' });
