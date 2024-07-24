@@ -1,79 +1,193 @@
 <script setup>
 import IconBoothListToggle from '@/components/icons/IconBoothListToggle.vue';
-import IconFileUpload from '@/components/icons/IconFileUpload.vue';
 import IconAdd from '@/components/icons/mobiles/IconAdd.vue';
 import SelectOption from '@/components/mobiles/SelectOption.vue';
-import { computed, ref, watch } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
+import { ADMIN_CATEGORY } from '@/utils/constants';
+import { useBoothInfo } from '@/stores/mobiles/boothInfo';
+
+const useBoothInfoStore = useBoothInfo();
+//TODO: DELETE
+const boothInfo = ref({
+  adminCategory: '주간부스',
+  adminName: '소리새',
+  boothId: 'af434c51-aff5-4401-836b-165087d1dde2',
+  boothName: '어쿠스틱',
+  closeTime: '18:00',
+  boothIntro: '어쿠스틱은 어쿠스틱한 음악을 들려주는 부스입니다.',
+  openTime: '12:00',
+  boothImage: [],
+  isOpen: true,
+  // 아래는 야간부스에서만 사용
+  // isOrder: false,
+  // isReservation: true,
+});
+
+const isSubmit = ref(false);
+const useReservation = ref(false);
+const useCoupon = ref(false);
+const useOrder = ref(false);
+
+const boothType = ADMIN_CATEGORY[boothInfo.value.adminCategory];
 
 const boothDescription = ref('');
 const characterCount = computed(() => boothDescription.value.length);
-
 watch(boothDescription, (newVal) => {
   if (newVal.length > 100) {
     boothDescription.value = newVal.slice(0, 100);
   }
 });
+
+const serviceHours = ref('');
+const handleInputBoothName = (event) => {
+  if (isSubmit.value) return;
+  boothInfo.value.boothName = event.target.value;
+};
+
+const handleInputServiceHours = (event) => {
+  if (isSubmit.value) return;
+  serviceHours.value = event.target.value;
+};
+
+const handleInputBoothIntro = (event) => {
+  if (isSubmit.value) return;
+  boothDescription.value = event.target.value;
+};
+//TODO: ADD BOOTH IMAGE
+//TODO: ADD MENU
+
+const handleClickSumbit = async () => {
+  if (isSubmit.value) return;
+  isSubmit.value = true;
+
+  if (
+    !boothInfo.value.adminName.length ||
+    !boothInfo.value.boothName.length ||
+    !serviceHours.value.length ||
+    !boothInfo.value.boothIntro.length
+  ) {
+    return;
+  }
+  const pattern = /^([01]?[0-9]|2[0-3]):[0-5][0-9]\s*~\s*([01]?[0-9]|2[0-4]):([0-5][0-9]|60)$/;
+
+  if (!pattern.test(serviceHours.value.trim())) {
+    // alert('올바른 운영시간을 입력해주세요. 예: 00:00 ~ 24:00');
+    return;
+  }
+  const [startTime, endTime] = serviceHours.value.split('~').map((time) => time.trim());
+
+  boothInfo.value.openTime = startTime;
+  boothInfo.value.closeTime = endTime;
+  // boothInfo.value.boothImage = fileUrls.value;
+
+  //nightbooth
+  if (boothType === 'night') {
+    boothInfo.value = {
+      ...boothInfo.value,
+      isReservation: useReservation.value,
+      isOrder: useOrder.value,
+    };
+  }
+
+  const res = await useBoothInfoStore.updateBoothInfo(boothType, boothInfo.value);
+
+  isSubmit.value = false;
+  router.push({ name: 'MobileMain' });
+};
+
+onMounted(async () => {
+  if (boothInfo.value) {
+    serviceHours.value = `${boothInfo.value.openTime} ~ ${boothInfo.value.closeTime}`;
+    boothDescription.value = boothInfo.value.boothIntro;
+    if (boothType === 'night') {
+      useReservation.value = boothInfo.value.isReservation;
+      useOrder.value = boothInfo.value.isOrder;
+    }
+  }
+});
+
+watch(useReservation, (newVal) => {
+  console.log('useReservation value changed:', newVal);
+});
 </script>
 <template>
-  <div class="dynamic-padding flex flex-col gap-[20px]">
-    <div class="flex gap-[10px] items-center">
-      <div class="w-[90px] font-bold text-base shrink-0">학과</div>
-      <div class="w-full px-5 py-3 bg-black bg-opacity-5 rounded-[10px] text-sm">컴퓨터공학부</div>
-    </div>
-    <div class="flex gap-[10px] items-center">
-      <div class="w-[90px] font-bold text-base shrink-0">부스이름</div>
-      <input
-        placeholder="부스 이름을 작성해주세요."
-        class="w-full px-5 py-3 bg-black bg-opacity-5 rounded-[10px] text-sm foucs:outline-none"
-      />
-    </div>
-    <div class="flex gap-[10px] items-center">
-      <div class="w-[90px] font-bold text-base shrink-0">운영 시간</div>
-      <input
-        placeholder="예) 15:00 ~ 20:00"
-        class="w-full px-5 py-3 bg-black bg-opacity-5 rounded-[10px] text-sm foucs:outline-none"
-      />
-      <IconBoothListToggle width="48" />
-    </div>
-    <div class="relative flex flex-col gap-[10px] items-start">
-      <div class="font-bold text-base">부스 소개</div>
-      <textarea
-        v-model="boothDescription"
-        placeholder="부스 소개를 작성해주세요."
-        class="resize-none w-full h-[97px] bg-black bg-opacity-5 rounded-3xl text-sm border-none p-5"
-      />
-      <div class="absolute bottom-9 right-5 text-sm">{{ characterCount }}/100</div>
-    </div>
-    <div class="flex flex-col gap-[10px] items-start">
-      <div class="font-bold text-base">부스 사진</div>
-      <!-- ADD: BOOTH IMAGE -->
-    </div>
-    <div class="flex flex-col gap-[10px] items-start">
-      <div class="font-bold text-base">메뉴 정보</div>
-      <!-- <MobileMenuDetail /> -->
-      <div class="w-full h-[150px] flex flex-col items-center justify-center border-dashed border-2 rounded-3xl">
-        <IconAdd />
-        <div class="pt-[10px] text-base">메뉴 추가하기</div>
+  <form class="w-full h-full" @submit.prevent="handleClickSumbit()">
+    <div class="dynamic-padding flex flex-col gap-[20px]">
+      <div class="flex gap-[10px] items-center">
+        <div class="w-[90px] font-bold text-base shrink-0">학과</div>
+        <div class="w-full px-5 py-3 bg-black bg-opacity-5 rounded-[10px] text-sm">{{ boothInfo.adminName }}</div>
+      </div>
+      <div class="flex gap-[10px] items-center">
+        <div class="w-[90px] font-bold text-base shrink-0">부스이름</div>
+        <input
+          type="text"
+          placeholder="부스 이름을 작성해주세요."
+          class="w-full px-5 py-3 bg-black bg-opacity-5 rounded-[10px] text-sm foucs:outline-none"
+          maxlength="100"
+          @input="handleInputBoothName($event)"
+          :value="boothInfo.boothName"
+          :disabled="isSubmit"
+        />
+      </div>
+      <div class="flex gap-[10px] items-center">
+        <div class="w-[90px] font-bold text-base shrink-0">운영 시간</div>
+        <input
+          type="text"
+          placeholder="예) 15:00 ~ 20:00"
+          class="w-full px-5 py-3 bg-black bg-opacity-5 rounded-[10px] text-sm foucs:outline-none"
+          maxlength="20"
+          @input="handleInputServiceHours($event)"
+          :value="serviceHours"
+          :disabled="isSubmit"
+        />
+        <IconBoothListToggle width="48" :is-active="boothInfo.isOpen" @click="boothInfo.isOpen = !boothInfo.isOpen" />
+      </div>
+      <div class="relative flex flex-col gap-[10px] items-start">
+        <div class="font-bold text-base">부스 소개</div>
+        <textarea
+          type="text"
+          placeholder="부스 소개를 작성해주세요."
+          class="resize-none w-full h-[97px] bg-black bg-opacity-5 rounded-3xl text-sm border-none p-5"
+          maxlength="100"
+          @input="handleInputBoothIntro($event)"
+          :value="boothDescription"
+          :disabled="isSubmit"
+        />
+        <div class="absolute bottom-9 right-5 text-sm">{{ characterCount }}/100</div>
+      </div>
+      <div class="flex flex-col gap-[10px] items-start">
+        <div class="font-bold text-base">부스 사진</div>
+        <!-- ADD: BOOTH IMAGE -->
+      </div>
+      <div class="flex flex-col gap-[10px] items-start">
+        <div class="font-bold text-base">메뉴 정보</div>
+        <!-- <MobileMenuDetail /> -->
+        <div class="w-full h-[150px] flex flex-col items-center justify-center border-dashed border-2 rounded-3xl">
+          <IconAdd />
+          <div class="pt-[10px] text-base">메뉴 추가하기</div>
+        </div>
+      </div>
+      <!-- Show when night booth -->
+      <div class="flex flex-col gap-[10px] items-start" v-if="boothType === 'night'">
+        <div class="font-bold text-base shrink-0">예약 기능 사용 여부</div>
+        <SelectOption v-model="useReservation" />
+      </div>
+      <div class="flex flex-col gap-[10px] items-start" v-if="boothType === 'night'">
+        <div class="font-bold text-base shrink-0">쿠폰 진행 여부</div>
+        <SelectOption v-model="useCoupon" />
+      </div>
+      <div class="flex flex-col gap-[10px] items-start" v-if="boothType === 'night'">
+        <div class="font-bold text-base shrink-0">주문 기능 사용 여부</div>
+        <SelectOption v-model="useOrder" />
       </div>
     </div>
-    <!-- Show when night booth -->
-    <div class="flex flex-col gap-[10px] items-start">
-      <div class="font-bold text-base shrink-0">예약 기능 사용 여부</div>
-      <SelectOption />
+    <div class="w-full dynamic-padding flex gap-[10px] py-20">
+      <button class="w-full bg-[#CCCCCC] rounded-[50px] text-white font-bold h-[54px]">취소</button>
+      <button class="w-full bg-[#CCCCCC] rounded-[50px] text-white font-bold h-[54px]" @click="handleClickSumbit()">
+        등록
+      </button>
     </div>
-    <div class="flex flex-col gap-[10px] items-start">
-      <div class="font-bold text-base shrink-0">쿠폰 진행 여부</div>
-      <SelectOption />
-    </div>
-    <div class="flex flex-col gap-[10px] items-start">
-      <div class="font-bold text-base shrink-0">주문 기능 사용 여부</div>
-      <SelectOption />
-    </div>
-  </div>
-  <div class="w-full dynamic-padding flex gap-[10px] py-20">
-    <button class="w-full bg-[#CCCCCC] rounded-[50px] text-white font-bold h-[54px]">취소</button>
-    <button class="w-full bg-[#CCCCCC] rounded-[50px] text-white font-bold h-[54px]">등록</button>
-  </div>
+  </form>
 </template>
 
 <style lang="css" scoped>
