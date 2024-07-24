@@ -1,3 +1,4 @@
+import router from '@/router';
 import axios from 'axios';
 
 export const api = axios.create({
@@ -45,4 +46,7 @@ export const imagesUpload = async (files) => {
 
 export const alertError = (errorMessage) => {
   alert(`${errorMessage}, 관리자에게 문의하세요.`);
+  if (router.currentRoute.value.path !== '/' || router.currentRoute.value.path !== '/login') {
+    router.push('/');
+  }
 };

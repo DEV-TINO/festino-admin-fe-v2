@@ -49,10 +49,20 @@ watchEffect(() => {
   );
 });
 
-const setIsUpdate = ({ reserveLength }) => {
-  if (reserveLength !== reserveNum.value) {
-    isUpdate.value = true;
+watchEffect(() => {
+  if (selectOrderType.value === 'reserve') {
+    isUserChecked.value = true;
   } else {
+    isUserChecked.value = false;
+  }
+});
+
+const setIsUpdate = ({ reserveLength }) => {
+  if (isUserChecked.value) {
+    isUpdate.value = false;
+  } else if (reserveLength !== reserveNum.value) {
+    isUpdate.value = true;
+  } else if (reserveLength === reserveNum.value && isUserChecked.value) {
     isUpdate.value = false;
   }
   reserveNum.value = reserveLength;
@@ -70,7 +80,12 @@ const handleClickDelete = async (reserveId) => {
     reserveId: reserveId,
   });
   console.log('[TablingView] handleClickDelete status:', status);
-  if (status) await getReserveList({ boothId: selectBoothId.value, type: selectOrderType.value });
+  if (status) {
+    const getReserveListAll = await Promise.allSettled([
+      getReserveList({ boothId: selectBoothId.value, type: selectOrderType.value }),
+      getReserveList({ boothId: selectBoothId.value, type: 'reserve' }),
+    ]);
+  }
   setIsUpdate({ reserveLength: reserveList.value['reserve'].length });
 };
 
@@ -80,7 +95,12 @@ const handleClickConfirm = async (reserveId) => {
     reserveId: reserveId,
   });
   console.log('[TablingView] handleClickConfirm status:', status);
-  if (status) await getReserveList({ boothId: selectBoothId.value, type: selectOrderType.value });
+  if (status) {
+    const getReserveListAll = await Promise.allSettled([
+      getReserveList({ boothId: selectBoothId.value, type: selectOrderType.value }),
+      getReserveList({ boothId: selectBoothId.value, type: 'reserve' }),
+    ]);
+  }
   setIsUpdate({ reserveLength: reserveList.value['reserve'].length });
 };
 
@@ -91,11 +111,12 @@ const handleClickRestore = async (reserveId) => {
     reserveType: selectOrderType.value,
   });
   console.log('[TablingView] handleClickRestore status:', status);
-  if (status)
-    await getReserveList({
-      boothId: selectBoothId.value,
-      type: selectOrderType.value,
-    });
+  if (status) {
+    const getReserveListAll = await Promise.allSettled([
+      getReserveList({ boothId: selectBoothId.value, type: selectOrderType.value }),
+      getReserveList({ boothId: selectBoothId.value, type: 'reserve' }),
+    ]);
+  }
   setIsUpdate({ reserveLength: reserveList.value['reserve'].length });
 };
 
@@ -265,9 +286,8 @@ onUnmounted(() => {
       <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
         <thead class="md:text-sm lg:text-lg xl:text-2xl text-gray-700 uppercase bg-primary-700">
           <tr>
-            <th scope="col" class="px-6 py-3 text-center text-secondary-700-light font-medium capitalize">
-              No. / 예약 번호
-            </th>
+            <th scope="col" class="px-6 py-3 text-center text-secondary-700-light font-medium capitalize">No.</th>
+            <th scope="col" class="px-6 py-3 text-center text-secondary-700-light font-medium capitalize">예약 번호</th>
             <th scope="col" class="px-6 py-3 text-center text-secondary-700-light font-medium">예약자</th>
             <th scope="col" class="px-6 py-3 text-center text-secondary-700-light font-medium">인원수</th>
             <th scope="col" class="px-6 py-3 text-center text-secondary-700-light font-medium">연락처</th>
@@ -289,7 +309,10 @@ onUnmounted(() => {
             :key="reserveIndex"
           >
             <th scope="row" class="px-6 py-4 whitespace-nowrap text-center">
-              {{ reserveIndex + 1 }} / {{ reserve.reservationNum }}
+              {{ reserveIndex + 1 }}
+            </th>
+            <th scope="row" class="px-6 py-4 whitespace-nowrap text-center">
+              {{ reserve.reservationNum }}
             </th>
             <td class="px-6 py-4 text-center">{{ reserve.userName }}</td>
             <td class="px-6 py-4 text-center">{{ reserve.personCount }}</td>
