@@ -62,6 +62,9 @@ export default {
           light: 'rgba(240, 12, 0, 0.12)',
           dark: '#BC0B00',
         },
+        restore: {
+          DEFAULT: '#E6F0FB',
+        }
       },
       borderColor: {
         primary: {
@@ -97,6 +100,9 @@ export default {
       },
       screens: {
         xs: '430px',
+      },
+      backgroundImage: {
+        'confirmation-icon': "url('/confirmation.svg')",
       },
     },
   },
