@@ -36,27 +36,6 @@ const isLoading = ref(false);
 
 const interval = ref(null);
 
-watchEffect(() => {
-  console.log(
-    'IsUserChecked:',
-    isUserChecked.value,
-    'IsUpdate:',
-    isUpdate.value,
-    'SelectOrderType:',
-    selectOrderType.value,
-    'ReserveNum:',
-    reserveNum.value,
-  );
-});
-
-watchEffect(() => {
-  if (selectOrderType.value === 'reserve') {
-    isUserChecked.value = true;
-  } else {
-    isUserChecked.value = false;
-  }
-});
-
 const setIsUpdate = ({ reserveLength }) => {
   if (isUserChecked.value) {
     isUpdate.value = false;
@@ -79,7 +58,6 @@ const handleClickDelete = async (reserveId) => {
     boothId: selectBoothId.value,
     reserveId: reserveId,
   });
-  console.log('[TablingView] handleClickDelete status:', status);
   if (status) {
     const getReserveListAll = await Promise.allSettled([
       getReserveList({ boothId: selectBoothId.value, type: selectOrderType.value }),
@@ -94,7 +72,6 @@ const handleClickConfirm = async (reserveId) => {
     boothId: selectBoothId.value,
     reserveId: reserveId,
   });
-  console.log('[TablingView] handleClickConfirm status:', status);
   if (status) {
     const getReserveListAll = await Promise.allSettled([
       getReserveList({ boothId: selectBoothId.value, type: selectOrderType.value }),
@@ -110,7 +87,6 @@ const handleClickRestore = async (reserveId) => {
     reserveId: reserveId,
     reserveType: selectOrderType.value,
   });
-  console.log('[TablingView] handleClickRestore status:', status);
   if (status) {
     const getReserveListAll = await Promise.allSettled([
       getReserveList({ boothId: selectBoothId.value, type: selectOrderType.value }),
@@ -121,7 +97,6 @@ const handleClickRestore = async (reserveId) => {
 };
 
 const refereshReserveList = () => {
-  console.log('Referesh Reserve List');
   interval.value = setInterval(async () => {
     if (!selectBoothId.value) return;
     if (!selectOrderType.value) return;
@@ -134,7 +109,6 @@ const refereshReserveList = () => {
         getReserveList({ boothId: selectBoothId.value, type: selectOrderType.value }),
         getReserveList({ boothId: selectBoothId.value, type: 'reserve' }),
       ]);
-      console.log('getReserveListAll', getReserveListAll);
     }
     setIsUpdate({ reserveLength: reserveList.value['reserve'].length });
   }, 5000);
@@ -144,9 +118,7 @@ watchEffect(async () => {
   if (!selectBoothId.value) return;
   if (!selectOrderType.value) return;
   isLoading.value = true;
-  console.log('SelectOrderType', selectOrderType.value);
   await getReserveList({ boothId: selectBoothId.value, type: selectOrderType.value });
-  console.log('ReserveList', reserveList.value, reserveList.value[selectOrderType.value]);
   setIsUpdate({ reserveLength: reserveList.value['reserve'].length });
   clearReferesh();
   refereshReserveList();
@@ -157,6 +129,14 @@ watchEffect(() => {
   if (!selectBoothId.value) return;
   if (!reserveBoothList.value) return;
   selectBooth.value = reserveBoothList.value.find((booth) => booth.boothId === selectBoothId.value);
+});
+
+watchEffect(() => {
+  if (selectOrderType.value === 'reserve') {
+    isUserChecked.value = true;
+  } else {
+    isUserChecked.value = false;
+  }
 });
 
 const clearReferesh = () => {
@@ -269,7 +249,7 @@ onUnmounted(() => {
     </div>
 
     <!-- For admin -->
-    <div class="flex justify-between min-w-[350px] items-center gap-4">
+    <div class="flex justify-between min-w-[350px] items-center gap-4" v-if="isAdmin">
       <div class="flex-shrink-0 text-xl font-semibold">학과 선택:</div>
 
       <select

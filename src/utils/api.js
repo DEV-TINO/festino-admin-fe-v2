@@ -44,9 +44,9 @@ export const imagesUpload = async (files) => {
   }
 };
 
-export const alertError = (errorMessage) => {
+export const alertError = (errorMessage, goHome = true) => {
   alert(`${errorMessage}, 관리자에게 문의하세요.`);
-  if (router.currentRoute.value.path !== '/' || router.currentRoute.value.path !== '/login') {
+  if (goHome) {
     router.push('/');
   }
 };

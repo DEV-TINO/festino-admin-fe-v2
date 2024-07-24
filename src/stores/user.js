@@ -43,7 +43,7 @@ export const useUser = defineStore('user', () => {
         isValidate: isValidate.value,
       };
     } catch (e) {
-      alertError('User Validate Error, Please try Login again!');
+      alertError('User Validate Error, Please try Login again!', false);
       isAdmin.value = false;
       isValidate.value = false;
       return {
@@ -142,7 +142,7 @@ export const useUser = defineStore('user', () => {
       isAdmin.value = false;
       isValidate.value = false;
       userOwnBoothId.value = '';
-      alertError(error);
+      alertError(error, false);
     }
   };
 
