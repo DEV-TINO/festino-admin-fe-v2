@@ -23,7 +23,7 @@ const { isAdmin, userOwnBoothId } = storeToRefs(useUserStore);
 const { boothList } = storeToRefs(useBoothListStore);
 const { reserveList, searchKeyword } = storeToRefs(useReserveListStore);
 
-const reserveBoothList = ref('');
+const reserveBoothList = ref([]);
 
 const selectBooth = ref('');
 const selectBoothId = ref('');
@@ -149,9 +149,9 @@ onMounted(async () => {
   console.log('[TablingView] isAdmin:', isAdmin.value);
   console.log('[TablingView] userOwnBoothId:', userOwnBoothId.value);
   clearReferesh();
+  await getAllBoothList();
+  reserveBoothList.value = boothList.value.filter((booth) => booth?.isReservation);
   if (isAdmin.value) {
-    await getAllBoothList();
-    reserveBoothList.value = boothList.value.filter((booth) => booth?.isReservation);
     selectBoothId.value = reserveBoothList.value[0].boothId;
   } else {
     if (userOwnBoothId.value) {

@@ -42,6 +42,11 @@ const handleClickReserve = () => {
   });
 };
 
+const handleClickOrder = () => {
+  console.log('Order clicked');
+  alert('기능 준비중입니다.');
+};
+
 const handleClickLogout = () => {
   console.log('Logout clicked');
   logout();
@@ -86,6 +91,7 @@ watch(() => route.name, updateActive, {
       <div
         class="hover:text-primary-900 hover:font-semibold cursor-pointer hidden sm:block"
         :class="setActiveClass(orderActive)"
+        @click="handleClickOrder()"
       >
         주문조희
       </div>
@@ -134,6 +140,7 @@ watch(() => route.name, updateActive, {
           <div
             class="w-24 h-8 flex items-center justify-center text-sm hover:text-primary-900 hover:bg-slate-50 cursor-pointer"
             :class="setActiveClass(orderActive)"
+            @click="handleClickOrder()"
           >
             주문조희
           </div>
