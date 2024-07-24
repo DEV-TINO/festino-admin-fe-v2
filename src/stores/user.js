@@ -53,6 +53,26 @@ export const useUser = defineStore('user', () => {
     }
   };
 
+  const getUserOwnBoothId = async () => {
+    try {
+      const response = await api.get('/admin/user/booth');
+      const data = response.data;
+
+      if (data.success) {
+        userOwnBoothId.value = data.boothId;
+        console.log(userOwnBoothId.value);
+        return userOwnBoothId.value;
+      } else {
+        userOwnBoothId.value = '';
+        return '';
+      }
+    } catch (e) {
+      userOwnBoothId.value = '';
+      console.error(e);
+      return '';
+    }
+  };
+
   const isUserOwnBooth = async (boothId) => {
     if (!isUUID(boothId)) return false;
 
@@ -142,5 +162,6 @@ export const useUser = defineStore('user', () => {
     setPassword,
     setIsError,
     setErrorMessage,
+    getUserOwnBoothId,
   };
 });

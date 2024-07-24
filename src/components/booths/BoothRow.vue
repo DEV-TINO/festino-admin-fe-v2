@@ -1,6 +1,6 @@
 <script setup>
 import IconBoothListToggle from '@/components/icons/IconBoothListToggle.vue';
-import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
+import { computed, onMounted, onUnmounted, ref, watch, watchEffect } from 'vue';
 
 import { useBoothPopup } from '@/stores/booths/boothPopup';
 import { useBoothList } from '@/stores/booths/boothList';
@@ -32,9 +32,13 @@ const updateWindowWidth = () => {
   windowWidth.value = window.innerWidth;
 };
 
+const isBoothOwner = computed(() => {
+  return isAdmin.value || props.boothInfo.boothId === userOwnBoothId.value;
+});
+
 // Handlers
 const handleClickBoothOpen = () => {
-  if (!isAdmin.value && props.boothInfo.boothId !== userOwnBoothId.value) {
+  if (!isBoothOwner.value) {
     alert('본인 부스가 아닙니다.');
     return;
   }
@@ -46,7 +50,7 @@ const handleClickBoothOpen = () => {
 };
 
 const handleClickBoothOrder = () => {
-  if (!isAdmin.value && props.boothInfo.boothId !== userOwnBoothId.value) {
+  if (!isBoothOwner.value) {
     alert('본인 부스가 아닙니다.');
     return;
   }
@@ -58,7 +62,7 @@ const handleClickBoothOrder = () => {
 };
 
 const handleClickBoothReservation = () => {
-  if (!isAdmin.value && props.boothInfo.boothId !== userOwnBoothId.value) {
+  if (!isBoothOwner.value) {
     alert('본인 부스가 아닙니다.');
     return;
   }
@@ -81,7 +85,13 @@ onUnmounted(() => {
 
 <template>
   <div
-    class="bg-white text-xs lg:text-base xl:text-xl h-[70px] w-full flex justify-between gap-4 flex-nowrap overflow-x-auto items-center px-4 lg:px-[60px] last:rounded-b-[20px] last:border-0 border-b-2 border-secondary-500 hover:bg-slate-50"
+    class="bg-white text-xs lg:text-base xl:text-xl h-[70px] w-full flex justify-between gap-4 flex-nowrap overflow-x-auto items-center px-4 lg:px-[60px] last:rounded-b-[20px] last:border-0 border-b-2 border-secondary-500"
+    :class="{
+      'bg-slate-200': isBoothOwner && !isAdmin,
+      'font-bold': isBoothOwner && !isAdmin,
+      'hover:bg-slate-200': isBoothOwner && !isAdmin,
+      'hover:bg-slate-50': !isBoothOwner || isAdmin,
+    }"
   >
     <!-- Booth Index -->
     <div class="text-nowrap min-w-[21px] w-[21px] lg:min-w-[35px] lg:w-[35px] text-center">
