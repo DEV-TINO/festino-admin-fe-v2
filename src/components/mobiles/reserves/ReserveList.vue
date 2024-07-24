@@ -6,7 +6,7 @@ import { useReserveModalStore } from "@/stores/mobiles/reserve/reserveModalStore
 
 const { reserveData } = storeToRefs(useReserveStore());
 const { getReserveData } = useReserveStore();
-const { handleClickOpenConfirm } = useReserveModalStore();
+const { handleClickOpenAdmin } = useReserveModalStore();
 const type = ref("reserve")
 
 const getMobileNum = (num) => {

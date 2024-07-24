@@ -4,10 +4,12 @@ import { storeToRefs } from "pinia";
 import { useReserveModalStore } from "@/stores/mobiles/reserve/reserveModalStore";
 import ReserveList from "@/components/mobiles/reserves/ReserveList.vue";
 import DeleteList from "@/components/mobiles/reserves/DeleteList.vue";
-import ConfirmModal from "@/components/mobiles/reserves/ConfirmModal.vue";
 import completeList from "@/components/mobiles/reserves/CompleteList.vue";
+import RestoreConfirmModal from "@/components/mobiles/reserves/RestoreConfirmModal.vue";
+import ReserveAdminModal from '@/components/mobiles/reserves/ReserveAdminModal.vue';
+import ReserveConfirmModal from "@/components/mobiles/reserves/ReserveConfirmModal.vue";
 
-const { confirmModalState } = storeToRefs(useReserveModalStore());
+const { restoreConfirmModalState, adminModalState, reserveConfirmModalState } = storeToRefs(useReserveModalStore());
 
 const isActive = ref({
   reserveList: true,
@@ -51,7 +53,9 @@ const activeTab = (isActive) => {
 </script>
 
 <template>
-  <ConfirmModal v-if="confirmModalState" />
+  <RestoreConfirmModal v-if="restoreConfirmModalState" />
+  <ReserveAdminModal v-if="adminModalState" />
+  <ReserveConfirmModal v-if="reserveConfirmModalState" />
   <div class="w-full h-full">
     <div class="flex font-semibold text-xl border-b border-secondary-300 relative">
       <div class="w-1/12"></div>

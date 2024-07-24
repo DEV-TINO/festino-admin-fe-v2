@@ -17,29 +17,44 @@ export const useReserveStore = defineStore('reserveStore', () => {
     }
   };
 
-  const updateReservation = async (reserveId, type) => {
-    if (type === "reserve") {
-      try {
-        const response = await api.delete('/admin/reservation', {
-          data: {
-            boothId: currentBoothId,
-            reservationId: reserveId,
-          },
-        });
-      } catch (error) {
-        console.error(error);
-      }
+  const confirmReserve = async (reserveId) => {
+    const type = 'reserve'
+    try {
+      const response = await api.put('/admin/reservation/complete', {
+        boothId: currentBoothId,
+        reservationId: reserveId,
+      });
+    } catch (error) {
+      console.error(error);
     }
-    else if (type === "cancel") {
-      try {
-        const response = await api.put('/admin/reservation/restore', {
+    getReserveData(type);
+  };
+
+  const deleteReserve = async (reserveId) => {
+    const type = 'reserve'
+    try {
+      const response = await api.delete('/admin/reservation', {
+        data: {
           boothId: currentBoothId,
           reservationId: reserveId,
-          reservationType: "CANCEL",
-        });
-      } catch (error) {
-        console.error(error);
-      }
+        }
+      });
+    } catch (error) {
+      console.error(error);
+    }
+    getReserveData(type);
+  };
+
+  const updateReservation = async (reserveId, type) => {
+    const upperCaseType = type.toUpperCase();
+    try {
+      const response = await api.put('/admin/reservation/restore', {
+        boothId: currentBoothId,
+        reservationId: reserveId,
+        reservationType: upperCaseType,
+      });
+    } catch (error) {
+      console.error(error);
     }
     getReserveData(type);
   };
@@ -48,6 +63,8 @@ export const useReserveStore = defineStore('reserveStore', () => {
     reserveData,
     getReserveData,
     updateReservation,
+    confirmReserve,
+    deleteReserve,
   };
 });
 6
