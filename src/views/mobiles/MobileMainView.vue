@@ -9,6 +9,10 @@ const router = useRouter();
 const handleRouter = (page, id) => {
   router.push({ path: `/admin/${id}/${page}` });
 };
+
+const clickMoveReserve = (page, id) => {
+  router.push({ name: 'MobileReserve' });
+};
 </script>
 
 <template>
@@ -26,7 +30,7 @@ const handleRouter = (page, id) => {
         </div>
       </div>
     </div>
-    <div class="flex flex-col gap-[30px] text-secondary-700 w-full">
+    <div @click="clickMoveReserve()" class="flex flex-col gap-[30px] text-secondary-700 w-full">
       <p class="font-semibold text-xl">예약관리</p>
       <div class="bg-primary-900 rounded-[20px] flex flex-col items-center w-full relative h-[190px] justify-end p-5">
         <IconReserveTino class="absolute -top-7" />
