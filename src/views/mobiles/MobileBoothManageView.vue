@@ -120,7 +120,6 @@ onMounted(async () => {
     }
   }
   if (isAdmin.value) {
-    console.log(isAdmin.value);
     await useBoothListStore.getAllBoothList();
     selectedBoothId.value = boothList.value[0].boothId;
   }

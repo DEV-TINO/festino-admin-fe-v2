@@ -33,7 +33,7 @@ const handleClickAdminMenu = (type) => {
 </script>
 
 <template>
-  <div class="flex flex-col justify-center items-center w-full h-full gap-10 dynamic-padding">
+  <div class="flex flex-col justify-center items-center w-full h-full gap-10 mobile-padding">
     <div class="flex flex-col gap-[30px] text-secondary-700 w-full">
       <p class="font-semibold text-xl">부스 등록 및 수정</p>
       <div
@@ -72,7 +72,7 @@ const handleClickAdminMenu = (type) => {
 </template>
 
 <style lang="css" scoped>
-.dynamic-padding {
+.mobile-padding {
   padding-right: calc(40 / 430 * 100%);
   padding-left: calc(40 / 430 * 100%);
 }
