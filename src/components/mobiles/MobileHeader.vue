@@ -3,8 +3,13 @@ import router from '@/router';
 import IconHeaderBack from '@/components/icons/mobiles/IconHeaderBack.vue';
 import { useUser } from '@/stores/user';
 import { watch, ref } from 'vue';
+import { useBoothUser } from '@/stores/mobiles/boothUser';
+import { storeToRefs } from 'pinia';
 
 const useUserStore = useUser();
+const useBoothUserStore = useBoothUser();
+
+const { userBoothInfo } = storeToRefs(useBoothUserStore);
 const routerName = ref('');
 
 const handleClickBackButton = () => {
@@ -26,9 +31,15 @@ watch(() => (routerName.value = router.currentRoute.value.name), { immediate: tr
     <div class="w-7">
       <IconHeaderBack @click="handleClickBackButton()" v-if="router.currentRoute.value.name != 'MobileMain'" />
     </div>
-    <p class="font-medium text-xl">컴퓨터공학부</p>
+    <p class="font-medium text-xl">{{ userBoothInfo.adminName }}</p>
     <div class="w-[42px] text-xs underline text-[#999999] underline-offset-4">
-      <p @click="handleClickLogoutButton()" class="cursor-pointer">로그아웃</p>
+      <p
+        @click="handleClickLogoutButton()"
+        class="cursor-pointer"
+        v-if="router.currentRoute.value.name === 'MobileMain'"
+      >
+        로그아웃
+      </p>
     </div>
   </div>
 </template>
