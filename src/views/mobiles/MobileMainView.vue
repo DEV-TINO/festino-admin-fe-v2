@@ -12,7 +12,7 @@ const router = useRouter();
 const useBoothDetailStore = useBoothDetail();
 const useUserStore = useUser();
 
-const { userOwnBoothId } = storeToRefs(useUserStore);
+const { userOwnBoothId, isAdmin } = storeToRefs(useUserStore);
 const { boothInfo, boothType } = storeToRefs(useBoothDetailStore);
 
 onMounted(async () => {
@@ -41,7 +41,7 @@ const handleClickAdminMenu = (type) => {
         <IconBoothTino class="absolute -top-7" />
         <div class="bg-white flex rounded-[20px] justify-between w-full h-[88px] p-5 items-center">
           <div class="flex flex-col gap-[6px]">
-            <p class="font-semibold">{{ boothInfo.adminName }}</p>
+            {{ isAdmin ? '개발팀' : boothInfo.adminName }}
             <p class="text-xs">부스 운영을 응원합니다!</p>
           </div>
           <IconBannerArrow />

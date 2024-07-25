@@ -2,6 +2,7 @@ import { defineStore, storeToRefs } from 'pinia';
 import { ref } from 'vue';
 
 import { useBoothList } from './boothList';
+import { useUser } from '../user';
 import { alertError, api } from '@/utils/api';
 import { ADMIN_CATEGORY } from '@/utils/constants';
 
@@ -9,6 +10,7 @@ export const useBoothDetail = defineStore('boothDetail', () => {
   const useBoothListStore = useBoothList();
   const { getAllBoothList } = useBoothListStore;
   const { boothList } = storeToRefs(useBoothListStore);
+  const { isAdmin } = storeToRefs(useUser());
 
   const boothInfo = ref({
     boothId: '',
@@ -68,6 +70,8 @@ export const useBoothDetail = defineStore('boothDetail', () => {
   };
 
   const getBoothInfo = async (boothId) => {
+    if (isAdmin.value) return;
+
     await getAllBoothList();
     const booth = boothList.value.find((booth) => booth.boothId === boothId);
     boothInfo.value = booth;
