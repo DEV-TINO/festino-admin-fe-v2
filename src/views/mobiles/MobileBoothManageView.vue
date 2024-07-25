@@ -74,6 +74,7 @@ const handleClickSumbit = async () => {
   }
 
   const saveBoothUrl = `/admin/booth/${boothType.value}`;
+  // TODO: ADD ERROR HANDLING
   const saveBoothResponse = await api.put(saveBoothUrl, boothInfo.value);
 
   isSubmit.value = false;
@@ -160,15 +161,15 @@ onMounted(async () => {
         </div>
       </div>
       <!-- Show when night booth -->
-      <div class="flex flex-col gap-[10px] items-start" v-if="boothType === 'night'">
+      <div v-if="boothType === 'night'" class="flex flex-col gap-[10px] items-start">
         <div class="font-bold text-base shrink-0">예약 기능 사용 여부</div>
         <SelectOption v-model="useReservation" />
       </div>
-      <div class="flex flex-col gap-[10px] items-start" v-if="boothType === 'night'">
+      <div v-if="boothType === 'night'" class="flex flex-col gap-[10px] items-start">
         <div class="font-bold text-base shrink-0">쿠폰 진행 여부</div>
         <SelectOption v-model="useCoupon" />
       </div>
-      <div class="flex flex-col gap-[10px] items-start" v-if="boothType === 'night'">
+      <div v-if="boothType === 'night'" class="flex flex-col gap-[10px] items-start">
         <div class="font-bold text-base shrink-0">주문 기능 사용 여부</div>
         <SelectOption v-model="useOrder" />
       </div>
