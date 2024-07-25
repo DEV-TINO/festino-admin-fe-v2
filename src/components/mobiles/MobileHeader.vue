@@ -2,13 +2,11 @@
 import router from '@/router';
 import IconHeaderBack from '@/components/icons/mobiles/IconHeaderBack.vue';
 import { useUser } from '@/stores/user';
-import { watch, ref } from 'vue';
-import { useBoothUser } from '@/stores/mobiles/boothUser';
+import { ref, watchEffect } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useBoothDetail } from '@/stores/booths/boothDetail';
 
 const useUserStore = useUser();
-const useBoothUserStore = useBoothUser();
 const useBoothDetailStore = useBoothDetail();
 
 const { boothInfo } = storeToRefs(useBoothDetailStore);
@@ -22,7 +20,7 @@ const handleClickLogoutButton = async () => {
   router.push({ name: 'MobileLogin' });
 };
 
-watch(() => (routerName.value = router.currentRoute.value.name), { immediate: true });
+watchEffect(() => (routerName.value = router.currentRoute.value.name));
 </script>
 
 <template>

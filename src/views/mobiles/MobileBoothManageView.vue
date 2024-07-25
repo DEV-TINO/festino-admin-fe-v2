@@ -3,29 +3,23 @@ import IconBoothListToggle from '@/components/icons/IconBoothListToggle.vue';
 import IconAdd from '@/components/icons/mobiles/IconAdd.vue';
 import SelectOption from '@/components/mobiles/SelectOption.vue';
 import { computed, onMounted, ref, watch } from 'vue';
-import { ADMIN_CATEGORY } from '@/utils/constants';
 import { useBoothInfo } from '@/stores/mobiles/boothInfo';
 import { useBoothDetail } from '@/stores/booths/boothDetail';
 import { storeToRefs } from 'pinia';
+import { useUser } from '@/stores/user';
 
 const useBoothInfoStore = useBoothInfo();
 const useBoothDetailStore = useBoothDetail();
+const useUserStore = useUser();
 
-const { boothInfo } = storeToRefs(useBoothDetailStore);
+const { boothInfo, menuList, boothType } = storeToRefs(useBoothDetailStore);
 
 const isSubmit = ref(false);
 const useReservation = ref(false);
 const useCoupon = ref(false);
 const useOrder = ref(false);
 
-const boothType = ADMIN_CATEGORY[boothInfo.value.adminCategory];
-
-const characterCount = computed(() => boothInfo.value.boothIntro?.length ?? 0);
-watch(boothInfo.value.boothIntro, (newVal) => {
-  if (newVal.length > 100) {
-    boothInfo.value.boothIntro = newVal.slice(0, 100);
-  }
-});
+const characterCount = computed(() => boothInfo.value?.boothIntro?.length ?? 0);
 
 const serviceHours = ref('');
 const handleInputBoothName = (event) => {
@@ -70,7 +64,7 @@ const handleClickSumbit = async () => {
   // boothInfo.value.boothImage = fileUrls.value;
 
   //nightbooth
-  if (boothType === 'night') {
+  if (boothType.value === 'night') {
     boothInfo.value = {
       ...boothInfo.value,
       isReservation: useReservation.value,
@@ -78,24 +72,26 @@ const handleClickSumbit = async () => {
     };
   }
 
-  const res = await useBoothInfoStore.updateBoothInfo(boothType, boothInfo.value);
+  const res = await useBoothInfoStore.updateBoothInfo(boothType.value, boothInfo.value);
 
   isSubmit.value = false;
   router.push({ name: 'MobileMain' });
 };
 
 onMounted(async () => {
-  if (boothInfo.value) {
+  useBoothDetailStore.reset();
+  const userBoothId = await useUserStore.getUserOwnBoothId();
+  const condition = await useBoothDetailStore.init(userBoothId);
+  if (condition) {
+    //TODO: ADD BOOTH IMAGE
     serviceHours.value = `${boothInfo.value.openTime} ~ ${boothInfo.value.closeTime}`;
-    if (boothType === 'night') {
+    if (boothType.value === 'night') {
       useReservation.value = boothInfo.value.isReservation;
       useOrder.value = boothInfo.value.isOrder;
     }
+  } else {
+    //부스정보 불러오기 실패
   }
-});
-
-watch(useReservation, (newVal) => {
-  console.log('useReservation value changed:', newVal);
 });
 </script>
 <template>
@@ -103,7 +99,7 @@ watch(useReservation, (newVal) => {
     <div class="dynamic-padding flex flex-col gap-[20px]">
       <div class="flex gap-[10px] items-center">
         <div class="w-[90px] font-bold text-base shrink-0">학과</div>
-        <div class="w-full px-5 py-3 bg-black bg-opacity-5 rounded-[10px] text-sm">{{ boothInfo.adminName }}</div>
+        <div class="w-full h-11 px-5 py-3 bg-black bg-opacity-5 rounded-[10px] text-sm">{{ boothInfo?.adminName }}</div>
       </div>
       <div class="flex gap-[10px] items-center">
         <div class="w-[90px] font-bold text-base shrink-0">부스이름</div>
@@ -113,7 +109,7 @@ watch(useReservation, (newVal) => {
           class="w-full px-5 py-3 bg-black bg-opacity-5 rounded-[10px] text-sm foucs:outline-none"
           maxlength="100"
           @input="handleInputBoothName($event)"
-          :value="boothInfo.boothName"
+          :value="boothInfo?.boothName"
           :disabled="isSubmit"
         />
       </div>
@@ -128,14 +124,14 @@ watch(useReservation, (newVal) => {
           :value="serviceHours"
           :disabled="isSubmit"
         />
-        <IconBoothListToggle width="48" :is-active="boothInfo.isOpen" @click="boothInfo.isOpen = !boothInfo.isOpen" />
+        <IconBoothListToggle :width="48" :is-active="boothInfo?.isOpen" @click="boothInfo.isOpen = !boothInfo.isOpen" />
       </div>
       <div class="relative flex flex-col gap-[10px] items-start">
         <div class="font-bold text-base">부스 소개</div>
         <textarea
           type="text"
           placeholder="부스 소개를 작성해주세요."
-          class="resize-none w-full h-[97px] bg-black bg-opacity-5 rounded-3xl text-sm border-none p-5"
+          class="resize-none w-full h-[97px] bg-black bg-opacity-5 rounded-3xl text-sm border-none p-5 pr-20 overflow-hidden"
           maxlength="100"
           @input="handleInputBoothIntro($event)"
           :value="boothInfo.boothIntro"
