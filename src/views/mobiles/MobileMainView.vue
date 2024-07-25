@@ -6,19 +6,14 @@ import IconBannerArrow from '@/components/icons/mobiles/IconBannerArrow.vue';
 import IconReserveTino from '@/components/icons/mobiles/IconReserveTino.vue';
 import { useRouter } from 'vue-router';
 import { useBoothUser } from '@/stores/mobiles/boothUser';
-import { useBoothList } from '@/stores/booths/boothList';
-import { useUser } from '@/stores/user';
 
 const router = useRouter();
-const useUserStore = useUser();
 const useBoothUserStore = useBoothUser();
 
-const { userOwnBoothId } = storeToRefs(useUserStore);
 const { userBoothInfo } = storeToRefs(useBoothUserStore);
 
 onMounted(async () => {
-  await useBoothUserStore.getBoothId();
-  useBoothUserStore.findUserBoothInfo(userOwnBoothId);
+  useBoothUserStore.initBoothInfo();
 });
 
 const handleClickAdminMenu = (type) => {
@@ -43,7 +38,7 @@ const handleClickAdminMenu = (type) => {
         <div class="bg-white flex rounded-[20px] justify-between w-full h-[88px] p-5 items-center">
           <div class="flex flex-col gap-[6px]">
             <!-- TODO: 부스 아이디 가져오는 api 오류 해결되면 수정 -->
-            <p class="font-semibold">메카트로닉스공학부</p>
+            <p class="font-semibold">{{ userBoothInfo.adminName }}</p>
             <p class="text-xs">부스 운영을 응원합니다!</p>
           </div>
           <IconBannerArrow />
