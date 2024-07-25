@@ -6,6 +6,7 @@ import IconReservation from '@/components/icons/IconReservation.vue';
 import router from '@/router';
 import { useBoothList } from '@/stores/booths/boothList';
 import { useReserveList } from '@/stores/reserve/reserveList';
+import { useReservePopup } from '@/stores/reserve/reservePopup';
 import { useUser } from '@/stores/user';
 import { alertError } from '@/utils/api';
 import { prettyDate } from '@/utils/utils';
@@ -15,9 +16,11 @@ import { onMounted, onUnmounted, ref, watch, watchEffect } from 'vue';
 const useUserStore = useUser();
 const useBoothListStore = useBoothList();
 const useReserveListStore = useReserveList();
+const useReservePopupStore = useReservePopup();
 
 const { getAllBoothList } = useBoothListStore;
 const { getReserveList, deleteReserve, confirmReserve, restoreReserve, getFilteredReserveList } = useReserveListStore;
+const { openBoothReservePopup, openPopup } = useReservePopupStore;
 
 const { isAdmin, userOwnBoothId } = storeToRefs(useUserStore);
 const { boothList } = storeToRefs(useBoothListStore);
@@ -25,7 +28,7 @@ const { reserveList, searchKeyword } = storeToRefs(useReserveListStore);
 
 const reserveBoothList = ref([]);
 
-const selectBooth = ref('');
+const selectBooth = ref({});
 const selectBoothId = ref('');
 const selectOrderType = ref('reserve'); // reserve, cancel, complete
 
@@ -47,13 +50,11 @@ const setIsUpdate = ({ reserveLength }) => {
   reserveNum.value = reserveLength;
 };
 
-const handleClickOrderType = (type) => {
-  if (type === 'reserve') isUserChecked.value = true;
-  else isUserChecked.value = false;
-  selectOrderType.value = type;
+const setSelectBooth = (booth) => {
+  selectBooth.value = booth;
 };
 
-const handleClickDelete = async (reserveId) => {
+const handleDelete = async (reserveId) => {
   const status = await deleteReserve({
     boothId: selectBoothId.value,
     reserveId: reserveId,
@@ -67,7 +68,7 @@ const handleClickDelete = async (reserveId) => {
   setIsUpdate({ reserveLength: reserveList.value['reserve'].length });
 };
 
-const handleClickConfirm = async (reserveId) => {
+const handleConfirm = async (reserveId) => {
   const status = await confirmReserve({
     boothId: selectBoothId.value,
     reserveId: reserveId,
@@ -81,7 +82,7 @@ const handleClickConfirm = async (reserveId) => {
   setIsUpdate({ reserveLength: reserveList.value['reserve'].length });
 };
 
-const handleClickRestore = async (reserveId) => {
+const handleRestore = async (reserveId) => {
   const status = await restoreReserve({
     boothId: selectBoothId.value,
     reserveId: reserveId,
@@ -94,6 +95,36 @@ const handleClickRestore = async (reserveId) => {
     ]);
   }
   setIsUpdate({ reserveLength: reserveList.value['reserve'].length });
+};
+
+const handleClickOrderType = (type) => {
+  if (type === 'reserve') isUserChecked.value = true;
+  else isUserChecked.value = false;
+  selectOrderType.value = type;
+};
+
+const handleClickDelete = async (reserve) => {
+  openPopup({
+    reserveInfo: reserve,
+    type: 'cancel',
+    callback: () => handleDelete(reserve.reservationId),
+  });
+};
+
+const handleClickConfirm = async (reserve) => {
+  openPopup({
+    reserveInfo: reserve,
+    type: 'confirm',
+    callback: () => handleConfirm(reserve.reservationId),
+  });
+};
+
+const handleClickRestore = async (reserve) => {
+  openPopup({
+    reserveInfo: reserve,
+    type: 'restore',
+    callback: () => handleRestore(reserve.reservationId),
+  });
 };
 
 const refereshReserveList = () => {
@@ -179,7 +210,17 @@ onUnmounted(() => {
       <div
         class="w-[320px] h-[55px] rounded-[20px] bg-primary-800-light text-primary-900 flex justify-center items-center text-2xl gap-[10px]"
       >
-        예약 기능 ON/OFF <IconBoothListToggle :width="70" :is-active="selectBooth.isReservation" />
+        예약 기능 ON/OFF
+        <IconBoothListToggle
+          :width="70"
+          :is-active="selectBooth.isReservation"
+          @click="
+            openBoothReservePopup({
+              booth: selectBooth,
+              callback: setSelectBooth,
+            })
+          "
+        />
       </div>
     </div>
     <!-- Reserve Category -->
@@ -201,14 +242,14 @@ onUnmounted(() => {
           :class="{ 'is-outlined': selectOrderType !== 'complete' }"
           @click="handleClickOrderType('complete')"
         >
-          확인 목록
+          입장 목록
         </button>
         <button
           class="is-button w-[120px] h-[50px] is-danger"
           :class="{ 'is-outlined': selectOrderType !== 'cancel' }"
           @click="handleClickOrderType('cancel')"
         >
-          삭제 목록
+          취소 목록
         </button>
       </div>
       <div
@@ -303,9 +344,9 @@ onUnmounted(() => {
                 <button
                   class="is-button w-full text-sm xl:text-base h-8"
                   type="button"
-                  @click="handleClickConfirm(reserve.reservationId)"
+                  @click="handleClickConfirm(reserve)"
                 >
-                  확인
+                  입장
                 </button>
               </div>
             </td>
@@ -314,9 +355,9 @@ onUnmounted(() => {
                 <button
                   type="button"
                   class="is-button w-full text-sm xl:text-base h-8 is-danger is-outlined"
-                  @click="handleClickDelete(reserve.reservationId)"
+                  @click="handleClickDelete(reserve)"
                 >
-                  삭제
+                  취소
                 </button>
               </div>
             </td>
@@ -325,9 +366,9 @@ onUnmounted(() => {
                 <button
                   type="button"
                   class="is-button w-full text-sm xl:text-base h-8 is-outlined"
-                  @click="handleClickRestore(reserve.reservationId)"
+                  @click="handleClickRestore(reserve)"
                 >
-                  복구
+                  예약
                 </button>
               </div>
             </td>
@@ -344,7 +385,7 @@ onUnmounted(() => {
             <td scope="col" colspan="7">
               <div class="w-full justify-center items-center flex flex-col py-10 bg-white rounded-b-[20px]">
                 <IconNotFound :width="404" />
-                <p class="text-3xl py-4">예약 내역이 없습니다.</p>
+                <p class="text-3xl py-4">검색 내역이 없습니다...</p>
               </div>
             </td>
           </tr>

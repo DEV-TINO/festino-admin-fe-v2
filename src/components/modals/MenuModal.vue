@@ -13,6 +13,7 @@ const { menuInfo } = storeToRefs(useMenuModalStore);
 
 const isMainMenu = ref(true);
 const isSubmit = ref(false);
+const submit = ref(null);
 
 const handleInputMenuName = (event) => {
   menuInfo.value.menuName = event.target.value;
@@ -58,12 +59,8 @@ const allowKeyEnter = (event) => {
 
 onMounted(() => {
   console.log('[MenuModal] mounted');
-  window.addEventListener('keydown', allowKeyEnter);
   isMainMenu.value = menuInfo.value.menuType === 'MAINMENU';
-});
-
-onUnmounted(() => {
-  window.removeEventListener('keydown', allowKeyEnter);
+  submit.value?.focus();
 });
 </script>
 <template>
@@ -190,7 +187,7 @@ onUnmounted(() => {
         >
           취소
         </button>
-        <button class="is-button w-[100px] h-[50px] font-semibold text-xl" type="submit" @click="handleSubmit()">
+        <button class="is-button w-[100px] h-[50px] font-semibold text-xl" type="submit" ref="submit" autofocus>
           확인
         </button>
       </div>

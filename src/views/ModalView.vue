@@ -5,6 +5,8 @@ import MenuModal from '../components/modals/MenuModal.vue';
 
 import { useBaseModal } from '@/stores/baseModal';
 import { storeToRefs } from 'pinia';
+import ReservePopup from '@/components/modals/ReservePopup.vue';
+import LoadingModal from '@/components/modals/LoadingModal.vue';
 
 const baseModalStore = useBaseModal();
 const { isModalOpen, modalType } = storeToRefs(baseModalStore);
@@ -13,6 +15,8 @@ const { isModalOpen, modalType } = storeToRefs(baseModalStore);
   <ModalBackground v-if="isModalOpen">
     <BoothPopup v-if="modalType === 'boothPopup'" />
     <MenuModal v-if="modalType === 'menuModal'" />
+    <ReservePopup v-if="modalType === 'reservePopup'" />
+    <LoadingModal v-if="modalType === 'loadingModal'" />
   </ModalBackground>
 </template>
 
