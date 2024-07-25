@@ -254,7 +254,7 @@ onMounted(async () => {
               @dragenter="event => handleDragEnter(event, index)"
               @dragend="handleDragEnd"
             >
-            <div :style="setBackgroundImage(url)" class="w-full h-full object-cover rounded-3xl border"></div>
+            <div :style="setBackgroundImage(url)" class="w-full h-full object-cover rounded-3xl border bg-cover"></div>
             <IconDelete @click="handleDeleteImage(index)" class="absolute top-2 right-2" />
           </div>
         </div>
