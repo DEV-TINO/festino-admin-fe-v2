@@ -1,3 +1,4 @@
+import router from '@/router';
 import axios from 'axios';
 
 export const api = axios.create({
@@ -43,6 +44,9 @@ export const imagesUpload = async (files) => {
   }
 };
 
-export const alertError = (errorMessage) => {
+export const alertError = (errorMessage, goHome = true) => {
   alert(`${errorMessage}, 관리자에게 문의하세요.`);
+  if (goHome) {
+    router.push('/');
+  }
 };

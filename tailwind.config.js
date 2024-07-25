@@ -40,6 +40,7 @@ export default {
           },
           800: {
             DEFAULT: 'rgba(0, 115, 240, 0.12)',
+            light: '#E6F0FB',
           },
           700: {
             DEFAULT: 'rgba(0, 115, 240, 0.08)',

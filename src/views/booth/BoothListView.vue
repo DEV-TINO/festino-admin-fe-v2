@@ -20,7 +20,7 @@ const handleClickBoothCreate = () => {
 
 onMounted(async () => {
   useBoothListStore.getAllBoothList();
-  useUserStore.isUserOwnBooth();
+  useUserStore.getUserOwnBoothId();
 });
 </script>
 
@@ -48,7 +48,7 @@ onMounted(async () => {
     <div class="w-full flex flex-col h-full shadow-primary rounded-b-[20px]">
       <!-- Header -->
       <div
-        class="text-xs lg:text-xl font-semibold h-[70px] w-full bg-primary-700 rounded-[20px] flex justify-between gap-4 flex-nowrap overflow-x-auto items-center px-4 lg:px-[60px]"
+        class="text-xs lg:text-xl font-semibold h-[70px] w-full bg-primary-700 rounded-t-[20px] flex justify-between gap-4 flex-nowrap overflow-x-auto items-center px-4 lg:px-[60px]"
       >
         <div class="text-nowrap min-w-[21px] w-[21px] lg:min-w-[35px] text-center">번호</div>
         <div class="text-balance break-keep min-w-[75px] w-[75px] lg:min-w-[130px] text-center">관리자 카테고리</div>
