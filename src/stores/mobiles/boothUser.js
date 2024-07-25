@@ -3,50 +3,31 @@ import { alertError, api } from '@/utils/api';
 import { ref } from 'vue';
 import { useUser } from '@/stores/user';
 import { useBoothList } from '../booths/boothList';
+import { useBoothDetail } from '@/stores/booths/boothDetail';
 import { isUUID } from '@/utils/utils';
 
 const useBoothListStore = useBoothList();
 const useUserStore = useUser();
+const useBoothDetailStore = useBoothDetail();
 
-const { userOwnBoothId } = storeToRefs(useUserStore);
-const { getAllBoothList } = useBoothListStore;
-//All Booth List
+const { boothType } = storeToRefs(useBoothDetailStore);
 const { boothList } = storeToRefs(useBoothListStore);
+const { userOwnBoothId } = storeToRefs(useUserStore);
 
 export const useBoothUser = defineStore('boothUser', () => {
   const userBoothInfo = ref({});
-  const getBoothId = async () => {
-    try {
-      const response = await api.get('/admin/user/booth');
-      const data = response.data;
 
-      if (data.success) {
-        userOwnBoothId.value = data.boothId;
-        return data.boothId;
-      } else {
-        userOwnBoothId.value = '';
-        return false;
-      }
-    } catch (e) {
-      userOwnBoothId.value = '';
-      console.error(e);
-    }
+  const getBoothInfo = async (boothId) => {
+    await useBoothListStore.getAllBoothList();
+    const booth = boothList.value.find((booth) => booth.boothId === boothId);
+    userBoothInfo.value = booth;
+    console.log('[INFO] boothUser.js - getBoothInfo', booth);
   };
 
-  const findUserBoothInfo = async (boothId) => {
-    await getAllBoothList();
-    if (!boothList || isUUID(boothId)) {
-      //부스 리스트가 없거나 부스 리스트 정보가 안가져와진 경우
-    }
-    boothList.value.forEach((booth) => {
-      if (booth.id === boothId) {
-        userOwnBoothId.value = boothId;
-        userBoothInfo.value = booth;
-      } else {
-        // 내가 부여받은 부스 번호가 부스 리스트에 없음
-      }
-    });
+  const initBoothInfo = async () => {
+    await useUserStore.getUserOwnBoothId();
+    await getBoothInfo(userOwnBoothId.value);
   };
 
-  return { userBoothInfo, getBoothId, findUserBoothInfo };
+  return { userBoothInfo, initBoothInfo };
 });
