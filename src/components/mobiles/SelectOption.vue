@@ -16,9 +16,9 @@ const handleClickOption = (option) => {
 </script>
 <template>
   <div class="flex">
-    <div @click="handleClickOption(false)" class="w-fit h-fit flex items-center cursor-pointer">
+    <div @click="handleClickOption(true)" class="w-fit h-fit flex items-center cursor-pointer">
       <svg class="mr-1" width="20" height="20" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="12" cy="12.5" r="12" fill="#CCCCCC" :class="!modelValue ? 'fill-[#0073F0]' : 'fill-[#CCCCCC]'" />
+        <circle cx="12" cy="12.5" r="12" :class="modelValue ? 'fill-[#0073F0]' : 'fill-[#CCCCCC]'" />
         <path
           d="M7.19922 12.4984L10.7992 16.0984L17.9992 8.89844"
           stroke="white"
@@ -26,11 +26,13 @@ const handleClickOption = (option) => {
           stroke-linecap="round"
         />
       </svg>
-      <div class="pl-1 text-base font-semibold" :class="{ 'is-select-menu-option': !modelValue }">사용 비동의</div>
+      <div class="pl-1 text-base font-semibold" :class="modelValue ? 'text-primary-900' : 'text-secondary-900'">
+        사용 동의
+      </div>
     </div>
-    <div @click="handleClickOption(true)" class="w-fit h-fit flex items-center pl-10 cursor-pointer">
+    <div @click="handleClickOption(false)" class="w-fit h-fit flex items-center pl-10 cursor-pointer">
       <svg class="mr-1" width="20" height="20" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="12" cy="12.5" r="12" fill="#CCCCCC" :class="modelValue ? 'fill-[#0073F0]' : 'fill-[#CCCCCC]'" />
+        <circle cx="12" cy="12.5" r="12" :class="!modelValue ? 'fill-[#0073F0]' : 'fill-[#CCCCCC]'" />
         <path
           d="M7.19922 12.4984L10.7992 16.0984L17.9992 8.89844"
           stroke="white"
@@ -38,7 +40,9 @@ const handleClickOption = (option) => {
           stroke-linecap="round"
         />
       </svg>
-      <div class="pl-1 text-base font-semibold" :class="{ 'is-select-menu-option': modelValue }">사용 동의</div>
+      <div class="pl-1 text-base font-semibold" :class="!modelValue ? 'text-primary-900' : 'text-secondary-900'">
+        사용 비동의
+      </div>
     </div>
   </div>
 </template>

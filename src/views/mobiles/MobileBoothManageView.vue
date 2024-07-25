@@ -80,6 +80,10 @@ const handleClickSumbit = async () => {
   router.push({ name: 'MobileMain' });
 };
 
+const handleClickCancleButton = () => {
+  router.push({ name: 'MobileMain' });
+};
+
 onMounted(async () => {
   useBoothDetailStore.reset();
   const userBoothId = await useUserStore.getUserOwnBoothId();
@@ -98,17 +102,19 @@ onMounted(async () => {
 </script>
 <template>
   <form class="w-full h-full" @submit.prevent="handleClickSumbit()">
-    <div class="dynamic-padding flex flex-col gap-[20px]">
+    <div class="dynamic-padding flex flex-col gap-[20px] text-secondary-700-light">
       <div class="flex gap-[10px] items-center">
         <div class="w-[90px] font-bold text-base shrink-0">학과</div>
-        <div class="w-full h-11 px-5 py-3 bg-black bg-opacity-5 rounded-[10px] text-sm">{{ boothInfo?.adminName }}</div>
+        <div class="w-full h-11 px-5 py-3 bg-primary-300-light rounded-2lg text-sm text-secondary-900-light">
+          {{ boothInfo?.adminName }}
+        </div>
       </div>
       <div class="flex gap-[10px] items-center">
         <div class="w-[90px] font-bold text-base shrink-0">부스이름</div>
         <input
           type="text"
           placeholder="부스 이름을 작성해주세요."
-          class="w-full px-5 py-3 bg-black bg-opacity-5 rounded-[10px] text-sm foucs:outline-none"
+          class="w-full px-5 py-3 bg-primary-300-light rounded-2lg text-sm border-none placeholder:text-secondary-900-light"
           maxlength="100"
           @input="handleInputBoothName($event)"
           :value="boothInfo?.boothName"
@@ -120,7 +126,7 @@ onMounted(async () => {
         <input
           type="text"
           placeholder="예) 15:00 ~ 20:00"
-          class="w-full px-5 py-3 bg-black bg-opacity-5 rounded-[10px] text-sm foucs:outline-none"
+          class="w-full px-5 py-3 bg-primary-300-light rounded-2lg text-sm border-none placeholder:text-secondary-900-light"
           maxlength="20"
           @input="handleInputServiceHours($event)"
           :value="serviceHours"
@@ -133,13 +139,13 @@ onMounted(async () => {
         <textarea
           type="text"
           placeholder="부스 소개를 작성해주세요."
-          class="resize-none w-full h-[97px] bg-black bg-opacity-5 rounded-3xl text-sm border-none p-5 pr-20 overflow-hidden"
+          class="resize-none w-full h-[97px] bg-primary-300-light rounded-3xl text-sm border-none p-5 pr-20 overflow-hidden placeholder:text-secondary-900-light"
           maxlength="100"
           @input="handleInputBoothIntro($event)"
           :value="boothInfo.boothIntro"
           :disabled="isSubmit"
         />
-        <div class="absolute bottom-9 right-5 text-sm">{{ characterCount }}/100</div>
+        <div class="absolute bottom-4 right-5 text-sm">{{ characterCount }}/100</div>
       </div>
       <div class="flex flex-col gap-[10px] items-start">
         <div class="font-bold text-base">부스 사진</div>
@@ -150,7 +156,7 @@ onMounted(async () => {
         <!-- <MobileMenuDetail /> -->
         <div class="w-full h-[150px] flex flex-col items-center justify-center border-dashed border-2 rounded-3xl">
           <IconAdd />
-          <div class="pt-[10px] text-base">메뉴 추가하기</div>
+          <div class="pt-[10px] text-sm text-secondary-900-light">메뉴 추가하기</div>
         </div>
       </div>
       <!-- Show when night booth -->
@@ -168,10 +174,10 @@ onMounted(async () => {
       </div>
     </div>
     <div class="w-full dynamic-padding flex gap-[10px] py-20">
-      <button class="w-full bg-[#CCCCCC] rounded-[50px] text-white font-bold h-[54px]">취소</button>
-      <button class="w-full bg-[#CCCCCC] rounded-[50px] text-white font-bold h-[54px]" @click="handleClickSumbit()">
-        등록
+      <button class="w-full rounded-[50px] h-[54px] is-button is-outlined" @click="handleClickCancleButton()">
+        취소
       </button>
+      <button class="w-full rounded-[50px] h-[54px] is-button" @click="handleClickSumbit()">등록</button>
     </div>
   </form>
 </template>
