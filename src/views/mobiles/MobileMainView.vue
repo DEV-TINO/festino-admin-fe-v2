@@ -5,17 +5,19 @@ import IconBoothTino from '@/components/icons/mobiles/IconBoothTino.vue';
 import IconBannerArrow from '@/components/icons/mobiles/IconBannerArrow.vue';
 import IconReserveTino from '@/components/icons/mobiles/IconReserveTino.vue';
 import { useRouter } from 'vue-router';
-import { useBoothUser } from '@/stores/mobiles/boothUser';
 import { useBoothDetail } from '@/stores/booths/boothDetail';
+import { useUser } from '@/stores/user';
 
 const router = useRouter();
-const useBoothUserStore = useBoothUser();
 const useBoothDetailStore = useBoothDetail();
+const useUserStore = useUser();
 
+const { userOwnBoothId } = storeToRefs(useUserStore);
 const { boothInfo } = storeToRefs(useBoothDetailStore);
 
 onMounted(async () => {
-  useBoothUserStore.initBoothInfo();
+  await useUserStore.getUserOwnBoothId();
+  useBoothDetailStore.initBoothInfo(userOwnBoothId.value);
 });
 
 const handleClickAdminMenu = (type) => {
