@@ -43,13 +43,33 @@ export const useUser = defineStore('user', () => {
         isValidate: isValidate.value,
       };
     } catch (e) {
-      alertError('User Validate Error, Please try Login again!');
+      alertError('User Validate Error, Please try Login again!', false);
       isAdmin.value = false;
       isValidate.value = false;
       return {
         isAdmin: isAdmin.value,
         isValidate: isValidate.value,
       };
+    }
+  };
+
+  const getUserOwnBoothId = async () => {
+    try {
+      const response = await api.get('/admin/user/booth');
+      const data = response.data;
+
+      if (data.success) {
+        userOwnBoothId.value = data.boothId;
+        console.log(userOwnBoothId.value);
+        return userOwnBoothId.value;
+      } else {
+        userOwnBoothId.value = '';
+        return '';
+      }
+    } catch (e) {
+      userOwnBoothId.value = '';
+      console.error(e);
+      return '';
     }
   };
 
@@ -122,7 +142,7 @@ export const useUser = defineStore('user', () => {
       isAdmin.value = false;
       isValidate.value = false;
       userOwnBoothId.value = '';
-      alertError(error);
+      alertError(error, false);
     }
   };
 
@@ -142,5 +162,6 @@ export const useUser = defineStore('user', () => {
     setPassword,
     setIsError,
     setErrorMessage,
+    getUserOwnBoothId,
   };
 });

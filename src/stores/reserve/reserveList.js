@@ -3,14 +3,33 @@ import { defineStore } from 'pinia';
 import { ref } from 'vue';
 
 export const useReserveList = defineStore('reserveList', () => {
-  const reserveList = ref([]);
+  const reserveList = ref({
+    reserve: [],
+    cancel: [],
+    complete: [],
+  });
   const deleteReserveList = ref([]);
 
   const searchKeyword = ref('');
 
-  const getFilteredReserveList = () => {
-    return reserveList.value.filter((reserve) => {
-      return reserve.name.includes(searchKeyword.value);
+  const setReserveList = ({ data, type }) => {
+    reserveList.value = {
+      ...reserveList.value,
+      [type]: data,
+    };
+  };
+
+  const getFilteredReserveList = ({ type }) => {
+    if (searchKeyword.value === '') {
+      return reserveList.value[type];
+    }
+    return reserveList.value[type].filter((reserve) => {
+      return (
+        reserve.userName.includes(searchKeyword.value) ||
+        String(reserve.reservationNum).includes(searchKeyword.value) ||
+        String(reserve.personCount).includes(searchKeyword.value) ||
+        String(reserve.phoneNum).includes(searchKeyword.value)
+      );
     });
   };
 
@@ -19,9 +38,15 @@ export const useReserveList = defineStore('reserveList', () => {
       const response = await api.get(`/admin/reservation/${type}/booth/${boothId}`);
       const data = response.data;
       if (data.success) {
-        reserveList.value = data.reservationInfo.reservationList;
+        setReserveList({
+          data: data.reservationInfo.reservationList,
+          type,
+        });
       } else {
-        reserveList.value = [];
+        setReserveList({
+          data: [],
+          type,
+        });
       }
     } catch (error) {
       console.error(error);
@@ -63,11 +88,12 @@ export const useReserveList = defineStore('reserveList', () => {
     }
   };
 
-  const restoreReserve = async ({ boothId, reserveId }) => {
+  const restoreReserve = async ({ boothId, reserveId, reserveType }) => {
     try {
       const response = await api.put('/admin/reservation/restore', {
         boothId: boothId,
         reservationId: reserveId,
+        reservationType: String(reserveType).toUpperCase(),
       });
       const data = response.data;
       return data.success;
