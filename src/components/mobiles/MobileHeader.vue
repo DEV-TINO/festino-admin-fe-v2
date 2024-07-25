@@ -31,7 +31,7 @@ watchEffect(() => (routerName.value = router.currentRoute.value.name));
     <div class="w-7">
       <IconHeaderBack @click="handleClickBackButton()" v-if="router.currentRoute.value.name != 'MobileMain'" />
     </div>
-    <p class="font-medium text-xl">
+    <p class="font-medium text-xl text-secondary-700">
       {{ boothInfo.adminName }}
     </p>
     <div class="w-[42px] text-xs underline text-[#999999] underline-offset-4">
