@@ -24,17 +24,17 @@ body {
 }
 
 .is-button {
-  @apply rounded-[20px] bg-primary-900 text-white font-semibold text-lg hover:bg-primary-900-dark;
+  @apply rounded-[20px] bg-primary-900 text-white font-semibold text-lg hover:bg-primary-900-dark focus:outline-none;
 }
 
 .is-button.is-outlined {
-  @apply border-[1px] border-primary-900 bg-white text-primary-900 hover:bg-gray-100;
+  @apply border-[1px] border-primary-900 bg-white text-primary-900 hover:bg-gray-100 focus:outline-none;
 }
 
 .is-button.is-danger {
-  @apply bg-danger hover:bg-danger-dark text-white !important;
+  @apply bg-danger focus:bg-danger-dark text-white hover:bg-danger-dark focus:outline-none !important;
 }
 
 .is-button.is-danger.is-outlined {
-  @apply border-[1px] border-danger bg-white text-danger hover:bg-gray-100 !important;
+  @apply border-[1px] border-danger bg-white text-danger hover:bg-gray-100 focus:outline-none !important;
 }
