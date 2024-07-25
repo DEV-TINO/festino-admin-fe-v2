@@ -5,23 +5,13 @@ import SelectOption from '@/components/mobiles/SelectOption.vue';
 import { computed, onMounted, ref, watch } from 'vue';
 import { ADMIN_CATEGORY } from '@/utils/constants';
 import { useBoothInfo } from '@/stores/mobiles/boothInfo';
+import { useBoothDetail } from '@/stores/booths/boothDetail';
+import { storeToRefs } from 'pinia';
 
 const useBoothInfoStore = useBoothInfo();
-//TODO: DELETE
-const boothInfo = ref({
-  adminCategory: '주간부스',
-  adminName: '소리새',
-  boothId: 'af434c51-aff5-4401-836b-165087d1dde2',
-  boothName: '어쿠스틱',
-  closeTime: '18:00',
-  boothIntro: '어쿠스틱은 어쿠스틱한 음악을 들려주는 부스입니다.',
-  openTime: '12:00',
-  boothImage: [],
-  isOpen: true,
-  // 아래는 야간부스에서만 사용
-  // isOrder: false,
-  // isReservation: true,
-});
+const useBoothDetailStore = useBoothDetail();
+
+const { boothInfo } = storeToRefs(useBoothDetailStore);
 
 const isSubmit = ref(false);
 const useReservation = ref(false);
@@ -30,11 +20,10 @@ const useOrder = ref(false);
 
 const boothType = ADMIN_CATEGORY[boothInfo.value.adminCategory];
 
-const boothDescription = ref('');
-const characterCount = computed(() => boothDescription.value.length);
-watch(boothDescription, (newVal) => {
+const characterCount = computed(() => boothInfo.value.boothIntro?.length ?? 0);
+watch(boothInfo.value.boothIntro, (newVal) => {
   if (newVal.length > 100) {
-    boothDescription.value = newVal.slice(0, 100);
+    boothInfo.value.boothIntro = newVal.slice(0, 100);
   }
 });
 
@@ -51,7 +40,7 @@ const handleInputServiceHours = (event) => {
 
 const handleInputBoothIntro = (event) => {
   if (isSubmit.value) return;
-  boothDescription.value = event.target.value;
+  boothInfo.value.boothIntro = event.target.value;
 };
 //TODO: ADD BOOTH IMAGE
 //TODO: ADD MENU
@@ -98,7 +87,6 @@ const handleClickSumbit = async () => {
 onMounted(async () => {
   if (boothInfo.value) {
     serviceHours.value = `${boothInfo.value.openTime} ~ ${boothInfo.value.closeTime}`;
-    boothDescription.value = boothInfo.value.boothIntro;
     if (boothType === 'night') {
       useReservation.value = boothInfo.value.isReservation;
       useOrder.value = boothInfo.value.isOrder;
@@ -150,7 +138,7 @@ watch(useReservation, (newVal) => {
           class="resize-none w-full h-[97px] bg-black bg-opacity-5 rounded-3xl text-sm border-none p-5"
           maxlength="100"
           @input="handleInputBoothIntro($event)"
-          :value="boothDescription"
+          :value="boothInfo.boothIntro"
           :disabled="isSubmit"
         />
         <div class="absolute bottom-9 right-5 text-sm">{{ characterCount }}/100</div>

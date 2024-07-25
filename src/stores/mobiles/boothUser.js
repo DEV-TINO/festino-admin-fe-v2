@@ -10,7 +10,7 @@ const useBoothListStore = useBoothList();
 const useUserStore = useUser();
 const useBoothDetailStore = useBoothDetail();
 
-const { boothType } = storeToRefs(useBoothDetailStore);
+const { boothType, boothInfo } = storeToRefs(useBoothDetailStore);
 const { boothList } = storeToRefs(useBoothListStore);
 const { userOwnBoothId } = storeToRefs(useUserStore);
 
@@ -20,7 +20,7 @@ export const useBoothUser = defineStore('boothUser', () => {
   const getBoothInfo = async (boothId) => {
     await useBoothListStore.getAllBoothList();
     const booth = boothList.value.find((booth) => booth.boothId === boothId);
-    userBoothInfo.value = booth;
+    boothInfo.value = booth;
     console.log('[INFO] boothUser.js - getBoothInfo', booth);
   };
 
