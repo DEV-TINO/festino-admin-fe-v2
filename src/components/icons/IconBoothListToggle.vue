@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, watchEffect } from 'vue';
 
 const props = defineProps({
   isActive: Boolean,
@@ -10,6 +10,12 @@ const props = defineProps({
 });
 
 const height = ref(30);
+
+watchEffect(() => {
+  if (props.width) {
+    height.value = (props.width * 30) / 60;
+  }
+});
 
 onMounted(() => {
   if (props.width) {
