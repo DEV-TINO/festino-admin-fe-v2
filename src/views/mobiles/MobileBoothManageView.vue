@@ -3,12 +3,13 @@ import IconBoothListToggle from '@/components/icons/IconBoothListToggle.vue';
 import IconAdd from '@/components/icons/mobiles/IconAdd.vue';
 import SelectOption from '@/components/mobiles/SelectOption.vue';
 import { computed, onMounted, ref, watch } from 'vue';
-import { useBoothInfo } from '@/stores/mobiles/boothInfo';
 import { useBoothDetail } from '@/stores/booths/boothDetail';
 import { storeToRefs } from 'pinia';
 import { useUser } from '@/stores/user';
+import { api } from '@/utils/api';
+import { useRouter } from 'vue-router';
 
-const useBoothInfoStore = useBoothInfo();
+const router = useRouter();
 const useBoothDetailStore = useBoothDetail();
 const useUserStore = useUser();
 
@@ -72,7 +73,8 @@ const handleClickSumbit = async () => {
     };
   }
 
-  const res = await useBoothInfoStore.updateBoothInfo(boothType.value, boothInfo.value);
+  const saveBoothUrl = `/admin/booth/${boothType.value}`;
+  const saveBoothResponse = await api.put(saveBoothUrl, boothInfo.value);
 
   isSubmit.value = false;
   router.push({ name: 'MobileMain' });

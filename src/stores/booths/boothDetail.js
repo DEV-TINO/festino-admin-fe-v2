@@ -67,6 +67,13 @@ export const useBoothDetail = defineStore('boothDetail', () => {
     return await getBoothDetail({ boothId: boothId, type: boothType.value });
   };
 
+  const initBoothInfo = async (boothId) => {
+    await getAllBoothList();
+    const booth = boothList.value.find((booth) => booth.boothId === boothId);
+    boothInfo.value = booth;
+    console.log('[INFO] boothUser.js - getBoothInfo', booth);
+  };
+
   const reset = () => {
     boothInfo.value = {
       boothId: '',
@@ -207,6 +214,7 @@ export const useBoothDetail = defineStore('boothDetail', () => {
 
   return {
     init,
+    initBoothInfo,
     reset,
     deleteMenu,
     createMenu,
