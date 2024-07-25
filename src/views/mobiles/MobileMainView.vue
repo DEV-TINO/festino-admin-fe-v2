@@ -7,10 +7,12 @@ import IconReserveTino from '@/components/icons/mobiles/IconReserveTino.vue';
 import { useRouter } from 'vue-router';
 import { useBoothDetail } from '@/stores/booths/boothDetail';
 import { useUser } from '@/stores/user';
+import { useBoothList } from '@/stores/booths/boothList';
 
 const router = useRouter();
 const useBoothDetailStore = useBoothDetail();
 const useUserStore = useUser();
+const useBoothListStore = useBoothList();
 
 const { userOwnBoothId, isAdmin } = storeToRefs(useUserStore);
 const { boothInfo, boothType } = storeToRefs(useBoothDetailStore);
@@ -40,7 +42,7 @@ const handleClickAdminMenu = (type) => {
       >
         <IconBoothTino class="absolute -top-7" />
         <div class="bg-white flex rounded-[20px] justify-between w-full h-[88px] p-5 items-center">
-          <div class="flex flex-col gap-[6px]">
+          <div class="flex flex-col gap-[6px] font-semibold">
             {{ isAdmin ? '개발팀' : boothInfo.adminName }}
             <p class="text-xs">부스 운영을 응원합니다!</p>
           </div>
@@ -48,7 +50,7 @@ const handleClickAdminMenu = (type) => {
         </div>
       </div>
     </div>
-    <div v-if="boothType === 'night'" class="flex flex-col gap-[30px] text-secondary-700 w-full">
+    <div v-if="boothType === 'night' || isAdmin" class="flex flex-col gap-[30px] text-secondary-700 w-full">
       <p class="font-semibold text-xl">예약관리</p>
       <div
         class="bg-primary-900 rounded-[20px] flex flex-col items-center w-full relative h-[190px] justify-end p-5 cursor-pointer"
@@ -57,8 +59,10 @@ const handleClickAdminMenu = (type) => {
         <IconReserveTino class="absolute -top-7" />
         <div class="bg-white flex rounded-[20px] justify-between w-full h-[88px] p-5 items-center">
           <div class="flex flex-col gap-[6px]">
-            <p class="font-semibold">{{ boothInfo.totalReservationNum }}팀 대기 중</p>
-            <p class="text-xs">예약 서비스 운영 시간 10:00 ~ 22:00</p>
+            <p class="font-semibold">
+              {{ isAdmin ? '예약 서비스' : `${boothInfo.totalReservationNum}팀 대기 중` }}
+            </p>
+            <p class="text-xs" v-if="!isAdmin">예약 서비스 운영 시간 10:00 ~ 22:00</p>
           </div>
           <IconBannerArrow />
         </div>

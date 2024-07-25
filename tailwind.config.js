@@ -103,6 +103,11 @@ export default {
       boxShadow: {
         primary: '0 1px 0 0 #0073F0',
       },
+      ringColor: {
+        primary: {
+          900: '#0073F0',
+        },
+      },
       screens: {
         xs: '430px',
       },

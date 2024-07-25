@@ -2,23 +2,29 @@
 import IconBoothListToggle from '@/components/icons/IconBoothListToggle.vue';
 import IconAdd from '@/components/icons/mobiles/IconAdd.vue';
 import SelectOption from '@/components/mobiles/SelectOption.vue';
-import { computed, onMounted, ref, watch } from 'vue';
+import { computed, onMounted, ref, watch, watchEffect } from 'vue';
 import { useBoothDetail } from '@/stores/booths/boothDetail';
 import { storeToRefs } from 'pinia';
 import { useUser } from '@/stores/user';
 import { api } from '@/utils/api';
 import { useRouter } from 'vue-router';
+import { useBoothList } from '@/stores/booths/boothList';
+import { ADMIN_CATEGORY } from '@/utils/constants';
 
 const router = useRouter();
 const useBoothDetailStore = useBoothDetail();
 const useUserStore = useUser();
+const useBoothListStore = useBoothList();
 
 const { boothInfo, menuList, boothType } = storeToRefs(useBoothDetailStore);
+const { isAdmin } = storeToRefs(useUserStore);
+const { boothList } = storeToRefs(useBoothListStore);
 
 const isSubmit = ref(false);
 const useReservation = ref(false);
 const useCoupon = ref(false);
 const useOrder = ref(false);
+const selectedBoothId = ref('');
 
 const characterCount = computed(() => boothInfo.value?.boothIntro?.length ?? 0);
 
@@ -55,7 +61,7 @@ const handleClickSumbit = async () => {
   const pattern = /^([01]?[0-9]|2[0-3]):[0-5][0-9]\s*~\s*([01]?[0-9]|2[0-4]):([0-5][0-9]|60)$/;
 
   if (!pattern.test(serviceHours.value.trim())) {
-    // alert('올바른 운영시간을 입력해주세요. 예: 00:00 ~ 24:00');
+    alert('올바른 운영시간을 입력해주세요. 예: 00:00 ~ 24:00');
     return;
   }
   const [startTime, endTime] = serviceHours.value.split('~').map((time) => time.trim());
@@ -78,26 +84,45 @@ const handleClickSumbit = async () => {
   const saveBoothResponse = await api.put(saveBoothUrl, boothInfo.value);
 
   isSubmit.value = false;
-  router.push({ name: 'MobileMain' });
+  // TODO: 수정하고 모달 띄우기
 };
 
 const handleClickCancleButton = () => {
   router.push({ name: 'MobileMain' });
 };
 
+watch(selectedBoothId, async () => {
+  useBoothDetailStore.reset();
+  const selectedBoothInfo = boothList.value.find((booth) => booth.boothId === selectedBoothId.value);
+  boothType.value = ADMIN_CATEGORY[selectedBoothInfo.adminCategory];
+  serviceHours.value = `${selectedBoothInfo.openTime} ~ ${selectedBoothInfo.closeTime}`;
+  if (boothType.value === 'night') {
+    useReservation.value = selectedBoothInfo.isReservation;
+    useOrder.value = selectedBoothInfo.isOrder;
+  }
+  const res = await useBoothDetailStore.getBoothDetail({ boothId: selectedBoothId.value, type: boothType.value });
+});
+
 onMounted(async () => {
   useBoothDetailStore.reset();
-  const userBoothId = await useUserStore.getUserOwnBoothId();
-  const condition = await useBoothDetailStore.init(userBoothId);
-  if (condition) {
-    //TODO: ADD BOOTH IMAGE
-    serviceHours.value = `${boothInfo.value.openTime} ~ ${boothInfo.value.closeTime}`;
-    if (boothType.value === 'night') {
-      useReservation.value = boothInfo.value.isReservation;
-      useOrder.value = boothInfo.value.isOrder;
+  if (!isAdmin.value) {
+    const userBoothId = await useUserStore.getUserOwnBoothId();
+    const condition = await useBoothDetailStore.init(userBoothId);
+    if (condition) {
+      //TODO: ADD BOOTH IMAGE
+      serviceHours.value = `${boothInfo.value.openTime} ~ ${boothInfo.value.closeTime}`;
+      if (boothType.value === 'night') {
+        useReservation.value = boothInfo.value.isReservation;
+        useOrder.value = boothInfo.value.isOrder;
+      }
+    } else {
+      //부스정보 불러오기 실패
     }
-  } else {
-    //부스정보 불러오기 실패
+  }
+  if (isAdmin.value) {
+    console.log(isAdmin.value);
+    await useBoothListStore.getAllBoothList();
+    selectedBoothId.value = boothList.value[0].boothId;
   }
 });
 </script>
@@ -106,9 +131,19 @@ onMounted(async () => {
     <div class="dynamic-padding flex flex-col gap-[20px] text-secondary-700-light">
       <div class="flex gap-[10px] items-center">
         <div class="w-[90px] font-bold text-base shrink-0">학과</div>
-        <div class="w-full h-11 px-5 py-3 bg-primary-300-light rounded-2lg text-sm text-secondary-900-light">
+        <div
+          v-if="!isAdmin"
+          class="w-full h-11 px-5 py-3 bg-primary-300-light rounded-2lg text-sm text-secondary-900-light"
+        >
           {{ boothInfo?.adminName }}
         </div>
+        <select
+          v-if="isAdmin"
+          class="w-full h-11 px-5 py-3 bg-primary-300-light rounded-2lg text-sm border-none"
+          v-model="selectedBoothId"
+        >
+          <option v-for="(booth, index) in boothList" :key="index" :value="booth.boothId">{{ booth.adminName }}</option>
+        </select>
       </div>
       <div class="flex gap-[10px] items-center">
         <div class="w-[90px] font-bold text-base shrink-0">부스이름</div>

@@ -238,6 +238,7 @@ export const useBoothDetail = defineStore('boothDetail', () => {
     addCreateMenu,
     addPatchMenu,
     addMenuList,
+    getBoothDetail,
     originalMenuList,
     createMenuList,
     deleteMenuList,
