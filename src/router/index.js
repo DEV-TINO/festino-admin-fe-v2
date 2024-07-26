@@ -66,6 +66,11 @@ const router = createRouter({
           name: 'MobileReserve',
           component: () => import('../views/mobiles/MobileReserveView.vue'),
         },
+        {
+          path: 'booth',
+          name: 'MobileBooth',
+          component: () => import('../views/mobiles/MobileBoothManageView.vue'),
+        },
       ],
     },
   ],
@@ -86,7 +91,7 @@ router.beforeEach(async (to, from) => {
   await isUserOwnBooth();
 
   if (!isValidate) {
-    if (from.name.includes('Mobile')) return { name: 'MobileLogin' };
+    if (from.name?.includes('Mobile')) return { name: 'MobileLogin' };
     else return { name: 'Login' };
   }
 

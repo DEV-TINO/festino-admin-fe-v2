@@ -14,6 +14,7 @@ export default {
         secondary: {
           900: {
             DEFAULT: '#999999',
+            light: 'rgba(153, 153, 153, 0.6)',
           },
           700: {
             DEFAULT: '#222222',
@@ -45,6 +46,9 @@ export default {
           700: {
             DEFAULT: 'rgba(0, 115, 240, 0.08)',
             light: 'rgba(0, 155, 250, 0.05)',
+          },
+          300: {
+            light: 'rgba(0, 0, 0, 0.03)',
           },
         },
         secondary: {
@@ -89,6 +93,9 @@ export default {
           light: 'rgba(240, 12, 0, 0.12)',
         },
       },
+      borderRadius: {
+        '2lg': '0.625rem', //10px
+      },
       fontSize: {
         '3xl': '1.75rem',
       },
@@ -98,6 +105,11 @@ export default {
       },
       boxShadow: {
         primary: '0 1px 0 0 #0073F0',
+      },
+      ringColor: {
+        primary: {
+          900: '#0073F0',
+        },
       },
       screens: {
         xs: '430px',
