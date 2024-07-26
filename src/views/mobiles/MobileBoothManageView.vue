@@ -2,11 +2,13 @@
 import IconBoothListToggle from '@/components/icons/IconBoothListToggle.vue';
 import IconAdd from '@/components/icons/mobiles/IconAdd.vue';
 import SelectOption from '@/components/mobiles/SelectOption.vue';
+import IconFileUpload from '@/components/icons/IconFileUpload.vue';
+import IconDelete from '@/components/icons/mobiles/IconDelete.vue';
 import { computed, onMounted, ref, watch, watchEffect } from 'vue';
 import { useBoothDetail } from '@/stores/booths/boothDetail';
 import { storeToRefs } from 'pinia';
 import { useUser } from '@/stores/user';
-import { api } from '@/utils/api';
+import { api, imagesUpload } from '@/utils/api';
 import { useRouter } from 'vue-router';
 import { useBoothList } from '@/stores/booths/boothList';
 import { ADMIN_CATEGORY } from '@/utils/constants';
@@ -28,6 +30,11 @@ const selectedBoothId = ref('');
 
 const characterCount = computed(() => boothInfo.value?.boothIntro?.length ?? 0);
 
+const isDragging = ref(false);
+const dragIndex = ref(null);
+const dropIndex = ref(null);
+const fileUrls = ref([]);
+
 const serviceHours = ref('');
 const handleInputBoothName = (event) => {
   if (isSubmit.value) return;
@@ -43,7 +50,72 @@ const handleInputBoothIntro = (event) => {
   if (isSubmit.value) return;
   boothInfo.value.boothIntro = event.target.value;
 };
-//TODO: ADD BOOTH IMAGE
+
+const handleAddImages = (event) => {
+  const imageLists = event.target.files;
+  let imageUrlLists = [...fileUrls.value];
+
+  for (let i = 0; i < imageLists.length; i++) {
+    const currentImageUrl = URL.createObjectURL(imageLists[i]);
+    imageUrlLists.push(currentImageUrl);
+  }
+
+  if (imageUrlLists.length > 10) {
+    imageUrlLists = imageUrlLists.slice(0, 10);
+  }
+
+  fileUrls.value = imageUrlLists;
+};
+
+const handleDeleteImage = (id) => {
+  fileUrls.value = fileUrls.value.filter((_, index) => index !== id);
+};
+
+const handleDragStart = (event, index) => {
+  dragIndex.value = index;
+  event.dataTransfer.effectAllowed = 'move';
+};
+
+const handleDragOver = (event) => {
+  event.preventDefault();
+};
+
+const handleDragEnter = (event, index) => {
+  dropIndex.value = index;
+};
+
+const handleDrop = () => {
+  if (dragIndex.value !== null && dropIndex.value !== null && dragIndex.value !== dropIndex.value) {
+    const draggedItem = fileUrls.value[dragIndex.value];
+    fileUrls.value.splice(dragIndex.value, 1);
+    fileUrls.value.splice(dropIndex.value, 0, draggedItem);
+  }
+  dragIndex.value = null;
+  dropIndex.value = null;
+};
+
+const handleDragEnd = () => {
+  isDragging.value = false;
+};
+
+const handleFileinput = (event) => {
+  if (isSubmit.value) return;
+  const files = event.target.files;
+  handleFiles(files);
+};
+
+const handleFiles = async (files) => {
+  if (files.length > 0) {
+    const urls = await imagesUpload(files);
+    fileUrls.value = [...fileUrls.value, ...urls];
+  }
+};
+
+const setBackgroundImage = (url) => {
+  return {
+    backgroundImage: `url(${url})`,
+  };
+};
 //TODO: ADD MENU
 
 const handleClickSumbit = async () => {
@@ -68,7 +140,7 @@ const handleClickSumbit = async () => {
 
   boothInfo.value.openTime = startTime;
   boothInfo.value.closeTime = endTime;
-  // boothInfo.value.boothImage = fileUrls.value;
+  boothInfo.value.boothImage = fileUrls.value;
 
   //nightbooth
   if (boothType.value === 'night') {
@@ -105,11 +177,11 @@ watch(selectedBoothId, async () => {
 
 onMounted(async () => {
   useBoothDetailStore.reset();
-  if (!isAdmin.value) {
+  if(!isAdmin.value) {
     const userBoothId = await useUserStore.getUserOwnBoothId();
     const condition = await useBoothDetailStore.init(userBoothId);
     if (condition) {
-      //TODO: ADD BOOTH IMAGE
+      fileUrls.value = [...boothInfo.value.boothImage];
       serviceHours.value = `${boothInfo.value.openTime} ~ ${boothInfo.value.closeTime}`;
       if (boothType.value === 'night') {
         useReservation.value = boothInfo.value.isReservation;
@@ -185,7 +257,43 @@ onMounted(async () => {
       </div>
       <div class="flex flex-col gap-[10px] items-start">
         <div class="font-bold text-base">부스 사진</div>
-        <!-- ADD: BOOTH IMAGE -->
+          <div
+            class="w-full h-[150px] p-3.5 flex flex-row border-2 border-dashed cursor-pointer bg-primary-300-light rounded-3xl text-secondary-300-light mb-2 overflow-x-scroll overflow-y-hidden"
+            @dragover="handleDragOver"
+            @drop="handleDrop"
+          >
+            <label
+              v-if="fileUrls.length === 0"
+              for="dropzone-file"
+              class="w-full flex flex-col items-center justify-center"
+            >
+              <div class="flex flex-col items-center justify-center">
+                <IconFileUpload class="pb-1" />
+                <p class="text-sm text-third-10 dark:text-third-10">부스사진을 등록해주세요.</p>
+                <p class="text-sm text-third-10 dark:text-third-10">최대 10장까지 첨부 가능</p>
+              </div>
+              <input 
+                id="dropzone-file"
+                type="file"
+                accept="image/*"
+                class="hidden"
+                multiple
+                @input="handleFileinput($event)"
+              />
+            </label>
+            <div
+              v-for="(url, index) in fileUrls"
+              :key="index"
+              class="relative w-[120px] h-[120px] flex-shrink-0 mr-2"
+              draggable="true"
+              @dragstart="event => handleDragStart(event, index)"
+              @dragenter="event => handleDragEnter(event, index)"
+              @dragend="handleDragEnd"
+            >
+            <div :style="setBackgroundImage(url)" class="w-full h-full object-cover rounded-3xl border bg-cover"></div>
+            <IconDelete @click="handleDeleteImage(index)" class="absolute top-2 right-2" />
+          </div>
+        </div>
       </div>
       <div class="flex flex-col gap-[10px] items-start">
         <div class="font-bold text-base">메뉴 정보</div>
@@ -196,15 +304,15 @@ onMounted(async () => {
         </div>
       </div>
       <!-- Show when night booth -->
-      <div v-if="boothType === 'night'" class="flex flex-col gap-[10px] items-start">
+      <div class="flex flex-col gap-[10px] items-start" v-if="boothType === 'night'">
         <div class="font-bold text-base shrink-0">예약 기능 사용 여부</div>
         <SelectOption v-model="useReservation" />
       </div>
-      <div v-if="boothType === 'night'" class="flex flex-col gap-[10px] items-start">
+      <div class="flex flex-col gap-[10px] items-start" v-if="boothType === 'night'">
         <div class="font-bold text-base shrink-0">쿠폰 진행 여부</div>
         <SelectOption v-model="useCoupon" />
       </div>
-      <div v-if="boothType === 'night'" class="flex flex-col gap-[10px] items-start">
+      <div class="flex flex-col gap-[10px] items-start" v-if="boothType === 'night'">
         <div class="font-bold text-base shrink-0">주문 기능 사용 여부</div>
         <SelectOption v-model="useOrder" />
       </div>
