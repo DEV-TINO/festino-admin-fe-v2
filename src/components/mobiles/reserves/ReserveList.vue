@@ -2,7 +2,7 @@
 import { ref, onMounted } from "vue";
 import { useReserveStore } from "@/stores/mobiles/reserve/reserveStore.js";
 import { storeToRefs } from "pinia";
-import { useReserveModalStore } from "@/stores/mobiles/reserve/reserveModalStore";
+import { useReserveModal } from '@/stores/mobiles/reserve/reserveModal';
 
 const { reserveData } = storeToRefs(useReserveStore());
 const { getReserveData } = useReserveStore();
@@ -39,7 +39,7 @@ onMounted(() => {
           <div class=" text-secondary-900 text-xs">{{ getReserveTime(data.updateAt) }}</div>
         </div>
         <div class="w-2/12 flex justify-end">
-          <div @click="handleClickOpenAdmin(data)" class="px-4 py-1 rounded-full bg-restore text-primary-900">관리</div>
+          <div @click="handleClickOpenReservePopup(data)" class="px-4 py-1 rounded-full bg-restore text-primary-900">관리</div>
         </div>
         <div class="w-1/12"></div>
       </div>

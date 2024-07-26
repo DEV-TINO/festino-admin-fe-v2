@@ -6,6 +6,7 @@ import Footer from './components/Footer.vue';
 import { useRoute } from 'vue-router';
 import ModalView from './views/ModalView.vue';
 import { initFlowbite } from 'flowbite';
+import MobileModalView from './views/MobileModalView.vue';
 
 const route = useRoute();
 
@@ -31,6 +32,7 @@ onMounted(() => {
 
 <template>
   <ModalView />
+  <MobileModalView />
   <div
     id="container"
     class="grid grid-cols-1 md:grid-cols-[minmax(50px,_1fr)_minmax(auto,_1920px)_minmax(50px,_1fr)] grid-rows-[100px_1fr_200px] min-h-screen w-full gap-0"
