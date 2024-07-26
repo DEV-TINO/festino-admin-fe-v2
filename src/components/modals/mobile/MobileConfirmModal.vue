@@ -19,7 +19,10 @@ const confirm = async() => {
   loading.value = true;
   if (confirmType.value === 'confirm') await confirmReserve({boothId : userOwnBoothId.value, reserveId : reserveData.value.reservationId});
   else if (confirmType.value === 'cancel') await deleteReserve({boothId : userOwnBoothId.value, reserveId : reserveData.value.reservationId});
-  else if (confirmType.value === 'restore') await restoreReserve({boothId : userOwnBoothId.value, reserveId : reserveData.value.reservationId, reserveType : popupType.value});
+  else if (confirmType.value === 'restore') {
+    await restoreReserve({boothId : userOwnBoothId.value, reserveId : reserveData.value.reservationId, reserveType : popupType.value});
+    await getReserveList({boothId : userOwnBoothId.value, type : 'reserve'});
+  }
   await getReserveList({boothId : userOwnBoothId.value, type : popupType.value});
   closeMobilePopup();
   loading.value = false;

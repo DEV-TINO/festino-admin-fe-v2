@@ -1,6 +1,8 @@
 <script setup>
-import { ref } from "vue";
+import { ref, watch, onMounted } from "vue";
 import ReserveList from "@/components/mobiles/reserves/ReserveList.vue";
+import { storeToRefs } from "pinia";
+import { useReserveList } from "@/stores/reserve/reserveList";
 
 const isActive = ref({
   reserveList: true,
@@ -8,7 +10,10 @@ const isActive = ref({
   completeList: false,
 });
 
+const { reserveList } = storeToRefs(useReserveList());
 const listType = ref("reserve");
+const checkMark = ref(false);
+const beforeReserveState = ref(0);
 
 const toggleTab = (type) => {
   listType.value = type;
@@ -38,24 +43,49 @@ const activeTab = (isActive) => {
     return 'text-secondary-900'
   }
 };
+
+const visibility = () => {
+  if (checkMark.value) return "visible"
+  else return "invisible"
+}
+
+watch(() => reserveList.value.reserve, () => {
+  if(listType.value !== "reserve") {
+    if(reserveList.value.reserve.length !== beforeReserveState.value) checkMark.value = true;
+    else checkMark.value = false;
+  }
+  else checkMark.value = false;
+  beforeReserveState.value = reserveList.value.reserve.length;
+});
+
+onMounted(async () => {
+  beforeReserveState.value = reserveList.value.reserve.length;
+});
 </script>
 
 <template>
   <div class="w-full h-full">
     <div class="flex justify-center font-semibold text-xl border-b border-secondary-300 relative gap-5">
       <div>
-        <div @click="toggleTab('reserve')" class="mb-2 w-[90px] text-center cursor-pointer" :class="activeTab(!isActive['reserveList'])">
-          예약 목록
+        <div>
+          <div class="w-full flex justify-end">
+            <div class="w-2 h-2 bg-danger rounded-full" :class="visibility()"></div>
+          </div>
+          <div @click="toggleTab('reserve')" class="mb-2 w-[90px] text-center cursor-pointer" :class="activeTab(!isActive['reserveList'])">
+            예약 목록
+          </div>
         </div>
         <div class="absolute -bottom-[2px] w-[90px]" :class="activeUnderline(isActive['reserveList'])"></div>
       </div>
       <div>
+        <div class="h-2"></div>
         <div @click="toggleTab('complete')" class="mb-2 w-[90px] text-center cursor-pointer" :class="activeTab(!isActive['completeList'])">
           완료 목록
         </div>
         <div class="absolute -bottom-[2px] w-[90px]" :class="activeUnderline(isActive['completeList'])"></div>
       </div>
       <div>
+        <div class="h-2"></div>
         <div @click="toggleTab('cancel')" class="mb-2 w-[90px] text-center cursor-pointer" :class="activeTab(!isActive['deleteList'])">
           삭제 목록
         </div>
