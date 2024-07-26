@@ -5,7 +5,8 @@ import { useReserveList } from "@/stores/reserve/reserveList";
 import { prettyDate } from "@/utils/utils";
 import { useUser } from '@/stores/user.js';
 import { useReserveModal } from '@/stores/mobiles/reserve/reserveModal';
-import IconNotFound from '../../icons/IconNotFound.vue';
+import IconNotFound from '@/components/icons/IconNotFound.vue';
+import IconLoading from "@/components/icons/IconLoading.vue";
 
 const props = defineProps({
   listType: {
@@ -57,7 +58,10 @@ onMounted(async () => {
 
 <template>
   <div class="w-full flex flex-col">
-    <div v-if="loading">loading</div>
+    <div v-if="loading" class="w-full pt-36 justify-center items-center flex flex-col gap-4">
+      <IconLoading :width="200" />
+      <div>예약 내역을 불러오고 있습니다</div>
+    </div>
     <div v-else class="flex items-center w-full py-[14px]" v-for="data in reserveData" :key="data.reservationNum">
       <div class="w-full flex text-secondary-700-light items-center">
         <div class="w-1/12"></div>
