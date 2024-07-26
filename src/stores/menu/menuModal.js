@@ -37,6 +37,16 @@ export const useMenuModal = defineStore('menuModal', () => {
     baseModalStore.openModal();
   };
 
+  const openMobileModal = (menu) => {
+    reset();
+    if (menu?.menuName) {
+      menuInfo.value = { ...menu };
+    }
+    console.log('[menuModal] openModal', menuInfo.value);
+    baseModalStore.setModalType('mobileMenu');
+    baseModalStore.openMobileModal();
+  };
+
   const submitModal = () => {
     console.log('[menuModal] submitModal', menuInfo.value);
     if (menuInfo.value?.menuId) {
@@ -47,10 +57,15 @@ export const useMenuModal = defineStore('menuModal', () => {
       addMenuList(menuInfo.value);
     }
     baseModalStore.closeModal();
+    baseModalStore.closeMobileModal();
   };
 
   const closeModal = () => {
     baseModalStore.closeModal();
+  };
+
+  const closeMobileModal = () => {
+    baseModalStore.closeMobileModal();
   };
 
   return {
@@ -58,6 +73,8 @@ export const useMenuModal = defineStore('menuModal', () => {
     submitModal,
     closeModal,
     reset,
+    openMobileModal,
+    closeMobileModal,
     menuInfo,
   };
 });

@@ -6,6 +6,7 @@ import MobileLoadingModal from '../components/modals/mobile/MobileLoadingModal.v
 
 import { useBaseModal } from '@/stores/baseModal';
 import { storeToRefs } from 'pinia';
+import MobileMenuModal from '@/components/modals/mobile/MobileMenuModal.vue';
 
 const baseModalStore = useBaseModal();
 const { isMobileModalOpen, modalType } = storeToRefs(baseModalStore);
@@ -15,7 +16,8 @@ const { isMobileModalOpen, modalType } = storeToRefs(baseModalStore);
   <MobileModalBackground v-if="isMobileModalOpen">
     <MobileConfirmModal v-if="modalType === 'mobileConfirm'" />
     <MobileReserveModal v-if="modalType === 'mobileReserve'" />
-    <MobileLoadingModal />
+    <MobileMenuModal v-if="modalType === 'mobileMenu'" />
+    <MobileLoadingModal v-if="modalType === 'mobileLoading'" />
   </MobileModalBackground>
 </template>
 

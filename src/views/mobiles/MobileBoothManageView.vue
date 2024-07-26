@@ -12,6 +12,7 @@ import { api, imagesUpload } from '@/utils/api';
 import { useRouter } from 'vue-router';
 import { useBoothList } from '@/stores/booths/boothList';
 import { ADMIN_CATEGORY, MENU_TYPE } from '@/utils/constants';
+import { useMenuModal } from '@/stores/menu/menuModal';
 
 const router = useRouter();
 const useBoothDetailStore = useBoothDetail();
@@ -24,13 +25,16 @@ const { boothInfo, menuList, boothType, createMenuList, deleteMenuList, patchMen
 const { isAdmin } = storeToRefs(useUserStore);
 const { boothList } = storeToRefs(useBoothListStore);
 
+const menuModalStore = useMenuModal();
+const { openMobileModal } = menuModalStore;
+
 const isSubmit = ref(false);
 const useReservation = ref(false);
 const useCoupon = ref(false);
 const useOrder = ref(false);
 const selectedBoothId = ref('');
 
-const characterCount = computed(() => boothInfo.value?.boothIntro?.length ?? 0);
+const boothIntroLength = computed(() => boothInfo.value?.boothIntro?.length ?? 0);
 
 const isDragging = ref(false);
 const dragIndex = ref(null);
@@ -50,23 +54,17 @@ const handleInputServiceHours = (event) => {
 
 const handleInputBoothIntro = (event) => {
   if (isSubmit.value) return;
-  boothInfo.value.boothIntro = event.target.value;
-};
 
-const handleAddImages = (event) => {
-  const imageLists = event.target.files;
-  let imageUrlLists = [...fileUrls.value];
+  const textarea = event.target;
+  const lines = textarea.value.split('\n');
 
-  for (let i = 0; i < imageLists.length; i++) {
-    const currentImageUrl = URL.createObjectURL(imageLists[i]);
-    imageUrlLists.push(currentImageUrl);
+  // 줄 수가 제한을 초과하면 텍스트를 잘라서 업데이트
+  if (lines.length > 3) {
+    textarea.value = lines.slice(0, 3).join('\n');
   }
 
-  if (imageUrlLists.length > 10) {
-    imageUrlLists = imageUrlLists.slice(0, 10);
-  }
-
-  fileUrls.value = imageUrlLists;
+  // 업데이트된 값을 boothInfo에 적용
+  boothInfo.value.boothIntro = textarea.value;
 };
 
 const handleDeleteImage = (id) => {
@@ -147,13 +145,13 @@ const handleClickSumbit = async () => {
     !serviceHours.value.length ||
     !boothInfo.value.boothIntro.length
   ) {
-    return;
+    return (isSubmit.value = false);
   }
   const pattern = /^([01]?[0-9]|2[0-3]):[0-5][0-9]\s*~\s*([01]?[0-9]|2[0-4]):([0-5][0-9]|60)$/;
 
   if (!pattern.test(serviceHours.value.trim())) {
     alert('올바른 운영시간을 입력해주세요. 예: 00:00 ~ 24:00');
-    return;
+    return (isSubmit.value = false);
   }
   const [startTime, endTime] = serviceHours.value.split('~').map((time) => time.trim());
 
@@ -190,7 +188,7 @@ const handleClickSumbit = async () => {
   console.log('[Submit] CreateMenuList', createMenuList.value);
   console.log('[Submit] DeleteMenuList', deleteMenuList.value);
   console.log('[Submit] PatchMenuList', patchMenuList.value);
-  z``;
+
   const menuModifyResults = await Promise.allSettled([
     ...deleteMenuList.value.map(async (menuId) => {
       return await deleteMenu(menuId);
@@ -317,13 +315,15 @@ onMounted(async () => {
         <textarea
           type="text"
           placeholder="부스 소개를 작성해주세요."
-          class="resize-none w-full h-[97px] bg-primary-300-light rounded-3xl text-sm border-none p-5 pr-20 overflow-hidden placeholder:text-secondary-900-light"
+          class="resize-none w-full h-[97px] bg-primary-300-light rounded-3xl text-sm border-none p-5 pr-20 overflow-hidden placeholder:text-secondary-900-light overflow-y-clip"
           maxlength="100"
           @input="handleInputBoothIntro($event)"
           :value="boothInfo.boothIntro"
           :disabled="isSubmit"
+          rows="3"
         />
-        <div class="absolute bottom-4 right-5 text-sm">{{ characterCount }}/100</div>
+
+        <div class="absolute bottom-4 right-5 text-sm">{{ boothIntroLength }}/100</div>
       </div>
       <div class="flex flex-col gap-[10px] items-start">
         <div class="font-bold text-base">부스 사진</div>
@@ -386,10 +386,10 @@ onMounted(async () => {
           </label>
         </div>
       </div>
-      <div class="flex flex-col gap-[10px] items-start">
+      <div v-if="ADMIN_CATEGORY[boothInfo.adminCategory] === 'night'" class="flex flex-col gap-[10px] items-start">
         <div class="font-bold text-base">메뉴 정보</div>
         <!-- <MobileMenuDetail /> -->
-        <div v-if="ADMIN_CATEGORY[boothInfo.adminCategory] === 'night'" class="w-full flex flex-col gap-[10px]">
+        <div class="w-full flex flex-col gap-[10px]">
           <div
             v-for="(menu, index) in menuList"
             :key="menu.menuId"
@@ -437,6 +437,7 @@ onMounted(async () => {
             <div class="flex gap-[10px]">
               <div
                 class="w-1/2 h-[33px] flex justify-center items-center bg-primary-800 text-primary-900 py-[6px] px-4 rounded-full cursor-pointer"
+                @click="openMobileModal(menu)"
               >
                 수정
               </div>
@@ -456,8 +457,10 @@ onMounted(async () => {
           <div
             class="w-full h-[150px] flex flex-col items-center justify-center border-dashed border-2 rounded-3xl bg-primary-300-light"
           >
-            <IconAdd />
-            <div class="pt-[10px] text-sm text-secondary-900-light">메뉴 추가하기</div>
+            <div @click="openMobileModal({})" class="flex flex-col items-center justify-center p-5">
+              <IconAdd />
+              <div class="pt-[10px] text-sm text-secondary-900-light">메뉴 추가하기</div>
+            </div>
           </div>
         </div>
       </div>
@@ -479,7 +482,7 @@ onMounted(async () => {
       <button class="w-full rounded-[50px] h-[54px] is-button is-outlined" @click="handleClickCancleButton()">
         취소
       </button>
-      <button class="w-full rounded-[50px] h-[54px] is-button" @click="handleClickSumbit()">등록</button>
+      <button class="w-full rounded-[50px] h-[54px] is-button" @click="handleClickSumbit()">수정</button>
     </div>
   </form>
 </template>

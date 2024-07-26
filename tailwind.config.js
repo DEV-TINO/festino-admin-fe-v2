@@ -69,7 +69,7 @@ export default {
         },
         restore: {
           DEFAULT: '#E6F0FB',
-        }
+        },
       },
       borderColor: {
         primary: {
@@ -85,6 +85,9 @@ export default {
           },
         },
         secondary: {
+          900: {
+            DEFAULT: '#999990',
+          },
           500: {
             DEFAULT: 'rgba(204, 204,204, 0.28)',
           },
