@@ -62,6 +62,11 @@ const router = createRouter({
           component: () => import('../views/mobiles/MobileLoginView.vue'),
         },
         {
+          path: 'reserve',
+          name: 'MobileReserve',
+          component: () => import('../views/mobiles/MobileReserveView.vue'),
+        },
+        {
           path: 'booth',
           name: 'MobileBooth',
           component: () => import('../views/mobiles/MobileBoothManageView.vue'),

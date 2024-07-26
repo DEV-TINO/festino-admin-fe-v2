@@ -3,6 +3,7 @@ import { ref } from 'vue';
 
 export const useBaseModal = defineStore('baseModal', () => {
   const isModalOpen = ref(false);
+  const isMobileModalOpen = ref(false);
 
   const modalType = ref('');
   const setModalType = (type) => {
@@ -17,11 +18,22 @@ export const useBaseModal = defineStore('baseModal', () => {
     isModalOpen.value = false;
   };
 
+  const openMobileModal = () => {
+    isMobileModalOpen.value = true;
+  };
+
+  const closeMobileModal = () => {
+    isMobileModalOpen.value = false;
+  };
+
   return {
     isModalOpen,
     modalType,
     setModalType,
     openModal,
     closeModal,
+    isMobileModalOpen,
+    openMobileModal,
+    closeMobileModal,
   };
 });
