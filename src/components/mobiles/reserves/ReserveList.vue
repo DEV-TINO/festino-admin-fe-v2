@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watch, onMounted } from "vue";
+import { ref, watch, onMounted, onUnmounted } from "vue";
 import { storeToRefs } from "pinia";
 import { useReserveList } from "@/stores/reserve/reserveList";
 import { prettyDate } from "@/utils/utils";
@@ -22,6 +22,7 @@ const { userOwnBoothId } = storeToRefs(useUser());
 const { openReservePopup } = useReserveModal();
 const reserveData = ref([]);
 const loading = ref(false);
+const interval = ref(null);
 
 const getMobileNum = (num) => {
   return `${num.slice(0, 3)}-${num.slice(3, 7)}-${num.slice(7, 11)}`
@@ -29,6 +30,15 @@ const getMobileNum = (num) => {
 
 const handleClickOpenReservePopup = (data) => {
   openReservePopup(props.listType, data);
+};
+
+const refreshReserveList = () => {
+  clearInterval(interval.value);
+  interval.value = setInterval(async () => {
+    if (!userOwnBoothId.value) return;
+    console.log('Refresh Reserve List');
+    await getReserveList({ boothId: userOwnBoothId.value, type: 'reserve' });
+  }, 5000);
 };
 
 watch(() => props.listType, async() => {
@@ -53,6 +63,11 @@ onMounted(async () => {
   await getReserveList({ boothId: userOwnBoothId.value, type: props.listType });
   reserveData.value = reserveList.value.reserve;
   loading.value = false;
+  refreshReserveList();  // Start the interval on mount
+});
+
+onUnmounted(() => {
+  clearInterval(interval.value);  // Clear the interval on unmount
 });
 </script>
 
@@ -82,7 +97,7 @@ onMounted(async () => {
     </div>
     <div v-if="!loading && reserveData.length === 0" class="w-full pt-32 justify-center items-center flex flex-col gap-4">
       <IconNotFound :width="200" />
-      <p>에약 내역이 없습니다</p>
+      <p>예약 내역이 없습니다</p>
     </div>
   </div>
 </template>
