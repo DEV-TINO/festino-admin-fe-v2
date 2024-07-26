@@ -11,7 +11,7 @@ import { useUser } from '@/stores/user';
 import { api, imagesUpload } from '@/utils/api';
 import { useRouter } from 'vue-router';
 import { useBoothList } from '@/stores/booths/boothList';
-import { ADMIN_CATEGORY } from '@/utils/constants';
+import { ADMIN_CATEGORY, MENU_TYPE } from '@/utils/constants';
 
 const router = useRouter();
 const useBoothDetailStore = useBoothDetail();
@@ -116,7 +116,18 @@ const setBackgroundImage = (url) => {
     backgroundImage: `url(${url})`,
   };
 };
-//TODO: ADD MENU
+
+const handleDragStartMenu = (event, index) => {
+  if (isSubmit.value) return;
+  event.dataTransfer.setData('text/plain', index);
+};
+
+const handleDropMenu = (event, dropIndex) => {
+  if (isSubmit.value) return;
+  const dragIndex = event.dataTransfer.getData('text/plain');
+  const item = menuList.value.splice(dragIndex, 1)[0];
+  menuList.value.splice(dropIndex, 0, item);
+};
 
 const handleClickSumbit = async () => {
   if (isSubmit.value) return;
@@ -177,7 +188,7 @@ watch(selectedBoothId, async () => {
 
 onMounted(async () => {
   useBoothDetailStore.reset();
-  if(!isAdmin.value) {
+  if (!isAdmin.value) {
     const userBoothId = await useUserStore.getUserOwnBoothId();
     const condition = await useBoothDetailStore.init(userBoothId);
     if (condition) {
@@ -256,39 +267,39 @@ onMounted(async () => {
       </div>
       <div class="flex flex-col gap-[10px] items-start">
         <div class="font-bold text-base">부스 사진</div>
-          <div
-            class="w-full h-[150px] p-3.5 flex flex-row border-2 border-dashed cursor-pointer bg-primary-300-light rounded-3xl text-secondary-300-light mb-2 overflow-x-scroll overflow-y-hidden"
-            @dragover="handleDragOver"
-            @drop="handleDrop"
+        <div
+          class="w-full h-[150px] p-3.5 flex flex-row border-2 border-dashed cursor-pointer bg-primary-300-light rounded-3xl overflow-x-scroll overflow-y-hidden"
+          @dragover="handleDragOver"
+          @drop="handleDrop"
+        >
+          <label
+            v-if="fileUrls.length === 0"
+            for="dropzone-file"
+            class="w-full flex flex-col items-center justify-center"
           >
-            <label
-              v-if="fileUrls.length === 0"
-              for="dropzone-file"
-              class="w-full flex flex-col items-center justify-center"
-            >
-              <div class="flex flex-col items-center justify-center">
-                <IconFileUpload class="pb-1" />
-                <p class="text-sm text-third-10 dark:text-third-10">부스사진을 등록해주세요.</p>
-                <p class="text-sm text-third-10 dark:text-third-10">최대 10장까지 첨부 가능</p>
-              </div>
-              <input 
-                id="dropzone-file"
-                type="file"
-                accept="image/*"
-                class="hidden"
-                multiple
-                @input="handleFileinput($event)"
-              />
-            </label>
-            <div
-              v-for="(url, index) in fileUrls"
-              :key="index"
-              class="relative w-[120px] h-[120px] flex-shrink-0 mr-2"
-              draggable="true"
-              @dragstart="event => handleDragStart(event, index)"
-              @dragenter="event => handleDragEnter(event, index)"
-              @dragend="handleDragEnd"
-            >
+            <div class="flex flex-col items-center justify-center text-secondary-900-light text-sm">
+              <IconFileUpload class="pb-1" />
+              <p class="dark:text-third-10">부스사진을 등록해주세요.</p>
+              <p class="dark:text-third-10">최대 10장까지 첨부 가능</p>
+            </div>
+            <input
+              id="dropzone-file"
+              type="file"
+              accept="image/*"
+              class="hidden"
+              multiple
+              @input="handleFileinput($event)"
+            />
+          </label>
+          <div
+            v-for="(url, index) in fileUrls"
+            :key="index"
+            class="relative w-[120px] h-[120px] flex-shrink-0 mr-2"
+            draggable="true"
+            @dragstart="(event) => handleDragStart(event, index)"
+            @dragenter="(event) => handleDragEnter(event, index)"
+            @dragend="handleDragEnd"
+          >
             <div :style="setBackgroundImage(url)" class="w-full h-full object-cover rounded-3xl border bg-cover"></div>
             <IconDelete @click="handleDeleteImage(index)" class="absolute top-2 right-2" />
           </div>
@@ -297,9 +308,70 @@ onMounted(async () => {
       <div class="flex flex-col gap-[10px] items-start">
         <div class="font-bold text-base">메뉴 정보</div>
         <!-- <MobileMenuDetail /> -->
-        <div class="w-full h-[150px] flex flex-col items-center justify-center border-dashed border-2 rounded-3xl">
-          <IconAdd />
-          <div class="pt-[10px] text-sm text-secondary-900-light">메뉴 추가하기</div>
+        <div v-if="ADMIN_CATEGORY[boothInfo.adminCategory] === 'night'" class="w-full flex flex-col gap-[10px]">
+          <div
+            v-for="(menu, index) in menuList"
+            :key="menu.menuId"
+            :draggable="!isSubmit"
+            @dragstart="handleDragStartMenu($event, index)"
+            @dragover.prevent
+            @drop="handleDropMenu($event, index)"
+            class="w-full h-fit p-[14px] bg-white rounded-3xl border border-primary flex flex-col justify-between"
+          >
+            <div class="flex mb-[12px]">
+              <img :src="menu.menuImage" class="rounded-3xl w-[94px] h-[94px] mr-3" />
+              <div class="w-full flex flex-col justify-between">
+                <div>
+                  <div class="pb-3 pt-[9px] flex justify-between">
+                    <div class="text-sm font-semibold">
+                      {{ menu.menuName }}
+                    </div>
+                    <div class="flex">
+                      <div
+                        class="flex items-center justify-center w-[45px] h-[17px] bg-secondary-300 text-[8px] rounded-full"
+                      >
+                        {{ MENU_TYPE[menu.menuType] }}
+                      </div>
+                    </div>
+                  </div>
+                  <div class="w-fit text-[10px]">
+                    {{ menu.menuDescription }}
+                  </div>
+                </div>
+                <div class="flex justify-between pb-[9px]">
+                  <div class="flex items-center">
+                    <div class="text-sm font-semibold">
+                      {{ menu.menuPrice }}
+                    </div>
+                    <div class="text-sm">원</div>
+                  </div>
+                  <IconBoothListToggle
+                    :is-active="!menu.isSoldOut"
+                    :width="40"
+                    @click="menu.isSoldOut = !menu.isSoldOut"
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="flex gap-[10px]">
+              <div
+                class="w-1/2 h-[33px] flex justify-center items-center bg-primary-800 text-primary-900 py-[6px] px-4 rounded-full cursor-pointer"
+              >
+                수정
+              </div>
+              <div
+                class="w-1/2 h-[33px] flex justify-center items-center bg-danger-light text-danger py-[6px] px-4 rounded-full cursor-pointer"
+              >
+                삭제
+              </div>
+            </div>
+          </div>
+          <div
+            class="w-full h-[150px] flex flex-col items-center justify-center border-dashed border-2 rounded-3xl bg-primary-300-light"
+          >
+            <IconAdd />
+            <div class="pt-[10px] text-sm text-secondary-900-light">메뉴 추가하기</div>
+          </div>
         </div>
       </div>
       <!-- Show when night booth -->
