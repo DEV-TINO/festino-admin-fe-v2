@@ -328,14 +328,15 @@ onMounted(async () => {
       <div class="flex flex-col gap-[10px] items-start">
         <div class="font-bold text-base">부스 사진</div>
         <div
-          class="w-full h-[150px] p-3.5 flex flex-row border-2 border-dashed cursor-pointer bg-primary-300-light rounded-3xl overflow-x-scroll overflow-y-hidden"
+          class="w-full h-[150]px flex flex-row bg-primary-300-light rounded-3xl p-3.5 border-2 border-dashed overflow-y-hidden overflow-x-scroll cursor-pointer"
           @dragover="handleDragOver"
           @drop="handleDrop"
+          id="imagezone"
         >
           <label
             v-if="fileUrls.length === 0"
             for="dropzone-file"
-            class="w-full flex flex-col items-center justify-center"
+            class="w-full h-full flex flex-col items-center justify-center py-[18px]"
           >
             <div class="flex flex-col items-center justify-center text-secondary-900-light text-sm">
               <IconFileUpload class="pb-1" />
@@ -343,12 +344,13 @@ onMounted(async () => {
               <p class="dark:text-third-10">최대 10장까지 첨부 가능</p>
             </div>
             <input
-              id="dropzone-file"
               type="file"
-              accept="image/*"
+              id="dropzone-file"
               class="hidden"
-              multiple
               @input="handleFileinput($event)"
+              multiple
+              accept="image/*.jpg, image/*.jpeg, image/*.png, image/*.gif"
+              :disabled="isSubmit"
             />
           </label>
           <div
@@ -363,6 +365,25 @@ onMounted(async () => {
             <div :style="setBackgroundImage(url)" class="w-full h-full object-cover rounded-3xl border bg-cover"></div>
             <IconDelete @click="handleDeleteImage(index)" class="absolute top-2 right-2" />
           </div>
+          <label
+            v-if="fileUrls.length != 0 && fileUrls.length < 10"
+            for="dropzone-file"
+            class="w-[120px] h-[120px] flex flex-col items-center justify-center py-[18px] shrink-0 border-2 rounded-3xl"
+          >
+            <div class="flex flex-col items-center justify-center text-secondary-900-light text-sm">
+              <IconFileUpload class="pb-1" />
+              <p class="dark:text-third-10">사진 추가</p>
+            </div>
+            <input
+              type="file"
+              id="dropzone-file"
+              class="hidden"
+              @input="handleFileinput($event)"
+              multiple
+              accept="image/*.jpg, image/*.jpeg, image/*.png, image/*.gif"
+              :disabled="isSubmit"
+            />
+          </label>
         </div>
       </div>
       <div class="flex flex-col gap-[10px] items-start">
@@ -467,5 +488,14 @@ onMounted(async () => {
 .dynamic-padding {
   padding-left: calc(20 / 430 * 100%) !important;
   padding-right: calc(20 / 430 * 100%) !important;
+}
+
+#imagezone {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+#imagezone::-webkit-scrollbar {
+  display: none;
 }
 </style>
