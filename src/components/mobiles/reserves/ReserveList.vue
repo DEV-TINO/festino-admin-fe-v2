@@ -63,11 +63,11 @@ onMounted(async () => {
   await getReserveList({ boothId: userOwnBoothId.value, type: props.listType });
   reserveData.value = reserveList.value.reserve;
   loading.value = false;
-  refreshReserveList();  // Start the interval on mount
+  refreshReserveList();
 });
 
 onUnmounted(() => {
-  clearInterval(interval.value);  // Clear the interval on unmount
+  clearInterval(interval.value);
 });
 </script>
 
