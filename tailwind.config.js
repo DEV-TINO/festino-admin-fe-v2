@@ -102,9 +102,6 @@ export default {
       screens: {
         xs: '430px',
       },
-      backgroundImage: {
-        'confirmation-icon': "url('/confirmation.svg')",
-      },
     },
   },
   plugins: [require('flowbite/plugin')],
