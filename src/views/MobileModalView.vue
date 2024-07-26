@@ -15,7 +15,7 @@ const { isMobileModalOpen, modalType } = storeToRefs(baseModalStore);
   <MobileModalBackground v-if="isMobileModalOpen">
     <MobileConfirmModal v-if="modalType === 'mobileConfirm'" />
     <MobileReserveModal v-if="modalType === 'mobileReserve'" />
-    <MobileLoadingModal />
+    <MobileLoadingModal v-if="modalType === 'loading'" />
   </MobileModalBackground>
 </template>
 
