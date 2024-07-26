@@ -111,7 +111,7 @@ onMounted(async () => {
         </button>
       </div>
       <div
-        class="bg-white rounded-[20px] w-full h-auto px-4 py-4 pb-12 gap-10 lg:py-[60px] lg:px-[60px] lg:gap-[60px] flex flex-col"
+        class="bg-white rounded-2xl w-full h-auto px-4 py-4 pb-12 gap-10 lg:py-[60px] lg:px-[60px] lg:gap-[60px] flex flex-col border-1 border-primary-700 text-secondary-700-light shadow-xs"
       >
         <!-- 부스 정보 -->
         <div class="flex flex-col gap-[20px] w-full">
@@ -120,21 +120,27 @@ onMounted(async () => {
           >
             부스 정보
           </div>
-          <div class="w-full bg-primary-700-light h-auto rounded-[20px] px-[40px] py-[40px]">
+          <div class="w-full bg-primary-900-lighter h-auto rounded-2xl px-[40px] py-[40px]">
             <div
-              class="w-full bg-primary-700 h-full rounded-[20px] border border-primary-700 grid grid-cols-[120px_1fr] grid-rows-[80px_80px_200px_280px] 2xl:grid-cols-[200px_1fr_200px_1fr] 2xl:grid-rows-[80px_200px_280px] place-items-stretch"
+              class="w-full bg-primary-700 h-full rounded-2xl border border-primary-700 grid grid-cols-[120px_1fr] grid-rows-[80px_80px_200px_280px] 2xl:grid-cols-[200px_1fr_200px_1fr] 2xl:grid-rows-[80px_200px_280px] place-items-stretch"
             >
-              <div class="flex items-center justify-center border-b border-r border-primary-700 px-4">부스 이름</div>
+              <div
+                class="flex items-center justify-center border-b border-r border-primary-700 px-4 text-xl font-medium"
+              >
+                부스 이름
+              </div>
               <div
                 class="bg-white flex items-center justify-center border-b border-primary-700 text-wrap px-4 2xl:rounded-none rounded-tr-[20px]"
               >
                 {{ boothInfo.boothName }}
               </div>
-              <div class="flex items-center justify-center 2xl:border-x border-r border-b border-primary-700 px-4">
+              <div
+                class="flex items-center justify-center 2xl:border-x border-r border-b border-primary-700 px-4 font-medium text-xl"
+              >
                 운영시간
               </div>
               <div
-                class="bg-white 2xl:rounded-tr-[20px] flex items-center justify-between border-b border-primary-700 px-[40px]"
+                class="bg-white 2xl:rounded-tr-2xl flex items-center justify-between border-b border-primary-700 px-[40px]"
               >
                 <div class="flex items-center justify-center gap-4 flex-wrap">
                   <div class="text-wrap">{{ boothInfo.openTime }}~{{ boothInfo.closeTime }}</div>
@@ -146,11 +152,19 @@ onMounted(async () => {
                 </div>
                 <IconBoothListToggle :is-active="boothInfo.isOpen" @click="handleClickBoothOpen()" />
               </div>
-              <div class="flex items-center justify-center border-r border-b border-primary-700 px-4">부스 소개</div>
+              <div
+                class="flex items-center justify-center border-r border-b border-primary-700 px-4 text-xl font-medium"
+              >
+                부스 소개
+              </div>
               <div class="2xl:col-span-3 bg-white flex items-center justify-center border-b border-primary-700">
                 <p>{{ boothInfo.boothIntro }}</p>
               </div>
-              <div class="flex items-center justify-center border-r border-primary-700 h-[278px] px-4">부스 이미지</div>
+              <div
+                class="flex items-center justify-center border-r border-primary-700 h-[278px] px-4 text-xl font-medium"
+              >
+                부스 이미지
+              </div>
               <div
                 class="overflow-x-auto overflow-y-hidden 2xl:col-span-3 flex justify-between items-center bg-white rounded-br-[20px] border-primary-700 h-[278px] py-[40px] px-[40px] gap-[23px]"
               >
@@ -176,12 +190,12 @@ onMounted(async () => {
           >
             메뉴 정보
           </div>
-          <div class="bg-primary-700 rounded-[20px] w-full lg:py-[40px] lg:px-[60px] px-4 py-4 flex flex-col">
+          <div class="bg-primary-900-lighter rounded-2xl w-full lg:py-[40px] lg:px-[60px] px-4 py-4 flex flex-col">
             <div class="grid gap-4 grid-cols-1 xl:grid-cols-2">
               <div
                 v-for="(menu, menuIndex) in menuList"
                 :key="menuIndex"
-                class="h-[220px] rounded-[20px] flex text-2xl font-bold px-[25px] py-[25px] gap-[28px] bg-white hover:border-primary-900 border"
+                class="h-[220px] rounded-2xl flex text-2xl font-bold px-[25px] py-[25px] gap-[28px] bg-white hover:border-primary-900 border-1 border-primary-700"
               >
                 <div
                   class="hidden md:block w-[180px] h-[180px] bg-contain bg-no-repeat bg-center bg-white rounded-xl flex-shrink-0 border-gray-200 border"
@@ -194,7 +208,7 @@ onMounted(async () => {
                       <div class="text-2xl font-semibold text-secondary-700 text-nowrap">
                         {{ menu.menuName }}
                       </div>
-                      <div class="gap-[12px] items-center text-sm flex flex-shrink-0 justify-end grow">
+                      <div class="gap-[12px] items-center text-sm flex flex-shrink-0 justify-end grow font-medium">
                         <div
                           class="w-[80px] h-[29px] rounded-full bg-secondary-300 items-center flex justify-center text-secondary-700"
                         >
@@ -226,7 +240,7 @@ onMounted(async () => {
               </div>
               <div
                 v-if="menuList.length === 0"
-                class="col-span-2 h-[220px] border-danger rounded-[20px] border flex flex-col items-center justify-center bg-white"
+                class="col-span-2 h-[220px] border-danger rounded-2xl border flex flex-col items-center justify-center bg-white"
               >
                 <div class="text-4xl text-danger">메뉴를 등록해주세요.</div>
                 <!-- <div>메뉴 추가하기</div> -->

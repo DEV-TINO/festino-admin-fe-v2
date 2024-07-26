@@ -139,7 +139,7 @@ onUnmounted(() => {
 
     <!-- Go To Booth Detail -->
     <div
-      class="text-nowrap w-[60px] h-[30px] rounded-2xl flex items-center justify-center text-center lg:w-[100px] lg:h-[40px] bg-primary-800 lg:rounded-[20px] text-primary-900 cursor-pointer select-none"
+      class="text-nowrap w-[60px] h-[30px] rounded-2xl flex items-center justify-center text-center lg:w-[100px] lg:h-[40px] bg-primary-800 lg:rounded-2xl text-primary-900 cursor-pointer select-none font-semibold"
       @click="handleClickBoothDetail(boothInfo?.boothId)"
     >
       부스정보
