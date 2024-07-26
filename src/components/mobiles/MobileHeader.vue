@@ -1,31 +1,48 @@
 <script setup>
 import router from '@/router';
 import IconHeaderBack from '@/components/icons/mobiles/IconHeaderBack.vue';
+import { useUser } from '@/stores/user';
+import { ref, watchEffect, onMounted } from 'vue';
+import { storeToRefs } from 'pinia';
+import { useBoothDetail } from '@/stores/booths/boothDetail';
 
-const props = defineProps({
-  title: {
-    type: String,
-    default: '',
-  },
-  isMainPage: {
-    type: Boolean,
-    default: false,
-  },
-});
+const useUserStore = useUser();
+const useBoothDetailStore = useBoothDetail();
+
+const { boothInfo } = storeToRefs(useBoothDetailStore);
+const { isAdmin } = storeToRefs(useUserStore);
+const routerName = ref('');
 
 const handleClickBackButton = () => {
-  router.push({ name: 'mobile-main' });
+  router.push({ name: 'MobileMain' });
 };
+const handleClickLogoutButton = async () => {
+  await useUserStore.logout();
+  router.push({ name: 'MobileLogin' });
+};
+
+watchEffect(() => (routerName.value = router.currentRoute.value.name));
 </script>
 
 <template>
-  <div class="w-full h-[60px] bg-white flex justify-between items-center px-6 shadow-xs mb-7">
+  <div
+    class="w-full h-[60px] bg-white flex justify-between items-center px-6 shadow-xs mb-7"
+    v-if="router.currentRoute.value.name != 'MobileLogin'"
+  >
     <div class="w-7">
-      <IconHeaderBack v-if="!isMainPage" @click="handleClickBackButton()" />
+      <IconHeaderBack @click="handleClickBackButton()" v-if="router.currentRoute.value.name != 'MobileMain'" />
     </div>
-    <p class="font-medium text-xl">{{ title }}</p>
-    <div class="w-[42px] text-xs underline text-secondary-300 underline-offset-4">
-      <p v-if="isMainPage">로그아웃</p>
+    <p class="font-medium text-xl text-secondary-700">
+      {{ isAdmin ? '개발팀' : boothInfo.adminName }}
+    </p>
+    <div class="w-[42px] text-xs underline text-[#999999] underline-offset-4">
+      <p
+        @click="handleClickLogoutButton()"
+        class="cursor-pointer"
+        v-if="router.currentRoute.value.name === 'MobileMain'"
+      >
+        로그아웃
+      </p>
     </div>
   </div>
 </template>
