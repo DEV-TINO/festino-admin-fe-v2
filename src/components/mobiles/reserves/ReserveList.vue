@@ -44,6 +44,10 @@ onMounted(() => {
         <div class="w-1/12"></div>
       </div>
     </div>
+    <div v-if="!loading && reserveData.length === 0" class="w-full pt-32 justify-center items-center flex flex-col gap-4">
+      <IconNotFound :width="200" />
+      <p>에약 내역이 없습니다</p>
+    </div>
   </div>
 </template>
 
