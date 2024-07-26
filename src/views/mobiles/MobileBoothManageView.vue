@@ -18,7 +18,9 @@ const useBoothDetailStore = useBoothDetail();
 const useUserStore = useUser();
 const useBoothListStore = useBoothList();
 
-const { boothInfo, menuList, boothType } = storeToRefs(useBoothDetailStore);
+const { deleteMenu, createMenu, addDeleteMenu, patchMenu } = useBoothDetailStore;
+const { boothInfo, menuList, boothType, createMenuList, deleteMenuList, patchMenuList, originalMenuList } =
+  storeToRefs(useBoothDetailStore);
 const { isAdmin } = storeToRefs(useUserStore);
 const { boothList } = storeToRefs(useBoothListStore);
 
@@ -129,6 +131,12 @@ const handleDropMenu = (event, dropIndex) => {
   menuList.value.splice(dropIndex, 0, item);
 };
 
+const handleClickDeleteMenu = async ({ menuIndex, menuId }) => {
+  if (isSubmit.value) return;
+  addDeleteMenu(menuId);
+  menuList.value.splice(menuIndex, 1);
+};
+
 const handleClickSumbit = async () => {
   if (isSubmit.value) return;
   isSubmit.value = true;
@@ -165,6 +173,58 @@ const handleClickSumbit = async () => {
   const saveBoothUrl = `/admin/booth/${boothType.value}`;
   // TODO: ADD ERROR HANDLING
   const saveBoothResponse = await api.put(saveBoothUrl, boothInfo.value);
+
+  menuList.value.forEach((menu) => {
+    const findPatchMenu = patchMenuList.value.find((patchMenu) => patchMenu.menuId === menu.menuId);
+    const findCreateMenu = createMenuList.value.find((createMenu) => createMenu.menuName === menu.menuName);
+
+    if (findPatchMenu) {
+      findPatchMenu.isSoldOut = menu.isSoldOut;
+    }
+    if (findCreateMenu) {
+      findCreateMenu.isSoldOut = menu.isSoldOut;
+    }
+  });
+
+  console.log('[Submit] MenuList', menuList.value);
+  console.log('[Submit] CreateMenuList', createMenuList.value);
+  console.log('[Submit] DeleteMenuList', deleteMenuList.value);
+  console.log('[Submit] PatchMenuList', patchMenuList.value);
+  z``;
+  const menuModifyResults = await Promise.allSettled([
+    ...deleteMenuList.value.map(async (menuId) => {
+      return await deleteMenu(menuId);
+    }),
+    ...patchMenuList.value.map(async (menu) => {
+      return await patchMenu(menu);
+    }),
+    ...createMenuList.value.map(async (menu) => {
+      return await createMenu(menu);
+    }),
+  ]);
+
+  console.log('[MenuModifyResults]', menuModifyResults);
+
+  console.log('[Submit] originalMenuList', originalMenuList.value);
+
+  const isSoldOutModifiyResults = await Promise.allSettled([
+    ...originalMenuList.value
+      .map(async (originalMenu) => {
+        const findMenu = menuList.value.find((menu) => menu.menuId === originalMenu.menuId);
+        if (findMenu) {
+          if (findMenu.isSoldOut !== originalMenu.isSoldOut) {
+            return await api.put('/admin/menu/sold-out', {
+              menuId: findMenu.menuId,
+              isSoldOut: originalMenu.isSoldOut,
+              boothId: boothInfo.value.boothId,
+            });
+          }
+        }
+      })
+      .filter((result) => result),
+  ]);
+
+  console.log('[isSoldOutModifiyResults]', isSoldOutModifiyResults);
 
   isSubmit.value = false;
   // TODO: 수정하고 모달 띄우기
@@ -361,6 +421,12 @@ onMounted(async () => {
               </div>
               <div
                 class="w-1/2 h-[33px] flex justify-center items-center bg-danger-light text-danger py-[6px] px-4 rounded-full cursor-pointer"
+                @click="
+                  handleClickDeleteMenu({
+                    menuIndex: menuIndex,
+                    menuId: menu.menuId,
+                  })
+                "
               >
                 삭제
               </div>
