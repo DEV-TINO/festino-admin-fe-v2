@@ -52,7 +52,6 @@ const visibility = () => {
 watch(() => reserveList.value.reserve, () => {
   if(listType.value !== "reserve") {
     if(reserveList.value.reserve.length !== beforeReserveState.value) checkMark.value = true;
-    else checkMark.value = false;
   }
   else checkMark.value = false;
   beforeReserveState.value = reserveList.value.reserve.length;
