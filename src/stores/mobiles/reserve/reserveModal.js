@@ -23,7 +23,7 @@ export const useReserveModal = defineStore('reserveModal', () => {
   };
 
   const openLoadingModal = () => {
-    baseModalStore.setModalType('loading');
+    baseModalStore.setModalType('mobileLoading');
     baseModalStore.openMobileModal();
   };
 
