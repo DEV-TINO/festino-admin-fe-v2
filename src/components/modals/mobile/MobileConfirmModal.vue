@@ -1,6 +1,6 @@
 <script setup>
 import IconBoothInfo from '../../icons/IconBoothInfo.vue';
-import { ref, watchEffect } from 'vue';
+import { ref, watchEffect, watch } from 'vue';
 import { useReserveModal } from '../../../stores/mobiles/reserve/reserveModal';
 import { useReserveList } from '@/stores/reserve/reserveList';
 import { storeToRefs } from 'pinia';
@@ -9,19 +9,29 @@ import { useUser } from '@/stores/user.js';
 
 const { confirmReserve, deleteReserve, restoreReserve, getReserveList } = useReserveList();
 const { userOwnBoothId } = storeToRefs(useUser());
-const { reserveList } = storeToRefs(useReserveList());
-const { closeMobilePopup } = useReserveModal();
+const { closeMobilePopup, openLoadingModal } = useReserveModal();
 const { reserveData, confirmType, popupType } = storeToRefs(useReserveModal());
 const title = ref('');
 const subTitle = ref('');
+const loading = ref(false);
 
 const confirm = async() => {
+  loading.value = true;
   if (confirmType.value === 'confirm') await confirmReserve({boothId : userOwnBoothId.value, reserveId : reserveData.value.reservationId});
   else if (confirmType.value === 'cancel') await deleteReserve({boothId : userOwnBoothId.value, reserveId : reserveData.value.reservationId});
-  else if (confirmType.value === 'restore') await restoreReserve({boothId : userOwnBoothId.value, reserveId : reserveData.value.reservationId, reserveType : popupType.value});
+  else if (confirmType.value === 'restore') {
+    await restoreReserve({boothId : userOwnBoothId.value, reserveId : reserveData.value.reservationId, reserveType : popupType.value});
+    await getReserveList({boothId : userOwnBoothId.value, type : 'reserve'});
+  }
   await getReserveList({boothId : userOwnBoothId.value, type : popupType.value});
-  closeMobilePopup()
+  closeMobilePopup();
+  loading.value = false;
 };
+
+watch(() => loading.value, () => {
+  if (loading.value) openLoadingModal();
+  else closeMobilePopup();
+});
 
 watchEffect(() => {
   if (confirmType.value) {

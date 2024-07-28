@@ -22,6 +22,11 @@ export const useReserveModal = defineStore('reserveModal', () => {
     baseModalStore.openMobileModal();
   };
 
+  const openLoadingModal = () => {
+    baseModalStore.setModalType('mobileLoading');
+    baseModalStore.openMobileModal();
+  };
+
   const closeMobilePopup = () => {
     baseModalStore.closeMobileModal();
   };
@@ -32,6 +37,7 @@ export const useReserveModal = defineStore('reserveModal', () => {
     openReservePopup,
     openConfirmPopup,
     closeMobilePopup,
+    openLoadingModal,
     reserveData,
   };
 });
