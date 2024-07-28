@@ -58,6 +58,7 @@ const handleDelete = async (reserveId) => {
   const status = await deleteReserve({
     boothId: selectBoothId.value,
     reserveId: reserveId,
+    reserveType: selectOrderType.value,
   });
   if (status) {
     const getReserveListAll = await Promise.allSettled([
@@ -72,6 +73,7 @@ const handleConfirm = async (reserveId) => {
   const status = await confirmReserve({
     boothId: selectBoothId.value,
     reserveId: reserveId,
+    reserveType: selectOrderType.value,
   });
   if (status) {
     const getReserveListAll = await Promise.allSettled([

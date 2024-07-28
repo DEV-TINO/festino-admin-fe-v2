@@ -57,7 +57,6 @@ const clearRefereshOrderList = () => {
 watchEffect(async () => {
   if (boothId.value) {
     await getAllOrderList();
-    refreshOrderList();
   }
 });
 
@@ -66,6 +65,7 @@ onMounted(async () => {
   initDepositOrder();
   initCookingOrderList();
   initFinishOrderList();
+  refreshOrderList();
 });
 
 onUnmounted(() => {

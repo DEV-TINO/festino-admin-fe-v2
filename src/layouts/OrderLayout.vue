@@ -127,7 +127,6 @@ watchEffect(async () => {
       boothId: boothId.value,
       date: 0,
     });
-    refreshAllTableOrders();
   }
 });
 
@@ -144,6 +143,7 @@ onMounted(async () => {
   } else {
     boothId.value = userOwnBoothId.value;
   }
+  refreshAllTableOrders();
 });
 
 onUnmounted(() => {
