@@ -25,8 +25,8 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="flex gap-4">
-    <div class="w-[20px] h-[20px] rounded-full bg-success-500"></div>
+  <div class="flex gap-4 items-center">
+    <div class="w-[20px] h-[20px] rounded-full bg-cancel-light"></div>
     <div class="text-lg">주문 취소</div>
   </div>
   <div class="grid 2xl:grid-cols-3 lg:grid-cols-2 place-items-center gap-10">

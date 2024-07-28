@@ -25,7 +25,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="flex gap-4">
+  <div class="flex gap-4 items-center">
     <div class="w-[20px] h-[20px] rounded-full bg-danger"></div>
     <div class="text-lg">입금 대기</div>
   </div>

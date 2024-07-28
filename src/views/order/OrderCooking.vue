@@ -25,7 +25,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="flex gap-4">
+  <div class="flex gap-4 items-center">
     <div class="w-[20px] h-[20px] rounded-full bg-primary-900"></div>
     <div class="text-lg">조리 중</div>
   </div>
