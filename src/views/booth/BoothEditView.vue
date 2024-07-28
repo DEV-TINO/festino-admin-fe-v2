@@ -4,6 +4,7 @@ import IconBoothListToggle from '@/components/icons/IconBoothListToggle.vue';
 import IconFileUpload from '@/components/icons/IconFileUpload.vue';
 import IconAdd from '@/components/icons/IconAdd.vue';
 import router from '@/router';
+import { prettyPrice } from '@/utils/utils';
 import { useBoothDetail } from '@/stores/booths/boothDetail';
 import { storeToRefs } from 'pinia';
 import { onMounted, ref } from 'vue';
@@ -636,7 +637,7 @@ onMounted(async () => {
                   <!-- Menu Footer -->
                   <div class="flex justify-between items-center w-full">
                     <div class="text-secondary-700 font-bold text-2xl">
-                      {{ menu.menuPrice }}<span class="text-secondary-700-light font-normal text-2xl">원</span>
+                      {{ prettyPrice(menu.menuPrice) }}<span class="text-secondary-700-light font-normal text-2xl"></span>
                     </div>
                     <IconBoothListToggle :is-active="!menu.isSoldOut" @click="menu.isSoldOut = !menu.isSoldOut" />
                   </div>

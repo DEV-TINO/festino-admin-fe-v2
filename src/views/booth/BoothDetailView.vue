@@ -3,6 +3,7 @@ import IconBoothInfo from '@/components/icons/IconBoothInfo.vue';
 import IconBoothListToggle from '@/components/icons/IconBoothListToggle.vue';
 import IconIndicator from '@/components/icons/IconIndicator.vue';
 import IconRadio from '@/components/icons/IconRadio.vue';
+import { prettyPrice } from '@/utils/utils';
 import { useBoothDetail } from '@/stores/booths/boothDetail';
 import { setBackgroundImage } from '@/utils/utils';
 import { storeToRefs } from 'pinia';
@@ -232,7 +233,7 @@ onMounted(async () => {
                   <!-- Menu Footer -->
                   <div class="flex justify-between items-center w-full">
                     <div class="text-secondary-700 font-bold text-2xl">
-                      {{ menu.menuPrice }}<span class="text-secondary-700-light font-normal text-2xl">원</span>
+                      {{ prettyPrice(menu.menuPrice) }}<span class="text-secondary-700-light font-normal text-2xl"></span>
                     </div>
                     <IconBoothListToggle :is-active="!menu.isSoldOut" @click="handleClickSoldOut(menu)" />
                   </div>
