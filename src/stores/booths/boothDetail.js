@@ -2,6 +2,7 @@ import { defineStore, storeToRefs } from 'pinia';
 import { ref } from 'vue';
 
 import { useBoothList } from './boothList';
+import { useUser } from '../user';
 import { alertError, api } from '@/utils/api';
 import { ADMIN_CATEGORY } from '@/utils/constants';
 
@@ -9,6 +10,7 @@ export const useBoothDetail = defineStore('boothDetail', () => {
   const useBoothListStore = useBoothList();
   const { getAllBoothList } = useBoothListStore;
   const { boothList } = storeToRefs(useBoothListStore);
+  const { isAdmin } = storeToRefs(useUser());
 
   const boothInfo = ref({
     boothId: '',
@@ -65,6 +67,25 @@ export const useBoothDetail = defineStore('boothDetail', () => {
     if (!boothId) return;
     boothType.value = await findBoothType(boothId);
     return await getBoothDetail({ boothId: boothId, type: boothType.value });
+  };
+
+  const getBoothInfo = async (boothId) => {
+    if (isAdmin.value) return;
+
+    await getAllBoothList();
+    const booth = boothList.value.find((booth) => booth.boothId === boothId);
+    boothInfo.value = booth;
+    boothType.value = ADMIN_CATEGORY[booth.adminCategory];
+    if (ADMIN_CATEGORY[booth.adminCategory] === 'night') {
+      const res = await api.get(`/admin/booth/night/${boothId}`);
+      if (res.data.success) {
+        boothInfo.value = res.data.boothInfo;
+      } else {
+        //데이터 가져오기 실패
+      }
+    }
+
+    console.log('[INFO] boothUser.js - getBoothInfo', booth);
   };
 
   const reset = () => {
@@ -207,6 +228,7 @@ export const useBoothDetail = defineStore('boothDetail', () => {
 
   return {
     init,
+    getBoothInfo,
     reset,
     deleteMenu,
     createMenu,
@@ -216,6 +238,7 @@ export const useBoothDetail = defineStore('boothDetail', () => {
     addCreateMenu,
     addPatchMenu,
     addMenuList,
+    getBoothDetail,
     originalMenuList,
     createMenuList,
     deleteMenuList,

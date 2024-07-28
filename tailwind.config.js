@@ -68,6 +68,9 @@ export default {
           light: 'rgba(240, 12, 0, 0.12)',
           dark: '#BC0B00',
         },
+        restore: {
+          DEFAULT: '#E6F0FB',
+        },
       },
       borderColor: {
         primary: {
@@ -75,6 +78,7 @@ export default {
             DEFAULT: '#0073F0',
             dark: '#0052CC',
             light: 'rgba(0, 115, 240, 0.86)',
+            ligther: 'rgba(0, 115, 240, 0.16)',
           },
           700: {
             light: 'rgba(0, 115, 240, 0.12)',
@@ -85,6 +89,9 @@ export default {
           },
         },
         secondary: {
+          900: {
+            DEFAULT: '#999990',
+          },
           500: {
             DEFAULT: 'rgba(204, 204,204, 0.28)',
           },
@@ -110,6 +117,11 @@ export default {
       },
       boxShadow: {
         primary: '0 1px 0 0 rgba(0, 115, 240, 0.16)',
+      },
+      ringColor: {
+        primary: {
+          900: '#0073F0',
+        },
       },
       screens: {
         xs: '430px',
