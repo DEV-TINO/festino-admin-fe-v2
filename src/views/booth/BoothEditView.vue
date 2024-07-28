@@ -2,6 +2,7 @@
 import IconBoothEdit from '@/components/icons/IconBoothEdit.vue';
 import IconBoothListToggle from '@/components/icons/IconBoothListToggle.vue';
 import IconFileUpload from '@/components/icons/IconFileUpload.vue';
+import IconAdd from '@/components/icons/IconAdd.vue';
 import router from '@/router';
 import { useBoothDetail } from '@/stores/booths/boothDetail';
 import { storeToRefs } from 'pinia';
@@ -364,7 +365,7 @@ onMounted(async () => {
 
 <template>
   <!-- Booth Edit -->
-  <div class="flex flex-col px-4 gap-[40px] min-w-[500px] pb-20">
+  <div class="flex flex-col px-4 gap-[40px] min-w-[500px] pb-20 text-secondary-700-light">
     <form @submit.prevent="handleClickSubmit()">
       <div class="flex justify-between pt-[50px] lg:pt-[100pt] min-w-[350px] pb-[40px]">
         <!-- Booth Header -->
@@ -374,7 +375,7 @@ onMounted(async () => {
         </div>
       </div>
       <div
-        class="bg-white rounded-[20px] w-full h-auto px-4 py-4 pb-12 gap-10 lg:py-[60px] lg:px-[60px] lg:gap-[60px] flex flex-col"
+        class="bg-white rounded-2xl w-full h-auto px-4 py-4 pb-12 gap-10 lg:py-[60px] lg:px-[60px] lg:gap-[60px] flex flex-col border-1 border-primary-700"
       >
         <!-- 부스 정보 -->
         <div class="flex flex-col gap-[20px] w-full">
@@ -385,11 +386,11 @@ onMounted(async () => {
           </div>
 
           <div
-            class="bg-primary-700 rounded-[20px] w-full py-4 px-4 lg:py-[40px] lg:px-[60px] flex flex-col gap-[30px] xl:gap-[20px]"
+            class="bg-primary-900-lighter rounded-2xl w-full py-4 px-4 lg:py-[40px] lg:px-[60px] flex flex-col gap-[30px] xl:gap-[20px] border-1 border-primary-700"
           >
             <!-- 학과명 -->
             <div class="flex gap-2 flex-wrap xl:flex-nowrap">
-              <div class="w-[85px] flex items-center justify-start">학과명</div>
+              <div class="w-[92px] flex items-center justify-start text-xl shrink-0">학과명</div>
               <div class="relative w-full">
                 <input
                   class="w-full xl:w-[390px] h-[60px] border border-gray-500 rounded-2xl px-[20px] focus:border-primary-900"
@@ -410,8 +411,8 @@ onMounted(async () => {
             </div>
 
             <!-- 부스 타입 -->
-            <div class="flex flex-wrap xl:flex-nowrap gap-2 xl:gap-0">
-              <div class="w-[85px] flex items-center justify-start">부스 타입</div>
+            <div class="flex flex-wrap xl:flex-nowrap gap-2">
+              <div class="w-[92px] flex items-center justify-start text-xl shrink-0">부스 타입</div>
               <div class="relative w-full xl:w-[390px]">
                 <select
                   :disabled="!isAdmin || isSubmit"
@@ -428,7 +429,7 @@ onMounted(async () => {
 
             <!-- 부스이름 -->
             <div class="flex gap-2 flex-wrap xl:flex-nowrap">
-              <div class="w-[85px] flex items-center justify-start">부스 이름</div>
+              <div class="w-[92px] flex items-center justify-start text-xl shrink-0">부스 이름</div>
               <div class="relative w-full">
                 <input
                   class="w-full h-[60px] border border-gray-500 rounded-2xl px-[20px] focus:border-primary-900"
@@ -450,11 +451,11 @@ onMounted(async () => {
 
             <!-- 운영시간 -->
             <div class="flex gap-2 flex-wrap xl:flex-nowrap items-center">
-              <div class="w-[85px] flex items-center justify-start">운영 시간</div>
+              <div class="w-[92px] flex items-center justify-start text-xl shrink-0">운영 시간</div>
               <div class="w-full flex items-center gap-2">
                 <div class="relative w-fit">
                   <input
-                    class="xl:w-[520px] h-[60px] border border-gray-500 rounded-xl px-[20px] focus:border-primary-900"
+                    class="xl:w-[520px] h-[60px] border border-gray-500 rounded-2xl px-[20px] focus:border-primary-900"
                     type="text"
                     maxlength="100"
                     placeholder="예시) 17:00 ~ 24:00"
@@ -475,10 +476,10 @@ onMounted(async () => {
 
             <!-- 부스소개 -->
             <div class="flex w-full gap-2 flex-wrap xl:flex-nowrap">
-              <div class="w-[85px] flex items-center justify-start">학과 소개</div>
+              <div class="w-[92px] flex items-center justify-start text-xl shrink-0">학과 소개</div>
               <div class="relative w-full">
                 <textarea
-                  class="w-full h-[150px] xl:h-[300px] border-[1px] border-gray-500 rounded-xl px-[20px] py-[20px] focus:border-primary-900 resize-none"
+                  class="w-full h-[150px] xl:h-[300px] border-[1px] border-gray-500 rounded-2xl px-[20px] py-[20px] focus:border-primary-900 resize-none"
                   type="text"
                   maxlength="300"
                   placeholder="학과 소개를 작성해주세요."
@@ -498,16 +499,16 @@ onMounted(async () => {
 
             <!-- 부스 이미지 -->
             <div class="flex w-full gap-2 flex-wrap xl:flex-nowrap">
-              <div class="flex-shrink-0 xl:w-[85px] flex items-center justify-start w-full">부스 이미지</div>
+              <div class="flex-shrink-0 xl:w-[92px] flex items-center justify-start w-full text-xl">부스 이미지</div>
               <label
                 v-if="fileUrls.length === 0"
                 for="dropzone-file"
-                class="flex flex-col items-center justify-center w-full h-[150px] xl:h-[300px] border-dashed border-gray-500 bg-gray-200 rounded-[20px] border-[1px] cursor-pointer hover:bg-slate-200"
+                class="flex flex-col items-center justify-center w-full h-[150px] xl:h-[300px] border-dashed border-primary-500 bg-primary-300-light rounded-2xl border-[1px] cursor-pointer hover:bg-slate-200"
               >
                 <IconFileUpload />
 
-                <p class="mb-2 text-sm text-gray-500">부스 사진을 등록해주세요.</p>
-                <p class="text-xs text-gray-500">최대 10장까지 첨부 가능</p>
+                <p class="mb-2 text-secondary-900-light">부스 사진을 등록해주세요.</p>
+                <p class="text-secondary-900-light">최대 10장까지 첨부 가능</p>
                 <input
                   type="file"
                   id="dropzone-file"
@@ -533,7 +534,7 @@ onMounted(async () => {
                       v-for="(urls, urlIndex) in fileUrls"
                       :key="urlIndex"
                       :style="setBackgroundImage(urls)"
-                      class="flex-shrink-0 w-[150px] h-[150px] xl:w-[300px] xl:h-[300px] rounded-[20px] bg-cover bg-no-repeat bg-center border-2 border-gray-300 bg-white hover:border-primary-900"
+                      class="flex-shrink-0 w-[150px] h-[150px] xl:w-[300px] xl:h-[300px] rounded-2xl bg-cover bg-no-repeat bg-center border-2 border-gray-300 bg-white hover:border-primary-900"
                       :draggable="!isSubmit"
                       @dragstart="handleDragStartBoothImage($event, urlIndex)"
                       @dragover.prevent
@@ -543,12 +544,12 @@ onMounted(async () => {
                     <label
                       v-if="fileUrls.length < 10"
                       for="dropzone-file"
-                      class="flex-shrink-0 flex flex-col items-center justify-center w-[150px] xl:w-[300px] h-[150px] xl:h-[300px] border-dashed border-gray-500 bg-gray-200 rounded-[20px] border-[1px] cursor-pointer hover:bg-slate-200"
+                      class="flex-shrink-0 flex flex-col items-center justify-center w-[150px] xl:w-[300px] h-[150px] xl:h-[300px] border-dashed border-gray-500 bg-primary-300-light rounded-2xl border-[1px] cursor-pointer hover:bg-slate-200"
                     >
                       <IconFileUpload />
 
-                      <p class="mb-2 text-sm text-gray-500">부스 사진을 등록해주세요.</p>
-                      <p class="text-xs text-gray-500">최대 10장까지 첨부 가능</p>
+                      <p class="mb-2 text-secondary-900-light">부스 사진을 등록해주세요.</p>
+                      <p class="text-secondary-900-light">최대 10장까지 첨부 가능</p>
                       <input
                         type="file"
                         id="dropzone-file"
@@ -573,12 +574,14 @@ onMounted(async () => {
           >
             메뉴 정보
           </div>
-          <div class="bg-primary-700 rounded-[20px] w-full lg:py-[40px] lg:px-[60px] px-4 py-4 flex flex-col">
+          <div
+            class="bg-primary-900-lighter rounded-2xl w-full lg:py-[40px] lg:px-[60px] px-4 py-4 flex flex-col border-1 border-primary-700"
+          >
             <div class="grid gap-4 grid-cols-1 xl:grid-cols-2">
               <div
                 v-for="(menu, menuIndex) in menuList"
                 :key="menuIndex"
-                class="h-[220px] rounded-[20px] flex text-2xl font-bold px-[25px] py-[25px] gap-[28px] bg-white hover:border-primary-900 border"
+                class="h-[220px] rounded-2xl flex text-2xl font-bold px-[25px] py-[25px] gap-[28px] bg-white hover:border-primary-900 border-1 border-primary-700"
                 :draggable="!isSubmit"
                 @dragstart="handleDragStartMenu($event, menuIndex)"
                 @dragover.prevent
@@ -586,7 +589,7 @@ onMounted(async () => {
                 @drop="handleDropMenu($event, menuIndex)"
               >
                 <div
-                  class="hidden md:block w-[180px] h-[180px] bg-contain bg-no-repeat bg-center bg-white rounded-xl flex-shrink-0 border-gray-200 border"
+                  class="hidden md:block w-[180px] h-[180px] bg-contain bg-no-repeat bg-center bg-white rounded-2xl flex-shrink-0 border-gray-200 border"
                   :style="setBackgroundImage(menu.menuImage)"
                 ></div>
                 <div class="flex flex-col w-full justify-between">
@@ -640,10 +643,10 @@ onMounted(async () => {
                 </div>
               </div>
               <div
-                class="h-[220px] bg-gray-200 rounded-[20px] border border-dashed border-gray-500 flex flex-col items-center justify-center text-gray-500 cursor-pointer"
+                class="h-[220px] bg-primary-300-light rounded-2xl border-2 border-dashed border-primay-500 flex flex-col items-center justify-center text-secondary-900-light cursor-pointer"
                 @click="openModal({})"
               >
-                <div class="font-semibold text-6xl">+</div>
+                <IconAdd class="mb-2" />
                 <div>메뉴 추가하기</div>
               </div>
             </div>

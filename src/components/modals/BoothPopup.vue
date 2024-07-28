@@ -54,11 +54,11 @@ onMounted(() => {
   <form @submit.prevent="handleSubmit()">
     <div
       v-if="checkCorrectSelect()"
-      class="w-[480px] h-[312px] flex flex-col justify-between items-center bg-white rounded-[20px]"
+      class="w-[480px] h-[312px] flex flex-col justify-between items-center bg-white rounded-2xl"
     >
       <div class="flex flex-col pt-[32px] items-center">
         <IconNotice :type="'info'" class="pb-[20px]" />
-        <div class="text-secondary-700 text-xl text-center">
+        <div class="text-secondary-700 font-bold text-xl text-center">
           {{ modalInfo[seletedType][`${getBoothInfo()}`]?.title }}
         </div>
         <div class="pt-[12px] text-secondary-700-light text-base whitespace-pre-wrap text-center">
@@ -76,7 +76,7 @@ onMounted(() => {
     <!-- Error -->
     <div
       v-if="!checkCorrectSelect()"
-      class="w-[480px] h-[312px] flex flex-col justify-between items-center bg-white rounded-[20px]"
+      class="w-[480px] h-[312px] flex flex-col justify-between items-center bg-white rounded-2xl"
     >
       <div class="flex flex-col pt-[32px] items-center">
         <IconNotice :type="'error'" class="pb-[20px]" />

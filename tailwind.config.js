@@ -14,7 +14,7 @@ export default {
         secondary: {
           900: {
             DEFAULT: '#999999',
-            light: 'rgba(153, 153, 153, 0.6)',
+            light: 'rgba(153, 153, 153, 0.7)',
           },
           700: {
             DEFAULT: '#222222',
@@ -38,6 +38,7 @@ export default {
             DEFAULT: '#0073F0',
             dark: '#0052CC',
             light: 'rgba(0, 115, 240, 0.86)',
+            lighter: 'rgba(0, 115, 240, 0.03)',
           },
           800: {
             DEFAULT: 'rgba(0, 115, 240, 0.12)',
@@ -83,6 +84,9 @@ export default {
             light: 'rgba(0, 115, 240, 0.12)',
             DEFAULT: 'rgba(0, 115, 240, 0.16)',
           },
+          500: {
+            DEFAULT: 'rgba(0, 0, 0, 0.16)',
+          },
         },
         secondary: {
           900: {
@@ -97,8 +101,12 @@ export default {
           light: 'rgba(240, 12, 0, 0.12)',
         },
       },
+      borderWidth: {
+        1: '1px',
+      },
       borderRadius: {
         '2lg': '0.625rem', //10px
+        '2xl': '1.25rem', //20px
       },
       fontSize: {
         '3xl': '1.75rem',
@@ -108,7 +116,7 @@ export default {
         jalnan2: ['jalnan2'],
       },
       boxShadow: {
-        primary: '0 1px 0 0 #0073F0',
+        primary: '0 1px 0 0 rgba(0, 115, 240, 0.16)',
       },
       ringColor: {
         primary: {

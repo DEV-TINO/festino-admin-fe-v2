@@ -65,7 +65,7 @@ onMounted(() => {
 </script>
 <template>
   <form @submit.prevent="handleSubmit()">
-    <div class="w-[780px] h-[716px] bg-white rounded-[20px] py-[50px] px-[50px] flex flex-col justify-between">
+    <div class="w-[780px] h-[716px] bg-white rounded-2xl py-[50px] px-[50px] flex flex-col justify-between">
       <!-- Inputs -->
       <div class="flex flex-col w-full gap-[28px]">
         <!-- 메뉴 -->
@@ -131,7 +131,7 @@ onMounted(() => {
             <label
               v-if="menuInfo.menuImage === ''"
               for="menu-image"
-              class="flex flex-col items-center justify-center w-full h-[150px] border border-dashed border-gray-500 bg-gray-200 hover:bg-slate-200 px-[20px] rounded-2xl active:border-primary-900"
+              class="flex flex-col items-center justify-center w-full h-[150px] border border-dashed border-gray-500 bg-secondary-300 hover:bg-slate-200 px-[20px] rounded-2xl active:border-primary-900"
             >
               <IconFileUpload />
               <p class="mb-2 text-sm text-gray-500">메뉴 사진을 등록해주세요.</p>

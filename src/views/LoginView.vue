@@ -54,7 +54,7 @@ const handleClickSubmit = async () => {
     <div class="text-primary-900 text-[60px] font-semibold pb-[75px]">Festino</div>
 
     <form @submit.prevent="handleClickSubmit()">
-      <div class="w-[660px] h-[555px] bg-white flex flex-col justify-between items-center shadow-md rounded-[20px]">
+      <div class="w-[660px] h-[555px] bg-white flex flex-col justify-between items-center shadow-md rounded-2xl">
         <div class="text-primary-900 text-[30px] font-semibold pt-[50px]">로그인</div>
         <div class="flex flex-col w-[540px] gap-[20px]">
           <!-- ID -->

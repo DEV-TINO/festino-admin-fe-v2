@@ -208,7 +208,7 @@ onUnmounted(() => {
         <div class="text-primary-900 text-4xl font-semibold">{{ selectBooth.adminName }} 예약 현황</div>
       </div>
       <div
-        class="w-[320px] h-[55px] rounded-[20px] bg-primary-800-light text-primary-900 flex justify-center items-center text-2xl gap-[10px]"
+        class="w-[320px] h-[55px] rounded-2xl bg-primary-800-light text-primary-900 flex justify-center items-center text-2xl gap-[10px]"
       >
         예약 기능 ON/OFF
         <IconBoothListToggle
@@ -253,7 +253,7 @@ onUnmounted(() => {
         </button>
       </div>
       <div
-        class="w-[450px] h-[55px] rounded-[20px] bg-primary-800-light text-primary-900 flex justify-center items-center text-2xl gap-[10px]"
+        class="w-[450px] h-[55px] rounded-2xl bg-primary-800-light text-primary-900 flex justify-center items-center text-2xl gap-[10px]"
       >
         <div class="relative w-full">
           <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">

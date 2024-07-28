@@ -1,7 +1,7 @@
 <template>
   <form @submit.prevent="handleSubmit()">
     <div
-      class="w-[500px] rounded-[20px] flex flex-col justify-between items-center py-[32px] px-[40px] bg-white gap-[20px]"
+      class="w-[500px] rounded-2xl flex flex-col justify-between items-center py-[32px] px-[40px] bg-white gap-[20px]"
     >
       <!-- Info -->
       <div class="flex flex-col justify-center items-center w-full">

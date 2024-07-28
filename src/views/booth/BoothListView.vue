@@ -35,7 +35,7 @@ onMounted(async () => {
       <div class="flex gap-4">
         <button
           v-if="isAdmin"
-          class="hover:bg-primary-900-dark w-[80px] h-[48px] rounded-xl text-xl lg:w-[106px] lg:h-[53px] flex items-center justify-center text-white lg:text-3xl bg-primary-900 lg:rounded-[20px] cursor-pointer select-none"
+          class="hover:bg-primary-900-dark w-[80px] h-[48px] rounded-xl text-xl lg:w-[106px] lg:h-[53px] flex items-center justify-center text-white lg:text-3xl bg-primary-900 lg:rounded-2xl cursor-pointer select-none"
           type="button"
           @click="handleClickBoothCreate()"
         >
@@ -45,10 +45,12 @@ onMounted(async () => {
     </div>
 
     <!-- Booth Body -->
-    <div class="w-full flex flex-col h-full shadow-primary rounded-b-[20px]">
+    <div
+      class="w-full flex flex-col h-full shadow-primary rounded-b-[20px] border-1 border-primary-700 rounded-t-2xl text-secondary-700-light"
+    >
       <!-- Header -->
       <div
-        class="text-xs lg:text-xl font-semibold h-[70px] w-full bg-primary-700 rounded-t-[20px] flex justify-between gap-4 flex-nowrap overflow-x-auto items-center px-4 lg:px-[60px]"
+        class="text-xs lg:text-xl font-semibold h-[70px] w-full bg-primary-700 rounded-t-2xl flex justify-between gap-4 flex-nowrap overflow-x-auto items-center px-4 lg:px-[60px] border-b border-primary-700"
       >
         <div class="text-nowrap min-w-[21px] w-[21px] lg:min-w-[35px] text-center">번호</div>
         <div class="text-balance break-keep min-w-[75px] w-[75px] lg:min-w-[130px] text-center">관리자 카테고리</div>
