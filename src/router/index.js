@@ -71,6 +71,11 @@ const router = createRouter({
           name: 'OrderFinish',
           component: () => import('../views/order/OrderFinish.vue'),
         },
+        {
+          path: 'cancel',
+          name: 'OrderCancel',
+          component: () => import('../views/order/OrderCancel.vue'),
+        },
       ],
     },
     {

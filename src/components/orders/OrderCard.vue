@@ -1,4 +1,5 @@
 <script setup>
+import OrderCancel from '@/views/order/OrderCancel.vue';
 import OrderCookingCard from './OrderCookingCard.vue';
 import OrderFinishCard from './OrderFinishCard.vue';
 import OrderReadyCard from './OrderReadyCard.vue';
@@ -21,6 +22,7 @@ const props = defineProps({
     <OrderReadyCard v-if="type === 'ready'" v-bind="cardData" />
     <OrderCookingCard v-if="type === 'cooking'" v-bind="cardData" />
     <OrderFinishCard v-if="type === 'finish'" v-bind="cardData" />
+    <OrderCancel v-if="type === 'cancel'" v-bind="cardData" />
   </div>
 </template>
 

@@ -6,6 +6,7 @@ import { useBaseOrder } from './baseOrder';
 import { useCookingOrder } from '@/stores/orders/cookingOrder';
 import { useDepositOrder } from '@/stores/orders/depositOrder';
 import { useFinishOrder } from '@/stores/orders/finishOrder';
+import { useCancelOrder } from '@/stores/orders/cancelOrder';
 
 export const useOrderPopup = defineStore('orderPopup', () => {
   const baseModalStore = useBaseModal();
@@ -14,11 +15,13 @@ export const useOrderPopup = defineStore('orderPopup', () => {
   const useDepositOrderStore = useDepositOrder();
   const useCookingOrderStore = useCookingOrder();
   const useFinishOrderStore = useFinishOrder();
+  const useCancelOrderStore = useCancelOrder();
 
   const { getAllTableOrders } = baseOrderStore;
   const { getWaitDepositOrderList } = useDepositOrderStore;
   const { getCookingOrderList } = useCookingOrderStore;
   const { getFinishOrderList } = useFinishOrderStore;
+  const { getCancelOrderList } = useCancelOrderStore;
 
   const { boothId } = storeToRefs(baseOrderStore);
 
@@ -26,7 +29,7 @@ export const useOrderPopup = defineStore('orderPopup', () => {
   const orderInfo = ref({});
   const cookingInfo = ref({});
 
-  const selectType = ref(''); // ready, cooking, finish
+  const selectType = ref(''); // ready, cooking, finish, cancel
 
   const deleteOrder = async ({ orderId }) => {
     try {
@@ -105,14 +108,35 @@ export const useOrderPopup = defineStore('orderPopup', () => {
   const submitPopup = async ({ type }) => {
     baseModalStore.setModalType('loadingModal');
     if (type === 'cancel') {
-      const success = await deleteOrder({ orderId: orderInfo.value.orderId });
-      if (!success) {
-        console.error('주문 취소 실패');
-      } else {
-        await getWaitDepositOrderList({
-          boothId: boothId.value,
-          date: 0,
+      if (selectType.value === 'cancel') {
+        const success = await patchOrderRestore({
+          orderId: orderInfo.value.orderId,
+          orderType: orderInfo.value.orderType,
         });
+        if (!success) {
+          console.error('주문 취소 복구 실패');
+        } else {
+          await Promise.allSettled([
+            getCancelOrderList({
+              boothId: boothId.value,
+              date: 0,
+            }),
+            getAllTableOrders({
+              boothId: boothId.value,
+              date: 0,
+            }),
+          ]);
+        }
+      } else {
+        const success = await deleteOrder({ orderId: orderInfo.value.orderId });
+        if (!success) {
+          console.error('주문 취소 실패');
+        } else {
+          await getWaitDepositOrderList({
+            boothId: boothId.value,
+            date: 0,
+          });
+        }
       }
     } else if (type === 'deposit') {
       const success = await patchOrderDeposit({ orderId: orderInfo.value.orderId });

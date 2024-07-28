@@ -138,6 +138,9 @@ onMounted(() => {
       >
         <button type="submit" class="is-button w-full h-[48px]" ref="submit" value="complete">조리 완료</button>
       </div>
+      <div v-if="selectType === 'cancel'" class="flex justify-between items-end gap-[20px] h-[72px]">
+        <button type="submit" class="is-button w-full h-[48px]" ref="submit" value="cancel">주문 취소 복구</button>
+      </div>
     </div>
   </form>
 </template>

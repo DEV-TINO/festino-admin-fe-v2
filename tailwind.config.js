@@ -31,6 +31,10 @@ export default {
         success: {
           DEFAULT: '#66CF55',
         },
+        cancel: {
+          DEFAULT: '#CCCCCC',
+          light: '#888888',
+        },
       },
       backgroundColor: {
         primary: {
@@ -91,6 +95,10 @@ export default {
         restore: {
           DEFAULT: '#E6F0FB',
         },
+        cancel: {
+          DEFAULT: '#CCCCCC',
+          light: '#888888',
+        },
       },
       borderColor: {
         primary: {
@@ -131,6 +139,10 @@ export default {
           500: {
             DEFAULT: 'rgba(102, 207, 85, 0.05)',
           },
+        },
+        cancel: {
+          DEFAULT: '#CCCCCC',
+          light: '#888888',
         },
       },
       borderWidth: {
