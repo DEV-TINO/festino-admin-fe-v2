@@ -1,3 +1,49 @@
+<script setup>
+import { BOOTH_POPUP_INFO, modalInfo } from '@/utils/constants';
+import IconBoothInfo from '../icons/IconBoothInfo.vue';
+import { useReservePopup } from '@/stores/reserve/reservePopup';
+import { storeToRefs } from 'pinia';
+import { onMounted, ref, watchEffect } from 'vue';
+
+const useReservePopupStore = useReservePopup();
+const { submitBoothReservePopup, submitPopup, closePopup } = useReservePopupStore;
+const { reservationInfo, boothInfo, popupType } = storeToRefs(useReservePopupStore);
+
+const isSubmit = ref(false);
+
+const submit = ref(null);
+
+const handleSubmit = async () => {
+  if (isSubmit.value) return;
+  isSubmit.value = true;
+  if (popupType.value === 'booth') {
+    submitBoothReservePopup();
+  } else {
+    submitPopup();
+  }
+  isSubmit.value = false;
+};
+
+const title = ref('');
+const subTitle = ref('');
+
+watchEffect(() => {
+  console.log(popupType.value);
+  if (popupType.value === 'booth') {
+    title.value = BOOTH_POPUP_INFO.booth[boothInfo.value.isReservation].title;
+    subTitle.value = BOOTH_POPUP_INFO.booth[boothInfo.value.isReservation].subTitle;
+  } else {
+    title.value = BOOTH_POPUP_INFO[popupType.value].title;
+    subTitle.value = BOOTH_POPUP_INFO[popupType.value].subTitle;
+  }
+});
+
+onMounted(() => {
+  console.log(boothInfo.value);
+  submit.value?.focus();
+});
+</script>
+
 <template>
   <form @submit.prevent="handleSubmit()">
     <div
@@ -65,51 +111,5 @@
     </div>
   </form>
 </template>
-
-<script setup>
-import { BOOTH_POPUP_INFO, modalInfo } from '@/utils/constants';
-import IconBoothInfo from '../icons/IconBoothInfo.vue';
-import { useReservePopup } from '@/stores/reserve/reservePopup';
-import { storeToRefs } from 'pinia';
-import { onMounted, ref, watch, watchEffect } from 'vue';
-
-const useReservePopupStore = useReservePopup();
-const { submitBoothReservePopup, submitPopup, closePopup } = useReservePopupStore;
-const { reservationInfo, boothInfo, popupType } = storeToRefs(useReservePopupStore);
-
-const isSubmit = ref(false);
-
-const submit = ref(null);
-
-const handleSubmit = async () => {
-  if (isSubmit.value) return;
-  isSubmit.value = true;
-  if (popupType.value === 'booth') {
-    submitBoothReservePopup();
-  } else {
-    submitPopup();
-  }
-  isSubmit.value = false;
-};
-
-const title = ref('');
-const subTitle = ref('');
-
-watchEffect(() => {
-  console.log(popupType.value);
-  if (popupType.value === 'booth') {
-    title.value = BOOTH_POPUP_INFO.booth[boothInfo.value.isReservation].title;
-    subTitle.value = BOOTH_POPUP_INFO.booth[boothInfo.value.isReservation].subTitle;
-  } else {
-    title.value = BOOTH_POPUP_INFO[popupType.value].title;
-    subTitle.value = BOOTH_POPUP_INFO[popupType.value].subTitle;
-  }
-});
-
-onMounted(() => {
-  console.log(boothInfo.value);
-  submit.value?.focus();
-});
-</script>
 
 <style lang="scss" scoped></style>

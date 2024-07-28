@@ -326,12 +326,4 @@ onMounted(async () => {
   </div>
 </template>
 
-<style lang="css" scoped>
-.no-scroll::-webkit-scrollbar {
-  display: none; /* Chrome, Safari, Opera*/
-}
-.no-scroll {
-  --ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
-}
-</style>
+<style lang="css" scoped></style>

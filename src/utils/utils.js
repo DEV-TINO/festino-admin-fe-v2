@@ -9,6 +9,22 @@ export const setBackgroundImage = (url) => {
   };
 };
 
+export const prettyMenuNum = (menuNum) => {
+  if (menuNum === '') return '';
+  if (typeof menuNum === 'string') menuNum = parseInt(menuNum);
+  return `${menuNum}개`;
+};
+
+export const prettyPhoneNumber = (phoneNumber) => {
+  return phoneNumber.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3');
+};
+
+export const prettyPrice = (price) => {
+  if (price === '') return '';
+  if (typeof price === 'string') price = parseInt(price);
+  return price.toLocaleString('ko-KR') + '원';
+};
+
 export const prettyDate = (date) => {
   const dateObject = new Date(date);
 
@@ -29,3 +45,6 @@ export const prettyDate = (date) => {
 
   return formattedTime;
 };
+
+export const chunkArray = (arr, size) =>
+  Array.from({ length: Math.ceil(arr.length / size) }, (_, index) => arr.slice(index * size, (index + 1) * size));

@@ -48,6 +48,9 @@ export default {
             DEFAULT: 'rgba(0, 115, 240, 0.08)',
             light: 'rgba(0, 155, 250, 0.05)',
           },
+          500: {
+            DEFAULT: 'rgba(48, 130, 246, 0.05)',
+          },
           300: {
             light: 'rgba(0, 0, 0, 0.03)',
           },
@@ -66,7 +69,24 @@ export default {
         danger: {
           DEFAULT: '#F00E00',
           light: 'rgba(240, 12, 0, 0.12)',
+          lighter: 'rgba(255, 109, 109, 0.05)',
           dark: '#BC0B00',
+          900: {
+            light: 'rgba(255, 109, 109, 0.7)',
+          },
+          700: {
+            DEFAULT: '#FBE4E4',
+          },
+        },
+        success: {
+          DEFAULT: '#66CF55',
+          dark: '#52B043',
+          700: {
+            DEFAULT: '#E2F5E1',
+          },
+          500: {
+            DEFAULT: 'rgba(102, 207, 85, 0.05)',
+          },
         },
         restore: {
           DEFAULT: '#E6F0FB',
@@ -84,6 +104,9 @@ export default {
             light: 'rgba(0, 115, 240, 0.12)',
             DEFAULT: 'rgba(0, 115, 240, 0.16)',
           },
+          600: {
+            DEFAULT: '#DAE8FA',
+          },
           500: {
             DEFAULT: 'rgba(0, 0, 0, 0.16)',
           },
@@ -99,6 +122,15 @@ export default {
         danger: {
           DEFAULT: '#F00E00',
           light: 'rgba(240, 12, 0, 0.12)',
+        },
+        success: {
+          DEFAULT: '#66CF55',
+          700: {
+            DEFAULT: '#E2F5E1',
+          },
+          500: {
+            DEFAULT: 'rgba(102, 207, 85, 0.05)',
+          },
         },
       },
       borderWidth: {

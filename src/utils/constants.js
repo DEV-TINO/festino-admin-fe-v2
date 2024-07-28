@@ -76,3 +76,20 @@ export const RESERVE_TYPE = {
   cancel: '삭제',
   complete: '완료',
 };
+
+export const ORDER_CATEGORY = {
+  all: '전체',
+  realTime: '실시간',
+  ready: '입금 대기',
+  cooking: '조리중',
+  finish: '조리 완료',
+  cancel: '주문 취소',
+  statistics: '통계',
+};
+
+export const ORDER_STATUS = {
+  ready: '주문내역 상세보기',
+  cooking: '조리 완료',
+  finish: '주문 복구',
+  complete: '조리 완료',
+};

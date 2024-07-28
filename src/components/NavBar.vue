@@ -44,7 +44,9 @@ const handleClickReserve = () => {
 
 const handleClickOrder = () => {
   console.log('Order clicked');
-  alert('기능 준비중입니다.');
+  router.push({
+    name: 'OrderRealTime',
+  });
 };
 
 const handleClickLogout = () => {
@@ -93,7 +95,7 @@ watch(() => route.name, updateActive, {
         :class="setActiveClass(orderActive)"
         @click="handleClickOrder()"
       >
-        주문조희
+        주문조회
       </div>
       <div
         v-if="isAdmin"
@@ -142,7 +144,7 @@ watch(() => route.name, updateActive, {
             :class="setActiveClass(orderActive)"
             @click="handleClickOrder()"
           >
-            주문조희
+            주문조회
           </div>
           <hr />
           <div

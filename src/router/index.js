@@ -47,6 +47,18 @@ const router = createRouter({
       component: NotFoundView,
     },
     {
+      path: '/order',
+      name: 'Order',
+      component: () => import('../layouts/OrderLayout.vue'),
+      children: [
+        {
+          path: '',
+          name: 'OrderRealTime',
+          component: () => import('../views/order/OrderRealTime.vue'),
+        },
+      ],
+    },
+    {
       path: '/mobile',
       name: 'Mobile',
       component: () => import('../layouts/MobileLayout.vue'),
@@ -81,14 +93,14 @@ const adminPages = [''];
 
 // Auth Guard
 router.beforeEach(async (to, from) => {
-  const { isUserVaild, isUserOwnBooth } = useUser();
+  const { isUserVaild, getUserOwnBoothId } = useUser();
 
   if (publicPages.includes(to.name)) {
     return true;
   }
 
   const { isAdmin, isValidate } = await isUserVaild();
-  await isUserOwnBooth();
+  await getUserOwnBoothId();
 
   if (!isValidate) {
     if (from.name?.includes('Mobile')) return { name: 'MobileLogin' };

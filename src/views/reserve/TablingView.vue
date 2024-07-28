@@ -376,7 +376,7 @@ onUnmounted(() => {
           <tr v-if="isLoading">
             <td scope="col" colspan="7">
               <div class="w-full justify-center items-center flex flex-col py-10 bg-white rounded-b-[20px]">
-                <IconLoading :width="464" />
+                <IconLoading :width="300" />
                 <p class="text-3xl py-4">에약 내역을 불러오는 중이에요...</p>
               </div>
             </td>
@@ -384,7 +384,7 @@ onUnmounted(() => {
           <tr v-if="!isLoading && getFilteredReserveList({ type: selectOrderType }).length === 0">
             <td scope="col" colspan="7">
               <div class="w-full justify-center items-center flex flex-col py-10 bg-white rounded-b-[20px]">
-                <IconNotFound :width="404" />
+                <IconNotFound :width="200" />
                 <p class="text-3xl py-4">검색 내역이 없습니다...</p>
               </div>
             </td>
