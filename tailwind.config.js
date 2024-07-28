@@ -38,7 +38,6 @@ export default {
             DEFAULT: '#0073F0',
             dark: '#0052CC',
             light: 'rgba(0, 115, 240, 0.86)',
-            lighter: 'rgba(0, 115, 240, 0.03)',
           },
           800: {
             DEFAULT: 'rgba(0, 115, 240, 0.12)',
