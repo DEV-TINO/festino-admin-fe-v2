@@ -35,8 +35,6 @@ const { openPopup } = useOrderPopupStore;
 
 const { boothId } = storeToRefs(useBaseOrderStore);
 
-const canSubmit = ref(false);
-
 const isComplete = (cook) => {
   return cook.servedCount === cook.totalCount;
 };
@@ -57,7 +55,6 @@ const patchCookServeCount = async ({ cookId, servedCount, cook }) => {
   } catch (error) {
     console.error('[OrderCookingCard] patchCookServeCount', error);
     return;
-  } finally {
   }
 };
 

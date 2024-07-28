@@ -119,10 +119,20 @@ export const useOrderPopup = defineStore('orderPopup', () => {
       if (!success) {
         console.error('입금 완료 실패');
       } else {
-        await getWaitDepositOrderList({
-          boothId: boothId.value,
-          date: 0,
-        });
+        await Promise.allSettled([
+          getWaitDepositOrderList({
+            boothId: boothId.value,
+            date: 0,
+          }),
+          getCookingOrderList({
+            boothId: boothId.value,
+            date: 0,
+          }),
+          getAllTableOrders({
+            boothId: boothId.value,
+            date: 0,
+          }),
+        ]);
       }
     } else if (type === 'restore') {
       const success = await patchOrderRestore({
