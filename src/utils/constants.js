@@ -92,4 +92,13 @@ export const ORDER_STATUS = {
   cooking: '조리 완료',
   finish: '주문 복구',
   complete: '조리 완료',
+  cancel: '주문 취소',
+};
+
+export const ORDER_URL = {
+  realTime: '',
+  ready: 'ready',
+  cooking: 'cooking',
+  finish: 'finish',
+  cancel: 'cancel',
 };

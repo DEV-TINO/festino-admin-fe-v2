@@ -8,10 +8,11 @@ import { useBaseOrder } from '@/stores/orders/baseOrder';
 import { useOrderPopup } from '@/stores/orders/orderPopup';
 import { useUser } from '@/stores/user';
 import { api } from '@/utils/api';
-import { ORDER_CATEGORY } from '@/utils/constants';
+import { ORDER_CATEGORY, ORDER_URL } from '@/utils/constants';
 import { chunkArray } from '@/utils/utils';
 import { storeToRefs } from 'pinia';
 import { computed, onMounted, onUnmounted, ref, watchEffect } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 
 const useUserStore = useUser();
 const useBoothListStore = useBoothList();
@@ -29,6 +30,8 @@ const { orderCategories, orderStatus, allTableOrders, boothId } = storeToRefs(us
 const orderBoothList = ref([]);
 const chunkedAllTableOrders = ref([]);
 const interval = ref(null);
+const route = useRoute();
+const router = useRouter();
 
 const { width } = useWindowSize();
 
@@ -132,6 +135,10 @@ watchEffect(async () => {
 
 watchEffect(() => {
   chunkedAllTableOrders.value = chunkArray(allTableOrders.value, 7);
+});
+
+watchEffect(() => {
+  router.push(`/order/${ORDER_URL[orderStatus.value]}`);
 });
 
 onMounted(async () => {

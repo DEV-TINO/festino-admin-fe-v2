@@ -55,3 +55,7 @@ body {
 .is-button.is-success.is-outlined {
   @apply border-[1px] border-success bg-white text-success hover:bg-gray-100 focus:outline-none !important;
 }
+
+.is-button.is-cancel.is-outlined {
+  @apply border-[1px] border-cancel-light bg-white text-cancel-light hover:bg-gray-100 focus:outline-none !important;
+}

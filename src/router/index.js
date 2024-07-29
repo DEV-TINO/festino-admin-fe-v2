@@ -56,6 +56,26 @@ const router = createRouter({
           name: 'OrderRealTime',
           component: () => import('../views/order/OrderRealTime.vue'),
         },
+        {
+          path: 'ready',
+          name: 'OrderReady',
+          component: () => import('../views/order/OrderReady.vue'),
+        },
+        {
+          path: 'cooking',
+          name: 'OrderCooking',
+          component: () => import('../views/order/OrderCooking.vue'),
+        },
+        {
+          path: 'finish',
+          name: 'OrderFinish',
+          component: () => import('../views/order/OrderFinish.vue'),
+        },
+        {
+          path: 'cancel',
+          name: 'OrderCancel',
+          component: () => import('../views/order/OrderCancel.vue'),
+        },
       ],
     },
     {
