@@ -97,6 +97,7 @@ const handleClickOrderDetail = async (orderId, orderType) => {
         phoneNum: orderInfo.phoneNum,
         tableNum: orderInfo.tableNum,
         totalPrice: orderInfo.totalPrice,
+        userName: orderInfo.userName,
       },
       selectMenuInfoList: orderInfo.menuList,
     });
@@ -117,6 +118,7 @@ const handleClickOrderFinish = async (tableOrder, orderId, orderType) => {
         phoneNum: orderInfo.phoneNum,
         tableNum: orderInfo.tableNum,
         totalPrice: orderInfo.totalPrice,
+        userName: orderInfo.userName,
       },
       selectMenuInfoList: orderInfo.menuList,
     });
