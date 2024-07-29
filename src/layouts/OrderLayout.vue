@@ -154,14 +154,14 @@ onUnmounted(() => {
 <template>
   <div class="flex flex-col px-4 gap-[40px] min-w-[630px] pb-20">
     <!-- Order Header -->
-    <div class="flex justify-between pt-[50px] lg:pt-[100px] min-w-[350px] gap-4">
+    <div class="flex justify-between pt-[50px] lg:pt-[100px] min-w-[670px] gap-4">
       <div class="flex items-center gap-4">
         <IconOrder />
         <div class="text-primary-900 text-4xl font-semibold">주문 조회</div>
       </div>
 
       <!-- For Admin -->
-      <div v-if="isAdmin" class="flex justify-between min-w-[350px] items-center gap-4">
+      <div v-if="isAdmin" class="flex justify-between min-w-[420px] items-center gap-4">
         <div class="flex-shrink-0 text-xl font-semibold">학과 선택:</div>
         <select
           class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"

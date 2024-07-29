@@ -202,7 +202,7 @@ onUnmounted(() => {
 });
 </script>
 <template>
-  <div class="flex flex-col px-4 gap-[40px] min-w-[630px] pb-20">
+  <div class="flex flex-col px-4 gap-[40px] min-w-[890px] pb-20">
     <!-- Reserve Header -->
     <div class="flex justify-between pt-[50px] lg:pt-[100px] min-w-[350px] gap-4">
       <div class="flex items-center gap-4">
@@ -210,7 +210,7 @@ onUnmounted(() => {
         <div class="text-primary-900 text-4xl font-semibold">{{ selectBooth.adminName }} 예약 현황</div>
       </div>
       <div
-        class="w-[320px] h-[55px] rounded-2xl bg-primary-800-light text-primary-900 flex justify-center items-center text-2xl gap-[10px]"
+        class="w-[320px] min-w-[300px] h-[55px] rounded-2xl bg-primary-800-light text-primary-900 flex justify-center items-center lg:text-2xl text-xl gap-[10px]"
       >
         예약 기능 ON/OFF
         <IconBoothListToggle
@@ -318,7 +318,7 @@ onUnmounted(() => {
             <th
               scope="col"
               colspan="2"
-              class="px-6 py-3 text-center text-secondary-700-light font-medium min-w-[140px]"
+              class="px-6 py-3 text-center text-secondary-700-light min-w-[140px]"
             >
               예약 관리
             </th>
@@ -327,17 +327,17 @@ onUnmounted(() => {
         <tbody class="text-xs md:text-sm lg:text-lg xl:text-2xl">
           <tr
             v-if="!isLoading"
-            class="bg-white border-b text-secondary-700-light font-medium"
+            class="bg-white border-b text-secondary-700-light"
             v-for="(reserve, reserveIndex) in getFilteredReserveList({ type: selectOrderType })"
             :key="reserveIndex"
           >
-            <th scope="row" class="px-6 py-4 whitespace-nowrap text-center">
+            <th scope="row" class="px-6 py-4 whitespace-nowrap text-center font-normal">
               {{ reserveIndex + 1 }}
             </th>
-            <th scope="row" class="px-6 py-4 whitespace-nowrap text-center">
+            <th scope="row" class="px-6 py-4 whitespace-nowrap text-center font-normal">
               {{ reserve.reservationNum }}
             </th>
-            <td class="px-6 py-4 text-center">{{ reserve.userName }}</td>
+            <td class="px-6 py-4 text-center min-w-[85px] lg:min-w-[100px]">{{ reserve.userName }}</td>
             <td class="px-6 py-4 text-center">{{ reserve.personCount }}</td>
             <td class="px-6 py-4 text-center">{{ reserve.phoneNum }}</td>
             <td class="px-6 py-4 text-center">{{ prettyDate(reserve.updateAt) }}</td>
@@ -377,9 +377,9 @@ onUnmounted(() => {
           </tr>
           <tr v-if="isLoading">
             <td scope="col" colspan="7">
-              <div class="w-full justify-center items-center flex flex-col py-10 bg-white rounded-b-[20px]">
-                <IconLoading :width="300" />
-                <p class="text-3xl py-4">에약 내역을 불러오는 중이에요...</p>
+              <div class="w-full justify-center items-center flex flex-col py-14 bg-white rounded-b-[20px]">
+                <IconLoading :width="200" />
+                <p class="text-xl py-4">에약 내역을 불러오는 중이에요...</p>
               </div>
             </td>
           </tr>
@@ -387,7 +387,7 @@ onUnmounted(() => {
             <td scope="col" colspan="7">
               <div class="w-full justify-center items-center flex flex-col py-10 bg-white rounded-b-[20px]">
                 <IconNotFound :width="200" />
-                <p class="text-3xl py-4">검색 내역이 없습니다...</p>
+                <p class="text-xl py-4">검색 내역이 없습니다...</p>
               </div>
             </td>
           </tr>

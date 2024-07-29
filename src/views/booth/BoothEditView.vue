@@ -4,6 +4,7 @@ import IconBoothListToggle from '@/components/icons/IconBoothListToggle.vue';
 import IconFileUpload from '@/components/icons/IconFileUpload.vue';
 import IconAdd from '@/components/icons/IconAdd.vue';
 import router from '@/router';
+import { prettyPrice } from '@/utils/utils';
 import { useBoothDetail } from '@/stores/booths/boothDetail';
 import { storeToRefs } from 'pinia';
 import { onMounted, ref } from 'vue';
@@ -520,7 +521,7 @@ onMounted(async () => {
                 />
               </label>
               <div v-if="fileUrls.length > 0" class="flex grow flex-col items-center justify-center overflow-x-auto">
-                <div class="text-red-500 w-full flex justify-end cursor-pointer">
+                <div class="text-red-500 w-full flex justify-end cursor-pointer mb-2">
                   <div
                     @click="fileUrls = []"
                     class="w-12 h-6 rounded border-danger bg-white text-danger flex items-center justify-center border"
@@ -596,7 +597,7 @@ onMounted(async () => {
                   <div class="flex flex-col w-full">
                     <!-- Menu header -->
                     <div class="flex justify-between items-center h-[29px] w-full min-w-fit">
-                      <div class="text-2xl font-semibold text-secondary-700 text-nowrap">
+                      <div class="text-xl font-semibold text-secondary-700 text-nowrap">
                         {{ menu.menuName }}
                       </div>
                       <div class="gap-[12px] items-center text-sm flex flex-shrink-0 justify-end grow">
@@ -636,7 +637,7 @@ onMounted(async () => {
                   <!-- Menu Footer -->
                   <div class="flex justify-between items-center w-full">
                     <div class="text-secondary-700 font-bold text-2xl">
-                      {{ menu.menuPrice }}<span class="text-secondary-700-light font-normal text-2xl">원</span>
+                      {{ prettyPrice(menu.menuPrice) }}<span class="text-secondary-700-light font-normal text-2xl"></span>
                     </div>
                     <IconBoothListToggle :is-active="!menu.isSoldOut" @click="menu.isSoldOut = !menu.isSoldOut" />
                   </div>
@@ -730,7 +731,7 @@ onMounted(async () => {
       <div class="flex justify-end items-center gap-4 pt-[40px]">
         <!-- TODO: Check does it need? -->
         <!-- <button type="button" class="is-button is-outlined w-[120px] h-[60px] text-3xl">삭제</button> -->
-        <button type="submit" class="is-button w-[120px] h-[60px] text-3xl">등록</button>
+        <button type="submit" class="is-button w-[100px] h-[50px] lg:w-[120px] lg:h-[60px] text-xl lg:text-2xl">등록</button>
       </div>
     </form>
   </div>

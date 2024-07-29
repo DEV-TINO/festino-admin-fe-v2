@@ -35,7 +35,7 @@ onMounted(async () => {
       <div class="flex gap-4">
         <button
           v-if="isAdmin"
-          class="hover:bg-primary-900-dark w-[80px] h-[48px] rounded-xl text-xl lg:w-[106px] lg:h-[53px] flex items-center justify-center text-white lg:text-3xl bg-primary-900 lg:rounded-2xl cursor-pointer select-none"
+          class="hover:bg-primary-900 w-[80px] h-[48px] rounded-xl text-lg lg:w-[106px] lg:h-[53px] flex items-center justify-center text-white lg:text-2xl bg-primary-900 lg:rounded-2xl cursor-pointer select-none"
           type="button"
           @click="handleClickBoothCreate()"
         >

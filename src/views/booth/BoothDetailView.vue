@@ -3,6 +3,7 @@ import IconBoothInfo from '@/components/icons/IconBoothInfo.vue';
 import IconBoothListToggle from '@/components/icons/IconBoothListToggle.vue';
 import IconIndicator from '@/components/icons/IconIndicator.vue';
 import IconRadio from '@/components/icons/IconRadio.vue';
+import { prettyPrice } from '@/utils/utils';
 import { useBoothDetail } from '@/stores/booths/boothDetail';
 import { setBackgroundImage } from '@/utils/utils';
 import { storeToRefs } from 'pinia';
@@ -116,7 +117,7 @@ onMounted(async () => {
         <!-- 부스 정보 -->
         <div class="flex flex-col gap-[20px] w-full">
           <div
-            class="w-[137px] h-[61px] rounded-2xl flex items-center justify-center bg-primary-700 text-primary-900 text-2xl font-semibold"
+            class="w-[137px] h-[61px] rounded-2xl flex items-center justify-center bg-primary-700 text-primary-900 text-xl lg:text-2xl font-semibold"
           >
             부스 정보
           </div>
@@ -130,7 +131,7 @@ onMounted(async () => {
                 부스 이름
               </div>
               <div
-                class="bg-white flex items-center justify-center border-b border-primary-700 text-wrap px-4 2xl:rounded-none rounded-tr-[20px]"
+                class="bg-white flex items-center border-b border-primary-700 text-wrap px-6 lg:px-10 2xl:rounded-none rounded-tr-[20px]"
               >
                 {{ boothInfo.boothName }}
               </div>
@@ -140,7 +141,7 @@ onMounted(async () => {
                 운영시간
               </div>
               <div
-                class="bg-white 2xl:rounded-tr-2xl flex items-center justify-between border-b border-primary-700 px-[40px]"
+                class="bg-white 2xl:rounded-tr-2xl flex items-center justify-between border-b border-primary-700 px-6 lg:px-10"
               >
                 <div class="flex items-center justify-center gap-4 flex-wrap">
                   <div class="text-wrap">{{ boothInfo.openTime }}~{{ boothInfo.closeTime }}</div>
@@ -157,8 +158,8 @@ onMounted(async () => {
               >
                 부스 소개
               </div>
-              <div class="2xl:col-span-3 bg-white flex items-center justify-center border-b border-primary-700">
-                <p>{{ boothInfo.boothIntro }}</p>
+              <div class="px-6 lg:px-10 2xl:col-span-3 bg-white flex items-center border-b border-primary-700">
+                <p class="whitespace-pre-line">{{ boothInfo.boothIntro }}</p>
               </div>
               <div
                 class="flex items-center justify-center border-r border-primary-700 h-[278px] px-4 text-xl font-medium"
@@ -166,7 +167,7 @@ onMounted(async () => {
                 부스 이미지
               </div>
               <div
-                class="overflow-x-auto overflow-y-hidden 2xl:col-span-3 flex justify-between items-center bg-white rounded-br-[20px] border-primary-700 h-[278px] py-[40px] px-[40px] gap-[23px]"
+                class="min-w-[400px] overflow-x-auto overflow-y-hidden 2xl:col-span-3 flex justify-between items-center bg-white rounded-br-[20px] border-primary-700 h-[278px] py-[40px] px-[40px] gap-[23px]"
               >
                 <IconIndicator :left="true" @click="handleClickLeftIndicator()" />
                 <div class="grow flex gap-[10px] overflow-auto no-scroll" ref="scrollContainer">
@@ -186,12 +187,12 @@ onMounted(async () => {
         <!-- 메뉴 정보 -->
         <div v-if="ADMIN_CATEGORY[boothInfo.adminCategory] === 'night'" class="flex flex-col gap-[20px] w-full">
           <div
-            class="w-[137px] h-[61px] rounded-2xl flex items-center justify-center bg-primary-700 text-primary-900 text-2xl font-semibold"
+            class="w-[137px] h-[61px] rounded-2xl flex items-center justify-center bg-primary-700 text-primary-900 text-xl lg:text-2xl font-semibold"
           >
             메뉴 정보
           </div>
           <div class="bg-primary-900-lighter rounded-2xl w-full lg:py-[40px] lg:px-[60px] px-4 py-4 flex flex-col">
-            <div class="grid gap-4 grid-cols-1 xl:grid-cols-2">
+            <div class="grid gap-4 grid-cols-1 2xl:grid-cols-2">
               <div
                 v-for="(menu, menuIndex) in menuList"
                 :key="menuIndex"
@@ -205,7 +206,7 @@ onMounted(async () => {
                   <div class="flex flex-col w-full">
                     <!-- Menu header -->
                     <div class="flex justify-between items-center h-[29px] w-full min-w-fit">
-                      <div class="text-2xl font-semibold text-secondary-700 text-nowrap">
+                      <div class="text-xl font-semibold text-secondary-700 text-nowrap">
                         {{ menu.menuName }}
                       </div>
                       <div class="gap-[12px] items-center text-sm flex flex-shrink-0 justify-end grow font-medium">
@@ -232,7 +233,7 @@ onMounted(async () => {
                   <!-- Menu Footer -->
                   <div class="flex justify-between items-center w-full">
                     <div class="text-secondary-700 font-bold text-2xl">
-                      {{ menu.menuPrice }}<span class="text-secondary-700-light font-normal text-2xl">원</span>
+                      {{ prettyPrice(menu.menuPrice) }}<span class="text-secondary-700-light font-normal text-2xl"></span>
                     </div>
                     <IconBoothListToggle :is-active="!menu.isSoldOut" @click="handleClickSoldOut(menu)" />
                   </div>
@@ -254,12 +255,10 @@ onMounted(async () => {
           v-if="ADMIN_CATEGORY[boothInfo.adminCategory] === 'night'"
           class="flex gap-6 md:gap-[40px] items-center flex-wrap"
         >
-          <div class="w-[232px] h-[60px]">
-            <div
-              class="w-[226px] h-[60px] rounded-2xl text-primary-900 flex items-center justify-center font-semibold text-2xl bg-primary-700 px-[24px]"
-            >
-              예약기능 사용 여부
-            </div>
+          <div
+            class="h-[60px] rounded-2xl text-primary-900 flex items-center justify-center font-semibold lg:text-2xl text-xl bg-primary-700 px-[24px]"
+          >
+            예약 기능 사용 여부
           </div>
           <div class="flex gap-[28px]">
             <div class="flex items-center justify-center gap-2 flex-shrink-0 cursor-pointer">
@@ -281,7 +280,7 @@ onMounted(async () => {
         <div v-if="false" class="flex gap-6 md:gap-[40px] items-center flex-wrap">
           <div class="w-[232px] h-[60px]">
             <div
-              class="w-[184px] h-[60px] rounded-2xl text-primary-900 flex items-center justify-center font-semibold text-2xl bg-primary-700 px-[24px]"
+              class="h-[60px] rounded-2xl text-primary-900 flex items-center justify-center font-semibold text-xl lg:text-2xl bg-primary-700 px-[24px]"
             >
               쿠폰 진행 여부
             </div>
@@ -302,7 +301,7 @@ onMounted(async () => {
           class="flex gap-6 md:gap-[40px] items-center flex-wrap"
         >
           <div
-            class="w-[232px] h-[60px] rounded-2xl text-primary-900 flex items-center justify-center font-semibold text-2xl bg-primary-700 px-[24px]"
+            class="h-[60px] rounded-2xl text-primary-900 flex items-center justify-center font-semibold text-xl lg:text-2xl bg-primary-700 px-[24px]"
           >
             주문 기능 사용 여부
           </div>

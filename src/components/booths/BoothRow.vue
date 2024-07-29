@@ -85,7 +85,7 @@ onUnmounted(() => {
 
 <template>
   <div
-    class="bg-white text-xs lg:text-base xl:text-xl h-[70px] w-full flex justify-between gap-4 flex-nowrap overflow-x-auto items-center px-4 lg:px-[60px] last:rounded-b-[20px] last:border-0 border-b-2 border-secondary-500"
+    class="text-second-700-light bg-white text-xs lg:text-xl h-[70px] w-full flex justify-between gap-4 flex-nowrap overflow-x-auto items-center px-4 lg:px-[60px] last:rounded-b-[20px] last:border-0 border-b-2 border-secondary-500"
     :class="{
       'bg-slate-200': isBoothOwner && !isAdmin,
       'font-bold': isBoothOwner && !isAdmin,
