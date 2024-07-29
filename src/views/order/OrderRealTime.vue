@@ -5,8 +5,9 @@ import { useBaseOrder } from '@/stores/orders/baseOrder';
 import { useCookingOrder } from '@/stores/orders/cookingOrder';
 import { useDepositOrder } from '@/stores/orders/depositOrder';
 import { useFinishOrder } from '@/stores/orders/finishOrder';
+import { cloneDeep } from 'lodash';
 import { storeToRefs } from 'pinia';
-import { onMounted, onUnmounted, ref, watchEffect } from 'vue';
+import { onMounted, onUnmounted, ref, watch, watchEffect } from 'vue';
 
 const useBaseOrderStore = useBaseOrder();
 const useDepositOrderStore = useDepositOrder();
@@ -23,6 +24,9 @@ const { finishOrderList } = storeToRefs(useFinishOrderStore);
 const { boothId } = storeToRefs(useBaseOrderStore);
 
 const interval = ref(null);
+const isFirstLoad = ref(true);
+const isNewWaitDepositExist = ref(false);
+const prevWaitDepositList = ref([]);
 
 const getAllOrderList = async () => {
   await Promise.allSettled([
@@ -54,14 +58,29 @@ const clearRefereshOrderList = () => {
   clearInterval(interval.value);
 };
 
+const initExistStatus = () => {
+  prevWaitDepositList.value = [];
+  isNewWaitDepositExist.value = false;
+  isFirstLoad.value = true;
+};
+
 watchEffect(async () => {
   if (boothId.value) {
     await getAllOrderList();
   }
 });
 
+watchEffect(() => {
+  if (prevWaitDepositList.value.length < waitDepositOrderList.value.length) {
+    prevWaitDepositList.value = cloneDeep(waitDepositOrderList.value);
+    if (isFirstLoad.value) return (isFirstLoad.value = false);
+    isNewWaitDepositExist.value = true;
+  }
+});
+
 onMounted(async () => {
   console.log('OrderRealTime onMounted');
+  initExistStatus();
   initDepositOrder();
   initCookingOrderList();
   initFinishOrderList();
@@ -80,6 +99,7 @@ onUnmounted(() => {
       <div class="flex gap-4 items-center">
         <div class="w-[20px] h-[20px] rounded-full bg-danger"></div>
         <div class="text-lg">입금 대기</div>
+        <div v-if="isNewWaitDepositExist" class="text-lg text-danger pl-5">새로운 입금 대기가 들어왔어요!</div>
       </div>
       <div
         class="min-w-[478px] flex 2xl:flex-col rounded-xl bg-danger-lighter gap-[40px] py-[40px] px-[24px] 2xl:justify-center 2xl:items-center overflow-x-auto"

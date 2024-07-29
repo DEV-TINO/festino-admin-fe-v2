@@ -68,6 +68,7 @@ export default {
           300: {
             DEFAULT: '#EEEEEE',
           },
+          200: { DEFAULT: '#FF5353' },
         },
         danger: {
           DEFAULT: '#F00E00',
