@@ -47,7 +47,7 @@ const patchCookServeCount = async ({ cookId, servedCount, cook }) => {
     });
     const data = response.data;
     if (data.success) {
-      cook.servedCount = data.restoreInfo.servedCount;
+      cook.servedCount = data.countInfo.servedCount;
       return;
     } else {
       return;
