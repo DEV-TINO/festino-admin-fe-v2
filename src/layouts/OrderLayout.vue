@@ -6,6 +6,7 @@ import { useWindowSize } from '@/hooks/useWindowSize';
 import { useBoothList } from '@/stores/booths/boothList';
 import { useBaseOrder } from '@/stores/orders/baseOrder';
 import { useOrderPopup } from '@/stores/orders/orderPopup';
+import { useDepositOrder } from '@/stores/orders/depositOrder';
 import { useUser } from '@/stores/user';
 import { api } from '@/utils/api';
 import { ORDER_CATEGORY, ORDER_URL } from '@/utils/constants';
@@ -13,25 +14,33 @@ import { chunkArray } from '@/utils/utils';
 import { storeToRefs } from 'pinia';
 import { computed, onMounted, onUnmounted, ref, watchEffect } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+import { cloneDeep } from 'lodash';
 
 const useUserStore = useUser();
 const useBoothListStore = useBoothList();
 const useBaseOrderStore = useBaseOrder();
 const useOrderPopupStore = useOrderPopup();
+const useDepositOrderStore = useDepositOrder();
 
 const { getAllBoothList } = useBoothListStore;
 const { setOrderStatus, getAllTableOrders, initBaseOrder } = useBaseOrderStore;
 const { openPopup } = useOrderPopupStore;
+const { getWaitDepositOrderList } = useDepositOrderStore;
 
 const { userOwnBoothId, isAdmin } = storeToRefs(useUserStore);
 const { boothList } = storeToRefs(useBoothListStore);
 const { orderCategories, orderStatus, allTableOrders, boothId } = storeToRefs(useBaseOrderStore);
+const { waitDepositOrderList } = storeToRefs(useDepositOrderStore);
 
 const orderBoothList = ref([]);
 const chunkedAllTableOrders = ref([]);
 const interval = ref(null);
+const waitDepositInterval = ref(null);
 const route = useRoute();
 const router = useRouter();
+const isNewOrderExist = ref(false);
+const prevOrderList = ref([]);
+const isFirstLoad = ref(true);
 
 const { width } = useWindowSize();
 
@@ -83,6 +92,22 @@ const refreshAllTableOrders = async () => {
 const clearIntervalAllTableOrders = () => {
   if (!interval.value) return;
   clearInterval(interval.value);
+};
+
+const refreshWaitDepositOrderList = async () => {
+  waitDepositInterval.value = setInterval(async () => {
+    if (boothId.value) {
+      await getWaitDepositOrderList({
+        boothId: boothId.value,
+        date: 0,
+      });
+    }
+  }, 5000);
+};
+
+const clearIntervalWaitDepositOrderList = () => {
+  if (!waitDepositInterval.value) return;
+  clearInterval(waitDepositInterval.value);
 };
 
 const handleClickOrderDetail = async (orderId, orderType) => {
@@ -143,7 +168,23 @@ watchEffect(() => {
   router.push(`/order/${ORDER_URL[orderStatus.value]}`);
 });
 
+watchEffect(() => {
+  if (waitDepositOrderList.value.length > prevOrderList.value.length) {
+    prevOrderList.value = cloneDeep(waitDepositOrderList.value);
+    if (isFirstLoad.value) return (isFirstLoad.value = false);
+    isNewOrderExist.value = true;
+  }
+});
+
+watchEffect(() => {
+  if (orderStatus.value === 'realTime') {
+    isNewOrderExist.value = false;
+  }
+});
+
 onMounted(async () => {
+  isNewOrderExist.value = false;
+  isFirstLoad.value = true;
   initBaseOrder();
   if (isAdmin.value) {
     await getAllBoothList();
@@ -153,10 +194,12 @@ onMounted(async () => {
     boothId.value = userOwnBoothId.value;
   }
   refreshAllTableOrders();
+  refreshWaitDepositOrderList();
 });
 
 onUnmounted(() => {
   clearIntervalAllTableOrders();
+  clearIntervalWaitDepositOrderList();
 });
 </script>
 
@@ -186,7 +229,7 @@ onUnmounted(() => {
     <div class="flex gap-[10px] overflow-x-auto pb-[40px]">
       <button
         type="button"
-        class="min-w-[120px] w-[200px] h-[50px] is-button no-scroll"
+        class="min-w-[120px] w-[200px] h-[50px] is-button no-scroll relative"
         :class="{
           'is-outlined': orderStatus !== orderCategory,
         }"
@@ -195,6 +238,11 @@ onUnmounted(() => {
         :key="orderCategoryIndex"
       >
         {{ ORDER_CATEGORY[orderCategory] }}
+        <!-- 실시간 빨간 점 -->
+        <div
+          v-if="orderCategory === 'realTime' && orderStatus != 'realTime' && isNewOrderExist"
+          class="absolute bg-secondary-200 w-4 h-4 rounded-full top-4 right-12"
+        ></div>
       </button>
     </div>
 
