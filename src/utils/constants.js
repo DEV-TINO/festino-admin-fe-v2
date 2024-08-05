@@ -101,4 +101,5 @@ export const ORDER_URL = {
   cooking: 'cooking',
   finish: 'finish',
   cancel: 'cancel',
+  statistics: 'statistics'
 };
