@@ -31,10 +31,6 @@ watchEffect(() => {
   }
 });
 
-watchEffect(() => {
-  console.log(orderedBoothList.value);
-});
-
 onMounted(async () => {
   useBoothListStore.getAllBoothList();
   useUserStore.getUserOwnBoothId();

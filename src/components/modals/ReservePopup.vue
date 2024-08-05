@@ -28,7 +28,6 @@ const title = ref('');
 const subTitle = ref('');
 
 watchEffect(() => {
-  console.log(popupType.value);
   if (popupType.value === 'booth') {
     title.value = BOOTH_POPUP_INFO.booth[boothInfo.value.isReservation].title;
     subTitle.value = BOOTH_POPUP_INFO.booth[boothInfo.value.isReservation].subTitle;
@@ -39,7 +38,6 @@ watchEffect(() => {
 });
 
 onMounted(() => {
-  console.log(boothInfo.value);
   submit.value?.focus();
 });
 </script>

@@ -14,7 +14,6 @@ const showNavBar = ref(true);
 const isMobile = ref(false);
 
 const updateNavBarVisibility = () => {
-  console.log('Current route:', route.name);
   showNavBar.value = route.name !== 'Login';
 };
 

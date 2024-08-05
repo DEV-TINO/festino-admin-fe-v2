@@ -184,11 +184,6 @@ const handleClickSumbit = async () => {
     }
   });
 
-  console.log('[Submit] MenuList', menuList.value);
-  console.log('[Submit] CreateMenuList', createMenuList.value);
-  console.log('[Submit] DeleteMenuList', deleteMenuList.value);
-  console.log('[Submit] PatchMenuList', patchMenuList.value);
-
   const menuModifyResults = await Promise.allSettled([
     ...deleteMenuList.value.map(async (menuId) => {
       return await deleteMenu(menuId);
@@ -200,10 +195,6 @@ const handleClickSumbit = async () => {
       return await createMenu(menu);
     }),
   ]);
-
-  console.log('[MenuModifyResults]', menuModifyResults);
-
-  console.log('[Submit] originalMenuList', originalMenuList.value);
 
   const isSoldOutModifiyResults = await Promise.allSettled([
     ...originalMenuList.value
@@ -221,8 +212,6 @@ const handleClickSumbit = async () => {
       })
       .filter((result) => result),
   ]);
-
-  console.log('[isSoldOutModifiyResults]', isSoldOutModifiyResults);
 
   isSubmit.value = false;
   // TODO: 수정하고 모달 띄우기

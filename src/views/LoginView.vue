@@ -34,7 +34,6 @@ const handleClickSubmit = async () => {
   }
   isSubmit.value = true;
   const isSuccess = await login();
-  console.log('isSuccess:', isSuccess);
   isSubmit.value = false;
   if (isSuccess) {
     router.push({

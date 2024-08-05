@@ -36,7 +36,6 @@ const refreshReserveList = () => {
   clearInterval(interval.value);
   interval.value = setInterval(async () => {
     if (!userOwnBoothId.value) return;
-    console.log('Refresh Reserve List');
     await getReserveList({ boothId: userOwnBoothId.value, type: 'reserve' });
   }, 5000);
 };

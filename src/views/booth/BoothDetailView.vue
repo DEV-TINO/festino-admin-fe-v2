@@ -44,7 +44,6 @@ const handleClickRightIndicator = () => {
 };
 
 const handleClickSoldOut = async (menu) => {
-  console.log('[BoothDetailView] handleClickSoldOut, isSoldOut:', menu.isSoldOut);
   const response = await api.put('/admin/menu/sold-out', {
     menuId: menu.menuId,
     isSoldOut: menu.isSoldOut,
@@ -60,7 +59,6 @@ const handleClickSoldOut = async (menu) => {
 };
 
 const handleClickBoothOpen = async () => {
-  console.log('[BoothDetailView] handleClickBoothOpen, isOpen:', boothInfo.value.isOpen);
   const response = await api.put(`/admin/booth/${ADMIN_CATEGORY[boothInfo.value.adminCategory]}/open`, {
     boothId: boothInfo.value.boothId,
     isOpen: boothInfo.value.isOpen,
@@ -80,7 +78,6 @@ const handleClickBoothEdit = () => {
 };
 
 onMounted(async () => {
-  console.log('[BoothDetailView] onMounted');
   reset();
   if (props.boothId) {
     const condition = await init(props.boothId);

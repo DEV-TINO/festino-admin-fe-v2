@@ -19,7 +19,6 @@ export const useReservePopup = defineStore('reservePopup', () => {
   };
 
   const openBoothReservePopup = ({ booth, callback }) => {
-    console.log(booth);
     boothInfo.value = booth;
     handleSumit.value = callback;
     baseModalStore.setModalType('reservePopup');

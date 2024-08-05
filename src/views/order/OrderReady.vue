@@ -15,7 +15,6 @@ const { waitDepositOrderList } = storeToRefs(useDepositOrderStore);
 const { boothId } = storeToRefs(useBaseOrderStore);
 
 onMounted(async () => {
-  console.log('OrderReady onMounted');
   initDepositOrder();
   await getWaitDepositOrderList({
     boothId: boothId.value,

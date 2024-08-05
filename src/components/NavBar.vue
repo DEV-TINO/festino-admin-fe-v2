@@ -25,32 +25,26 @@ const setActiveClass = (active) => {
 };
 
 const handleClickHome = () => {
-  console.log('Home clicked');
   router.push('/');
 };
 
 const handleClickBooth = () => {
-  console.log('Booth clicked');
   router.push('/');
 };
 
 const handleClickReserve = () => {
-  console.log('Reserve clicked');
-  console.log('userOwnBoothId:', userOwnBoothId.value);
   router.push({
     name: 'Tabling',
   });
 };
 
 const handleClickOrder = () => {
-  console.log('Order clicked');
   router.push({
     name: 'OrderRealTime',
   });
 };
 
 const handleClickLogout = () => {
-  console.log('Logout clicked');
   logout();
   router.push('/login');
 };

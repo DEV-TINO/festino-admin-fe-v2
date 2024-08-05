@@ -13,9 +13,7 @@ const isSubmit = ref(false);
 const submit = ref(null);
 
 const handleSubmit = async (event) => {
-  console.log('[OrderPopup] handleSubmit');
   const submitType = event.submitter.value;
-  console.log('[OrderPopup] submitType:', submitType, 'isSubmit:', isSubmit.value);
   if (isSubmit.value) return;
   submit.value = true;
   await submitPopup({
@@ -23,13 +21,6 @@ const handleSubmit = async (event) => {
   });
   isSubmit.value = false;
 };
-
-watchEffect(() => {
-  console.log('[OrderPopup] selectType:', selectType.value);
-  console.log('[OrderPopup] menuInfoList:', menuInfoList.value);
-  console.log('[OrderPopup] orderInfo:', orderInfo.value);
-  console.log('[OrderPopup] cookingInfo:', cookingInfo.value);
-});
 
 onMounted(() => {
   submit.value?.focus();

@@ -133,7 +133,6 @@ const refereshReserveList = () => {
   interval.value = setInterval(async () => {
     if (!selectBoothId.value) return;
     if (!selectOrderType.value) return;
-    console.log('Referesh Reserve List');
 
     if (selectOrderType.value === 'reserve') {
       await getReserveList({ boothId: selectBoothId.value, type: selectOrderType.value });
@@ -174,13 +173,10 @@ watchEffect(() => {
 
 const clearReferesh = () => {
   if (!interval.value) return;
-  console.log('clearReferesh');
   clearInterval(interval.value);
 };
 
 onMounted(async () => {
-  console.log('[TablingView] isAdmin:', isAdmin.value);
-  console.log('[TablingView] userOwnBoothId:', userOwnBoothId.value);
   clearReferesh();
   await getAllBoothList();
   reserveBoothList.value = boothList.value.filter((booth) => booth?.isReservation);
@@ -315,11 +311,7 @@ onUnmounted(() => {
             <th scope="col" class="px-6 py-3 text-center text-secondary-700-light font-medium">인원수</th>
             <th scope="col" class="px-6 py-3 text-center text-secondary-700-light font-medium">연락처</th>
             <th scope="col" class="px-6 py-3 text-center text-secondary-700-light font-medium">예약 시간</th>
-            <th
-              scope="col"
-              colspan="2"
-              class="px-6 py-3 text-center text-secondary-700-light min-w-[140px]"
-            >
+            <th scope="col" colspan="2" class="px-6 py-3 text-center text-secondary-700-light min-w-[140px]">
               예약 관리
             </th>
           </tr>

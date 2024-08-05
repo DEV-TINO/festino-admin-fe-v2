@@ -60,7 +60,6 @@ export const useUser = defineStore('user', () => {
 
       if (data.success) {
         userOwnBoothId.value = data.boothId;
-        console.log(userOwnBoothId.value);
         return userOwnBoothId.value;
       } else {
         userOwnBoothId.value = '';
@@ -84,7 +83,6 @@ export const useUser = defineStore('user', () => {
 
       if (data.success) {
         userOwnBoothId.value = data.boothId;
-        console.log(userOwnBoothId.value);
         return boothId === userOwnBoothId.value;
       } else {
         userOwnBoothId.value = '';
@@ -120,7 +118,6 @@ export const useUser = defineStore('user', () => {
       }
       return isSuccess;
     } catch (error) {
-      console.log(error);
       isError.value = true;
       errorMessage.value = error;
 

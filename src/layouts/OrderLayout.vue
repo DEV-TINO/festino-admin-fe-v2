@@ -132,7 +132,6 @@ const handleClickOrderDetail = async (orderId, orderType) => {
 const handleClickOrderFinish = async (tableOrder, orderId, orderType) => {
   if (!isFinish(tableOrder)) return;
   const orderInfo = await getDetailOrder(orderId);
-  console.log('[OrderLayout] handleClickOrderFinish', orderInfo);
   if (orderInfo) {
     openPopup({
       type: 'complete',
@@ -152,7 +151,6 @@ const handleClickOrderFinish = async (tableOrder, orderId, orderType) => {
 
 watchEffect(async () => {
   if (boothId.value) {
-    console.log('currentBoothId changed', boothId.value);
     await getAllTableOrders({
       boothId: boothId.value,
       date: 0,

@@ -15,7 +15,6 @@ const { finishOrderList } = storeToRefs(useFinishOrderStore);
 const { boothId } = storeToRefs(useBaseOrderStore);
 
 onMounted(async () => {
-  console.log('OrderCooking onMounted');
   initFinishOrderList();
   await getFinishOrderList({
     boothId: boothId.value,

@@ -79,7 +79,6 @@ watchEffect(() => {
 });
 
 onMounted(async () => {
-  console.log('OrderRealTime onMounted');
   initExistStatus();
   initDepositOrder();
   initCookingOrderList();
@@ -88,7 +87,6 @@ onMounted(async () => {
 });
 
 onUnmounted(() => {
-  console.log('OrderRealTime onUnmounted');
   clearRefereshOrderList();
 });
 </script>

@@ -15,7 +15,6 @@ const { cancelOrderList } = storeToRefs(useCancelOrderStore);
 const { boothId } = storeToRefs(useBaseOrderStore);
 
 onMounted(async () => {
-  console.log('OrderCooking onMounted');
   initCancelOrderList();
   await getCancelOrderList({
     boothId: boothId.value,

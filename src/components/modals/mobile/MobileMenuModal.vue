@@ -32,7 +32,6 @@ const handleInputMenuDescription = (event) => {
 };
 
 const handleInputMenuImage = async (event) => {
-  console.log(event.target.files[0]);
   const file = event.target.files[0];
   const url = await imageUpload(file);
   menuInfo.value.menuImage = url;
@@ -58,7 +57,6 @@ const menuIntroLength = ref(0);
 menuIntroLength.value = computed(() => menuInfo.value.menuDescription.length);
 
 onMounted(() => {
-  console.log('[MenuModal] mounted');
   isMainMenu.value = menuInfo.value.menuType === 'MAINMENU';
   submit.value?.focus();
 });

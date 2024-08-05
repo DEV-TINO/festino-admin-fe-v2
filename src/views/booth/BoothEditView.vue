@@ -141,8 +141,6 @@ const handleClickSubmit = async () => {
   boothInfo.value.boothImage = fileUrls.value;
   boothInfo.value.isOpen = isOpen.value;
 
-  console.log('[Submit]', boothInfo.value);
-
   let newBoothId = '';
 
   const saveBoothUrl = `/admin/booth/${ADMIN_CATEGORY[boothInfo.value.adminCategory]}`;
@@ -170,7 +168,6 @@ const handleClickSubmit = async () => {
           isReservation: useReservation.value,
         });
         const nightSaveBoothData = nightSaveBoothResponse.data;
-        console.log(nightSaveBoothData);
         if (nightSaveBoothData.success) {
           newBoothId = nightSaveBoothData.boothId;
         } else {
@@ -188,7 +185,6 @@ const handleClickSubmit = async () => {
           boothId: props.boothId,
         });
         const daySaveBoothData = daySaveBoothResponse.data;
-        console.log(daySaveBoothData);
         if (daySaveBoothData.success) {
           newBoothId = daySaveBoothData.boothId;
         } else {
@@ -207,7 +203,6 @@ const handleClickSubmit = async () => {
         });
 
         const foodSaveBoothData = foodSaveBoothResponse.data;
-        console.log(foodSaveBoothData);
         if (foodSaveBoothData.success) {
           newBoothId = foodSaveBoothData.boothId;
         } else {
@@ -231,7 +226,6 @@ const handleClickSubmit = async () => {
           isReservation: useReservation.value,
         });
         const nightSaveBoothData = nightSaveBoothResponse.data;
-        console.log(nightSaveBoothData);
         if (nightSaveBoothData.success) {
           newBoothId = nightSaveBoothData.boothId;
         } else {
@@ -248,7 +242,6 @@ const handleClickSubmit = async () => {
           ...baseBoothInfo,
         });
         const daySaveBoothData = daySaveBoothResponse.data;
-        console.log(daySaveBoothData);
         if (daySaveBoothData.success) {
           newBoothId = daySaveBoothData.boothId;
         } else {
@@ -266,7 +259,6 @@ const handleClickSubmit = async () => {
         });
 
         const foodSaveBoothData = foodSaveBoothResponse.data;
-        console.log(foodSaveBoothData);
         if (foodSaveBoothData.success) {
           newBoothId = foodSaveBoothData.boothId;
         } else {
@@ -297,11 +289,6 @@ const handleClickSubmit = async () => {
     }
   });
 
-  console.log('[Submit] MenuList', menuList.value);
-  console.log('[Submit] CreateMenuList', createMenuList.value);
-  console.log('[Submit] DeleteMenuList', deleteMenuList.value);
-  console.log('[Submit] PatchMenuList', patchMenuList.value);
-
   const menuModifyResults = await Promise.allSettled([
     ...deleteMenuList.value.map(async (menuId) => {
       return await deleteMenu(menuId);
@@ -313,10 +300,6 @@ const handleClickSubmit = async () => {
       return await createMenu(menu);
     }),
   ]);
-
-  console.log('[MenuModifyResults]', menuModifyResults);
-
-  console.log('[Submit] originalMenuList', originalMenuList.value);
 
   const isSoldOutModifiyResults = await Promise.allSettled([
     ...originalMenuList.value
@@ -335,14 +318,11 @@ const handleClickSubmit = async () => {
       .filter((result) => result),
   ]);
 
-  console.log('[isSoldOutModifiyResults]', isSoldOutModifiyResults);
-
   isSubmit.value = false;
   router.push(`/booth/${boothInfo.value.boothId}`);
 };
 
 onMounted(async () => {
-  console.log('[BoothEditView] onMounted');
   reset();
   if (props.boothId) {
     const condition = await init(props.boothId);
@@ -350,7 +330,6 @@ onMounted(async () => {
       fileUrls.value = [...boothInfo.value.boothImage];
       serviceHours.value = `${boothInfo.value.openTime} ~ ${boothInfo.value.closeTime}`;
       isOpen.value = boothInfo.value.isOpen;
-      console.log('[BoothEditView] MenuList', menuList.value);
 
       if (boothType.value === 'night') {
         useReservation.value = boothInfo.value.isReservation;
@@ -637,7 +616,8 @@ onMounted(async () => {
                   <!-- Menu Footer -->
                   <div class="flex justify-between items-center w-full">
                     <div class="text-secondary-700 font-bold text-2xl">
-                      {{ prettyPrice(menu.menuPrice) }}<span class="text-secondary-700-light font-normal text-2xl"></span>
+                      {{ prettyPrice(menu.menuPrice)
+                      }}<span class="text-secondary-700-light font-normal text-2xl"></span>
                     </div>
                     <IconBoothListToggle :is-active="!menu.isSoldOut" @click="menu.isSoldOut = !menu.isSoldOut" />
                   </div>
@@ -731,7 +711,9 @@ onMounted(async () => {
       <div class="flex justify-end items-center gap-4 pt-[40px]">
         <!-- TODO: Check does it need? -->
         <!-- <button type="button" class="is-button is-outlined w-[120px] h-[60px] text-3xl">삭제</button> -->
-        <button type="submit" class="is-button w-[100px] h-[50px] lg:w-[120px] lg:h-[60px] text-xl lg:text-2xl">등록</button>
+        <button type="submit" class="is-button w-[100px] h-[50px] lg:w-[120px] lg:h-[60px] text-xl lg:text-2xl">
+          등록
+        </button>
       </div>
     </form>
   </div>

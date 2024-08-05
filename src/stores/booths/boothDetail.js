@@ -63,7 +63,6 @@ export const useBoothDetail = defineStore('boothDetail', () => {
     }
   };
   const init = async (boothId) => {
-    console.log('[INFO] boothDetail.js - init()', boothId);
     if (!boothId) return;
     boothType.value = await findBoothType(boothId);
     return await getBoothDetail({ boothId: boothId, type: boothType.value });
@@ -84,8 +83,6 @@ export const useBoothDetail = defineStore('boothDetail', () => {
         //데이터 가져오기 실패
       }
     }
-
-    console.log('[INFO] boothUser.js - getBoothInfo', booth);
   };
 
   const reset = () => {
@@ -116,8 +113,6 @@ export const useBoothDetail = defineStore('boothDetail', () => {
 
     const booth = boothList.value.find((booth) => booth.boothId === boothId);
 
-    console.log('[INFO] boothDetail.js - findBoothType()', booth);
-
     return ADMIN_CATEGORY?.[booth?.adminCategory ?? ''] ?? '';
   };
 
@@ -133,8 +128,6 @@ export const useBoothDetail = defineStore('boothDetail', () => {
       ]);
       const boothData = boothResponse.data;
       const menuData = menuResponse.data;
-
-      console.log('[INFO] boothDetail.js - getBoothDetail()', boothData, menuData);
 
       if (boothData.success && menuData.success) {
         boothInfo.value = boothData.boothInfo;

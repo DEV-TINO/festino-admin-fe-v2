@@ -140,7 +140,6 @@ router.beforeEach(async (to, from) => {
 // Booth Guard
 router.beforeEach(async (to, from) => {
   if (to.name === 'BoothDetail' || to.name === 'BoothEdit') {
-    console.log(isUUID(to.params.boothId));
     const { isUserOwnBooth } = useUser();
     const isOwn = await isUserOwnBooth(to.params.boothId);
     if (isOwn) {

@@ -31,7 +31,6 @@ const clearCookingOrderListInterval = () => {
 };
 
 onMounted(async () => {
-  console.log('OrderCooking onMounted');
   initCookingOrderList();
   await getCookingOrderList({
     boothId: boothId.value,
@@ -41,7 +40,6 @@ onMounted(async () => {
 });
 
 onUnmounted(() => {
-  console.log('OrderCooking onUnmounted');
   clearCookingOrderListInterval();
 });
 </script>

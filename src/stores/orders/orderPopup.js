@@ -38,7 +38,6 @@ export const useOrderPopup = defineStore('orderPopup', () => {
           orderId: orderId,
         },
       });
-      console.log('response', response);
       const data = response.data;
       return data.success;
     } catch (error) {
@@ -53,7 +52,6 @@ export const useOrderPopup = defineStore('orderPopup', () => {
         orderId: orderId,
         orderType: orderType,
       });
-      console.log('response', response);
       const data = response.data;
       return data.success;
     } catch (error) {
@@ -67,7 +65,6 @@ export const useOrderPopup = defineStore('orderPopup', () => {
       const response = await api.put(`/admin/booth/${boothId.value}/order/deposit`, {
         orderId: orderId,
       });
-      console.log('response', response);
       const data = response.data;
       return data.success;
     } catch (error) {
@@ -82,7 +79,6 @@ export const useOrderPopup = defineStore('orderPopup', () => {
         orderId: orderId,
         orderType: orderType,
       });
-      console.log('response', response);
       const data = response.data;
       return data.success;
     } catch (error) {
@@ -96,7 +92,6 @@ export const useOrderPopup = defineStore('orderPopup', () => {
       const response = await api.put(`/admin/booth/${boothId.value}/order/cook/finish`, {
         cookId: cookId,
       });
-      console.log('response', response);
       const data = response.data;
       return data.success;
     } catch (error) {
