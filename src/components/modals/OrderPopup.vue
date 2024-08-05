@@ -41,8 +41,25 @@ onMounted(() => {
       class="w-[880px] min-h-[350px] bg-white shadow-primary rounded-2xl flex flex-col justify-between gap-[20px] px-[40px] py-[32px]"
     >
       <!-- Header -->
-      <div class="flex w-full items-center justify-center text-primary-900 text-3xl font-semibold">
+      <div class="flex w-full items-center justify-center text-primary-900 text-3xl font-semibold relative">
         {{ ORDER_STATUS?.[selectType] ?? ORDER_STATUS.ready }}
+
+        <button
+          type="button"
+          class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white absolute right-0"
+          @click="closePopup()"
+        >
+          <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+            <path
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
+            />
+          </svg>
+          <span class="sr-only">Close modal</span>
+        </button>
       </div>
 
       <!-- completeInfo -->

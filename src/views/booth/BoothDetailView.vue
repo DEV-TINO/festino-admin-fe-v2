@@ -146,9 +146,13 @@ onMounted(async () => {
                 <div class="flex items-center justify-center gap-4 flex-wrap">
                   <div class="text-wrap">{{ boothInfo.openTime }}~{{ boothInfo.closeTime }}</div>
                   <div
-                    class="hidden sm:flex w-[74px] h-[35px] rounded-full items-center justify-center bg-primary-800 text-primary-900"
+                    class="hidden sm:flex w-[74px] h-[35px] rounded-full items-center justify-center"
+                    :class="{
+                      'bg-primary-800 text-primary-900': boothInfo.isOpen,
+                      'bg-danger-light text-danger': !boothInfo.isOpen,
+                    }"
                   >
-                    운영중
+                    {{ boothInfo.isOpen ? '운영중' : '준비중' }}
                   </div>
                 </div>
                 <IconBoothListToggle :is-active="boothInfo.isOpen" @click="handleClickBoothOpen()" />
@@ -216,10 +220,14 @@ onMounted(async () => {
                           {{ MENU_TYPE[menu.menuType] }}
                         </div>
                         <button
-                          class="w-[65px] h-[29px] rounded-full flex items-center justify-center bg-primary-800 text-primary-900"
+                          class="w-[65px] h-[29px] rounded-full flex items-center justify-center cursor-text"
+                          :class="{
+                            'bg-primary-800 text-primary-900': !menu.isSoldOut,
+                            'bg-danger-light text-danger': menu.isSoldOut,
+                          }"
                           type="button"
                         >
-                          판매중
+                          {{ menu.isSoldOut ? '준비중' : '판매중' }}
                         </button>
                       </div>
                     </div>
@@ -233,7 +241,8 @@ onMounted(async () => {
                   <!-- Menu Footer -->
                   <div class="flex justify-between items-center w-full">
                     <div class="text-secondary-700 font-bold text-2xl">
-                      {{ prettyPrice(menu.menuPrice) }}<span class="text-secondary-700-light font-normal text-2xl"></span>
+                      {{ prettyPrice(menu.menuPrice)
+                      }}<span class="text-secondary-700-light font-normal text-2xl"></span>
                     </div>
                     <IconBoothListToggle :is-active="!menu.isSoldOut" @click="handleClickSoldOut(menu)" />
                   </div>
@@ -307,15 +316,15 @@ onMounted(async () => {
           </div>
           <div class="flex gap-[28px]">
             <div class="flex items-center justify-center gap-2 flex-shrink-0 cursor-pointer" @click="useOrder = true">
-              <IconRadio :is-active="boothInfo.isReservation" :read-only="true" />
+              <IconRadio :is-active="boothInfo.isOrder" :read-only="true" />
               <div
                 class="text-secondary-900 text-xl font-semibold"
                 :class="{
-                  'text-success': boothInfo.isReservation,
-                  'text-danger': !boothInfo.isReservation,
+                  'text-success': boothInfo.isOrder,
+                  'text-danger': !boothInfo.isOrder,
                 }"
               >
-                {{ boothInfo.isReservation ? '사용 중' : '사용 안함' }}
+                {{ boothInfo.isOrder ? '사용 중' : '사용 안함' }}
               </div>
             </div>
           </div>

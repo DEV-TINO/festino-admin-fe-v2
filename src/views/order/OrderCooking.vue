@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted } from 'vue';
+import { onMounted, onUnmounted, ref } from 'vue';
 import { useCookingOrder } from '@/stores/orders/cookingOrder';
 import { useBaseOrder } from '@/stores/orders/baseOrder';
 import { storeToRefs } from 'pinia';
@@ -14,6 +14,22 @@ const { getCookingOrderList, initCookingOrderList } = useCookingOrderStore;
 const { cookingOrderList } = storeToRefs(useCookingOrderStore);
 const { boothId } = storeToRefs(useBaseOrderStore);
 
+const interval = ref(null);
+
+const refreshCookingOrderList = async () => {
+  interval.value = setInterval(async () => {
+    await getCookingOrderList({
+      boothId: boothId.value,
+      date: 0,
+    });
+  }, 5000);
+};
+
+const clearCookingOrderListInterval = () => {
+  if (!interval.value) return;
+  clearInterval(interval.value);
+};
+
 onMounted(async () => {
   console.log('OrderCooking onMounted');
   initCookingOrderList();
@@ -21,6 +37,12 @@ onMounted(async () => {
     boothId: boothId.value,
     date: 0,
   });
+  refreshCookingOrderList();
+});
+
+onUnmounted(() => {
+  console.log('OrderCooking onUnmounted');
+  clearCookingOrderListInterval();
 });
 </script>
 

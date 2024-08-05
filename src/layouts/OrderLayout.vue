@@ -165,7 +165,14 @@ watchEffect(() => {
 });
 
 watchEffect(() => {
-  router.push(`/order/${ORDER_URL[orderStatus.value]}`);
+  if (orderStatus.value === 'statistics') {
+    alert('준비중인 페이지입니다.');
+    setOrderStatus('realTime');
+    router.push(`/order/${ORDER_URL.realTime}`);
+    return;
+  } else {
+    router.push(`/order/${ORDER_URL[orderStatus.value]}`);
+  }
 });
 
 watchEffect(() => {
