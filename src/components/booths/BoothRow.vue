@@ -33,7 +33,7 @@ const updateWindowWidth = () => {
 };
 
 const isBoothOwner = computed(() => {
-  return isAdmin.value || props.boothInfo.boothId === userOwnBoothId.value;
+  return isAdmin.value || props.boothInfo?.boothId === userOwnBoothId.value;
 });
 
 // Handlers
@@ -85,12 +85,10 @@ onUnmounted(() => {
 
 <template>
   <div
-    class="text-second-700-light bg-white text-xs lg:text-xl h-[70px] w-full flex justify-between gap-4 flex-nowrap overflow-x-auto items-center px-4 lg:px-[60px] last:rounded-b-[20px] last:border-0 border-b-2 border-secondary-500"
+    class="text-second-700-light text-xs lg:text-xl h-[70px] w-full flex justify-between gap-4 flex-nowrap overflow-x-auto items-center px-4 lg:px-[60px] last:rounded-b-[20px] last:border-0 border-b-2 border-secondary-500"
     :class="{
-      'bg-slate-200': isBoothOwner && !isAdmin,
-      'font-bold': isBoothOwner && !isAdmin,
-      'hover:bg-slate-200': isBoothOwner && !isAdmin,
-      'hover:bg-slate-50': !isBoothOwner || isAdmin,
+      'hover:bg-slate-200 bg-slate-100 font-bold': isBoothOwner && !isAdmin,
+      'hover:bg-slate-50 bg-white': !isBoothOwner || isAdmin,
     }"
   >
     <!-- Booth Index -->
@@ -100,17 +98,17 @@ onUnmounted(() => {
 
     <!-- Booth Category -->
     <div class="text-wrap break-keep min-w-[75px] w-[75px] lg:min-w-[130px] lg:w-[130px] text-center">
-      {{ boothInfo.adminCategory }}
+      {{ boothInfo?.adminCategory }}
     </div>
 
     <!-- Booth Name -->
     <div class="text-wrap break-keep min-w-[42px] w-[70px] lg:min-w-[70px] lg:w-[140px] text-center">
-      {{ boothInfo.boothName }}
+      {{ boothInfo?.boothName }}
     </div>
 
     <!-- Open time to Close Time -->
     <div class="text-wrap break-keep min-w-[42px] w-[70px] lg:min-w-[70px] lg:w-[140px] text-center">
-      {{ boothInfo.openTime }} ~ {{ boothInfo.closeTime }}
+      {{ boothInfo?.openTime }} ~ {{ boothInfo?.closeTime }}
     </div>
 
     <!-- Can Reserve? -->

@@ -1,7 +1,7 @@
 <script setup>
 import IconBoothList from '@/components/icons/IconBoothList.vue';
 import BoothList from '@/components/booths/BoothRow.vue';
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, watchEffect } from 'vue';
 
 import { useBoothList } from '@/stores/booths/boothList';
 import { storeToRefs } from 'pinia';
@@ -11,12 +11,29 @@ import { useUser } from '@/stores/user';
 const useBoothListStore = useBoothList();
 const useUserStore = useUser();
 
-const { isAdmin } = storeToRefs(useUserStore);
+const { isAdmin, userOwnBoothId } = storeToRefs(useUserStore);
 const { boothList } = storeToRefs(useBoothListStore);
+const orderedBoothList = ref([]);
 
 const handleClickBoothCreate = () => {
   router.push({ name: 'BoothCreate' });
 };
+
+watchEffect(() => {
+  if (isAdmin.value) {
+    orderedBoothList.value = boothList.value;
+  } else {
+    if (boothList.value) {
+      const myBooth = boothList.value.find((booth) => booth.boothId === userOwnBoothId.value);
+      const otherBooths = boothList.value.filter((booth) => booth.boothId !== userOwnBoothId.value);
+      orderedBoothList.value = [myBooth, ...otherBooths];
+    }
+  }
+});
+
+watchEffect(() => {
+  console.log(orderedBoothList.value);
+});
 
 onMounted(async () => {
   useBoothListStore.getAllBoothList();
@@ -63,7 +80,7 @@ onMounted(async () => {
       </div>
 
       <!-- Body -->
-      <BoothList v-for="(booth, index) in boothList" :key="booth.id" :boothIndex="index + 1" :boothInfo="booth" />
+      <BoothList v-for="(booth, index) in orderedBoothList" :key="index" :boothIndex="index + 1" :boothInfo="booth" />
     </div>
   </div>
 </template>
