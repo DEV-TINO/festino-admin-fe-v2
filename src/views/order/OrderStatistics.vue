@@ -1,0 +1,127 @@
+<script setup>
+import { useBaseOrder } from '@/stores/orders/baseOrder';
+import { useOrderStatistics } from '@/stores/orders/orderStatistics';
+import { useBoothList } from '@/stores/booths/boothList';
+import { storeToRefs } from 'pinia';
+import { computed, ref, watchEffect, onMounted, onUnmounted } from 'vue';
+import router from '@/router';
+import { alertError } from '@/utils/api';
+
+const useBaseOrderStore = useBaseOrder();
+const useOrderStatisticsStores = useOrderStatistics();
+const useBoothListStore = useBoothList();
+
+const { getStatistics } = useOrderStatisticsStores;
+const { getAllBoothList } = useBoothListStore;
+
+const { boothId, allOrderStatistics } = storeToRefs(useBaseOrderStore);
+const { boothList } = storeToRefs(useBoothListStore);
+
+const month = ref(9);
+const dates = ref({
+  11: '수',
+  12: '목',
+  13: '금',
+});
+const selectBooth = ref({});
+const selectBoothId = ref('');
+const isLoading = ref(false);
+
+const formattedMonth = computed(() => month.value.toString().padStart(2, '0'));
+const formattedDates = computed(() => {
+  return Object.keys(dates.value).reduce((acc, key) => {
+    acc[key.padStart(2, '0')] = dates.value[key];
+    return acc;
+  }, {});
+});
+
+const today = new Date().getDate();
+const activeDate = ref(today <= 11 ? '11' : today >= 13 ? '13' : '12');
+
+const handleButtonClick = (key) => {
+  activeDate.value = key;
+};
+
+const fetchStatistics = async () => {
+  if (selectBoothId.value) {
+    isLoading.value = true;
+    await getStatistics({
+      boothId: selectBoothId.value,
+      date: 1,
+    });
+    isLoading.value = false;
+  }
+};
+
+watchEffect(() => {
+  fetchStatistics();
+});
+
+watchEffect(() => {
+  selectBooth.value = boothList.value.find((booth) => booth.boothId === selectBoothId.value) || {};
+});
+
+onMounted(async () => {
+  fetchStatistics();
+  await getAllBoothList();
+  if (boothList.value.length > 0) {
+    selectBoothId.value = boothId.value;
+    selectBooth.value = boothList.value;
+  }
+});
+
+onUnmounted(() => {
+});
+</script>
+
+<template>
+  <div class="w-full h-[638px] flex overflow-x-hidden">
+    <div class="w-1/2 h-full border border-primary-900 rounded-l-[20px]">
+    </div>
+    <div class="w-1/2 h-full overflow-hidden p-[40px] border-r border-y border-primary-900 rounded-r-[20px] flex flex-col justify-between items-center">
+      <div class="font-semibold text-primary-900 text-[28px]">{{ selectBooth.adminName }} 야간부스 매출 통계</div>
+      <div class="w-full flex justify-center gap-4">
+        <button
+          type="button"
+          class="min-w-[120px] w-[200px] h-[50px] is-button relative"
+          v-for="(day, key) in formattedDates"
+          :key="key"
+          :class="{ 'is-outlined': key !== activeDate }"
+          @click="handleButtonClick(key)"
+        >
+          {{ formattedMonth }}/{{ key }} ({{ day }})
+        </button>
+      </div>
+      <div
+        class="max-w-[712px] w-full h-[408px] rounded-3xl flex flex-col text-secondary-500 border-2 border-primary relative"
+      >
+        <div
+          class="flex flex-row bg-[#E6F0FB] rounded-t-3xl font-semibold px-7 h-[43px] items-center shrink-0"
+        >
+          <p class="basis-1/2">메뉴</p>
+          <p class="basis-1/4 text-center">수량</p>
+          <p class="basis-1/4 text-center">가격</p>
+        </div>
+        <div class="overflow-scroll">
+          <div
+            class="flex flex-row bg-white font-normal px-7 h-10 items-center border-b-2 border-secondary-600 shrink-0 hover:bg-secondary-400-light"
+            v-for="index in 10"
+            :key="index"
+          >
+            <p class="basis-1/2">둘이먹다 둘이죽는 치즈닭꼬치</p>
+            <p class="basis-1/4 text-center">4개</p>
+            <p class="basis-1/4 text-center">13,400원</p>
+          </div>
+        </div>
+        <div
+          class="grid place-items-center text-primary-900 font-medium text-2xl h-[73px] rounded-b-3xl aboslute bottom-0 shrink-0 bg-white border-t-2 border-secondary-600 shadow-m"
+        >
+          총액 : 34,000원
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<style>
+</style>
