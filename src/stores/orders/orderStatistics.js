@@ -14,7 +14,7 @@ export const useOrderStatistics = defineStore('orderStatistics', () => {
     try {
       const response = await api.get(`/admin/booth/${boothId}/order/statistic/${date}`);
       const data = response.data;
-      
+
       if (data.success) {
         allOrderStatistics.value = data.statistic;
       } else {
