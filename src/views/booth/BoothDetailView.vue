@@ -163,12 +163,12 @@ onMounted(async () => {
                 <p class="whitespace-pre-line">{{ boothInfo.boothIntro }}</p>
               </div>
               <div
-                class="flex items-center justify-center border-r border-primary-700 h-[278px] px-4 text-xl font-medium"
+                class="flex items-center justify-center border-r border-primary-700 h-[280px] px-4 text-xl font-medium"
               >
                 부스 이미지
               </div>
               <div
-                class="min-w-[400px] overflow-x-auto overflow-y-hidden 2xl:col-span-3 flex justify-between items-center bg-white rounded-br-[20px] border-primary-700 h-[278px] py-[40px] px-[40px] gap-[23px]"
+                class="min-w-[400px] overflow-x-auto overflow-y-hidden 2xl:col-span-3 flex justify-between items-center bg-white rounded-br-[20px] border-primary-700 h-[280px] py-[40px] px-[40px] gap-[23px]"
               >
                 <IconIndicator :left="true" @click="handleClickLeftIndicator()" />
                 <div class="grow flex gap-[10px] overflow-auto no-scroll" ref="scrollContainer">
@@ -185,6 +185,46 @@ onMounted(async () => {
           </div>
         </div>
 
+        <!-- 계좌 정보  -->
+        <div v-if="ADMIN_CATEGORY[boothInfo.adminCategory] === 'night'" class="flex flex-col gap-[20px] w-full">
+          <div
+            class="w-[137px] h-[61px] rounded-2xl flex items-center justify-center bg-primary-700 text-primary-900 text-xl lg:text-2xl font-semibold"
+          >
+            계좌 정보
+          </div>
+          <div class="w-full bg-primary-900-lighter h-auto rounded-2xl px-[40px] py-[40px]">
+            <div
+              class="w-full bg-primary-700 h-full rounded-2xl border border-primary-700 grid grid-cols-[120px_1fr] grid-rows-[80px_80px_80px] 2xl:grid-cols-[200px_1fr_200px_1fr] 2xl:grid-rows-[80px_80px] place-items-stretch"
+            >
+              <div
+                class="flex items-center justify-center border-b border-r border-primary-700 px-4 text-xl font-medium"
+              >
+                예금주
+              </div>
+              <div
+                class="bg-white flex items-center border-b border-primary-700 text-wrap px-6 lg:px-10 2xl:rounded-none rounded-tr-[20px]"
+              >
+                {{ boothInfo.accountInfo?.accountHolder }}
+              </div>
+              <div
+                class="flex items-center justify-center 2xl:border-x border-r border-b border-primary-700 px-4 font-medium text-xl"
+              >
+                은행명
+              </div>
+              <div
+                class="bg-white 2xl:rounded-tr-2xl flex items-center justify-between border-b border-primary-700 px-6 lg:px-10"
+              >
+                {{ boothInfo.accountInfo?.bankName }}
+              </div>
+              <div class="flex items-center justify-center border-r border-primary-700 px-4 text-xl font-medium">
+                계좌번호
+              </div>
+              <div class="px-6 lg:px-10 2xl:col-span-3 bg-white flex items-center border-primary-700 rounded-br-2xl">
+                {{ boothInfo.accountInfo?.account }}
+              </div>
+            </div>
+          </div>
+        </div>
         <!-- 메뉴 정보 -->
         <div v-if="ADMIN_CATEGORY[boothInfo.adminCategory] === 'night'" class="flex flex-col gap-[20px] w-full">
           <div
