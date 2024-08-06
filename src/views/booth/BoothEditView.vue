@@ -186,7 +186,6 @@ const handleClickSubmit = async () => {
           isReservation: useReservation.value,
           accountInfo: boothInfo.value.accountInfo,
         });
-        console.log('accountInfo', boothInfo.value.accountInfo);
         const nightSaveBoothData = nightSaveBoothResponse.data;
         if (nightSaveBoothData.success) {
           newBoothId = nightSaveBoothData.boothId;
