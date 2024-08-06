@@ -26,6 +26,11 @@ export const useBoothDetail = defineStore('boothDetail', () => {
     isOrder: true,
     isReservation: true,
     totalReservationNum: 0,
+    accountInfo: {
+      account: '',
+      accountHolder: '',
+      bankName: '',
+    },
   });
   const boothType = ref('');
 
@@ -100,6 +105,11 @@ export const useBoothDetail = defineStore('boothDetail', () => {
       isOrder: true,
       isReservation: true,
       totalReservationNum: 0,
+      accountInfo: {
+        account: '',
+        accountHolder: '',
+        bankName: '',
+      },
     };
     boothType.value = '';
     menuList.value = [];
