@@ -85,12 +85,12 @@ const handleDropMenu = (event, dropIndex) => {
   const start = Math.min(dragIndex, dropIndex);
   const end = Math.max(dragIndex, dropIndex);
 
-  for (let i = start; i <= end; i++) {
-    menuList.value[i].menuIndex = i;
+  menuList.value.slice(start, end + 1).forEach((menuItem, index) => {
+    menuItem.menuIndex = start + index;
     addPatchMenu({
-      ...menuList.value[i],
+      ...menuItem,
     });
-  }
+  });
 };
 
 const handleInputAdminName = (event) => {
