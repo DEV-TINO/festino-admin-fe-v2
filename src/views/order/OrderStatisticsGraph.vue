@@ -120,7 +120,7 @@ const updateYScaleMax = () => {
   }
 };
 
-watchEffect(() => {
+const initializeChart = () => {
   if (allOrderStatistics.value && allOrderStatistics.value.menuSaleList) {
     menuData.value = allOrderStatistics.value.menuSaleList;
     DATA_COUNT.value = menuData.value.length;
@@ -130,6 +130,10 @@ watchEffect(() => {
 
     updateYScaleMax();
   }
+};
+
+watchEffect(() => {
+  initializeChart();
 });
 </script>
 
