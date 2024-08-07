@@ -10,6 +10,7 @@ import { storeToRefs } from 'pinia';
 import { onMounted, ref } from 'vue';
 import { ADMIN_CATEGORY, MENU_TYPE } from '@/utils/constants';
 import { alertError, api } from '@/utils/api';
+import { useTableDetail } from '@/stores/booths/tableDetail';
 import router from '@/router';
 
 const props = defineProps({
@@ -22,6 +23,8 @@ const props = defineProps({
 const useBoothDetailStore = useBoothDetail();
 const { reset, init } = useBoothDetailStore;
 const { boothInfo, menuList } = storeToRefs(useBoothDetailStore);
+
+const tableDetailStore = useTableDetail();
 
 const IMAGE_WIDTH = 210; // width + gap
 
@@ -77,6 +80,10 @@ const handleClickBoothEdit = () => {
   router.push({ name: 'BoothEdit' });
 };
 
+const handleClickTableCusotm = () => {
+  tableDetailStore.openTableDetailModal();
+};
+
 onMounted(async () => {
   reset();
   if (props.boothId) {
@@ -100,13 +107,22 @@ onMounted(async () => {
           <IconBoothInfo />
           <div class="text-primary-900 text-4xl font-semibold">{{ boothInfo.adminName }} 부스 정보</div>
         </div>
-        <button
-          class="is-button w-[80px] h-[48px] text-xl lg:w-[106px] lg:h-[53px]"
-          type="button"
-          @click="handleClickBoothEdit()"
-        >
-          수정
-        </button>
+        <div class="flex gap-5">
+          <button
+            class="is-button w-[130px] h-[48px] text-xl lg:w-[156px] lg:h-[53px]"
+            type="button"
+            @click="handleClickTableCusotm()"
+          >
+            테이블 커스텀
+          </button>
+          <button
+            class="is-button w-[80px] h-[48px] text-xl lg:w-[106px] lg:h-[53px]"
+            type="button"
+            @click="handleClickBoothEdit()"
+          >
+            수정
+          </button>
+        </div>
       </div>
       <div
         class="bg-white rounded-2xl w-full h-auto px-4 py-4 pb-12 gap-10 lg:py-[60px] lg:px-[60px] lg:gap-[60px] flex flex-col border-1 border-primary-700 text-secondary-700-light shadow-xs"
