@@ -19,7 +19,7 @@ const useBoothDetailStore = useBoothDetail();
 const useUserStore = useUser();
 const useBoothListStore = useBoothList();
 
-const { deleteMenu, createMenu, addDeleteMenu, patchMenu } = useBoothDetailStore;
+const { deleteMenu, createMenu, addDeleteMenu, patchMenu, addPatchMenu } = useBoothDetailStore;
 const { boothInfo, menuList, boothType, createMenuList, deleteMenuList, patchMenuList, originalMenuList } =
   storeToRefs(useBoothDetailStore);
 const { isAdmin } = storeToRefs(useUserStore);
@@ -127,6 +127,16 @@ const handleDropMenu = (event, dropIndex) => {
   const dragIndex = event.dataTransfer.getData('text/plain');
   const item = menuList.value.splice(dragIndex, 1)[0];
   menuList.value.splice(dropIndex, 0, item);
+
+  const start = Math.min(dragIndex, dropIndex);
+  const end = Math.max(dragIndex, dropIndex);
+
+  menuList.value.slice(start, end + 1).forEach((menuItem, index) => {
+    menuItem.menuIndex = start + index;
+    addPatchMenu({
+      ...menuItem,
+    });
+  });
 };
 
 const handleClickDeleteMenu = async ({ menuIndex, menuId }) => {
