@@ -5,7 +5,7 @@ import { useBoothDetail } from '../booths/boothDetail';
 
 export const useMenuModal = defineStore('menuModal', () => {
   const baseModalStore = useBaseModal();
-  const { addCreateMenu, addPatchMenu, addMenuList, patchCurrentMenu } = useBoothDetail();
+  const { addCreateMenu, addPatchMenu, addMenuList, patchCurrentMenu, menuList } = useBoothDetail();
 
   const menuInfo = ref({
     menuName: '',
@@ -24,6 +24,7 @@ export const useMenuModal = defineStore('menuModal', () => {
       menuImage: '',
       menuType: 'MAINMENU',
       isSoldOut: false,
+      menuIndex: menuList.length,
     };
   };
 
