@@ -45,13 +45,13 @@ const clickReserve = () => {
         </div>
       </div>
       <div class="mt-2 flex gap-5 font-semibold text-xl w-full">
-        <div v-if="popupType !== 'cancel'" @click="clickCancel()" class="flex items-center justify-center w-full h-12 border-2 border-primary-900 rounded-3xl text-primary-900">
-          삭제
-        </div>
         <div v-if="popupType !== 'complete'" @click="clickComplete()" class="flex items-center justify-center w-full h-12 rounded-3xl bg-primary-900 text-white">
-          완료
+          입장
         </div>
-        <div v-if="popupType !== 'reserve'" @click="clickReserve()" class="flex items-center justify-center w-full h-12 rounded-3xl bg-primary-900 text-white">
+        <div v-if="popupType !== 'cancel'" @click="clickCancel()" class="flex items-center justify-center w-full h-12 border-2 border-danger rounded-3xl text-danger">
+          취소
+        </div>
+        <div v-if="popupType !== 'reserve'" @click="clickReserve()" class="flex items-center justify-center w-full h-12 border-2 border-primary-900 rounded-3xl text-primary-900">
           예약
         </div>
       </div>
