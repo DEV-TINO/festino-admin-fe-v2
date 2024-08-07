@@ -444,7 +444,7 @@ onMounted(async () => {
                 class="w-1/2 h-[33px] flex justify-center items-center bg-danger-light text-danger py-[6px] px-4 rounded-full cursor-pointer"
                 @click="
                   handleClickDeleteMenu({
-                    menuIndex: menuIndex,
+                    menuIndex: index,
                     menuId: menu.menuId,
                   })
                 "
