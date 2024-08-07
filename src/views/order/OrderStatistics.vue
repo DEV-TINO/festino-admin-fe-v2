@@ -4,6 +4,7 @@ import { useOrderStatistics } from '@/stores/orders/orderStatistics';
 import { useBoothList } from '@/stores/booths/boothList';
 import { storeToRefs } from 'pinia';
 import { computed, ref, watchEffect, onMounted } from 'vue';
+import StatisticsGraph from '@/views/order/OrderStatisticsGraph.vue'
 
 const useBaseOrderStore = useBaseOrder();
 const useOrderStatisticsStore = useOrderStatistics();
@@ -34,6 +35,7 @@ const formattedDates = computed(() => {
     return acc;
   }, {});
 });
+
 const priceToString = (price) => {
   if (price == null) {
     return '0';
@@ -91,7 +93,8 @@ onMounted(async () => {
 
 <template>
   <div class="w-full h-[638px] flex overflow-x-hidden">
-    <div class="w-1/2 h-full border border-primary-900 rounded-l-[20px]">
+    <div class="w-1/2 py-10 pl-10 h-full border border-primary-900 rounded-l-[20px]">
+      <StatisticsGraph />
     </div>
     <div class="w-1/2 min-w-[490px] h-full overflow-hidden p-[40px] border-r border-y border-primary-900 rounded-r-[20px] flex flex-col justify-between items-center">
       <div class="font-semibold text-primary-900 text-[28px]">{{ selectBooth?.adminName }} 야간부스 매출 통계</div>
