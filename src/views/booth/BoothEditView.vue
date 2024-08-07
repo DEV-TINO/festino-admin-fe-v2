@@ -561,7 +561,7 @@ onMounted(async () => {
               <div
                 v-for="(menu, menuIndex) in menuList"
                 :key="menuIndex"
-                class="h-[220px] rounded-2xl flex text-2xl font-bold px-[25px] py-[25px] gap-[28px] bg-white hover:border-primary-900 border-1 border-primary-700"
+                class="h-[220px] rounded-2xl flex items-center text-2xl font-bold px-[25px] py-[25px] gap-[28px] bg-white hover:border-primary-900 border-1 border-primary-700"
                 :draggable="!isSubmit"
                 @dragstart="handleDragStartMenu($event, menuIndex)"
                 @dragover.prevent
