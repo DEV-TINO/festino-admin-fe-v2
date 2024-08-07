@@ -22,7 +22,7 @@ const boothDetailStore = useBoothDetail();
 const useUserStore = useUser();
 const { isAdmin } = storeToRefs(useUserStore);
 
-const { init, reset, deleteMenu, createMenu, addDeleteMenu, patchMenu } = boothDetailStore;
+const { init, reset, deleteMenu, createMenu, addDeleteMenu, patchMenu, addPatchMenu } = boothDetailStore;
 const { boothInfo, menuList, createMenuList, deleteMenuList, boothType, patchMenuList, originalMenuList } =
   storeToRefs(boothDetailStore);
 
@@ -81,6 +81,16 @@ const handleDropMenu = (event, dropIndex) => {
   const dragIndex = event.dataTransfer.getData('text/plain');
   const item = menuList.value.splice(dragIndex, 1)[0];
   menuList.value.splice(dropIndex, 0, item);
+
+  const start = Math.min(dragIndex, dropIndex);
+  const end = Math.max(dragIndex, dropIndex);
+
+  for (let i = start; i <= end; i++) {
+    menuList.value[i].menuIndex = i;
+    addPatchMenu({
+      ...menuList.value[i],
+    });
+  }
 };
 
 const handleInputAdminName = (event) => {
