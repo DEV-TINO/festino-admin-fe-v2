@@ -197,7 +197,7 @@ onMounted(async () => {
               <div
                 v-for="(menu, menuIndex) in menuList"
                 :key="menuIndex"
-                class="h-[220px] rounded-2xl flex text-2xl font-bold px-[25px] py-[25px] gap-[28px] bg-white hover:border-primary-900 border-1 border-primary-700"
+                class="h-[220px] rounded-2xl flex text-2xl items-center font-bold px-[25px] py-[25px] gap-[28px] bg-white hover:border-primary-900 border-1 border-primary-700"
               >
                 <div
                   class="hidden md:block w-[180px] h-[180px] bg-contain bg-no-repeat bg-center bg-white rounded-xl flex-shrink-0 border-gray-200 border"
