@@ -22,7 +22,7 @@ const boothDetailStore = useBoothDetail();
 const useUserStore = useUser();
 const { isAdmin } = storeToRefs(useUserStore);
 
-const { init, reset, deleteMenu, createMenu, addDeleteMenu, patchMenu } = boothDetailStore;
+const { init, reset, deleteMenu, createMenu, addDeleteMenu, patchMenu, addPatchMenu } = boothDetailStore;
 const { boothInfo, menuList, createMenuList, deleteMenuList, boothType, patchMenuList, originalMenuList } =
   storeToRefs(boothDetailStore);
 
@@ -81,6 +81,16 @@ const handleDropMenu = (event, dropIndex) => {
   const dragIndex = event.dataTransfer.getData('text/plain');
   const item = menuList.value.splice(dragIndex, 1)[0];
   menuList.value.splice(dropIndex, 0, item);
+
+  const start = Math.min(dragIndex, dropIndex);
+  const end = Math.max(dragIndex, dropIndex);
+
+  menuList.value.slice(start, end + 1).forEach((menuItem, index) => {
+    menuItem.menuIndex = start + index;
+    addPatchMenu({
+      ...menuItem,
+    });
+  });
 };
 
 const handleInputAdminName = (event) => {
@@ -641,7 +651,7 @@ onMounted(async () => {
               <div
                 v-for="(menu, menuIndex) in menuList"
                 :key="menuIndex"
-                class="h-[220px] rounded-2xl flex text-2xl font-bold px-[25px] py-[25px] gap-[28px] bg-white hover:border-primary-900 border-1 border-primary-700"
+                class="h-[220px] rounded-2xl flex items-center text-2xl font-bold px-[25px] py-[25px] gap-[28px] bg-white hover:border-primary-900 border-1 border-primary-700"
                 :draggable="!isSubmit"
                 @dragstart="handleDragStartMenu($event, menuIndex)"
                 @dragover.prevent
