@@ -1,25 +1,27 @@
 <script setup>
+import IconNotFound from '@/components/icons/IconNotFound.vue';
+import IconLoading from '@/components/icons/IconLoading.vue';
 import { ref, watch, onMounted, onUnmounted } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useReserveList } from '@/stores/reserve/reserveList';
 import { prettyDate } from '@/utils/utils';
-import { useUser } from '@/stores/user.js';
 import { useReserveModal } from '@/stores/mobiles/reserve/reserveModal';
-import IconNotFound from '@/components/icons/IconNotFound.vue';
-import IconLoading from '@/components/icons/IconLoading.vue';
 
 const props = defineProps({
   listType: {
     type: String,
     required: true,
-  },
+  }
 });
 
-const { getReserveList } = useReserveList();
-const { getUserOwnBoothId } = useUser();
-const { reserveList } = storeToRefs(useReserveList());
-const { userOwnBoothId } = storeToRefs(useUser());
-const { openReservePopup } = useReserveModal();
+const useReserveModalStore = useReserveModal();
+const useReserveListStore = useReserveList();
+
+const { getReserveList } = useReserveListStore;
+const { reserveList } = storeToRefs(useReserveListStore);
+const { openReservePopup } = useReserveModalStore;
+const { selectBoothId } = storeToRefs(useReserveModalStore);
+
 const reserveData = ref([]);
 const loading = ref(false);
 const interval = ref(null);
@@ -35,37 +37,38 @@ const handleClickOpenReservePopup = (data) => {
 const refreshReserveList = () => {
   clearInterval(interval.value);
   interval.value = setInterval(async () => {
-    if (!userOwnBoothId.value) return;
-    await getReserveList({ boothId: userOwnBoothId.value, type: 'reserve' });
+    if (!selectBoothId.value) return;
+    await getReserveList({ boothId: selectBoothId.value, type: 'reserve' });
   }, 5000);
 };
 
-watch(
-  () => props.listType,
-  async () => {
-    reserveData.value = [];
-    loading.value = true;
-    await getReserveList({ boothId: userOwnBoothId.value, type: props.listType });
-    if (props.listType === 'reserve') reserveData.value = reserveList.value.reserve;
-    else if (props.listType === 'cancel') reserveData.value = reserveList.value.cancel;
-    else if (props.listType === 'complete') reserveData.value = reserveList.value.complete;
-    loading.value = false;
-  },
-);
+watch(() => props.listType, async () => {
+  reserveData.value = [];
+  loading.value = true;
+  await getReserveList({ boothId: selectBoothId.value, type: props.listType });
+  if (props.listType === 'reserve') reserveData.value = reserveList.value.reserve;
+  else if (props.listType === 'cancel') reserveData.value = reserveList.value.cancel;
+  else if (props.listType === 'complete') reserveData.value = reserveList.value.complete;
+  loading.value = false;
+});
 
-watch(
-  () => reserveList.value,
-  () => {
-    if (props.listType === 'reserve') reserveData.value = reserveList.value.reserve;
-    else if (props.listType === 'cancel') reserveData.value = reserveList.value.cancel;
-    else if (props.listType === 'complete') reserveData.value = reserveList.value.complete;
-  },
-);
+watch(() => reserveList.value, () => {
+  if (props.listType === 'reserve') reserveData.value = reserveList.value.reserve;
+  else if (props.listType === 'cancel') reserveData.value = reserveList.value.cancel;
+  else if (props.listType === 'complete') reserveData.value = reserveList.value.complete;
+});
+
+watch(() => selectBoothId.value, async () => {
+  reserveData.value = [];
+  loading.value = true;
+  await getReserveList({ boothId: selectBoothId.value, type: props.listType });
+  reserveData.value = reserveList.value.reserve;
+  loading.value = false;
+});
 
 onMounted(async () => {
   loading.value = true;
-  await getUserOwnBoothId();
-  await getReserveList({ boothId: userOwnBoothId.value, type: props.listType });
+  await getReserveList({ boothId: selectBoothId.value, type: props.listType });
   reserveData.value = reserveList.value.reserve;
   loading.value = false;
   refreshReserveList();
