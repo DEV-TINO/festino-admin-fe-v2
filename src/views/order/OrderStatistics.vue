@@ -33,13 +33,6 @@ const formattedDates = computed(() => {
   }, {});
 });
 
-const priceToString = (price) => {
-  if (price == null) {
-    return '0';
-  }
-  return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-}
-
 const today = new Date().getDate();
 const activeDate = ref(today <= 11 ? '11' : today >= 13 ? '13' : '12');
 
