@@ -103,3 +103,9 @@ export const ORDER_URL = {
   cancel: 'cancel',
   statistics: 'statistics'
 };
+
+export const DATES = {
+  11: '수',
+  12: '목',
+  13: '금',
+}

@@ -1,9 +1,10 @@
 <script setup>
+import { ref, watchEffect, nextTick } from 'vue';
 import { useOrderStatistics } from '@/stores/orders/orderStatistics';
 import { storeToRefs } from 'pinia';
-import { ref, watchEffect } from 'vue';
 import { Line } from "vue-chartjs";
 import { Chart as ChartJS, registerables } from "chart.js";
+import { prettyPrice } from '@/utils/utils';
 
 ChartJS.register(...registerables);
 
@@ -11,7 +12,8 @@ const useOrderStatisticsStore = useOrderStatistics();
 const { allOrderStatistics } = storeToRefs(useOrderStatisticsStore);
 
 const menuData = ref([]);
-const DATA_COUNT = ref(0);
+const isDataReady = ref(false);
+let chartInstance = null;
 
 const chartData = ref({
   labels: [],
@@ -44,31 +46,21 @@ const chartData = ref({
 const options = ref({
   responsive: true,
   maintainAspectRatio: false,
+  animation: { duration: 1000 }, // Ensure animation is always applied
   plugins: {
-    title: {
-      display: false,
-    },
-    legend: {
-      display: false,
-    },
+    title: { display: false },
+    legend: { display: false },
     tooltip: {
       callbacks: {
-        title: function (tooltipItems) {
-          return `${tooltipItems[0].label}`;
-        },
-        label: function (tooltipItem) {
+        title: (tooltipItems) => `${tooltipItems[0].label}`,
+        label: (tooltipItem) => {
           const index = tooltipItem.dataIndex;
-          return `총 판매 금액 : ${priceToString(menuData.value[index]?.menuSale || 0)}원`;
+          return `총 판매 금액 : ${prettyPrice(menuData.value[index]?.menuSale || 0)}`;
         },
       },
       backgroundColor: "rgba(0, 0, 0, 0.58)",
-      titleFont: {
-        size: 14,
-        weight: "bold",
-      },
-      bodyFont: {
-        size: 14,
-      },
+      titleFont: { size: 14, weight: "bold" },
+      bodyFont: { size: 14 },
       displayColors: false,
       padding: 15,
       titleAlign: "center",
@@ -79,67 +71,56 @@ const options = ref({
     },
   },
   scales: {
-    x: {
-      grid: {
-        display: false,
-      },
-    },
+    x: { grid: { display: false } },
     y: {
       min: 0,
-      max: 100,  // 초기값, 나중에 업데이트됨
-      ticks: {
-        stepSize: 10,
-      },
-      grid: {
-        display: false,
-      },
+      max: 100,
+      ticks: { stepSize: 10 },
+      grid: { display: false },
     },
   },
 });
 
-const priceToString = (price) => {
-  if (price == null) {
-    return '0';
-  }
-  return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-}
-
 const updateYScaleMax = () => {
-  if (menuData.value.length > 0) {
-    const maxValue = Math.max(...menuData.value.map(menu => menu.menuCount));
-    options.value = {
-      ...options.value,
-      scales: {
-        ...options.value.scales,
-        y: {
-          ...options.value.scales.y,
-          max: Math.ceil(maxValue / 10) * 10,
-        },
-      },
-    };
-  }
+  const maxValue = Math.max(...menuData.value.map(menu => menu.menuCount));
+  options.value.scales.y.max = Math.ceil(maxValue / 10) * 10;
 };
 
 const initializeChart = () => {
-  if (allOrderStatistics.value && allOrderStatistics.value.menuSaleList) {
+  if (allOrderStatistics.value?.menuSaleList) {
     menuData.value = allOrderStatistics.value.menuSaleList;
-    DATA_COUNT.value = menuData.value.length;
 
-    chartData.value.labels = menuData.value.map(menu => menu.menuName);
-    chartData.value.datasets[0].data = menuData.value.map(menu => menu.menuCount);
+    chartData.value = {
+      ...chartData.value,
+      labels: menuData.value.map(menu => menu.menuName),
+      datasets: [
+        {
+          ...chartData.value.datasets[0],
+          data: menuData.value.map(menu => menu.menuCount),
+        }
+      ]
+    };
 
     updateYScaleMax();
+    isDataReady.value = true;
+
+    nextTick(() => {
+      if (chartInstance?.chartInstance) {
+        chartInstance.chartInstance.update({ lazy: false, duration: 1000 });
+      }
+    });
   }
 };
 
 watchEffect(() => {
+  isDataReady.value = false;
   initializeChart();
 });
 </script>
 
 <template>
   <div class="relative h-full w-full overflow-x-scroll">
-    <Line :data="chartData" :options="options" />
+    <Line v-if="isDataReady" ref="chartInstance" :data="chartData" :options="options" />
   </div>
 </template>
 
