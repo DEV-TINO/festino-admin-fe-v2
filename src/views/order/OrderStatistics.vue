@@ -5,6 +5,8 @@ import { useBoothList } from '@/stores/booths/boothList';
 import { storeToRefs } from 'pinia';
 import { computed, ref, watchEffect, onMounted } from 'vue';
 import StatisticsGraph from '@/views/order/OrderStatisticsGraph.vue'
+import { prettyPrice } from '@/utils/utils';
+import { DATES } from '@/utils/constants';
 
 const useBaseOrderStore = useBaseOrder();
 const useOrderStatisticsStore = useOrderStatistics();
@@ -18,11 +20,6 @@ const { boothList } = storeToRefs(useBoothListStore);
 const { allOrderStatistics } = storeToRefs(useOrderStatisticsStore);
 
 const month = ref(9);
-const dates = ref({
-  11: '수',
-  12: '목',
-  13: '금',
-});
 const selectBooth = ref({});
 const selectBoothId = ref('');
 const isLoading = ref(false);
@@ -30,8 +27,8 @@ const day = ref(0);
 
 const formattedMonth = computed(() => month.value.toString().padStart(2, '0'));
 const formattedDates = computed(() => {
-  return Object.keys(dates.value).reduce((acc, key) => {
-    acc[key.padStart(2, '0')] = dates.value[key];
+  return Object.keys(DATES).reduce((acc, key) => {
+    acc[key.padStart(2, '0')] = DATES[key];
     return acc;
   }, {});
 });
@@ -128,13 +125,13 @@ onMounted(async () => {
           >
             <p class="basis-1/3">{{ menu.menuName }}</p>
             <p class="basis-1/5 text-center">{{ menu.menuCount }}개</p>
-            <p class="basis-1/5 min-w-[130px] text-center">{{ priceToString(menu.menuSale) }}원</p>
+            <p class="basis-1/5 min-w-[130px] text-center">{{ prettyPrice(menu.menuSale || 0) }}</p>
           </div>
         </div>
         <div
           class="grid place-items-center text-primary-900 font-medium text-2xl h-[73px] rounded-b-3xl aboslute bottom-0 shrink-0 bg-white border-secondary-600 shadow-[0px_-3px_12px_rgba(0,0,0,0.12)]"
         >
-          총액 : {{ priceToString(allOrderStatistics.totalSale) }}원
+          총액 : {{ prettyPrice(allOrderStatistics.totalSale || 0) }}
         </div>
       </div>
     </div>
