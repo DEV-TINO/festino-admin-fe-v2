@@ -13,7 +13,7 @@ const { allOrderStatistics } = storeToRefs(useOrderStatisticsStore);
 
 const menuData = ref([]);
 const isDataReady = ref(false);
-let chartInstance = null;
+const chartInstance = ref('');
 
 const chartData = ref({
   labels: [],
@@ -46,7 +46,7 @@ const chartData = ref({
 const options = ref({
   responsive: true,
   maintainAspectRatio: false,
-  animation: { duration: 1000 }, // Ensure animation is always applied
+  animation: { duration: 1000 },
   plugins: {
     title: { display: false },
     legend: { display: false },
@@ -105,8 +105,8 @@ const initializeChart = () => {
     isDataReady.value = true;
 
     nextTick(() => {
-      if (chartInstance?.chartInstance) {
-        chartInstance.chartInstance.update({ lazy: false, duration: 1000 });
+      if (chartInstance.value?.chartInstance) {
+        chartInstance.value.chartInstance.update({ lazy: false, duration: 1000 });
       }
     });
   }
