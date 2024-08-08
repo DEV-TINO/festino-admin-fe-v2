@@ -345,6 +345,13 @@ const handleClickSubmit = async () => {
 
 onMounted(async () => {
   reset();
+  if (boothInfo.value.accountInfo === null) {
+    boothInfo.value.accountInfo = {
+      account: '',
+      accountHolder: '',
+      bankName: '',
+    };
+  }
   if (props.boothId) {
     const condition = await init(props.boothId);
     if (condition) {
