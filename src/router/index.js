@@ -76,6 +76,11 @@ const router = createRouter({
           name: 'OrderCancel',
           component: () => import('../views/order/OrderCancel.vue'),
         },
+        {
+          path: 'statistics',
+          name: 'OrderStatistics',
+          component: () => import('../views/order/OrderStatistics.vue'),
+        }
       ],
     },
     {

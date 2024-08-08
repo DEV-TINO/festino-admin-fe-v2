@@ -3,6 +3,7 @@ import router from '@/router';
 import { useUser } from '@/stores/user';
 import { storeToRefs } from 'pinia';
 import { onMounted, ref } from 'vue';
+import IconLogo from '@/components/icons/IconLogo.vue'
 
 const { setPassword, setUserId, setIsError, login, logout } = useUser();
 const { userId, password, isError } = storeToRefs(useUser());
@@ -50,7 +51,9 @@ const handleClickSubmit = async () => {
 <template>
   <div class="flex flex-col justify-center items-center w-full h-full overflow-hidden">
     <!-- Logo -->
-    <div class="text-primary-900 text-[60px] font-semibold pb-[75px]">Festino</div>
+    <div class="text-primary-900 font-semibold pb-[75px]">
+      <IconLogo class="w-[181px] h-[91px]" />
+    </div>
 
     <form @submit.prevent="handleClickSubmit()">
       <div class="w-[660px] h-[555px] bg-white flex flex-col justify-between items-center shadow-md rounded-2xl">

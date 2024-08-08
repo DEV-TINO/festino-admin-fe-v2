@@ -41,6 +41,7 @@ const router = useRouter();
 const isNewOrderExist = ref(false);
 const prevOrderList = ref([]);
 const isFirstLoad = ref(true);
+const isStatistics = ref(false);
 
 const { width } = useWindowSize();
 
@@ -164,13 +165,12 @@ watchEffect(() => {
 
 watchEffect(() => {
   if (orderStatus.value === 'statistics') {
-    alert('준비중인 페이지입니다.');
-    setOrderStatus('realTime');
-    router.push(`/order/${ORDER_URL.realTime}`);
-    return;
+    isStatistics.value = true;
   } else {
-    router.push(`/order/${ORDER_URL[orderStatus.value]}`);
+    isStatistics.value = false;
   }
+
+  router.push(`/order/${ORDER_URL[orderStatus.value]}`);
 });
 
 watchEffect(() => {
@@ -190,6 +190,7 @@ watchEffect(() => {
 onMounted(async () => {
   isNewOrderExist.value = false;
   isFirstLoad.value = true;
+  isStatistics.value = false;
   initBaseOrder();
   if (isAdmin.value) {
     await getAllBoothList();
@@ -252,7 +253,7 @@ onUnmounted(() => {
     </div>
 
     <!-- 테이블 주문 현황 -->
-    <div class="flex flex-col w-full rounded-xl shadow-primary bg-white relative">
+    <div v-if="!isStatistics" class="flex flex-col w-full rounded-xl shadow-primary bg-white relative">
       <!-- Thead -->
       <div class="w-full h-[50px] bg-primary-700 flex items-center justify-center rounded-t-xl">테이블 주문 현황</div>
       <!-- Tbody -->
