@@ -118,6 +118,24 @@ const handleInputBoothIntro = (event) => {
   boothInfo.value.boothIntro = event.target.value;
 };
 
+const handleInputAccountHolder = (event) => {
+  if (isSubmit.value) return;
+  boothInfo.value.accountInfo.accountHolder = event.target.value;
+};
+const handleInputBankName = (event) => {
+  if (isSubmit.value) return;
+  boothInfo.value.accountInfo.bankName = event.target.value;
+};
+
+const handleInputAccount = (event) => {
+  if (isSubmit.value) return;
+  const inputValue = event.target.value.replace(/\D/g, '');
+  const formattedValue = inputValue.replace(/(.{4})/g, '$1-').replace(/-$/, '');
+
+  event.target.value = formattedValue;
+  boothInfo.value.accountInfo.account = formattedValue;
+};
+
 const handleClickDeleteMenu = async ({ menuIndex, menuId }) => {
   if (isSubmit.value) return;
   addDeleteMenu(menuId);
@@ -176,7 +194,9 @@ const handleClickSubmit = async () => {
           boothId: props.boothId,
           isOrder: useOrder.value,
           isReservation: useReservation.value,
+          accountInfo: boothInfo.value.accountInfo,
         });
+        console.log('accountInfo', boothInfo.value.accountInfo);
         const nightSaveBoothData = nightSaveBoothResponse.data;
         if (nightSaveBoothData.success) {
           newBoothId = nightSaveBoothData.boothId;
@@ -234,6 +254,7 @@ const handleClickSubmit = async () => {
           ...baseBoothInfo,
           isOrder: useOrder.value,
           isReservation: useReservation.value,
+          accountInfo: boothInfo.value.accountInfo,
         });
         const nightSaveBoothData = nightSaveBoothResponse.data;
         if (nightSaveBoothData.success) {
@@ -334,6 +355,13 @@ const handleClickSubmit = async () => {
 
 onMounted(async () => {
   reset();
+  if (boothInfo.value.accountInfo === null) {
+    boothInfo.value.accountInfo = {
+      account: '',
+      accountHolder: '',
+      bankName: '',
+    };
+  }
   if (props.boothId) {
     const condition = await init(props.boothId);
     if (condition) {
@@ -552,6 +580,65 @@ onMounted(async () => {
                     </label>
                   </div>
                 </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 계좌정보 -->
+        <div v-if="ADMIN_CATEGORY[boothInfo.adminCategory] === 'night'" class="flex flex-col gap-[20px] w-full">
+          <div
+            class="w-[137px] h-[61px] rounded-2xl flex items-center justify-center bg-primary-700 text-primary-900 text-2xl font-semibold"
+          >
+            계좌 정보
+          </div>
+
+          <div
+            class="bg-primary-900-lighter rounded-2xl w-full py-4 px-4 lg:py-[40px] lg:px-[60px] flex flex-col gap-[30px] xl:gap-[20px] border-1 border-primary-700"
+          >
+            <!-- 예금주 -->
+            <div class="flex gap-2 flex-wrap xl:flex-nowrap">
+              <div class="w-[92px] flex items-center justify-start text-xl shrink-0">예금주</div>
+              <div class="relative w-full">
+                <input
+                  class="w-full h-[60px] border border-gray-500 rounded-2xl px-[20px] focus:border-primary-900"
+                  type="text"
+                  maxlength="100"
+                  placeholder="예금주를 입력하세요."
+                  @input="handleInputAccountHolder($event)"
+                  :value="boothInfo?.accountInfo?.accountHolder ?? ''"
+                  :disabled="isSubmit"
+                />
+              </div>
+            </div>
+            <!-- 은행명 -->
+            <div class="flex gap-2 flex-wrap xl:flex-nowrap">
+              <div class="w-[92px] flex items-center justify-start text-xl shrink-0">은행명</div>
+              <div class="relative w-full">
+                <input
+                  class="w-full h-[60px] border border-gray-500 rounded-2xl px-[20px] focus:border-primary-900"
+                  type="text"
+                  maxlength="100"
+                  placeholder="은행명을 입력하세요."
+                  @input="handleInputBankName($event)"
+                  :value="boothInfo?.accountInfo?.bankName ?? ''"
+                  :disabled="isSubmit"
+                />
+              </div>
+            </div>
+            <!-- 계좌번호 -->
+            <div class="flex gap-2 flex-wrap xl:flex-nowrap">
+              <div class="w-[92px] flex items-center justify-start text-xl shrink-0">계좌번호</div>
+              <div class="relative w-full">
+                <input
+                  class="w-full h-[60px] border border-gray-500 rounded-2xl px-[20px] focus:border-primary-900"
+                  type="text"
+                  maxlength="100"
+                  placeholder="계좌번호를 입력하세요."
+                  @input="handleInputAccount($event)"
+                  :value="boothInfo?.accountInfo?.account ?? ''"
+                  :disabled="isSubmit"
+                />
               </div>
             </div>
           </div>

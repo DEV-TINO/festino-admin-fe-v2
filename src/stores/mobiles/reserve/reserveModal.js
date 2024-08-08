@@ -5,9 +5,9 @@ import { ref } from 'vue';
 export const useReserveModal = defineStore('reserveModal', () => {
   const baseModalStore = useBaseModal();
   const reserveData = ref([]);
-
   const popupType = ref('');
   const confirmType = ref('');
+  const selectBoothId = ref('');
 
   const openReservePopup = (type, data) => {
     reserveData.value = data;
@@ -39,5 +39,6 @@ export const useReserveModal = defineStore('reserveModal', () => {
     closeMobilePopup,
     openLoadingModal,
     reserveData,
+    selectBoothId,
   };
 });

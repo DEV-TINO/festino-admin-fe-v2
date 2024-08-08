@@ -266,7 +266,7 @@ onMounted(async () => {
 });
 </script>
 <template>
-  <form class="w-full h-full" @submit.prevent="handleClickSumbit()">
+  <form class="w-full h-full mt-7" @submit.prevent="handleClickSumbit()">
     <div class="dynamic-padding flex flex-col gap-[20px] text-secondary-700-light">
       <div class="flex gap-[10px] items-center">
         <div class="w-[90px] font-bold text-base shrink-0">학과</div>

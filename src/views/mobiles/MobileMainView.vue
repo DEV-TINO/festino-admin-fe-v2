@@ -33,7 +33,7 @@ const handleClickAdminMenu = (type) => {
 </script>
 
 <template>
-  <div class="flex flex-col justify-center items-center w-full h-full gap-10 mobile-padding">
+  <div class="flex flex-col justify-center items-center w-full h-full gap-10 mobile-padding mt-7">
     <div class="flex flex-col gap-[30px] text-secondary-700 w-full">
       <p class="font-semibold text-xl">부스 등록 및 수정</p>
       <div
