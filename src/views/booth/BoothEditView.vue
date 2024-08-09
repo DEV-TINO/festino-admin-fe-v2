@@ -387,7 +387,7 @@ onMounted(async () => {
           </div>
 
           <div
-            class="bg-primary-900-lighter rounded-2xl w-full py-4 px-4 lg:py-[40px] lg:px-[60px] flex flex-col gap-[30px] xl:gap-[20px] border-1 border-primary-700"
+            class="bg-primary-500-light rounded-2xl w-full py-4 px-4 lg:py-[40px] lg:px-[60px] flex flex-col gap-[30px] xl:gap-[20px] border-1 border-primary-700"
           >
             <!-- 학과명 -->
             <div class="flex gap-2 flex-wrap xl:flex-nowrap">
@@ -577,7 +577,7 @@ onMounted(async () => {
           </div>
 
           <div
-            class="bg-primary-900-lighter rounded-2xl w-full py-4 px-4 lg:py-[40px] lg:px-[60px] flex flex-col gap-[30px] xl:gap-[20px] border-1 border-primary-700"
+            class="bg-primary-500-light rounded-2xl w-full py-4 px-4 lg:py-[40px] lg:px-[60px] flex flex-col gap-[30px] xl:gap-[20px] border-1 border-primary-700"
           >
             <!-- 예금주 -->
             <div class="flex gap-2 flex-wrap xl:flex-nowrap">
@@ -635,7 +635,7 @@ onMounted(async () => {
             메뉴 정보
           </div>
           <div
-            class="bg-primary-900-lighter rounded-2xl w-full lg:py-[40px] lg:px-[60px] px-4 py-4 flex flex-col border-1 border-primary-700"
+            class="bg-primary-500-light rounded-2xl w-full lg:py-[40px] lg:px-[60px] px-4 py-4 flex flex-col border-1 border-primary-700"
           >
             <div class="grid gap-4 grid-cols-1 xl:grid-cols-2">
               <div

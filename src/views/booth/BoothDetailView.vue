@@ -134,7 +134,7 @@ onMounted(async () => {
           >
             부스 정보
           </div>
-          <div class="w-full bg-primary-900-lighter h-auto rounded-2xl px-[40px] py-[40px]">
+          <div class="w-full bg-primary-500-light h-auto rounded-2xl px-[40px] py-[40px]">
             <div
               class="w-full bg-primary-700 h-full rounded-2xl border border-primary-700 grid grid-cols-[120px_1fr] grid-rows-[80px_80px_200px_280px] 2xl:grid-cols-[200px_1fr_200px_1fr] 2xl:grid-rows-[80px_200px_280px] place-items-stretch"
             >
@@ -208,7 +208,7 @@ onMounted(async () => {
           >
             계좌 정보
           </div>
-          <div class="w-full bg-primary-900-lighter h-auto rounded-2xl px-[40px] py-[40px]">
+          <div class="w-full bg-primary-500-light h-auto rounded-2xl px-[40px] py-[40px]">
             <div
               class="w-full bg-primary-700 h-full rounded-2xl border border-primary-700 grid grid-cols-[120px_1fr] grid-rows-[80px_80px_80px] 2xl:grid-cols-[200px_1fr_200px_1fr] 2xl:grid-rows-[80px_80px] place-items-stretch"
             >
@@ -248,7 +248,7 @@ onMounted(async () => {
           >
             메뉴 정보
           </div>
-          <div class="bg-primary-900-lighter rounded-2xl w-full lg:py-[40px] lg:px-[60px] px-4 py-4 flex flex-col">
+          <div class="bg-primary-500-light rounded-2xl w-full lg:py-[40px] lg:px-[60px] px-4 py-4 flex flex-col">
             <div class="grid gap-4 grid-cols-1 2xl:grid-cols-2">
               <div
                 v-for="(menu, menuIndex) in menuList"
