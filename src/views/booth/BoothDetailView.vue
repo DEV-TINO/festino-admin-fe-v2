@@ -247,7 +247,7 @@ onMounted(async () => {
                   <div class="flex flex-col w-full">
                     <!-- Menu header -->
                     <div class="flex justify-between items-center h-[29px] w-full min-w-fit gap-2">
-                      <div class="text-lg font-semibold text-secondary-700 text-nowrap truncate w-[190px] sm:w-[300px] md:w-[150px] lg:w-[220px] xl:w-[480px] 2xl:w-[150px] 3xl:w-full 3xl:max-w-[290px]">
+                      <div class="text-lg font-semibold text-secondary-700 text-nowrap truncate w-[190px] sm:w-[300px] md:w-[150px] lg:w-[220px] xl:w-[480px] 2xl:w-[150px] 3xl:w-full 3xl:max-w-[280px]">
                         {{ menu.menuName }}
                       </div>
                       <div class="gap-[12px] items-center text-sm flex flex-shrink-0 justify-end grow font-medium">
