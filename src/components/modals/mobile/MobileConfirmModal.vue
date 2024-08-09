@@ -5,25 +5,25 @@ import { useReserveModal } from '../../../stores/mobiles/reserve/reserveModal';
 import { useReserveList } from '@/stores/reserve/reserveList';
 import { storeToRefs } from 'pinia';
 import { BOOTH_POPUP_INFO } from '@/utils/constants';
-import { useUser } from '@/stores/user.js';
+
+const useReserveModalStore = useReserveModal();
 
 const { confirmReserve, deleteReserve, restoreReserve, getReserveList } = useReserveList();
-const { userOwnBoothId } = storeToRefs(useUser());
-const { closeMobilePopup, openLoadingModal } = useReserveModal();
-const { reserveData, confirmType, popupType } = storeToRefs(useReserveModal());
+const { closeMobilePopup, openLoadingModal } = useReserveModalStore;
+const { reserveData, confirmType, popupType, selectBoothId } = storeToRefs(useReserveModalStore);
 const title = ref('');
 const subTitle = ref('');
 const loading = ref(false);
 
 const confirm = async() => {
   loading.value = true;
-  if (confirmType.value === 'confirm') await confirmReserve({boothId : userOwnBoothId.value, reserveId : reserveData.value.reservationId});
-  else if (confirmType.value === 'cancel') await deleteReserve({boothId : userOwnBoothId.value, reserveId : reserveData.value.reservationId});
+  if (confirmType.value === 'confirm') await confirmReserve({boothId : selectBoothId.value, reserveId : reserveData.value.reservationId});
+  else if (confirmType.value === 'cancel') await deleteReserve({boothId : selectBoothId.value, reserveId : reserveData.value.reservationId});
   else if (confirmType.value === 'restore') {
-    await restoreReserve({boothId : userOwnBoothId.value, reserveId : reserveData.value.reservationId, reserveType : popupType.value});
-    await getReserveList({boothId : userOwnBoothId.value, type : 'reserve'});
+    await restoreReserve({boothId : selectBoothId.value, reserveId : reserveData.value.reservationId, reserveType : popupType.value});
+    await getReserveList({boothId : selectBoothId.value, type : 'reserve'});
   }
-  await getReserveList({boothId : userOwnBoothId.value, type : popupType.value});
+  await getReserveList({boothId : selectBoothId.value, type : popupType.value});
   closeMobilePopup();
   loading.value = false;
 };

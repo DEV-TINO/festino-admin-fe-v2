@@ -4,6 +4,7 @@ import { storeToRefs } from 'pinia';
 import { ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import router from '@/router';
+import IconLogo from '@/components/icons/IconLogo.vue'
 
 const { logout } = useUser();
 const { isAdmin, userOwnBoothId } = storeToRefs(useUser());
@@ -66,7 +67,9 @@ watch(() => route.name, updateActive, {
   <div
     class="bg-white w-full flex justify-between px-20px 2xl:px-[50px] px-4 items-center h-full shadow-primary select-none"
   >
-    <div class="text-3xl text-primary-900 font-semibold cursor-pointer" @click="handleClickHome()">Festino</div>
+    <div class="text-3xl text-primary-900 font-semibold cursor-pointer" @click="handleClickHome()">
+      <IconLogo class="w-[86px] h-[43.23px]" />
+    </div>
     <div
       class="flex justify-end gap-4 md:gap-[40px] lg:gap-[80px] text-secondary-900 md:text-xl lg:text-2xl font-medium"
     >

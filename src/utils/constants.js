@@ -101,4 +101,11 @@ export const ORDER_URL = {
   cooking: 'cooking',
   finish: 'finish',
   cancel: 'cancel',
+  statistics: 'statistics'
 };
+
+export const DATES = {
+  11: '수',
+  12: '목',
+  13: '금',
+}

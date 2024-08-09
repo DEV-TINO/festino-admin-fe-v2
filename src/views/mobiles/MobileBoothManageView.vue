@@ -19,7 +19,7 @@ const useBoothDetailStore = useBoothDetail();
 const useUserStore = useUser();
 const useBoothListStore = useBoothList();
 
-const { deleteMenu, createMenu, addDeleteMenu, patchMenu } = useBoothDetailStore;
+const { deleteMenu, createMenu, addDeleteMenu, patchMenu, addPatchMenu } = useBoothDetailStore;
 const { boothInfo, menuList, boothType, createMenuList, deleteMenuList, patchMenuList, originalMenuList } =
   storeToRefs(useBoothDetailStore);
 const { isAdmin } = storeToRefs(useUserStore);
@@ -127,6 +127,16 @@ const handleDropMenu = (event, dropIndex) => {
   const dragIndex = event.dataTransfer.getData('text/plain');
   const item = menuList.value.splice(dragIndex, 1)[0];
   menuList.value.splice(dropIndex, 0, item);
+
+  const start = Math.min(dragIndex, dropIndex);
+  const end = Math.max(dragIndex, dropIndex);
+
+  menuList.value.slice(start, end + 1).forEach((menuItem, index) => {
+    menuItem.menuIndex = start + index;
+    addPatchMenu({
+      ...menuItem,
+    });
+  });
 };
 
 const handleClickDeleteMenu = async ({ menuIndex, menuId }) => {
@@ -256,7 +266,7 @@ onMounted(async () => {
 });
 </script>
 <template>
-  <form class="w-full h-full" @submit.prevent="handleClickSumbit()">
+  <form class="w-full h-full mt-7" @submit.prevent="handleClickSumbit()">
     <div class="dynamic-padding flex flex-col gap-[20px] text-secondary-700-light">
       <div class="flex gap-[10px] items-center">
         <div class="w-[90px] font-bold text-base shrink-0">학과</div>
@@ -434,7 +444,7 @@ onMounted(async () => {
                 class="w-1/2 h-[33px] flex justify-center items-center bg-danger-light text-danger py-[6px] px-4 rounded-full cursor-pointer"
                 @click="
                   handleClickDeleteMenu({
-                    menuIndex: menuIndex,
+                    menuIndex: index,
                     menuId: menu.menuId,
                   })
                 "

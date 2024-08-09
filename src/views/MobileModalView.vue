@@ -10,13 +10,14 @@ import MobileMenuModal from '@/components/modals/mobile/MobileMenuModal.vue';
 
 const baseModalStore = useBaseModal();
 const { isMobileModalOpen, modalType } = storeToRefs(baseModalStore);
+const { closeMobileModal } = baseModalStore;
 </script>
 
 <template>
-  <MobileModalBackground v-if="isMobileModalOpen">
-    <MobileConfirmModal v-if="modalType === 'mobileConfirm'" />
-    <MobileReserveModal v-if="modalType === 'mobileReserve'" />
-    <MobileMenuModal v-if="modalType === 'mobileMenu'" />
+  <MobileModalBackground v-if="isMobileModalOpen" @click="closeMobileModal()">
+    <MobileConfirmModal v-if="modalType === 'mobileConfirm'" @click.stop />
+    <MobileReserveModal v-if="modalType === 'mobileReserve'" @click.stop />
+    <MobileMenuModal v-if="modalType === 'mobileMenu'" @click.stop />
     <MobileLoadingModal v-if="modalType === 'mobileLoading'" />
   </MobileModalBackground>
 </template>

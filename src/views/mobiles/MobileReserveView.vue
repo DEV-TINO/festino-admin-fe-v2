@@ -1,19 +1,31 @@
 <script setup>
-import { ref, watch, onMounted } from 'vue';
 import ReserveList from '@/components/mobiles/reserves/ReserveList.vue';
+import { ref, watch, onMounted, watchEffect } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useReserveList } from '@/stores/reserve/reserveList';
+import { useBoothList } from '@/stores/booths/boothList';
+import { useReserveModal } from '@/stores/mobiles/reserve/reserveModal';
+import { useUser } from '@/stores/user';
+
+const useBoothListStore = useBoothList();
+
+const { getAllBoothList } = useBoothListStore;
+const { boothList } = storeToRefs(useBoothListStore);
+const { selectBoothId } = storeToRefs(useReserveModal());
+const { reserveList } = storeToRefs(useReserveList());
+const { isAdmin, userOwnBoothId } = storeToRefs(useUser());
+
+const reserveBoothList = ref([]);
+const selectBooth = ref({});
+const listType = ref('reserve');
+const checkMark = ref(false);
+const beforeReserveState = ref(0);
 
 const isActive = ref({
   reserveList: true,
   deleteList: false,
   completeList: false,
 });
-
-const { reserveList } = storeToRefs(useReserveList());
-const listType = ref('reserve');
-const checkMark = ref(false);
-const beforeReserveState = ref(0);
 
 const toggleTab = (type) => {
   listType.value = type;
@@ -49,24 +61,51 @@ const visibility = () => {
   else return 'invisible';
 };
 
-watch(
-  () => reserveList.value.reserve,
-  () => {
-    if (listType.value !== 'reserve') {
-      if (reserveList.value.reserve.length !== beforeReserveState.value) checkMark.value = true;
-    } else checkMark.value = false;
+watch(() => reserveList.value.reserve, () => {
+  if (listType.value !== 'reserve') {
+    if (reserveList.value.reserve.length !== beforeReserveState.value) checkMark.value = true;
+  } else checkMark.value = false;
     beforeReserveState.value = reserveList.value.reserve.length;
   },
 );
 
+watchEffect(() => {
+  if (!selectBoothId.value) return;
+  if (!reserveBoothList.value) return;
+  selectBooth.value = reserveBoothList.value.find((booth) => booth.boothId === selectBoothId.value);
+  toggleTab('reserve');
+});
+
 onMounted(async () => {
+  await getAllBoothList();
+  reserveBoothList.value = boothList.value.filter((booth) => booth?.isReservation);
+  if (isAdmin.value) {
+    selectBoothId.value = reserveBoothList.value[0].boothId;
+  } else {
+    if (userOwnBoothId.value) {
+      selectBoothId.value = userOwnBoothId.value;
+    } else {
+      alertError('부스를 소유하고 있지 않습니다.');
+      router.push('/');
+    }
+  }
   beforeReserveState.value = reserveList.value.reserve.length;
 });
 </script>
 
 <template>
   <div class="w-full h-full">
-    <div class="flex justify-center font-semibold text-xl border-b border-secondary-300 relative gap-5">
+    <div class="flex justify-end w-full px-4 items-center gap-4" v-if="isAdmin">
+      <select
+        class="max-w-[160px] rounded-lg border-gray-400 text-secondary-900 text-sm focus:text-black focus:ring-white focus:border-primary-900 block w-full px-4"
+        v-model="selectBoothId"
+      >
+        <option v-for="(booth, boothIndex) in reserveBoothList" :key="boothIndex" :value="booth.boothId">
+          {{ booth.adminName }}
+        </option>
+      </select>
+    </div>
+    <div class="pt-4 flex justify-center font-semibold text-xl border-b border-secondary-300 relative gap-5">
       <div>
         <div>
           <div class="w-full flex justify-end">
@@ -124,7 +163,7 @@ onMounted(async () => {
         <div class="w-1/12"></div>
       </div>
     </div>
-    <ReserveList :listType="listType" />
+    <ReserveList v-if="selectBoothId" :listType="listType" />
   </div>
 </template>
 
