@@ -18,6 +18,10 @@ const handleClickAddTableButton = async () => {
     modalContainer.value.scrollTop = modalContainer.value.scrollHeight;
   }
 };
+
+const handleClickDeleteTableButton = () => {
+  TABLE_INFO.pop();
+};
 </script>
 
 <template>
@@ -33,16 +37,29 @@ const handleClickAddTableButton = async () => {
         <div class="w-32 text-center flex-shrink-0">테이블 번호</div>
         <div class="w-full">커스텀 번호</div>
       </div>
-      <div v-for="(table, index) in TABLE_INFO" :key="index" class="w-full flex justify-between items-center gap-5">
-        <div class="w-32 text-center flex-shrink-0">{{ table.tableNum }}</div>
-        <input
-          type="text"
-          placeholder="커스텀 할 테이블 번호를 입력해주세요."
-          @input="handleInputCustomTableNum($event, index)"
-          :value="table.customNum"
-          maxlength="100"
-          class="w-full h-[60px] border border-gray-400 bg-white px-[20px] rounded-2xl active:border-primary-900"
-        />
+      <div class="w-full flex flex-col grow gap-5">
+        <div
+          v-for="(table, index) in TABLE_INFO"
+          :key="index"
+          class="w-full flex justify-between items-center relative"
+        >
+          <div class="w-32 text-center flex-shrink-0">{{ table.tableNum }}</div>
+          <input
+            type="text"
+            placeholder="커스텀 할 테이블 번호를 입력해주세요."
+            @input="handleInputCustomTableNum($event, index)"
+            :value="table.customNum"
+            maxlength="100"
+            class="w-full h-[60px] border border-gray-400 bg-white pl-[20px] pr-[60px] rounded-2xl active:border-primary-900"
+          />
+          <div
+            v-if="index === TABLE_INFO.length - 1"
+            @click="handleClickDeleteTableButton()"
+            class="absolute right-5 text-base text-danger cursor-pointer"
+          >
+            삭제
+          </div>
+        </div>
       </div>
       <!-- Buttons -->
       <div class="w-full flex justify-between items-center text-xl pt-10">
