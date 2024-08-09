@@ -674,7 +674,7 @@ onMounted(async () => {
                     <!-- Menu header -->
                     <div class="flex justify-between items-center h-[29px] w-full min-w-fit gap-2">
                       <div 
-                        class="text-lg font-semibold text-secondary-700 text-nowrap xl:truncate xl:w-[100px] 3xl:w-full 3xl:max-w-[226px]"
+                        class="text-lg font-semibold text-secondary-700 text-nowrap truncate xl:w-[100px] 3xl:w-full 3xl:max-w-[226px]"
                       >
                         {{ menu.menuName }}
                       </div>
