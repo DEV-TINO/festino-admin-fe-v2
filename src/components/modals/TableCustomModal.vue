@@ -1,18 +1,26 @@
 <script setup>
+import { nextTick, onMounted, ref } from 'vue';
+import { storeToRefs } from 'pinia';
 import { useTableDetail } from '@/stores/booths/tableDetail';
-import { nextTick, ref } from 'vue';
+import { useUser } from '@/stores/user';
+import IconNotFound from '../icons/IconNotFound.vue';
 
 const useTableDetailStore = useTableDetail();
-const { TABLE_INFO, closeTableDetailModal, submitTableDetail } = useTableDetailStore;
+const useUserStore = useUser();
+
+const { tableNumList } = storeToRefs(useTableDetailStore);
+const { userOwnBoothId } = storeToRefs(useUserStore);
+
+const { closeTableDetailModal, sumbitTableDetail, getTableList } = useTableDetailStore;
 
 const modalContainer = ref(null);
 
 const handleInputCustomTableNum = (event, index) => {
-  TABLE_INFO[index].customNum = event.target.value;
+  tableNumList.value[index].customTableNum = event.target.value;
 };
 
 const handleClickAddTableButton = async () => {
-  TABLE_INFO.push({ tableNum: TABLE_INFO.length + 1, customNum: '' });
+  tableNumList.value.push({ tableNumIndex: tableNumList.value.length + 1, customTableNum: '' });
   await nextTick();
   if (modalContainer.value) {
     modalContainer.value.scrollTop = modalContainer.value.scrollHeight;
@@ -20,8 +28,12 @@ const handleClickAddTableButton = async () => {
 };
 
 const handleClickDeleteTableButton = () => {
-  TABLE_INFO.pop();
+  tableNumList.value.pop();
 };
+
+onMounted(() => {
+  getTableList(userOwnBoothId.value);
+});
 </script>
 
 <template>
@@ -39,28 +51,33 @@ const handleClickDeleteTableButton = () => {
       </div>
       <div class="w-full flex flex-col grow gap-5">
         <div
-          v-for="(table, index) in TABLE_INFO"
+          v-for="(table, index) in tableNumList"
           :key="index"
-          class="w-full flex justify-between items-center relative"
+          class="w-full flex justify-between items-center relative gap-5"
         >
-          <div class="w-32 text-center flex-shrink-0">{{ table.tableNum }}</div>
+          <div class="w-32 text-center flex-shrink-0">{{ table.tableNumIndex }}</div>
           <input
             type="text"
             placeholder="커스텀 할 테이블 번호를 입력해주세요."
             @input="handleInputCustomTableNum($event, index)"
-            :value="table.customNum"
+            :value="table.customTableNum"
             maxlength="100"
             class="w-full h-[60px] border border-gray-400 bg-white pl-[20px] pr-[60px] rounded-2xl active:border-primary-900"
           />
           <div
-            v-if="index === TABLE_INFO.length - 1"
+            v-if="index === tableNumList.length - 1"
             @click="handleClickDeleteTableButton()"
             class="absolute right-5 text-base text-danger cursor-pointer"
           >
             삭제
           </div>
         </div>
+        <div v-if="tableNumList.length === 0" class="h-full flex flex-col justify-center items-center gap-5">
+          <IconNotFound />
+          테이블이 존재하지 않습니다. 추가해주세요!
+        </div>
       </div>
+
       <!-- Buttons -->
       <div class="w-full flex justify-between items-center text-xl pt-10">
         <button
@@ -81,7 +98,7 @@ const handleClickDeleteTableButton = () => {
             class="is-button w-[100px] h-[50px] font-semibold"
             type="submit"
             ref="submit"
-            @click="submitTableDetail()"
+            @click="sumbitTableDetail(userOwnBoothId)"
             autofocus
           >
             확인

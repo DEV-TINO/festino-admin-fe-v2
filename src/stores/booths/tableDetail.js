@@ -1,7 +1,11 @@
+import { api, alertError } from '@/utils/api';
 import { defineStore } from 'pinia';
 import { useBaseModal } from '../baseModal';
+import { ref } from 'vue';
 
 export const useTableDetail = defineStore('tableDetail', () => {
+  const tableNumList = ref([]);
+
   const baseModalStore = useBaseModal();
 
   const openTableDetailModal = () => {
@@ -12,31 +16,49 @@ export const useTableDetail = defineStore('tableDetail', () => {
   const closeTableDetailModal = () => {
     baseModalStore.closeModal();
   };
-  // TODO : USE API DATA
-  const TABLE_INFO = [
-    { tableNum: 1, customNum: 'A-1' },
-    { tableNum: 2, customNum: 'A-2' },
-    { tableNum: 3, customNum: 'A-3' },
-    { tableNum: 4, customNum: 'A-4' },
-    { tableNum: 5, customNum: 'A-5' },
-    { tableNum: 6, customNum: 'B-1' },
-    { tableNum: 7, customNum: 'B-2' },
-    { tableNum: 8, customNum: 'B-3' },
-    { tableNum: 9, customNum: 'B-4' },
-    { tableNum: 10, customNum: 'C-1' },
-    { tableNum: 11, customNum: 'C-2' },
-    { tableNum: 12, customNum: 'C-3' },
-  ];
 
-  const sumbitTableDetail = () => {
+  const getTableList = async (boothId) => {
+    try {
+      const res = await api.get(`/admin/order/table/booth/${boothId}`);
+      if (res.data.success) tableNumList.value = res.data.tableNumList;
+      else {
+        alertError(`${res.data.message}`);
+      }
+    } catch (error) {
+      console.log(error);
+      alertError(error);
+    }
+  };
+  const updateTableList = async (boothId) => {
+    try {
+      const res = await api.post('/admin/order/table', {
+        boothId,
+        tableNumList: tableNumList.value,
+      });
+      if (!res.data.success) {
+        alertError(res.data.message);
+      }
+    } catch (error) {
+      console.log(error);
+      alertError(error);
+    }
+  };
+
+  const sumbitTableDetail = async (boothId) => {
+    tableNumList.value.forEach((table) => {
+      if (table.customTableNum === '') {
+        table.customTableNum = table.tableNumIndex;
+      }
+    });
+    await updateTableList(boothId);
     baseModalStore.closeModal();
-    //TODO : API CALL
   };
 
   return {
+    tableNumList,
     openTableDetailModal,
     closeTableDetailModal,
-    TABLE_INFO,
     sumbitTableDetail,
+    getTableList,
   };
 });
