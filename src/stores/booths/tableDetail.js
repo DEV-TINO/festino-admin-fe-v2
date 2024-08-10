@@ -5,6 +5,7 @@ import { ref } from 'vue';
 
 export const useTableDetail = defineStore('tableDetail', () => {
   const tableNumList = ref([]);
+  const tableNum = ref(0);
 
   const baseModalStore = useBaseModal();
 
@@ -20,8 +21,10 @@ export const useTableDetail = defineStore('tableDetail', () => {
   const getTableList = async (boothId) => {
     try {
       const res = await api.get(`/admin/order/table/booth/${boothId}`);
-      if (res.data.success) tableNumList.value = res.data.tableNumList;
-      else {
+      if (res.data.success) {
+        tableNumList.value = res.data.tableNumList;
+        tableNum.value = res.data.tableNumList.length;
+      } else {
         alertError(`${res.data.message}`);
       }
     } catch (error) {
@@ -58,6 +61,7 @@ export const useTableDetail = defineStore('tableDetail', () => {
 
   return {
     tableNumList,
+    tableNum,
     openTableDetailModal,
     closeTableDetailModal,
     sumbitTableDetail,

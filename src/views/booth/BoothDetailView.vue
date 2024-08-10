@@ -5,12 +5,12 @@ import IconIndicator from '@/components/icons/IconIndicator.vue';
 import IconRadio from '@/components/icons/IconRadio.vue';
 import { prettyPrice } from '@/utils/utils';
 import { useBoothDetail } from '@/stores/booths/boothDetail';
+import { useTableDetail } from '@/stores/booths/tableDetail';
 import { setBackgroundImage } from '@/utils/utils';
 import { storeToRefs } from 'pinia';
 import { onMounted, ref } from 'vue';
 import { ADMIN_CATEGORY, MENU_TYPE } from '@/utils/constants';
 import { alertError, api } from '@/utils/api';
-import { useTableDetail } from '@/stores/booths/tableDetail';
 import router from '@/router';
 
 const props = defineProps({
@@ -21,10 +21,11 @@ const props = defineProps({
 });
 
 const useBoothDetailStore = useBoothDetail();
+const useTableDetailStore = useTableDetail();
+
 const { reset, init } = useBoothDetailStore;
 const { boothInfo, menuList } = storeToRefs(useBoothDetailStore);
-
-const tableDetailStore = useTableDetail();
+const { tableNum } = storeToRefs(useTableDetailStore);
 
 const IMAGE_WIDTH = 210; // width + gap
 
@@ -80,10 +81,6 @@ const handleClickBoothEdit = () => {
   router.push({ name: 'BoothEdit' });
 };
 
-const handleClickTableCusotm = () => {
-  tableDetailStore.openTableDetailModal();
-};
-
 onMounted(async () => {
   reset();
   if (props.boothId) {
@@ -107,23 +104,13 @@ onMounted(async () => {
           <IconBoothInfo />
           <div class="text-primary-900 text-4xl font-semibold">{{ boothInfo.adminName }} 부스 정보</div>
         </div>
-        <div class="flex gap-5">
-          <button
-            v-if="ADMIN_CATEGORY[boothInfo.adminCategory] === 'night'"
-            class="is-button w-[130px] h-[48px] text-xl lg:w-[156px] lg:h-[53px]"
-            type="button"
-            @click="handleClickTableCusotm()"
-          >
-            테이블 관리
-          </button>
-          <button
-            class="is-button w-[80px] h-[48px] text-xl lg:w-[106px] lg:h-[53px]"
-            type="button"
-            @click="handleClickBoothEdit()"
-          >
-            수정
-          </button>
-        </div>
+        <button
+          class="is-button w-[80px] h-[48px] text-xl lg:w-[106px] lg:h-[53px]"
+          type="button"
+          @click="handleClickBoothEdit()"
+        >
+          수정
+        </button>
       </div>
       <div
         class="bg-white rounded-2xl w-full h-auto px-4 py-4 pb-12 gap-10 lg:py-[60px] lg:px-[60px] lg:gap-[60px] flex flex-col border-1 border-primary-700 text-secondary-700-light shadow-xs"
@@ -327,7 +314,7 @@ onMounted(async () => {
             <div class="flex items-center justify-center gap-2 flex-shrink-0 cursor-pointer">
               <IconRadio :is-active="boothInfo.isReservation" :read-only="true" />
               <div
-                class="text-secondary-900 text-xl font-semibold"
+                class="text-xl font-semibold"
                 :class="{
                   'text-success': boothInfo.isReservation,
                   'text-danger': !boothInfo.isReservation,
@@ -351,7 +338,13 @@ onMounted(async () => {
           <div class="flex gap-[28px]">
             <div class="flex items-center justify-center gap-2 flex-shrink-0 cursor-pointer" @click="useCoupon = true">
               <IconRadio :is-active="false" :read-only="true" />
-              <div class="text-xl font-semibold">
+              <div
+                class="text-xl font-semibold"
+                :class="{
+                  'text-success': boothInfo.isReservation,
+                  'text-danger': !boothInfo.isReservation,
+                }"
+              >
                 {{ false ? '사용 중' : '사용 안함' }}
               </div>
             </div>
@@ -372,7 +365,7 @@ onMounted(async () => {
             <div class="flex items-center justify-center gap-2 flex-shrink-0 cursor-pointer" @click="useOrder = true">
               <IconRadio :is-active="boothInfo.isOrder" :read-only="true" />
               <div
-                class="text-secondary-900 text-xl font-semibold"
+                class="text-xl font-semibold"
                 :class="{
                   'text-success': boothInfo.isOrder,
                   'text-danger': !boothInfo.isOrder,
@@ -382,6 +375,19 @@ onMounted(async () => {
               </div>
             </div>
           </div>
+        </div>
+
+        <!-- 테이블 정보 -->
+        <div
+          v-if="ADMIN_CATEGORY[boothInfo.adminCategory] === 'night' && boothInfo.isOrder"
+          class="flex gap-6 md:gap-[40px] items-center flex-wrap"
+        >
+          <div
+            class="h-[60px] rounded-2xl text-primary-900 flex items-center justify-center font-semibold text-xl lg:text-2xl bg-primary-700 px-[24px]"
+          >
+            현재 테이블 개수
+          </div>
+          <div class="text-xl lg:text-2xl font-semibold text-secondary-900">{{ tableNum }}개</div>
         </div>
       </div>
     </form>

@@ -3,6 +3,7 @@ import { ref } from 'vue';
 
 import { useBoothList } from './boothList';
 import { useUser } from '../user';
+import { useTableDetail } from './tableDetail';
 import { alertError, api } from '@/utils/api';
 import { ADMIN_CATEGORY } from '@/utils/constants';
 
@@ -10,6 +11,7 @@ export const useBoothDetail = defineStore('boothDetail', () => {
   const useBoothListStore = useBoothList();
   const { getAllBoothList } = useBoothListStore;
   const { boothList } = storeToRefs(useBoothListStore);
+  const { getTableList } = useTableDetail();
   const { isAdmin } = storeToRefs(useUser());
 
   const boothInfo = ref({
@@ -80,13 +82,19 @@ export const useBoothDetail = defineStore('boothDetail', () => {
     const booth = boothList.value.find((booth) => booth.boothId === boothId);
     boothInfo.value = booth;
     boothType.value = ADMIN_CATEGORY[booth.adminCategory];
-    if (ADMIN_CATEGORY[booth.adminCategory] === 'night') {
-      const res = await api.get(`/admin/booth/night/${boothId}`);
-      if (res.data.success) {
-        boothInfo.value = res.data.boothInfo;
-      } else {
-        //데이터 가져오기 실패
+
+    try {
+      if (ADMIN_CATEGORY[booth.adminCategory] === 'night') {
+        const res = await api.get(`/admin/booth/night/${boothId}`);
+        if (res.data.success) {
+          boothInfo.value = res.data.boothInfo;
+        } else {
+          alertError(res.data.message);
+        }
       }
+    } catch (error) {
+      console.error(error);
+      alertError(error);
     }
   };
 
@@ -143,6 +151,11 @@ export const useBoothDetail = defineStore('boothDetail', () => {
         boothInfo.value = boothData.boothInfo;
         menuList.value = menuData.menuList;
         originalMenuList.value = JSON.parse(JSON.stringify(menuData.menuList));
+
+        if (boothData.boothInfo?.isOrder) {
+          await getTableList(boothId);
+        }
+
         return true;
       } else {
         alertError(boothData.message + menuData.message);
