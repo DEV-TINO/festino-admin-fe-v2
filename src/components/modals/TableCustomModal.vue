@@ -14,7 +14,7 @@ const { tableNumList, tableNum } = storeToRefs(useTableDetailStore);
 const { closeTableDetailModal } = useTableDetailStore;
 
 const modalContainer = ref(null);
-const newTableNumList = ref(tableNumList.value || []);
+const newTableNumList = ref([...tableNumList.value] || []);
 
 const handleInputCustomTableNum = (event, index) => {
   newTableNumList.value[index].customTableNum = event.target.value;
@@ -36,14 +36,19 @@ const handleClickTotalDeleteButton = () => {
   newTableNumList.value = [];
 };
 
+const handleClickDeleteButton = () => {
+  newTableNumList.value.pop();
+};
+
 const handleClickSaveButton = () => {
-  tableNumList.value = newTableNumList.value;
+  tableNumList.value = [...newTableNumList.value];
   tableNum.value = newTableNumList.value.length;
   closeTableDetailModal();
 };
 
 const handleClickCancelButton = () => {
-  newTableNumList.value.pop();
+  newTableNumList.value = [...tableNumList.value];
+  closeTableDetailModal();
 };
 
 onMounted(() => {
@@ -83,7 +88,7 @@ onMounted(() => {
         />
         <div
           v-if="index === newTableNumList.length - 1"
-          @click="handleClickCancelButton()"
+          @click="handleClickDeleteButton()"
           class="absolute right-5 text-base text-danger cursor-pointer"
         >
           삭제
@@ -126,7 +131,7 @@ onMounted(() => {
       <button
         class="is-button is-outlined w-[100px] h-[50px] font-semibold"
         type="button"
-        @click="closeTableDetailModal()"
+        @click="handleClickCancelButton()"
       >
         취소
       </button>
