@@ -827,24 +827,19 @@ onMounted(async () => {
         </div>
 
         <!-- 테이블 정보 및 테이블 커스텀 -->
-        <div v-if="ADMIN_CATEGORY[boothInfo.adminCategory] === 'night' && useOrder" class="flex flex-col gap-[10px]">
-          <div class="text-xl">테이블 개수</div>
-          <div class="flex gap-11">
-            <input
-              class="w-[470px] h-[60px] border border-gray-500 rounded-2xl px-[20px] focus:border-primary-900"
-              type="text"
-              maxlength="10"
-              placeholder="테이블 개수를 입력하세요."
-              @input="handleInputTableNum($event)"
-              :value="tableNum"
-              :disabled="isSubmit"
-            />
-            <div
-              @click="handleClickTableCusotm()"
-              class="is-button w-[140px] lg:w-[160px] font-semibold text-xl lg:text-2xl shrink-0 cursor-pointer flex justify-center items-center"
-            >
-              테이블 커스텀
-            </div>
+        <div
+          v-if="ADMIN_CATEGORY[boothInfo.adminCategory] === 'night' && useOrder"
+          class="w-[530px] h-[110px] flex justify-between items-center border-1 border-cancel rounded-2xl p-5"
+        >
+          <div class="flex flex-col text-xl gap-2">
+            <div>현재 테이블 수</div>
+            <div class="font-bold">{{ tableNum }}개</div>
+          </div>
+          <div
+            @click="handleClickTableCusotm()"
+            class="is-button h-[64px] w-[180px] lg:w-[160px] font-semibold text-xl lg:text-2xl shrink-0 cursor-pointer flex justify-center items-center"
+          >
+            테이블 커스텀
           </div>
         </div>
       </div>
