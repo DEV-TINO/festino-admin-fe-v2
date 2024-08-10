@@ -39,9 +39,10 @@ export const useTableDetail = defineStore('tableDetail', () => {
         tableNumList: tableNumList.value,
       });
       if (res.data.success) {
-        alert('테이블 정보가 수정되었습니다.');
+        return true;
       } else {
         alertError(res.data.message);
+        return false;
       }
     } catch (error) {
       console.log(error);
@@ -55,8 +56,7 @@ export const useTableDetail = defineStore('tableDetail', () => {
         table.customTableNum = table.tableNumIndex;
       }
     });
-    await updateTableList(boothId);
-    baseModalStore.closeModal();
+    return await updateTableList(boothId);
   };
 
   return {

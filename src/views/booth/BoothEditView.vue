@@ -13,6 +13,7 @@ import { alertError, api, imagesUpload } from '@/utils/api';
 import IconRadio from '@/components/icons/IconRadio.vue';
 import { useMenuModal } from '@/stores/menu/menuModal';
 import { useUser } from '@/stores/user';
+import { useTableDetail } from '@/stores/booths/tableDetail';
 
 const props = defineProps({
   boothId: String,
@@ -20,11 +21,15 @@ const props = defineProps({
 
 const boothDetailStore = useBoothDetail();
 const useUserStore = useUser();
+const useTableDetailStore = useTableDetail();
+
 const { isAdmin } = storeToRefs(useUserStore);
+const { tableNum } = storeToRefs(useTableDetailStore);
 
 const { init, reset, deleteMenu, createMenu, addDeleteMenu, patchMenu, addPatchMenu } = boothDetailStore;
 const { boothInfo, menuList, createMenuList, deleteMenuList, boothType, patchMenuList, originalMenuList } =
   storeToRefs(boothDetailStore);
+const { sumbitTableDetail } = useTableDetailStore;
 
 const menuModalStore = useMenuModal();
 const { openModal } = menuModalStore;
@@ -136,6 +141,17 @@ const handleInputAccount = (event) => {
   boothInfo.value.accountInfo.account = formattedValue;
 };
 
+const handleInputTableNum = (event) => {
+  if (isSubmit.value) return;
+  const inputValue = parseInt(event.target.value.replace(/\D/g, ''), 10) || '';
+  event.target.value = inputValue;
+  tableNum.value = inputValue;
+};
+
+const handleClickTableCusotm = () => {
+  useTableDetailStore.openTableDetailModal();
+};
+
 const handleClickDeleteMenu = async ({ menuIndex, menuId }) => {
   if (isSubmit.value) return;
   addDeleteMenu(menuId);
@@ -196,8 +212,9 @@ const handleClickSubmit = async () => {
           isReservation: useReservation.value,
           accountInfo: boothInfo.value.accountInfo,
         });
-        console.log('accountInfo', boothInfo.value.accountInfo);
+
         const nightSaveBoothData = nightSaveBoothResponse.data;
+
         if (nightSaveBoothData.success) {
           newBoothId = nightSaveBoothData.boothId;
         } else {
@@ -348,6 +365,11 @@ const handleClickSubmit = async () => {
       })
       .filter((result) => result),
   ]);
+
+  if (ADMIN_CATEGORY[boothInfo.value.adminCategory] === 'night') {
+    const tableDetailResult = await sumbitTableDetail(props.boothId);
+    if (!tableDetailResult) return;
+  }
 
   isSubmit.value = false;
   router.push(`/booth/${boothInfo.value.boothId}`);
@@ -800,6 +822,28 @@ onMounted(async () => {
             <div class="flex items-center justify-center gap-2 flex-shrink-0 cursor-pointer" @click="useOrder = false">
               <IconRadio :is-active="!useOrder" />
               <div class="text-secondary-900 text-xl font-semibold">사용 비동의</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 테이블 정보 및 테이블 커스텀 -->
+        <div v-if="ADMIN_CATEGORY[boothInfo.adminCategory] === 'night' && useOrder" class="flex flex-col gap-[10px]">
+          <div class="text-xl">테이블 개수</div>
+          <div class="flex gap-11">
+            <input
+              class="w-[470px] h-[60px] border border-gray-500 rounded-2xl px-[20px] focus:border-primary-900"
+              type="text"
+              maxlength="10"
+              placeholder="테이블 개수를 입력하세요."
+              @input="handleInputTableNum($event)"
+              :value="tableNum"
+              :disabled="isSubmit"
+            />
+            <div
+              @click="handleClickTableCusotm()"
+              class="is-button w-[140px] lg:w-[160px] font-semibold text-xl lg:text-2xl shrink-0 cursor-pointer flex justify-center items-center"
+            >
+              테이블 커스텀
             </div>
           </div>
         </div>
