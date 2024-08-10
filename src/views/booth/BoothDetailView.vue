@@ -113,7 +113,7 @@ onMounted(async () => {
             type="button"
             @click="handleClickTableCusotm()"
           >
-            테이블 커스텀
+            테이블 관리
           </button>
           <button
             class="is-button w-[80px] h-[48px] text-xl lg:w-[106px] lg:h-[53px]"
