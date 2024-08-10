@@ -35,7 +35,9 @@ export const useTableDetail = defineStore('tableDetail', () => {
         boothId,
         tableNumList: tableNumList.value,
       });
-      if (!res.data.success) {
+      if (res.data.success) {
+        alert('테이블 정보가 수정되었습니다.');
+      } else {
         alertError(res.data.message);
       }
     } catch (error) {

@@ -2,14 +2,14 @@
 import { nextTick, onMounted, ref } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useTableDetail } from '@/stores/booths/tableDetail';
-import { useUser } from '@/stores/user';
+import { useBoothDetail } from '@/stores/booths/boothDetail';
 import IconNotFound from '../icons/IconNotFound.vue';
 
 const useTableDetailStore = useTableDetail();
-const useUserStore = useUser();
+const useBoothDetailStore = useBoothDetail();
 
 const { tableNumList } = storeToRefs(useTableDetailStore);
-const { userOwnBoothId } = storeToRefs(useUserStore);
+const { boothInfo } = storeToRefs(useBoothDetailStore);
 
 const { closeTableDetailModal, sumbitTableDetail, getTableList } = useTableDetailStore;
 
@@ -32,7 +32,7 @@ const handleClickDeleteTableButton = () => {
 };
 
 onMounted(() => {
-  getTableList(userOwnBoothId.value);
+  getTableList(boothInfo.value.boothId);
 });
 </script>
 
@@ -98,7 +98,7 @@ onMounted(() => {
             class="is-button w-[100px] h-[50px] font-semibold"
             type="submit"
             ref="submit"
-            @click="sumbitTableDetail(userOwnBoothId)"
+            @click="sumbitTableDetail(boothInfo.boothId)"
             autofocus
           >
             확인
