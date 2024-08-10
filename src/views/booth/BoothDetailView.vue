@@ -109,6 +109,7 @@ onMounted(async () => {
         </div>
         <div class="flex gap-5">
           <button
+            v-if="ADMIN_CATEGORY[boothInfo.adminCategory] === 'night'"
             class="is-button w-[130px] h-[48px] text-xl lg:w-[156px] lg:h-[53px]"
             type="button"
             @click="handleClickTableCusotm()"
