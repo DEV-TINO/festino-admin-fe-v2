@@ -5,6 +5,7 @@ import IconIndicator from '@/components/icons/IconIndicator.vue';
 import IconRadio from '@/components/icons/IconRadio.vue';
 import { prettyPrice } from '@/utils/utils';
 import { useBoothDetail } from '@/stores/booths/boothDetail';
+import { useTableDetail } from '@/stores/booths/tableDetail';
 import { setBackgroundImage } from '@/utils/utils';
 import { storeToRefs } from 'pinia';
 import { onMounted, ref } from 'vue';
@@ -20,8 +21,11 @@ const props = defineProps({
 });
 
 const useBoothDetailStore = useBoothDetail();
+const useTableDetailStore = useTableDetail();
+
 const { reset, init } = useBoothDetailStore;
 const { boothInfo, menuList } = storeToRefs(useBoothDetailStore);
+const { tableNum } = storeToRefs(useTableDetailStore);
 
 const IMAGE_WIDTH = 210; // width + gap
 
@@ -118,7 +122,7 @@ onMounted(async () => {
           >
             부스 정보
           </div>
-          <div class="w-full bg-primary-900-lighter h-auto rounded-2xl px-[40px] py-[40px]">
+          <div class="w-full bg-primary-500-light h-auto rounded-2xl px-[40px] py-[40px]">
             <div
               class="w-full bg-primary-700 h-full rounded-2xl border border-primary-700 grid grid-cols-[120px_1fr] grid-rows-[80px_80px_200px_280px] 2xl:grid-cols-[200px_1fr_200px_1fr] 2xl:grid-rows-[80px_200px_280px] place-items-stretch"
             >
@@ -192,7 +196,7 @@ onMounted(async () => {
           >
             계좌 정보
           </div>
-          <div class="w-full bg-primary-900-lighter h-auto rounded-2xl px-[40px] py-[40px]">
+          <div class="w-full bg-primary-500-light h-auto rounded-2xl px-[40px] py-[40px]">
             <div
               class="w-full bg-primary-700 h-full rounded-2xl border border-primary-700 grid grid-cols-[120px_1fr] grid-rows-[80px_80px_80px] 2xl:grid-cols-[200px_1fr_200px_1fr] 2xl:grid-rows-[80px_80px] place-items-stretch"
             >
@@ -232,7 +236,7 @@ onMounted(async () => {
           >
             메뉴 정보
           </div>
-          <div class="bg-primary-900-lighter rounded-2xl w-full lg:py-[40px] lg:px-[60px] px-4 py-4 flex flex-col">
+          <div class="bg-primary-500-light rounded-2xl w-full lg:py-[40px] lg:px-[60px] px-4 py-4 flex flex-col">
             <div class="grid gap-4 grid-cols-1 2xl:grid-cols-2">
               <div
                 v-for="(menu, menuIndex) in menuList"
@@ -310,7 +314,7 @@ onMounted(async () => {
             <div class="flex items-center justify-center gap-2 flex-shrink-0 cursor-pointer">
               <IconRadio :is-active="boothInfo.isReservation" :read-only="true" />
               <div
-                class="text-secondary-900 text-xl font-semibold"
+                class="text-xl font-semibold"
                 :class="{
                   'text-success': boothInfo.isReservation,
                   'text-danger': !boothInfo.isReservation,
@@ -334,7 +338,13 @@ onMounted(async () => {
           <div class="flex gap-[28px]">
             <div class="flex items-center justify-center gap-2 flex-shrink-0 cursor-pointer" @click="useCoupon = true">
               <IconRadio :is-active="false" :read-only="true" />
-              <div class="text-xl font-semibold">
+              <div
+                class="text-xl font-semibold"
+                :class="{
+                  'text-success': boothInfo.isReservation,
+                  'text-danger': !boothInfo.isReservation,
+                }"
+              >
                 {{ false ? '사용 중' : '사용 안함' }}
               </div>
             </div>
@@ -355,7 +365,7 @@ onMounted(async () => {
             <div class="flex items-center justify-center gap-2 flex-shrink-0 cursor-pointer" @click="useOrder = true">
               <IconRadio :is-active="boothInfo.isOrder" :read-only="true" />
               <div
-                class="text-secondary-900 text-xl font-semibold"
+                class="text-xl font-semibold"
                 :class="{
                   'text-success': boothInfo.isOrder,
                   'text-danger': !boothInfo.isOrder,
@@ -365,6 +375,19 @@ onMounted(async () => {
               </div>
             </div>
           </div>
+        </div>
+
+        <!-- 테이블 정보 -->
+        <div
+          v-if="ADMIN_CATEGORY[boothInfo.adminCategory] === 'night' && boothInfo.isOrder"
+          class="flex gap-6 md:gap-[40px] items-center flex-wrap"
+        >
+          <div
+            class="h-[60px] rounded-2xl text-primary-900 flex items-center justify-center font-semibold text-xl lg:text-2xl bg-primary-700 px-[24px]"
+          >
+            현재 테이블 개수
+          </div>
+          <div class="text-xl lg:text-2xl font-semibold text-secondary-900">{{ tableNum }}개</div>
         </div>
       </div>
     </form>

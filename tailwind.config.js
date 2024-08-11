@@ -53,6 +53,7 @@ export default {
           },
           500: {
             DEFAULT: 'rgba(48, 130, 246, 0.05)',
+            light: 'rgba(0, 115, 240, 0.03)',
           },
           300: {
             light: 'rgba(0, 0, 0, 0.03)',
