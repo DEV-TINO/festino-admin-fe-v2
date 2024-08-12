@@ -196,7 +196,7 @@ onMounted(async () => {
             v-for="(menu, index) in allOrderStatistics.menuSaleList"
             :key="index"
           >
-            <p class="basis-1/3 text-secondary-700-light">{{ menu.menuName }} (12,000원)</p>
+            <p class="basis-1/3 text-secondary-700-light">{{ menu.menuName }}</p>
             <p class="basis-1/5 text-center text-secondary-700-light">{{ menu.menuCount }}개</p>
             <p class="basis-1/5 min-w-[130px] text-center text-secondary-700-light">{{ prettyPrice(menu.menuSale || 0) }}</p>
           </div>
