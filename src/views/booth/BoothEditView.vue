@@ -24,7 +24,7 @@ const useUserStore = useUser();
 const useTableDetailStore = useTableDetail();
 
 const { isAdmin } = storeToRefs(useUserStore);
-const { tableNum } = storeToRefs(useTableDetailStore);
+const { tableNum, tableNumList } = storeToRefs(useTableDetailStore);
 
 const { init, reset, deleteMenu, createMenu, addDeleteMenu, patchMenu, addPatchMenu } = boothDetailStore;
 const { boothInfo, menuList, createMenuList, deleteMenuList, boothType, patchMenuList, originalMenuList } =
@@ -421,13 +421,13 @@ onMounted(async () => {
         <!-- 부스 정보 -->
         <div class="flex flex-col gap-[20px] w-full">
           <div
-            class="w-[137px] h-[61px] rounded-2xl flex items-center justify-center bg-primary-700 text-primary-900 text-2xl font-semibold"
+            class="w-[137px] h-[61px] rounded-2xl flex items-center justify-center bg-primary-700 text-primary-900-light text-2xl font-semibold"
           >
             부스 정보
           </div>
 
           <div
-            class="bg-primary-500-light rounded-2xl w-full py-4 px-4 lg:py-[40px] lg:px-[60px] flex flex-col gap-[30px] xl:gap-[20px] border-1 border-primary-700"
+            class="bg-primary-500-light rounded-2xl w-full py-4 px-4 lg:py-[40px] lg:px-[40px] flex flex-col gap-[30px] xl:gap-[20px] border-1 border-primary-700"
           >
             <!-- 학과명 -->
             <div class="flex gap-2 flex-wrap xl:flex-nowrap">
@@ -605,13 +605,51 @@ onMounted(async () => {
                 </div>
               </div>
             </div>
+
+            <!-- 테이블 정보 -->
+            <div v-if="ADMIN_CATEGORY[boothInfo.adminCategory] === 'night'">
+              <div class="flex xl:items-center items-start justify-between py-10 flex-col gap-10 sm:flex-row">
+                <div class="flex items-start flex-col gap-[26px] xl:items-center xl:flex-row">
+                  <div
+                    class="w-[280px] h-[61px] rounded-2xl flex items-center justify-center bg-primary-700 text-primary-900-light text-xl lg:text-2xl font-semibold px-5 gap-7 shrink-0"
+                  >
+                    현재 테이블 개수 <span class="text-secondary-700-light">{{ tableNum }}개</span>
+                  </div>
+                  <div class="text-secondary-500">* 테이블 번호 클릭 시 테이블의 QR 링크가 복사됩니다.</div>
+                </div>
+                <div
+                  @click="handleClickTableCusotm()"
+                  class="is-button h-[53px] w-[195px] lg:w-[175px] font-semibold text-xl lg:text-2xl shrink-0 cursor-pointer grid place-items-center"
+                >
+                  테이블 커스텀
+                </div>
+              </div>
+              <div class="grid 3xl:grid-cols-3 xl:grid-cols-2 gap-5">
+                <div
+                  v-for="(table, index) in tableNumList"
+                  :key="index"
+                  class="w-[467px] h-20 flex text-center rounded-3lg shadow-secondary"
+                >
+                  <div
+                    class="w-[180px] bg-primary-700 rounded-l-3lg border-1 border-primary-700-dark text-secondary-700-light font-medium text-xl grid place-items-center"
+                  >
+                    테이블 {{ index + 1 }}
+                  </div>
+                  <div
+                    class="grow bg-white rounded-r-3lg border-1 border-primary-900-ligther border-l-0 grid place-items-center text-secondary-700 text-2xl font-semibold"
+                  >
+                    {{ table.customTableNum }}
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
         <!-- 계좌정보 -->
         <div v-if="ADMIN_CATEGORY[boothInfo.adminCategory] === 'night'" class="flex flex-col gap-[20px] w-full">
           <div
-            class="w-[137px] h-[61px] rounded-2xl flex items-center justify-center bg-primary-700 text-primary-900 text-2xl font-semibold"
+            class="w-[137px] h-[61px] rounded-2xl flex items-center justify-center bg-primary-700 text-primary-900-light text-2xl font-semibold"
           >
             계좌 정보
           </div>
@@ -670,7 +708,7 @@ onMounted(async () => {
         <!-- 메뉴 정보 -->
         <div v-if="ADMIN_CATEGORY[boothInfo.adminCategory] === 'night'" class="flex flex-col gap-[20px] w-full">
           <div
-            class="w-[137px] h-[61px] rounded-2xl flex items-center justify-center bg-primary-700 text-primary-900 text-2xl font-semibold"
+            class="w-[137px] h-[61px] rounded-2xl flex items-center justify-center bg-primary-700 text-primary-900-light text-2xl font-semibold"
           >
             메뉴 정보
           </div>
@@ -763,7 +801,7 @@ onMounted(async () => {
         >
           <div class="w-[232px] h-[60px]">
             <div
-              class="w-[226px] h-[60px] rounded-2xl text-primary-900 flex items-center justify-center font-semibold text-2xl bg-primary-700 px-[24px]"
+              class="w-[226px] h-[60px] rounded-2xl text-primary-900-light flex items-center justify-center font-semibold text-2xl bg-primary-700 px-[24px]"
             >
               예약기능 사용 여부
             </div>
@@ -790,7 +828,7 @@ onMounted(async () => {
         <div v-if="false" class="flex gap-6 md:gap-[40px] items-center flex-wrap">
           <div class="w-[232px] h-[60px]">
             <div
-              class="w-[184px] h-[60px] rounded-2xl text-primary-900 flex items-center justify-center font-semibold text-2xl bg-primary-700 px-[24px]"
+              class="w-[184px] h-[60px] rounded-2xl text-primary-900-light flex items-center justify-center font-semibold text-2xl bg-primary-700 px-[24px]"
             >
               쿠폰 진행 여부
             </div>
@@ -813,7 +851,7 @@ onMounted(async () => {
           class="flex gap-6 md:gap-[40px] items-center flex-wrap"
         >
           <div
-            class="w-[232px] h-[60px] rounded-2xl text-primary-900 flex items-center justify-center font-semibold text-2xl bg-primary-700 px-[24px]"
+            class="w-[232px] h-[60px] rounded-2xl text-primary-900-light flex items-center justify-center font-semibold text-2xl bg-primary-700 px-[24px]"
           >
             주문 기능 사용 여부
           </div>
@@ -826,23 +864,6 @@ onMounted(async () => {
               <IconRadio :is-active="!useOrder" />
               <div class="text-secondary-900 text-xl font-semibold">사용 비동의</div>
             </div>
-          </div>
-        </div>
-
-        <!-- 테이블 정보 및 테이블 커스텀 -->
-        <div
-          v-if="ADMIN_CATEGORY[boothInfo.adminCategory] === 'night' && useOrder"
-          class="w-[530px] h-[110px] flex justify-between items-center border-1 border-cancel rounded-2xl p-5"
-        >
-          <div class="flex flex-col text-xl gap-2">
-            <div>현재 테이블 수</div>
-            <div class="font-bold">{{ tableNum }}개</div>
-          </div>
-          <div
-            @click="handleClickTableCusotm()"
-            class="is-button h-[64px] w-[180px] lg:w-[160px] font-semibold text-xl lg:text-2xl shrink-0 cursor-pointer flex justify-center items-center"
-          >
-            테이블 커스텀
           </div>
         </div>
       </div>
