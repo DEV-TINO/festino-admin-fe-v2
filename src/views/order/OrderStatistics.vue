@@ -7,6 +7,7 @@ import { computed, ref, watchEffect, watch, onMounted } from 'vue';
 import StatisticsGraph from '@/views/order/OrderStatisticsGraph.vue';
 import { prettyPrice } from '@/utils/utils';
 import { DATES } from '@/utils/constants';
+import IconDropDown from '@/components/icons/IconDropDown.vue';
 
 const useBaseOrderStore = useBaseOrder();
 const useOrderStatisticsStore = useOrderStatistics();
@@ -79,6 +80,26 @@ const fetchStatistics = async () => {
   }
 };
 
+const handleStatisticsSort = (sort) => {
+  const menuList = [...allOrderStatistics.value.menuSaleList]; 
+
+  if (sort === 'nameAsc') {
+    menuList.sort((a, b) => a.menuName.localeCompare(b.menuName));
+  } else if (sort === 'nameDesc') {
+    menuList.sort((a, b) => b.menuName.localeCompare(a.menuName));
+  } else if (sort === 'countAsc') {
+    menuList.sort((a, b) => a.menuCount - b.menuCount);
+  } else if (sort === 'countDesc') {
+    menuList.sort((a, b) => b.menuCount - a.menuCount);
+  } else if (sort === 'saleAsc') {
+    menuList.sort((a, b) => a.menuSale - b.menuSale);
+  } else if (sort === 'saleDesc') {
+    menuList.sort((a, b) => b.menuSale - a.menuSale);
+  }
+
+  allOrderStatistics.value.menuSaleList = menuList;
+}
+
 watchEffect(() => {
   selectBooth.value = boothList.value.find((booth) => booth.boothId === selectBoothId.value) || {};
 });
@@ -110,7 +131,7 @@ onMounted(async () => {
       <StatisticsGraph />
     </div>
     <div class="w-1/2 min-w-[490px] h-full overflow-hidden p-[40px] border-r border-y border-primary-900 rounded-r-[20px] flex flex-col justify-between items-center">
-      <div class="min-w-[432px] font-semibold text-primary-900 text-[28px]">{{ selectBooth?.adminName }} 야간부스 매출 통계</div>
+      <div class="min-w-[432px] font-semibold text-primary-900 text-[28px] flex justify-center">{{ selectBooth?.adminName }} 야간부스 매출 통계</div>
       <div class="w-full flex justify-center gap-4">
         <button
           type="button"
@@ -124,24 +145,60 @@ onMounted(async () => {
         </button>
       </div>
       <div
-        class="max-w-[712px] w-full h-[380px] rounded-3xl flex flex-col text-secondary-500 border-2 border-[rgba(0,115,240,0.16)] relative"
+        class="max-w-[712px] w-full h-[380px] rounded-3xl flex flex-col text-secondary-500 border-2 bg-white border-[rgba(0,115,240,0.16)] relative"
       >
         <div
-          class="flex flex-row justify-between bg-[#E6F0FB] rounded-t-3xl font-semibold pl-7 h-[43px] border-b-2 border-[#C7C7C7] items-center shrink-0"
+          class="h-[50px] flex flex-row justify-between bg-[#E6F0FB] rounded-t-3xl font-semibold pl-7 border-b-2 border-[#C7C7C7] items-center shrink-0"
         >
-          <p class="basis-1/3">메뉴</p>
-          <p class="basis-1/5 text-center">수량</p>
-          <p class="basis-1/5 min-w-[130px] text-center">가격</p>
+          <p class="basis-1/3 h-full flex items-center font-semibold select-none">
+            메뉴
+            <div>
+              <IconDropDown 
+                class="-scale-y-100 hover:stroke-[#0073F0]"
+                @click="handleStatisticsSort('nameAsc')"
+              />
+              <IconDropDown 
+                class="hover:stroke-[#0073F0]" 
+                @click="handleStatisticsSort('nameDesc')"
+              />
+            </div>
+          </p>
+          <p class="basis-1/4 text-center flex justify-center items-center font-semibold select-none">
+            수량
+            <div>
+              <IconDropDown 
+                class="-scale-y-100 hover:stroke-[#0073F0]"
+                @click="handleStatisticsSort('countAsc')"
+              />
+              <IconDropDown 
+                class="hover:stroke-[#0073F0]" 
+                @click="handleStatisticsSort('countDesc')"
+              />
+            </div>
+          </p>
+          <p class="basis-1/5 min-w-[130px] text-center flex justify-center items-center font-semibold select-none">
+            가격
+            <div>
+              <IconDropDown 
+                class="-scale-y-100 hover:stroke-[#0073F0]"
+                @click="handleStatisticsSort('saleAsc')"
+              />
+              <IconDropDown 
+                class="hover:stroke-[#0073F0]" 
+                @click="handleStatisticsSort('saleDesc')"
+              />
+            </div>
+          </p>
         </div>
         <div class="h-full overflow-y-scroll scrollbar-hide">
           <div
-            class="flex flex-row justify-between font-normal pl-7 h-10 items-center border-b-2 border-[#C7C7C7] shrink-0 hover:bg-gray-200"
+            class="flex flex-row justify-between font-normal pl-7 min-h-10 items-center border-b-2 border-[#C7C7C7] shrink-0 hover:bg-gray-200"
             v-for="(menu, index) in allOrderStatistics.menuSaleList"
             :key="index"
           >
-            <p class="basis-1/3">{{ menu.menuName }}</p>
-            <p class="basis-1/5 text-center">{{ menu.menuCount }}개</p>
-            <p class="basis-1/5 min-w-[130px] text-center">{{ prettyPrice(menu.menuSale || 0) }}</p>
+            <p class="basis-1/3 text-secondary-700-light">{{ menu.menuName }} (12,000원)</p>
+            <p class="basis-1/5 text-center text-secondary-700-light">{{ menu.menuCount }}개</p>
+            <p class="basis-1/5 min-w-[130px] text-center text-secondary-700-light">{{ prettyPrice(menu.menuSale || 0) }}</p>
           </div>
         </div>
         <div

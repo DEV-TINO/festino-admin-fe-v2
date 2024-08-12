@@ -76,7 +76,7 @@ const options = ref({
       grid: { display: true },
       title: {
         display: true,
-        text: '메뉴'
+        text: '[ 메뉴 ]'
       }
     },
     y: {
@@ -86,7 +86,7 @@ const options = ref({
       grid: { display: true },
       title: {
         display: true,
-        text: '판매량'
+        text: '[ 판매량 ]'
       }
     },
   },
