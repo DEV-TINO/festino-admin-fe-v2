@@ -235,7 +235,7 @@ onUnmounted(() => {
     <div class="flex gap-[10px] overflow-x-auto pb-[40px]">
       <button
         type="button"
-        class="min-w-[120px] w-[200px] h-[50px] is-button no-scroll relative"
+        class="min-w-[120px] w-[200px] h-[50px] is-button no-scroll"
         :class="{
           'is-outlined': orderStatus !== orderCategory,
         }"
@@ -243,12 +243,14 @@ onUnmounted(() => {
         v-for="(orderCategory, orderCategoryIndex) in orderCategories"
         :key="orderCategoryIndex"
       >
-        {{ ORDER_CATEGORY[orderCategory] }}
-        <!-- 실시간 빨간 점 -->
-        <div
-          v-if="orderCategory === 'realTime' && orderStatus != 'realTime' && isNewOrderExist"
-          class="absolute bg-secondary-200 w-4 h-4 rounded-full top-4 right-12"
-        ></div>
+        <div class="relative">
+          {{ ORDER_CATEGORY[orderCategory] }}
+          <!-- 실시간 빨간 점 -->
+          <div
+            v-if="orderCategory === 'realTime' && orderStatus != 'realTime' && isNewOrderExist"
+            class="absolute bg-secondary-200 w-4 h-4 rounded-full top-[6px] right-3"
+          ></div>
+        </div>
       </button>
     </div>
 
