@@ -25,7 +25,7 @@ const useTableDetailStore = useTableDetail();
 
 const { reset, init } = useBoothDetailStore;
 const { boothInfo, menuList } = storeToRefs(useBoothDetailStore);
-const { tableNum } = storeToRefs(useTableDetailStore);
+const { tableNum, tableNumList } = storeToRefs(useTableDetailStore);
 
 const IMAGE_WIDTH = 210; // width + gap
 
@@ -118,7 +118,7 @@ onMounted(async () => {
         <!-- 부스 정보 -->
         <div class="flex flex-col gap-[20px] w-full">
           <div
-            class="w-[137px] h-[61px] rounded-2xl flex items-center justify-center bg-primary-700 text-primary-900 text-xl lg:text-2xl font-semibold"
+            class="w-[137px] h-[61px] rounded-2xl flex items-center justify-center bg-primary-700 text-primary-900-light text-xl lg:text-2xl font-semibold"
           >
             부스 정보
           </div>
@@ -186,13 +186,43 @@ onMounted(async () => {
                 <IconIndicator :right="true" @click="handleClickRightIndicator()" />
               </div>
             </div>
+            <!-- 테이블 정보 -->
+            <div v-if="ADMIN_CATEGORY[boothInfo.adminCategory] === 'night'">
+              <div class="flex items-start flex-col gap-[26px] py-10 lg:items-center lg:flex-row">
+                <div
+                  class="w-[280px] h-[61px] rounded-2xl flex items-center justify-center bg-primary-700 text-primary-900-light text-xl lg:text-2xl font-semibold px-5 gap-7 shrink-0"
+                >
+                  현재 테이블 개수 <span class="text-secondary-700-light">{{ tableNum }}개</span>
+                </div>
+                <div class="text-secondary-500">* 테이블 번호 클릭 시 테이블의 QR 링크가 복사됩니다.</div>
+              </div>
+              <!-- <div class="grid 2xl:grid-cols-3 lg:grid-cols-2 gap-5"> -->
+              <div class="grid 3xl:grid-cols-3 xl:grid-cols-2 gap-5">
+                <div
+                  v-for="(table, index) in tableNumList"
+                  :key="index"
+                  class="w-[467px] h-20 flex text-center rounded-3lg shadow-secondary"
+                >
+                  <div
+                    class="w-[180px] bg-primary-700 rounded-l-3lg border-1 border-primary-700-dark text-secondary-700-light font-medium text-xl grid place-items-center"
+                  >
+                    테이블 {{ index + 1 }}
+                  </div>
+                  <div
+                    class="grow bg-white rounded-r-3lg border-1 border-primary-900-ligther border-l-0 grid place-items-center text-secondary-700 text-2xl font-semibold"
+                  >
+                    {{ table.customTableNum }}
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
         <!-- 계좌 정보  -->
         <div v-if="ADMIN_CATEGORY[boothInfo.adminCategory] === 'night'" class="flex flex-col gap-[20px] w-full">
           <div
-            class="w-[137px] h-[61px] rounded-2xl flex items-center justify-center bg-primary-700 text-primary-900 text-xl lg:text-2xl font-semibold"
+            class="w-[137px] h-[61px] rounded-2xl flex items-center justify-center bg-primary-700 text-primary-900-light text-xl lg:text-2xl font-semibold"
           >
             계좌 정보
           </div>
@@ -232,7 +262,7 @@ onMounted(async () => {
         <!-- 메뉴 정보 -->
         <div v-if="ADMIN_CATEGORY[boothInfo.adminCategory] === 'night'" class="flex flex-col gap-[20px] w-full">
           <div
-            class="w-[137px] h-[61px] rounded-2xl flex items-center justify-center bg-primary-700 text-primary-900 text-xl lg:text-2xl font-semibold"
+            class="w-[137px] h-[61px] rounded-2xl flex items-center justify-center bg-primary-700 text-primary-900-light text-xl lg:text-2xl font-semibold"
           >
             메뉴 정보
           </div>
@@ -251,7 +281,9 @@ onMounted(async () => {
                   <div class="flex flex-col w-full">
                     <!-- Menu header -->
                     <div class="flex justify-between items-center h-[29px] w-full min-w-fit gap-2">
-                      <div class="text-lg font-semibold text-secondary-700 text-nowrap truncate w-[190px] sm:w-[300px] md:w-[150px] lg:w-[220px] xl:w-[480px] 2xl:w-[150px] 3xl:w-full 3xl:max-w-[280px]">
+                      <div
+                        class="text-lg font-semibold text-secondary-700 text-nowrap truncate w-[190px] sm:w-[300px] md:w-[150px] lg:w-[220px] xl:w-[480px] 2xl:w-[150px] 3xl:w-full 3xl:max-w-[280px]"
+                      >
                         {{ menu.menuName }}
                       </div>
                       <div class="gap-[12px] items-center text-sm flex flex-shrink-0 justify-end grow font-medium">
@@ -306,7 +338,7 @@ onMounted(async () => {
           class="flex gap-6 md:gap-[40px] items-center flex-wrap"
         >
           <div
-            class="h-[60px] rounded-2xl text-primary-900 flex items-center justify-center font-semibold lg:text-2xl text-xl bg-primary-700 px-[24px]"
+            class="h-[60px] rounded-2xl text-primary-900-light flex items-center justify-center font-semibold lg:text-2xl text-xl bg-primary-700 px-[24px]"
           >
             예약 기능 사용 여부
           </div>
@@ -330,7 +362,7 @@ onMounted(async () => {
         <div v-if="false" class="flex gap-6 md:gap-[40px] items-center flex-wrap">
           <div class="w-[232px] h-[60px]">
             <div
-              class="h-[60px] rounded-2xl text-primary-900 flex items-center justify-center font-semibold text-xl lg:text-2xl bg-primary-700 px-[24px]"
+              class="h-[60px] rounded-2xl text-primary-900-light flex items-center justify-center font-semibold text-xl lg:text-2xl bg-primary-700 px-[24px]"
             >
               쿠폰 진행 여부
             </div>
@@ -357,7 +389,7 @@ onMounted(async () => {
           class="flex gap-6 md:gap-[40px] items-center flex-wrap"
         >
           <div
-            class="h-[60px] rounded-2xl text-primary-900 flex items-center justify-center font-semibold text-xl lg:text-2xl bg-primary-700 px-[24px]"
+            class="h-[60px] rounded-2xl text-primary-900-light flex items-center justify-center font-semibold text-xl lg:text-2xl bg-primary-700 px-[24px]"
           >
             주문 기능 사용 여부
           </div>
@@ -375,19 +407,6 @@ onMounted(async () => {
               </div>
             </div>
           </div>
-        </div>
-
-        <!-- 테이블 정보 -->
-        <div
-          v-if="ADMIN_CATEGORY[boothInfo.adminCategory] === 'night' && boothInfo.isOrder"
-          class="flex gap-6 md:gap-[40px] items-center flex-wrap"
-        >
-          <div
-            class="h-[60px] rounded-2xl text-primary-900 flex items-center justify-center font-semibold text-xl lg:text-2xl bg-primary-700 px-[24px]"
-          >
-            현재 테이블 개수
-          </div>
-          <div class="text-xl lg:text-2xl font-semibold text-secondary-900">{{ tableNum }}개</div>
         </div>
       </div>
     </form>
