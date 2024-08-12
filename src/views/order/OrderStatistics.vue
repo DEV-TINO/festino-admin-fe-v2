@@ -68,6 +68,22 @@ const handleButtonClick = (key) => {
   }
 };
 
+const sortStrategies = {
+  nameAsc: (a, b) => a.menuName.localeCompare(b.menuName),
+  nameDesc: (a, b) => b.menuName.localeCompare(a.menuName),
+  countAsc: (a, b) => a.menuCount - b.menuCount,
+  countDesc: (a, b) => b.menuCount - a.menuCount,
+  saleAsc: (a, b) => a.menuSale - b.menuSale,
+  saleDesc: (a, b) => b.menuSale - a.menuSale,
+};
+
+const handleStatisticsSort = (sort) => {
+  const sortFunction = sortStrategies[sort];
+  if (sortFunction) {
+    allOrderStatistics.value.menuSaleList.sort(sortFunction);
+  }
+};
+
 const fetchStatistics = async () => {
   if (selectBoothId.value) {
     isLoading.value = true;
@@ -79,26 +95,6 @@ const fetchStatistics = async () => {
     isLoading.value = false;
   }
 };
-
-const handleStatisticsSort = (sort) => {
-  const menuList = [...allOrderStatistics.value.menuSaleList]; 
-
-  if (sort === 'nameAsc') {
-    menuList.sort((a, b) => a.menuName.localeCompare(b.menuName));
-  } else if (sort === 'nameDesc') {
-    menuList.sort((a, b) => b.menuName.localeCompare(a.menuName));
-  } else if (sort === 'countAsc') {
-    menuList.sort((a, b) => a.menuCount - b.menuCount);
-  } else if (sort === 'countDesc') {
-    menuList.sort((a, b) => b.menuCount - a.menuCount);
-  } else if (sort === 'saleAsc') {
-    menuList.sort((a, b) => a.menuSale - b.menuSale);
-  } else if (sort === 'saleDesc') {
-    menuList.sort((a, b) => b.menuSale - a.menuSale);
-  }
-
-  allOrderStatistics.value.menuSaleList = menuList;
-}
 
 watchEffect(() => {
   selectBooth.value = boothList.value.find((booth) => booth.boothId === selectBoothId.value) || {};
