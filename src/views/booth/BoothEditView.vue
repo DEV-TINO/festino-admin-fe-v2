@@ -134,11 +134,12 @@ const handleInputBankName = (event) => {
 
 const handleInputAccount = (event) => {
   if (isSubmit.value) return;
-  const inputValue = event.target.value.replace(/\D/g, '');
-  const formattedValue = inputValue.replace(/(.{4})/g, '$1-').replace(/-$/, '');
 
-  event.target.value = formattedValue;
-  boothInfo.value.accountInfo.account = formattedValue;
+  let inputValue = event.target.value;
+  inputValue = inputValue.trim();
+  inputValue = inputValue.replace(/\D/g, '-');
+  event.target.value = inputValue;
+  boothInfo.value.accountInfo.account = inputValue;
 };
 
 const handleInputTableNum = (event) => {
@@ -695,7 +696,7 @@ onMounted(async () => {
                   <div class="flex flex-col w-full">
                     <!-- Menu header -->
                     <div class="flex justify-between items-center h-[29px] w-full min-w-fit gap-2">
-                      <div 
+                      <div
                         class="text-lg font-semibold text-secondary-700 text-nowrap truncate xl:w-[100px] 3xl:w-full 3xl:max-w-[226px]"
                       >
                         {{ menu.menuName }}
