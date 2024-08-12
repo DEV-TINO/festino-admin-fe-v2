@@ -231,6 +231,25 @@ const handleClickCancleButton = () => {
   router.push({ name: 'MobileMain' });
 };
 
+const handleInputAccountHolder = (event) => {
+  if (isSubmit.value) return;
+  boothInfo.value.accountInfo.accountHolder = event.target.value;
+};
+const handleInputBankName = (event) => {
+  if (isSubmit.value) return;
+  boothInfo.value.accountInfo.bankName = event.target.value;
+};
+
+const handleInputAccount = (event) => {
+  if (isSubmit.value) return;
+
+  let inputValue = event.target.value;
+  inputValue = inputValue.trim();
+  inputValue = inputValue.replace(/\D/g, '-');
+  event.target.value = inputValue;
+  boothInfo.value.accountInfo.account = inputValue;
+};
+
 watch(selectedBoothId, async () => {
   useBoothDetailStore.reset();
   const selectedBoothInfo = boothList.value.find((booth) => booth.boothId === selectedBoothId.value);
@@ -460,6 +479,52 @@ onMounted(async () => {
               <IconAdd />
               <div class="pt-[10px] text-sm text-secondary-900-light">메뉴 추가하기</div>
             </div>
+          </div>
+        </div>
+      </div>
+      <!-- 계좌정보 -->
+      <div v-if="ADMIN_CATEGORY[boothInfo.adminCategory] === 'night'" class="flex flex-col gap-[20px] w-full py-[10px]">
+        <div
+          class="font-bold text-base"
+        >
+          계좌 정보
+        </div>
+        <div class="flex flex-col gap-[10px]">
+          <div class="flex items-center justify-between">
+            <div class="text-secondary-700-light text-sm min-w-[100px]">예금주</div>
+            <input
+              class="w-full px-5 py-3 bg-primary-300-light rounded-2lg text-sm border-none placeholder:text-secondary-900-light"
+              type="text"
+              maxlength="100"
+              placeholder="예금주를 입력하세요."
+              @input="handleInputAccountHolder($event)"
+              :value="boothInfo?.accountInfo?.accountHolder ?? ''"
+              :disabled="isSubmit"
+            />
+          </div>
+          <div class="flex items-center justify-between">
+            <div class="text-secondary-700-light text-sm min-w-[100px]">은행명</div>
+            <input
+              class="w-full px-5 py-3 bg-primary-300-light rounded-2lg text-sm border-none placeholder:text-secondary-900-light"
+              type="text"
+              maxlength="100"
+              placeholder="은행명을 입력하세요."
+              @input="handleInputBankName($event)"
+              :value="boothInfo?.accountInfo?.bankName ?? ''"
+              :disabled="isSubmit"
+            />
+          </div>
+          <div class="flex items-center justify-between">
+            <div class="text-secondary-700-light text-sm min-w-[100px]">계좌번호</div>
+            <input
+              class="w-full px-5 py-3 bg-primary-300-light rounded-2lg text-sm border-none placeholder:text-secondary-900-light"
+              type="text"
+              maxlength="100"
+              placeholder="계좌번호를 입력하세요."
+              @input="handleInputAccount($event)"
+              :value="boothInfo?.accountInfo?.account ?? ''"
+              :disabled="isSubmit"
+            />
           </div>
         </div>
       </div>
