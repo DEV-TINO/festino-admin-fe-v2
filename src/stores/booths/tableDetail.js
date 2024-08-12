@@ -51,9 +51,9 @@ export const useTableDetail = defineStore('tableDetail', () => {
   };
 
   const submitTableDetail = async (boothId) => {
-    tableNumList.value.forEach((table) => {
-      if (table.customTableNum === '') {
-        table.customTableNum = index + 1;
+    tableNumList.value.forEach((table, index) => {
+      if (!table.tableNumIndex) {
+        table.tableNumIndex = index + 1;
       }
     });
     return await updateTableList(boothId);

@@ -51,6 +51,11 @@ const handleClickDeleteButton = (index) => {
 };
 
 const handleClickSaveButton = () => {
+  newTableNumList.value.forEach((table, index) => {
+    if (table.customTableNum === '') {
+      table.customTableNum = index + 1;
+    }
+  });
   tableNumList.value = [...newTableNumList.value];
   tableNum.value = newTableNumList.value.length;
   closeTableDetailModal();
@@ -133,7 +138,7 @@ onMounted(() => {
       <div class="text-secondary-700-light font-medium text-center">
         커스텀 테이블 번호를 입력해주세요. (예시: A-1, 최대 10글자)<br />미 입력 시 테이블 번호가 자동으로 설정됩니다.
       </div>
-      <div class="grid grid-cols-2 gap-[18px]">
+      <div class="grid grid-cols-2 gap-[18px] place-items-center">
         <div
           class="w-[288px] h-[98px] flex flex-col gap-3"
           v-for="(table, index) in newTableNumList"
@@ -143,18 +148,18 @@ onMounted(() => {
           <div class="flex justify-between">
             <div class="text-xl font-medium">테이블 {{ index + 1 }}</div>
             <div class="flex gap-[10px] font-medium text-sm">
-              <button
-                class="w-[53px] h-[29px] rounded-5xl bg-primary-100 text-primary-900"
+              <div
+                class="w-[53px] h-[29px] rounded-5xl bg-primary-100 text-primary-900 cursor-pointer grid place-items-center"
                 @click="handleClickAddTableButton(1, index)"
               >
                 추가
-              </button>
-              <button
-                class="w-[53px] h-[29px] rounded-5xl bg-danger-light text-danger"
+              </div>
+              <div
+                class="w-[53px] h-[29px] rounded-5xl bg-danger-light text-danger cursor-pointer grid place-items-center"
                 @click="handleClickDeleteButton(index)"
               >
                 삭제
-              </button>
+              </div>
             </div>
           </div>
           <input
@@ -188,32 +193,6 @@ onMounted(() => {
         저장
       </button>
     </div>
-
-    <!-- Table List -->
-    <!-- <div class="w-full flex flex-col grow gap-5">
-      <div
-        v-for="(table, index) in newTableNumList"
-        :key="index"
-        class="w-full flex flex-col justify-between relative gap-[6px]"
-        :id="'table-' + index"
-      >
-        <div class="flex justify-between">
-          <div class="w-32 flex-shrink-0 ml-1">테이블 {{ index + 1 }}</div>
-          <div class="flex gap-5 text-base font-semibold">
-            <div @click="handleClickAddTableButton(1, index)" class="text-primary-900 cursor-pointer">추가</div>
-            <div @click="handleClickDeleteButton(index)" class="text-danger cursor-pointer pr-4">삭제</div>
-          </div>
-        </div>
-        <input
-          type="text"
-          :placeholder="index + 1"
-          @input="handleInputCustomTableNum($event, index)"
-          :value="table.customTableNum"
-          maxlength="100"
-          class="w-full h-[60px] border border-gray-400 bg-white px-[20px] rounded-2xl active:border-primary-900"
-        />
-      </div>
-    </div> -->
   </div>
 </template>
 
