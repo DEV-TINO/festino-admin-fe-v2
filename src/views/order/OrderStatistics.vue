@@ -37,24 +37,24 @@ const formattedDates = computed(() => {
 const currentMonth = new Date().getMonth() + 1;
 const today = new Date().getDate();
 
+const activeDateMap = {
+  11: 0,
+  12: 1,
+  13: 2
+};
+
 const determineActiveDate = () => {
   if (currentMonth < 9) {
     return 0;
   } else if (currentMonth > 9) {
     return 2;
   } else {
-    if (today === 11) {
-      return 0;
-    } else if (today === 12) {
-      return 1;
-    } else if (today === 13) {
-      return 2;
+    if (activeDateMap[today] !== undefined) {
+      return activeDateMap[today];
     } else if (today < 11) {
       return 0;
-    } else if (today > 13) {
-      return 2;
     } else {
-      return 1;
+      return 2;
     }
   }
 };
@@ -169,7 +169,7 @@ onMounted(async () => {
                 class="-scale-y-100"
                 @click="handleStatisticsSort('countAsc')"
               />
-              <IconDropDown 
+              <IconDropDown
                 @click="handleStatisticsSort('countDesc')"
               />
             </div>
@@ -181,7 +181,7 @@ onMounted(async () => {
                 class="-scale-y-100"
                 @click="handleStatisticsSort('saleAsc')"
               />
-              <IconDropDown 
+              <IconDropDown
                 @click="handleStatisticsSort('saleDesc')"
               />
             </div>
@@ -199,7 +199,7 @@ onMounted(async () => {
           </div>
         </div>
         <div
-          class="grid place-items-center text-primary-900 font-medium text-2xl h-[73px] rounded-b-3xl bottom-0 shrink-0 bg-white border-secondary-600 shadow-[0px_-3px_12px_rgba(0,0,0,0.12)]"
+          class="grid place-items-center text-primary-900 font-medium text-2xl h-[73px] rounded-b-3xl aboslute bottom-0 shrink-0 bg-white border-secondary-600 shadow-[0px_-3px_12px_rgba(0,0,0,0.12)]"
         >
           총액 : {{ prettyPrice(allOrderStatistics.totalSale || 0) }}
         </div>
