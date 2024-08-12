@@ -142,13 +142,6 @@ const handleInputAccount = (event) => {
   boothInfo.value.accountInfo.account = inputValue;
 };
 
-const handleInputTableNum = (event) => {
-  if (isSubmit.value) return;
-  const inputValue = parseInt(event.target.value.replace(/\D/g, ''), 10) || '';
-  event.target.value = inputValue;
-  tableNum.value = inputValue;
-};
-
 const handleClickTableCusotm = () => {
   useTableDetailStore.openTableDetailModal();
 };

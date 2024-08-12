@@ -20,23 +20,29 @@ const handleInputCustomTableNum = (event, index) => {
   newTableNumList.value[index].customTableNum = event.target.value;
 };
 
-const handleClickAddTableButton = async (num, index = newTableNumList.value.length - 1) => {
+const handleInputTableNum = (event) => {
+  const num = parseInt(event.target.value, 10);
+  console.log(num);
+};
+
+const handleClickAddTableButton = async (num) => {
+  let newIndex = newTableNumList.value.length;
+
   if (num === 1) {
-    newTableNumList.value.splice(index + 1, 0, { customTableNum: '' });
-    index++;
+    newTableNumList.value.push({ customTableNum: '', tableNumIndex: newIndex });
   } else {
     newTableNumList.value = [
       ...newTableNumList.value,
       ...Array(10)
         .fill()
-        .map(() => ({ customTableNum: '' })),
+        .map(() => ({ customTableNum: '', tableNumIndex: newIndex++ })),
     ];
-    index = newTableNumList.value.length - 1;
   }
 
   await nextTick();
 
-  document.getElementById(`table-${index}`).scrollIntoView({
+  const lastIndex = newTableNumList.value.length - 1;
+  document.getElementById(`table-${lastIndex}`)?.scrollIntoView({
     behavior: 'smooth',
     block: 'center',
   });
@@ -66,11 +72,39 @@ const handleClickCancelButton = () => {
   closeTableDetailModal();
 };
 
+const handleDropStartTable = (event, index) => {
+  event.dataTransfer.setData('text/plain', index);
+};
+
+const handleDropTable = (event, dropIndex) => {
+  const dragIndex = event.dataTransfer.getData('text/plain');
+  const dragItem = newTableNumList.value.splice(dragIndex, 1)[0];
+  newTableNumList.value.splice(dropIndex, 0, dragItem);
+
+  const start = Math.min(dragIndex, dropIndex);
+  const end = Math.max(dragIndex, dropIndex);
+
+  newTableNumList.value.slice(start, end + 1).forEach((table, index) => {
+    table.tableNumIndex = start + index;
+  });
+};
+
 onMounted(() => {
   setTimeout(() => {
     modalContainer.value?.scrollTo({ top: 0, behavior: 'auto' });
   }, 0);
 });
+
+watch(
+  newTableNumList,
+  () => {
+    newTableNumList.value.forEach((table, index) => {
+      table.tableNumIndex = index + 1;
+    });
+    console.log(newTableNumList.value);
+  },
+  { deep: true },
+);
 </script>
 
 <template>
@@ -93,8 +127,9 @@ onMounted(() => {
         >
           <div class="text-primary-900 font-bold">현재 테이블 개수</div>
           <input
-            class="w-[68px] h-[34px] rounded-2xl border-1 border-secondary-700 text-center font-bold focus:border-primary-900 focus:outline-none focus:border-2"
+            type="text"
             :placeholder="newTableNumList.length"
+            class="w-[68px] h-[34px] rounded-2xl border-1 border-secondary-700 text-center font-bold focus:border-primary-900 focus:outline-none focus:border-2"
           />
         </div>
       </div>
@@ -140,35 +175,32 @@ onMounted(() => {
       </div>
       <div class="grid grid-cols-2 gap-[18px] place-items-center">
         <div
-          class="w-[288px] h-[98px] flex flex-col gap-3"
-          v-for="(table, index) in newTableNumList"
-          :key="index"
-          :id="'table-' + index"
+          class="w-[304px] h-auto flex flex-col gap-3 p-2 border-1 border-transparent rounded-2xl cursor-pointer hover:border-primary-900"
+          v-for="(table, tableIndex) in newTableNumList"
+          :key="tableIndex"
+          :id="'table-' + tableIndex"
+          :draggable="true"
+          @dragstart="handleDropStartTable($event, tableIndex)"
+          @dragover.prevent
+          @dragenter.prevent
+          @drop="handleDropTable($event, tableIndex)"
         >
           <div class="flex justify-between">
-            <div class="text-xl font-medium">테이블 {{ index + 1 }}</div>
-            <div class="flex gap-[10px] font-medium text-sm">
-              <div
-                class="w-[53px] h-[29px] rounded-5xl bg-primary-100 text-primary-900 cursor-pointer grid place-items-center"
-                @click="handleClickAddTableButton(1, index)"
-              >
-                추가
-              </div>
-              <div
-                class="w-[53px] h-[29px] rounded-5xl bg-danger-light text-danger cursor-pointer grid place-items-center"
-                @click="handleClickDeleteButton(index)"
-              >
-                삭제
-              </div>
+            <div class="text-xl font-medium">테이블 {{ tableIndex + 1 }}</div>
+            <div
+              class="w-[53px] h-[29px] rounded-5xl bg-danger-light text-danger cursor-pointer grid place-items-center font-medium text-sm"
+              @click="handleClickDeleteButton(tableIndex)"
+            >
+              삭제
             </div>
           </div>
           <input
             type="text"
-            :placeholder="index + 1"
-            @input="handleInputCustomTableNum($event, index)"
+            :placeholder="tableIndex + 1"
+            @input="handleInputCustomTableNum($event, tableIndex)"
             :value="table.customTableNum"
-            maxlength="100"
-            class="w-full h-full border-1 border-secondary-700 rounded-2xl px-[17px] font-medium focus:border-primary-900 focus:outline-none focus:border-2"
+            maxlength="10"
+            class="w-full h-[57px] border-1 border-secondary-700 rounded-2xl px-[17px] font-medium focus:border-primary-900 focus:outline-none focus:border-2"
           />
         </div>
       </div>
