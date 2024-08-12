@@ -20,24 +20,34 @@ const handleInputCustomTableNum = (event, index) => {
   newTableNumList.value[index].customTableNum = event.target.value;
 };
 
-const handleClickAddTableButton = async (num) => {
+const handleClickAddTableButton = async (num, index = newTableNumList.value.length - 1) => {
   if (num === 1) {
-    newTableNumList.value.push({ tableNumIndex: newTableNumList.value.length + 1, customTableNum: '' });
+    newTableNumList.value.splice(index + 1, 0, { customTableNum: '' });
+    index++;
   } else {
-    for (let i = 0; i < 10; i++) {
-      newTableNumList.value.push({ tableNumIndex: newTableNumList.value.length + 1, customTableNum: '' });
-    }
+    newTableNumList.value = [
+      ...newTableNumList.value,
+      ...Array(10)
+        .fill()
+        .map(() => ({ customTableNum: '' })),
+    ];
+    index = newTableNumList.value.length - 1;
   }
+
   await nextTick();
-  modalContainer.value?.scrollTo({ top: modalContainer.value.scrollHeight, behavior: 'smooth' });
+
+  document.getElementById(`table-${index}`).scrollIntoView({
+    behavior: 'smooth',
+    block: 'center',
+  });
 };
 
 const handleClickTotalDeleteButton = () => {
   newTableNumList.value = [];
 };
 
-const handleClickDeleteButton = () => {
-  newTableNumList.value.pop();
+const handleClickDeleteButton = (index) => {
+  newTableNumList.value.splice(index, 1);
 };
 
 const handleClickSaveButton = () => {
@@ -76,23 +86,23 @@ onMounted(() => {
         v-for="(table, index) in newTableNumList"
         :key="index"
         class="w-full flex flex-col justify-between relative gap-[6px]"
+        :id="'table-' + index"
       >
-        <div class="w-32 flex-shrink-0 ml-1">테이블 {{ table.tableNumIndex }}</div>
+        <div class="flex justify-between">
+          <div class="w-32 flex-shrink-0 ml-1">테이블 {{ index + 1 }}</div>
+          <div class="flex gap-5 text-base font-semibold">
+            <div @click="handleClickAddTableButton(1, index)" class="text-primary-900 cursor-pointer">추가</div>
+            <div @click="handleClickDeleteButton(index)" class="text-danger cursor-pointer pr-4">삭제</div>
+          </div>
+        </div>
         <input
           type="text"
-          :placeholder="table.tableNumIndex"
+          :placeholder="index + 1"
           @input="handleInputCustomTableNum($event, index)"
           :value="table.customTableNum"
           maxlength="100"
           class="w-full h-[60px] border border-gray-400 bg-white px-[20px] rounded-2xl active:border-primary-900"
         />
-        <div
-          v-if="index === newTableNumList.length - 1"
-          @click="handleClickDeleteButton()"
-          class="absolute right-5 text-base text-danger cursor-pointer"
-        >
-          삭제
-        </div>
       </div>
       <div v-if="newTableNumList.length === 0" class="h-full flex flex-col justify-center items-center gap-5">
         <IconNotFound />
