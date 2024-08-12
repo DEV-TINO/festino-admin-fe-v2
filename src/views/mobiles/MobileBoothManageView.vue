@@ -538,7 +538,7 @@ onMounted(async () => {
         <SelectOption v-model="useOrder" />
       </div>
     </div>
-    <div class="w-full dynamic-padding flex gap-[10px] py-20">
+    <div class="w-full dynamic-padding flex gap-[10px] py-10">
       <button class="w-full rounded-[50px] h-[54px] is-button is-outlined" @click="handleClickCancleButton()">
         취소
       </button>
