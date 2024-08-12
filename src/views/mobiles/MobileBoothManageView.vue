@@ -453,10 +453,10 @@ onMounted(async () => {
               </div>
             </div>
           </div>
-          <div
+          <div @click="openMobileModal({})"
             class="w-full h-[150px] flex flex-col items-center justify-center border-dashed border-2 rounded-3xl bg-primary-300-light"
           >
-            <div @click="openMobileModal({})" class="flex flex-col items-center justify-center p-5">
+            <div class="flex flex-col items-center justify-center p-5">
               <IconAdd />
               <div class="pt-[10px] text-sm text-secondary-900-light">메뉴 추가하기</div>
             </div>
