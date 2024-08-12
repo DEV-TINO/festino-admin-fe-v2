@@ -469,10 +469,6 @@ onMounted(async () => {
         <SelectOption v-model="useReservation" />
       </div>
       <div class="flex flex-col gap-[10px] items-start" v-if="boothType === 'night'">
-        <div class="font-bold text-base shrink-0">쿠폰 진행 여부</div>
-        <SelectOption v-model="useCoupon" />
-      </div>
-      <div class="flex flex-col gap-[10px] items-start" v-if="boothType === 'night'">
         <div class="font-bold text-base shrink-0">주문 기능 사용 여부</div>
         <SelectOption v-model="useOrder" />
       </div>
