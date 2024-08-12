@@ -61,6 +61,9 @@ export default {
           300: {
             light: 'rgba(0, 0, 0, 0.03)',
           },
+          100: {
+            DEFAULT: '#E0EEFD',
+          },
         },
         secondary: {
           900: {
@@ -68,6 +71,9 @@ export default {
           },
           700: {
             DEFAULT: '#7E8A97',
+          },
+          500: {
+            DEFAULT: '#EBF4FE',
           },
           300: {
             DEFAULT: '#EEEEEE',
@@ -128,6 +134,9 @@ export default {
           900: {
             DEFAULT: '#999990',
           },
+          700: {
+            DEFAULT: '#D7D7D7',
+          },
           500: {
             DEFAULT: 'rgba(204, 204,204, 0.28)',
           },
@@ -155,8 +164,9 @@ export default {
       },
       borderRadius: {
         '2lg': '0.625rem', //10px
-        '2xl': '1.25rem', //20px
         '3lg': '1rem', //16px
+        '2xl': '1.25rem', //20px
+        '5xl': '3.125rem', //50px
       },
       fontSize: {
         '3xl': '1.75rem',
