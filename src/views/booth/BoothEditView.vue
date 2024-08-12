@@ -29,7 +29,7 @@ const { tableNum } = storeToRefs(useTableDetailStore);
 const { init, reset, deleteMenu, createMenu, addDeleteMenu, patchMenu, addPatchMenu } = boothDetailStore;
 const { boothInfo, menuList, createMenuList, deleteMenuList, boothType, patchMenuList, originalMenuList } =
   storeToRefs(boothDetailStore);
-const { sumbitTableDetail } = useTableDetailStore;
+const { submitTableDetail } = useTableDetailStore;
 
 const menuModalStore = useMenuModal();
 const { openModal } = menuModalStore;
@@ -368,7 +368,7 @@ const handleClickSubmit = async () => {
   ]);
 
   if (ADMIN_CATEGORY[boothInfo.value.adminCategory] === 'night') {
-    const tableDetailResult = await sumbitTableDetail(props.boothId);
+    const tableDetailResult = await submitTableDetail(props.boothId);
     if (!tableDetailResult) return;
   }
 

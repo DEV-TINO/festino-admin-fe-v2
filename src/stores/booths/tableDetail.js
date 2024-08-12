@@ -50,7 +50,7 @@ export const useTableDetail = defineStore('tableDetail', () => {
     }
   };
 
-  const sumbitTableDetail = async (boothId) => {
+  const submitTableDetail = async (boothId) => {
     tableNumList.value.forEach((table) => {
       if (table.customTableNum === '') {
         table.customTableNum = table.tableNumIndex;
@@ -64,7 +64,7 @@ export const useTableDetail = defineStore('tableDetail', () => {
     tableNum,
     openTableDetailModal,
     closeTableDetailModal,
-    sumbitTableDetail,
+    submitTableDetail,
     getTableList,
   };
 });
