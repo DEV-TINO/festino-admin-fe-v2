@@ -601,14 +601,11 @@ onMounted(async () => {
 
             <!-- 테이블 정보 -->
             <div v-if="ADMIN_CATEGORY[boothInfo.adminCategory] === 'night'">
-              <div class="flex xl:items-center items-start justify-between py-10 flex-col gap-10 sm:flex-row">
-                <div class="flex items-start flex-col gap-[26px] xl:items-center xl:flex-row">
-                  <div
-                    class="w-[280px] h-[61px] rounded-2xl flex items-center justify-center bg-primary-700 text-primary-900-light text-xl lg:text-2xl font-semibold px-5 gap-7 shrink-0"
-                  >
-                    현재 테이블 개수 <span class="text-secondary-700-light">{{ tableNum }}개</span>
-                  </div>
-                  <div class="text-secondary-500">* 테이블 번호 클릭 시 테이블의 QR 링크가 복사됩니다.</div>
+              <div class="flex items-start justify-between py-10 flex-col gap-10 sm:flex-row">
+                <div
+                  class="w-[280px] h-[61px] rounded-2xl flex items-center justify-center bg-primary-700 text-primary-900-light text-xl lg:text-2xl font-semibold px-5 gap-7 shrink-0"
+                >
+                  현재 테이블 개수 <span class="text-secondary-700-light">{{ tableNum }}개</span>
                 </div>
                 <div
                   @click="handleClickTableCusotm()"
@@ -619,14 +616,14 @@ onMounted(async () => {
               </div>
               <div class="grid 3xl:grid-cols-3 xl:grid-cols-2 gap-5">
                 <div
-                  v-for="(table, index) in tableNumList"
-                  :key="index"
+                  v-for="(table, tableIndex) in tableNumList"
+                  :key="tableIndex"
                   class="w-[467px] h-20 flex text-center rounded-3lg shadow-secondary"
                 >
                   <div
                     class="w-[180px] bg-primary-700 rounded-l-3lg border-1 border-primary-700-dark text-secondary-700-light font-medium text-xl grid place-items-center"
                   >
-                    테이블 {{ index + 1 }}
+                    테이블 {{ tableIndex + 1 }}
                   </div>
                   <div
                     class="grow bg-white rounded-r-3lg border-1 border-primary-900-ligther border-l-0 grid place-items-center text-secondary-700 text-2xl font-semibold"

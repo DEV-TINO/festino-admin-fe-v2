@@ -81,6 +81,11 @@ const handleClickBoothEdit = () => {
   router.push({ name: 'BoothEdit' });
 };
 
+const handleClickTableNum = (index) => {
+  window.navigator.clipboard.writeText(tableNumList.value[index].orderUrl);
+  alert('QR 코드 주소가 복사되었습니다.');
+};
+
 onMounted(async () => {
   reset();
   if (props.boothId) {
@@ -194,19 +199,20 @@ onMounted(async () => {
                 >
                   현재 테이블 개수 <span class="text-secondary-700-light">{{ tableNum }}개</span>
                 </div>
-                <div class="text-secondary-500">* 테이블 번호 클릭 시 테이블의 QR 링크가 복사됩니다.</div>
+                <div class="text-secondary-500">* 테이블 번호 클릭 시 테이블의 QR 코드 주소가 복사됩니다.</div>
               </div>
               <!-- <div class="grid 2xl:grid-cols-3 lg:grid-cols-2 gap-5"> -->
               <div class="grid 3xl:grid-cols-3 xl:grid-cols-2 gap-5">
                 <div
-                  v-for="(table, index) in tableNumList"
-                  :key="index"
+                  v-for="(table, tableIndex) in tableNumList"
+                  :key="tableIndex"
                   class="w-[467px] h-20 flex text-center rounded-3lg shadow-secondary"
                 >
                   <div
-                    class="w-[180px] bg-primary-700 rounded-l-3lg border-1 border-primary-700-dark text-secondary-700-light font-medium text-xl grid place-items-center"
+                    @click="handleClickTableNum(tableIndex)"
+                    class="w-[180px] bg-primary-700 rounded-l-3lg border-1 border-primary-700-dark text-secondary-700-light font-medium text-xl grid place-items-center cursor-pointer"
                   >
-                    테이블 {{ index + 1 }}
+                    테이블 {{ tableIndex + 1 }}
                   </div>
                   <div
                     class="grow bg-white rounded-r-3lg border-1 border-primary-900-ligther border-l-0 grid place-items-center text-secondary-700 text-2xl font-semibold"
