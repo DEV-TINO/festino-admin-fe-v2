@@ -136,12 +136,12 @@ onMounted(async () => {
         <button
           type="button"
           class="min-w-[120px] w-[200px] h-[50px] is-button relative"
-          v-for="(day, key, index) in formattedDates"
-          :key="index"
-          :class="{ 'is-outlined': index !== activeDate }"
-          @click="handleButtonClick(index)"
+          v-for="(date, key, day) in formattedDates"
+          :key="day"
+          :class="{ 'is-outlined': day !== activeDate }"
+          @click="handleButtonClick(day)"
         >
-          {{ formattedMonth }}/{{ key }} ({{ day }})
+          {{ formattedMonth }}/{{ key }} ({{ date }})
         </button>
       </div>
       <div
@@ -154,11 +154,10 @@ onMounted(async () => {
             메뉴
             <div>
               <IconDropDown 
-                class="-scale-y-100 hover:stroke-[#0073F0]"
+                class="-scale-y-100"
                 @click="handleStatisticsSort('nameAsc')"
               />
               <IconDropDown 
-                class="hover:stroke-[#0073F0]" 
                 @click="handleStatisticsSort('nameDesc')"
               />
             </div>
@@ -167,11 +166,10 @@ onMounted(async () => {
             수량
             <div>
               <IconDropDown 
-                class="-scale-y-100 hover:stroke-[#0073F0]"
+                class="-scale-y-100"
                 @click="handleStatisticsSort('countAsc')"
               />
               <IconDropDown 
-                class="hover:stroke-[#0073F0]" 
                 @click="handleStatisticsSort('countDesc')"
               />
             </div>
@@ -180,11 +178,10 @@ onMounted(async () => {
             가격
             <div>
               <IconDropDown 
-                class="-scale-y-100 hover:stroke-[#0073F0]"
+                class="-scale-y-100"
                 @click="handleStatisticsSort('saleAsc')"
               />
               <IconDropDown 
-                class="hover:stroke-[#0073F0]" 
                 @click="handleStatisticsSort('saleDesc')"
               />
             </div>
@@ -202,7 +199,7 @@ onMounted(async () => {
           </div>
         </div>
         <div
-          class="grid place-items-center text-primary-900 font-medium text-2xl h-[73px] rounded-b-3xl aboslute bottom-0 shrink-0 bg-white border-secondary-600 shadow-[0px_-3px_12px_rgba(0,0,0,0.12)]"
+          class="grid place-items-center text-primary-900 font-medium text-2xl h-[73px] rounded-b-3xl bottom-0 shrink-0 bg-white border-secondary-600 shadow-[0px_-3px_12px_rgba(0,0,0,0.12)]"
         >
           총액 : {{ prettyPrice(allOrderStatistics.totalSale || 0) }}
         </div>
