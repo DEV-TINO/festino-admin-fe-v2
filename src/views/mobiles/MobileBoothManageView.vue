@@ -488,7 +488,7 @@ onMounted(async () => {
         </div>
       </div>
       <!-- 테이블 커스텀 -->
-      <div v-if="ADMIN_CATEGORY[boothInfo.adminCategory] === 'night'" class="flex flex-col w-full py-[10px]">
+      <div v-if="ADMIN_CATEGORY[boothInfo.adminCategory] === 'night'" class="flex flex-col w-full">
         <div
           class="font-bold text-base pb-2.5"
         >
@@ -507,7 +507,7 @@ onMounted(async () => {
         </div>
       </div>
       <!-- 계좌정보 -->
-      <div v-if="ADMIN_CATEGORY[boothInfo.adminCategory] === 'night'" class="flex flex-col gap-[20px] w-full py-[10px]">
+      <div v-if="ADMIN_CATEGORY[boothInfo.adminCategory] === 'night'" class="flex flex-col gap-[20px] w-full">
         <div
           class="font-bold text-base"
         >
