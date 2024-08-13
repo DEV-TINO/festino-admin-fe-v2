@@ -102,7 +102,7 @@ watch(
 
 <template>
   <div
-    class="w-[730px] h-[938px] flex flex-col justify-start items-center bg-white rounded-2xl overflow-y-auto px-[57px] py-11 gap-[24px]"
+    class="w-[730px] h-[910px] flex flex-col justify-start items-center bg-white rounded-2xl overflow-y-auto px-[57px] py-11 gap-[24px]"
   >
     <div class="w-full flex justify-between items-center gap-5 shrink-0 font-semibold text-[30px] text-primary-900 h-9">
       <div class="w-[25px]"></div>
