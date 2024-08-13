@@ -2,7 +2,6 @@
 import { nextTick, onMounted, ref, watch } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useTableDetail } from '@/stores/booths/tableDetail';
-import { useBoothDetail } from '@/stores/booths/boothDetail';
 import IconNotFound from '../icons/IconNotFound.vue';
 import IconClose from '../icons/IconClose.vue';
 import IconPlus from '../icons/IconPlus.vue';
@@ -18,11 +17,6 @@ const newTableNumList = ref([...tableNumList.value] || []);
 
 const handleInputCustomTableNum = (event, index) => {
   newTableNumList.value[index].customTableNum = event.target.value;
-};
-
-const handleInputTableNum = (event) => {
-  const num = parseInt(event.target.value, 10);
-  console.log(num);
 };
 
 const handleClickAddTableButton = async (num) => {
@@ -101,7 +95,6 @@ watch(
     newTableNumList.value.forEach((table, index) => {
       table.tableNumIndex = index + 1;
     });
-    console.log(newTableNumList.value);
   },
   { deep: true },
 );
