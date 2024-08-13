@@ -102,7 +102,7 @@ watch(
 
 <template>
   <div
-    class="w-[740px] h-[938px] flex flex-col justify-start items-center bg-white rounded-2xl overflow-y-auto px-[40px] py-11 gap-[24px]"
+    class="w-[730px] h-[938px] flex flex-col justify-start items-center bg-white rounded-2xl overflow-y-auto px-[57px] py-11 gap-[24px]"
   >
     <div class="w-full flex justify-between items-center gap-5 shrink-0 font-semibold text-[30px] text-primary-900 h-9">
       <div class="w-[25px]"></div>
@@ -136,14 +136,14 @@ watch(
         </div>
         <div
           @click="handleClickAddTableButton(10)"
-          class="w-[185px] rounded-2xl text-primary-900 text-xl border-1 border-primary-900 h-12 flex items-center justify-center gap-2 cursor-pointer hover:bg-primary-800"
+          class="w-[234px] rounded-2xl text-primary-900 text-xl border-1 border-primary-900 h-12 flex items-center justify-center gap-2 cursor-pointer hover:bg-primary-800"
         >
           <IconPlus />
           테이블 10개 추가
         </div>
         <div
           @click="handleClickTotalDeleteButton()"
-          class="w-[145px] rounded-2xl text-danger text-xl border-1 border-danger h-12 flex items-center justify-center gap-2 cursor-pointer hover:bg-danger-light"
+          class="w-[138px] rounded-2xl text-danger text-xl border-1 border-danger h-12 flex items-center justify-center gap-2 cursor-pointer hover:bg-danger-light"
         >
           전체 삭제
         </div>
@@ -159,7 +159,7 @@ watch(
     </div>
     <!-- Table List -->
     <!-- Scroll -->
-    <div id="modalContainer" ref="modalContainer" class="grow overflow-y-auto w-full flex flex-col gap-5">
+    <div id="modalContainer" ref="modalContainer" class="grow overflow-y-auto w-full flex flex-col gap-5 px-2">
       <!-- 설명 -->
       <div class="text-secondary-700-light font-medium text-center">
         커스텀 테이블 번호를 입력해주세요. (예시: A-1, 최대 10글자)<br />미 입력 시 테이블 번호가 자동으로 설정됩니다.
