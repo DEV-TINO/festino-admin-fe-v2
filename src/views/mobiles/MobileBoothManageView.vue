@@ -4,7 +4,7 @@ import IconAdd from '@/components/icons/mobiles/IconAdd.vue';
 import SelectOption from '@/components/mobiles/SelectOption.vue';
 import IconFileUpload from '@/components/icons/IconFileUpload.vue';
 import IconDelete from '@/components/icons/mobiles/IconDelete.vue';
-import { computed, onMounted, ref, watch, watchEffect } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 import { useBoothDetail } from '@/stores/booths/boothDetail';
 import { useTableDetail } from '@/stores/booths/tableDetail';
 import { storeToRefs } from 'pinia';
@@ -14,6 +14,7 @@ import { useRouter } from 'vue-router';
 import { useBoothList } from '@/stores/booths/boothList';
 import { ADMIN_CATEGORY, MENU_TYPE } from '@/utils/constants';
 import { useMenuModal } from '@/stores/menu/menuModal';
+import { useCustomTableModal } from '@/stores/mobiles/customTableModal';
 
 const router = useRouter();
 const useBoothDetailStore = useBoothDetail();
@@ -27,10 +28,11 @@ const { boothInfo, menuList, boothType, createMenuList, deleteMenuList, patchMen
 const { isAdmin } = storeToRefs(useUserStore);
 const { boothList } = storeToRefs(useBoothListStore);
 const { tableNum, tableNumList } = storeToRefs(useTableDetailStore);
-const { getTableList } = useTableDetailStore;
+const { getTableList, submitTableDetail } = useTableDetailStore;
 
 const menuModalStore = useMenuModal();
 const { openMobileModal } = menuModalStore;
+const { openCustomTablePopup } = useCustomTableModal();
 
 const isSubmit = ref(false);
 const useReservation = ref(false);
@@ -225,6 +227,11 @@ const handleClickSumbit = async () => {
       })
       .filter((result) => result),
   ]);
+
+  if (ADMIN_CATEGORY[boothInfo.value.adminCategory] === 'night') {
+    const tableDetailResult = await submitTableDetail(boothInfo.value.boothId);
+    if (!tableDetailResult) return;
+  }
 
   isSubmit.value = false;
   // TODO: 수정하고 모달 띄우기
@@ -503,7 +510,7 @@ onMounted(async () => {
           </div>
         </div>
         <div class="flex justify-end pt-2.5">
-          <button class="bg-primary-900 text-white px-6 py-2 rounded-xl font-semibold">테이블 커스텀</button>
+          <button class="bg-primary-900 text-white px-6 py-2 rounded-xl font-semibold" @click="openCustomTablePopup()">테이블 커스텀</button>
         </div>
       </div>
       <!-- 계좌정보 -->

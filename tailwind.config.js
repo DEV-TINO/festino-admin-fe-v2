@@ -155,6 +155,7 @@ export default {
       },
       fontSize: {
         '3xl': '1.75rem',
+        '2xs': '0.625rem', //10px
       },
       fontFamily: {
         pretendard: ['Pretendard Variable'],
