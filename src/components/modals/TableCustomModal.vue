@@ -109,9 +109,7 @@ watch(
 
 <template>
   <div
-    id="modalContainer"
-    ref="modalContainer"
-    class="w-[739px] h-[938px] flex flex-col justify-start items-center bg-white rounded-2xl overflow-y-auto px-[57px] py-11 gap-[24px]"
+    class="w-[740px] h-[938px] flex flex-col justify-start items-center bg-white rounded-2xl overflow-y-auto px-[40px] py-11 gap-[24px]"
   >
     <div class="w-full flex justify-between items-center gap-5 shrink-0 font-semibold text-[30px] text-primary-900 h-9">
       <div class="w-[25px]"></div>
@@ -126,11 +124,11 @@ watch(
           class="w-[262px] h-[51px] rounded-2xl flex gap-[10px] justify-center items-center bg-secondary-500 text-lg"
         >
           <div class="text-primary-900 font-bold">현재 테이블 개수</div>
-          <input
-            type="text"
-            :placeholder="newTableNumList.length"
-            class="w-[68px] h-[34px] rounded-2xl border-1 border-secondary-700 text-center font-bold focus:border-primary-900 focus:outline-none focus:border-2"
-          />
+          <div
+            class="w-[68px] h-[34px] rounded-2xl border-1 border-secondary-700 text-secondary-500 text-center font-bold bg-white grid place-items-center"
+          >
+            {{ newTableNumList.length }}
+          </div>
         </div>
       </div>
 
@@ -168,7 +166,7 @@ watch(
     </div>
     <!-- Table List -->
     <!-- Scroll -->
-    <div class="grow overflow-y-auto w-full flex flex-col gap-5">
+    <div id="modalContainer" ref="modalContainer" class="grow overflow-y-auto w-full flex flex-col gap-5">
       <!-- 설명 -->
       <div class="text-secondary-700-light font-medium text-center">
         커스텀 테이블 번호를 입력해주세요. (예시: A-1, 최대 10글자)<br />미 입력 시 테이블 번호가 자동으로 설정됩니다.

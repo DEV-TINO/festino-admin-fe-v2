@@ -614,7 +614,7 @@ onMounted(async () => {
                   테이블 커스텀
                 </div>
               </div>
-              <div class="grid 3xl:grid-cols-3 xl:grid-cols-2 gap-5">
+              <div class="grid 3xl:grid-cols-3 xl:grid-cols-2 gap-5 place-items-center">
                 <div
                   v-for="(table, tableIndex) in tableNumList"
                   :key="tableIndex"

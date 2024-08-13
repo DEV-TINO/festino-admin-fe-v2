@@ -201,8 +201,7 @@ onMounted(async () => {
                 </div>
                 <div class="text-secondary-500">* 테이블 번호 클릭 시 테이블의 QR 코드 주소가 복사됩니다.</div>
               </div>
-              <!-- <div class="grid 2xl:grid-cols-3 lg:grid-cols-2 gap-5"> -->
-              <div class="grid 3xl:grid-cols-3 xl:grid-cols-2 gap-5">
+              <div class="grid 3xl:grid-cols-3 xl:grid-cols-2 gap-5 place-items-center">
                 <div
                   v-for="(table, tableIndex) in tableNumList"
                   :key="tableIndex"
