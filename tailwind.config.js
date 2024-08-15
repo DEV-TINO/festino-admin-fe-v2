@@ -20,6 +20,9 @@ export default {
             DEFAULT: '#222222',
             light: '#444444',
           },
+          500: {
+            DEFAULT: '#4B4B4B',
+          },
           300: {
             DEFAULT: 'rgba(255, 255, 255, 0.7)',
           },
@@ -58,6 +61,9 @@ export default {
           300: {
             light: 'rgba(0, 0, 0, 0.03)',
           },
+          100: {
+            DEFAULT: '#E0EEFD',
+          },
         },
         secondary: {
           900: {
@@ -65,6 +71,9 @@ export default {
           },
           700: {
             DEFAULT: '#7E8A97',
+          },
+          500: {
+            DEFAULT: '#EBF4FE',
           },
           300: {
             DEFAULT: '#EEEEEE',
@@ -112,6 +121,7 @@ export default {
           700: {
             light: 'rgba(0, 115, 240, 0.12)',
             DEFAULT: 'rgba(0, 115, 240, 0.16)',
+            dark: 'rgba(0, 115, 240, 0.24)',
           },
           600: {
             DEFAULT: '#DAE8FA',
@@ -123,6 +133,9 @@ export default {
         secondary: {
           900: {
             DEFAULT: '#999990',
+          },
+          700: {
+            DEFAULT: '#D7D7D7',
           },
           500: {
             DEFAULT: 'rgba(204, 204,204, 0.28)',
@@ -151,7 +164,9 @@ export default {
       },
       borderRadius: {
         '2lg': '0.625rem', //10px
+        '3lg': '1rem', //16px
         '2xl': '1.25rem', //20px
+        '5xl': '3.125rem', //50px
       },
       fontSize: {
         '3xl': '1.75rem',
@@ -163,6 +178,7 @@ export default {
       },
       boxShadow: {
         primary: '0 1px 0 0 rgba(0, 115, 240, 0.16)',
+        secondary: '0 0 12px rgba(0, 0, 0, 0.04)',
       },
       ringColor: {
         primary: {
@@ -171,10 +187,10 @@ export default {
       },
       screens: {
         xs: '430px',
-        '3xl': '1800px'
+        '3xl': '1800px',
       },
     },
   },
-  plugins: [require('flowbite/plugin'), require("tailwind-scrollbar-hide")],
+  plugins: [require('flowbite/plugin'), require('tailwind-scrollbar-hide')],
   important: true,
 };
