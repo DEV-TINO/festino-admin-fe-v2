@@ -614,19 +614,19 @@ onMounted(async () => {
                   테이블 커스텀
                 </div>
               </div>
-              <div class="grid 3xl:grid-cols-3 xl:grid-cols-2 gap-5 place-items-center">
+              <div class="grid 3xl:grid-cols-4 2xl:grid-cols-3 lg:grid-cols-2 gap-5 place-items-center">
                 <div
                   v-for="(table, tableIndex) in tableNumList"
                   :key="tableIndex"
-                  class="w-[467px] h-20 flex text-center rounded-3lg shadow-secondary"
+                  class="w-full h-20 flex text-center rounded-3lg shadow-secondary"
                 >
                   <div
-                    class="w-[180px] bg-primary-700 rounded-l-3lg border-1 border-primary-700-dark text-secondary-700-light font-medium text-xl grid place-items-center"
+                    class="w-[180px] bg-primary-700 rounded-l-3lg border-1 border-primary-700-dark text-secondary-700-light font-medium lg:text-xl text-base grid place-items-center"
                   >
                     테이블 {{ tableIndex + 1 }}
                   </div>
                   <div
-                    class="grow bg-white rounded-r-3lg border-1 border-primary-900-ligther border-l-0 grid place-items-center text-secondary-700 text-2xl font-semibold"
+                    class="grow min-w-[210px] bg-white rounded-r-3lg border-1 border-primary-900-ligther border-l-0 grid place-items-center text-secondary-700 lg:text-2xl text-xl font-semibold"
                   >
                     {{ table.customTableNum }}
                   </div>
