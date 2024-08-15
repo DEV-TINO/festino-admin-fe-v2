@@ -652,7 +652,7 @@ onMounted(async () => {
               <div class="w-[92px] flex items-center justify-start text-xl shrink-0">예금주</div>
               <div class="relative w-full">
                 <input
-                  class="w-full h-[60px] border border-gray-500 rounded-2xl px-[20px] focus:border-primary-900"
+                  class="md:w-[520px] w-full h-[60px] border border-gray-500 rounded-2xl px-[20px] focus:border-primary-900"
                   type="text"
                   maxlength="100"
                   placeholder="예금주를 입력하세요."
@@ -667,7 +667,7 @@ onMounted(async () => {
               <div class="w-[92px] flex items-center justify-start text-xl shrink-0">은행명</div>
               <div class="relative w-full">
                 <input
-                  class="w-full h-[60px] border border-gray-500 rounded-2xl px-[20px] focus:border-primary-900"
+                  class="md:w-[520px] w-full h-[60px] border border-gray-500 rounded-2xl px-[20px] focus:border-primary-900"
                   type="text"
                   maxlength="100"
                   placeholder="은행명을 입력하세요."
@@ -682,7 +682,7 @@ onMounted(async () => {
               <div class="w-[92px] flex items-center justify-start text-xl shrink-0">계좌번호</div>
               <div class="relative w-full">
                 <input
-                  class="w-full h-[60px] border border-gray-500 rounded-2xl px-[20px] focus:border-primary-900"
+                  class="md:w-[520px] w-full h-[60px] border border-gray-500 rounded-2xl px-[20px] focus:border-primary-900"
                   type="text"
                   maxlength="100"
                   placeholder="계좌번호를 입력하세요."
