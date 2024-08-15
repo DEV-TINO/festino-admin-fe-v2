@@ -4,8 +4,9 @@ import IconAdd from '@/components/icons/mobiles/IconAdd.vue';
 import SelectOption from '@/components/mobiles/SelectOption.vue';
 import IconFileUpload from '@/components/icons/IconFileUpload.vue';
 import IconDelete from '@/components/icons/mobiles/IconDelete.vue';
-import { computed, onMounted, ref, watch, watchEffect } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 import { useBoothDetail } from '@/stores/booths/boothDetail';
+import { useTableDetail } from '@/stores/booths/tableDetail';
 import { storeToRefs } from 'pinia';
 import { useUser } from '@/stores/user';
 import { api, imagesUpload } from '@/utils/api';
@@ -13,24 +14,28 @@ import { useRouter } from 'vue-router';
 import { useBoothList } from '@/stores/booths/boothList';
 import { ADMIN_CATEGORY, MENU_TYPE } from '@/utils/constants';
 import { useMenuModal } from '@/stores/menu/menuModal';
+import { useCustomTableModal } from '@/stores/mobiles/customTableModal';
 
 const router = useRouter();
 const useBoothDetailStore = useBoothDetail();
 const useUserStore = useUser();
 const useBoothListStore = useBoothList();
+const useTableDetailStore = useTableDetail();
 
 const { deleteMenu, createMenu, addDeleteMenu, patchMenu, addPatchMenu } = useBoothDetailStore;
 const { boothInfo, menuList, boothType, createMenuList, deleteMenuList, patchMenuList, originalMenuList } =
   storeToRefs(useBoothDetailStore);
 const { isAdmin } = storeToRefs(useUserStore);
 const { boothList } = storeToRefs(useBoothListStore);
+const { tableNum, tableNumList } = storeToRefs(useTableDetailStore);
+const { getTableList, submitTableDetail } = useTableDetailStore;
 
 const menuModalStore = useMenuModal();
 const { openMobileModal } = menuModalStore;
+const { openCustomTablePopup } = useCustomTableModal();
 
 const isSubmit = ref(false);
 const useReservation = ref(false);
-const useCoupon = ref(false);
 const useOrder = ref(false);
 const selectedBoothId = ref('');
 
@@ -223,12 +228,36 @@ const handleClickSumbit = async () => {
       .filter((result) => result),
   ]);
 
+  if (ADMIN_CATEGORY[boothInfo.value.adminCategory] === 'night') {
+    const tableDetailResult = await submitTableDetail(boothInfo.value.boothId);
+    if (!tableDetailResult) return;
+  }
+
   isSubmit.value = false;
   // TODO: 수정하고 모달 띄우기
 };
 
 const handleClickCancleButton = () => {
   router.push({ name: 'MobileMain' });
+};
+
+const handleInputAccountHolder = (event) => {
+  if (isSubmit.value) return;
+  boothInfo.value.accountInfo.accountHolder = event.target.value;
+};
+const handleInputBankName = (event) => {
+  if (isSubmit.value) return;
+  boothInfo.value.accountInfo.bankName = event.target.value;
+};
+
+const handleInputAccount = (event) => {
+  if (isSubmit.value) return;
+
+  let inputValue = event.target.value;
+  inputValue = inputValue.trim();
+  inputValue = inputValue.replace(/\D/g, '-');
+  event.target.value = inputValue;
+  boothInfo.value.accountInfo.account = inputValue;
 };
 
 watch(selectedBoothId, async () => {
@@ -241,6 +270,7 @@ watch(selectedBoothId, async () => {
     useOrder.value = selectedBoothInfo.isOrder;
   }
   const res = await useBoothDetailStore.getBoothDetail({ boothId: selectedBoothId.value, type: boothType.value });
+  await getTableList(selectedBoothId.value);
 });
 
 onMounted(async () => {
@@ -263,6 +293,7 @@ onMounted(async () => {
     await useBoothListStore.getAllBoothList();
     selectedBoothId.value = boothList.value[0].boothId;
   }
+  await getTableList(selectedBoothId.value);
 });
 </script>
 <template>
@@ -453,13 +484,78 @@ onMounted(async () => {
               </div>
             </div>
           </div>
-          <div
+          <div @click="openMobileModal({})"
             class="w-full h-[150px] flex flex-col items-center justify-center border-dashed border-2 rounded-3xl bg-primary-300-light"
           >
-            <div @click="openMobileModal({})" class="flex flex-col items-center justify-center p-5">
+            <div class="flex flex-col items-center justify-center p-5">
               <IconAdd />
               <div class="pt-[10px] text-sm text-secondary-900-light">메뉴 추가하기</div>
             </div>
+          </div>
+        </div>
+      </div>
+      <!-- 테이블 커스텀 -->
+      <div v-if="ADMIN_CATEGORY[boothInfo.adminCategory] === 'night'" class="flex flex-col w-full">
+        <div
+          class="font-bold text-base pb-2.5"
+        >
+          현재 테이블 개수 : {{ tableNum }}개
+        </div>
+        <div class="flex w-full flex-wrap justify-between">
+          <div v-for="table in tableNumList" :key="table.tableNumIndex" class="py-2.5 w-[48%]">
+            <div class="rounded-xl border border-primary-700 text-sm flex">
+              <div class="rounded-l-xl bg-primary-700 py-2.5 px-4">테이블 {{ table.tableNumIndex }}</div>
+              <div class="px-4 py-2.5">{{ table.customTableNum }}</div>
+            </div>
+          </div>
+        </div>
+        <div class="flex justify-end pt-2.5">
+          <button class="bg-primary-900 text-white px-6 py-2 rounded-xl font-semibold" @click="openCustomTablePopup()">테이블 커스텀</button>
+        </div>
+      </div>
+      <!-- 계좌정보 -->
+      <div v-if="ADMIN_CATEGORY[boothInfo.adminCategory] === 'night'" class="flex flex-col gap-[20px] w-full">
+        <div
+          class="font-bold text-base"
+        >
+          계좌 정보
+        </div>
+        <div class="flex flex-col gap-[10px]">
+          <div class="flex items-center justify-between">
+            <div class="text-secondary-700-light text-sm min-w-[100px]">예금주</div>
+            <input
+              class="w-full px-5 py-3 bg-primary-300-light rounded-2lg text-sm border-none placeholder:text-secondary-900-light"
+              type="text"
+              maxlength="100"
+              placeholder="예금주를 입력하세요."
+              @input="handleInputAccountHolder($event)"
+              :value="boothInfo?.accountInfo?.accountHolder ?? ''"
+              :disabled="isSubmit"
+            />
+          </div>
+          <div class="flex items-center justify-between">
+            <div class="text-secondary-700-light text-sm min-w-[100px]">은행명</div>
+            <input
+              class="w-full px-5 py-3 bg-primary-300-light rounded-2lg text-sm border-none placeholder:text-secondary-900-light"
+              type="text"
+              maxlength="100"
+              placeholder="은행명을 입력하세요."
+              @input="handleInputBankName($event)"
+              :value="boothInfo?.accountInfo?.bankName ?? ''"
+              :disabled="isSubmit"
+            />
+          </div>
+          <div class="flex items-center justify-between">
+            <div class="text-secondary-700-light text-sm min-w-[100px]">계좌번호</div>
+            <input
+              class="w-full px-5 py-3 bg-primary-300-light rounded-2lg text-sm border-none placeholder:text-secondary-900-light"
+              type="text"
+              maxlength="100"
+              placeholder="계좌번호를 입력하세요."
+              @input="handleInputAccount($event)"
+              :value="boothInfo?.accountInfo?.account ?? ''"
+              :disabled="isSubmit"
+            />
           </div>
         </div>
       </div>
@@ -469,15 +565,11 @@ onMounted(async () => {
         <SelectOption v-model="useReservation" />
       </div>
       <div class="flex flex-col gap-[10px] items-start" v-if="boothType === 'night'">
-        <div class="font-bold text-base shrink-0">쿠폰 진행 여부</div>
-        <SelectOption v-model="useCoupon" />
-      </div>
-      <div class="flex flex-col gap-[10px] items-start" v-if="boothType === 'night'">
         <div class="font-bold text-base shrink-0">주문 기능 사용 여부</div>
         <SelectOption v-model="useOrder" />
       </div>
     </div>
-    <div class="w-full dynamic-padding flex gap-[10px] py-20">
+    <div class="w-full dynamic-padding flex gap-[10px] py-10">
       <button class="w-full rounded-[50px] h-[54px] is-button is-outlined" @click="handleClickCancleButton()">
         취소
       </button>
