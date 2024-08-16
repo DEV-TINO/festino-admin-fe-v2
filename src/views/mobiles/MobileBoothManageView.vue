@@ -280,6 +280,7 @@ onMounted(async () => {
     const condition = await useBoothDetailStore.init(userBoothId);
     if (condition) {
       fileUrls.value = [...boothInfo.value.boothImage];
+      if (!fileUrls.value[0]) fileUrls.value = [];
       serviceHours.value = `${boothInfo.value.openTime} ~ ${boothInfo.value.closeTime}`;
       if (boothType.value === 'night') {
         useReservation.value = boothInfo.value.isReservation;
