@@ -284,6 +284,7 @@ onMounted(async () => {
       if (boothType.value === 'night') {
         useReservation.value = boothInfo.value.isReservation;
         useOrder.value = boothInfo.value.isOrder;
+        await getTableList(userBoothId);
       }
     } else {
       //부스정보 불러오기 실패
@@ -292,8 +293,8 @@ onMounted(async () => {
   if (isAdmin.value) {
     await useBoothListStore.getAllBoothList();
     selectedBoothId.value = boothList.value[0].boothId;
+    await getTableList(selectedBoothId.value);
   }
-  await getTableList(selectedBoothId.value);
 });
 </script>
 <template>
