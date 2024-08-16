@@ -1,19 +1,20 @@
 <script setup>
-import { nextTick, onMounted, ref, watch } from 'vue';
+import { nextTick, onMounted, ref, watchEffect } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useTableDetail } from '@/stores/booths/tableDetail';
 import IconNotFound from '../icons/IconNotFound.vue';
 import IconClose from '../icons/IconClose.vue';
 import IconPlus from '../icons/IconPlus.vue';
+import _ from 'lodash';
 
 const useTableDetailStore = useTableDetail();
 
-const { tableNumList, tableNum } = storeToRefs(useTableDetailStore);
-
 const { closeTableDetailModal } = useTableDetailStore;
 
+const { tableNumList, tableNum } = storeToRefs(useTableDetailStore);
+
 const modalContainer = ref(null);
-const newTableNumList = ref([...tableNumList.value] || []);
+const newTableNumList = ref(_.cloneDeep(tableNumList.value));
 
 const handleInputCustomTableNum = (event, index) => {
   newTableNumList.value[index].customTableNum = event.target.value;
@@ -89,15 +90,11 @@ onMounted(() => {
   }, 0);
 });
 
-watch(
-  newTableNumList,
-  () => {
-    newTableNumList.value.forEach((table, index) => {
-      table.tableNumIndex = index + 1;
-    });
-  },
-  { deep: true },
-);
+watchEffect(() => {
+  newTableNumList.value.forEach((table, index) => {
+    table.tableNumIndex = index + 1;
+  });
+});
 </script>
 
 <template>
