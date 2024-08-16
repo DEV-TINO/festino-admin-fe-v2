@@ -4,10 +4,14 @@ import { ORDER_STATUS } from '@/utils/constants';
 import { prettyMenuNum, prettyPhoneNumber, prettyPrice } from '@/utils/utils';
 import { storeToRefs } from 'pinia';
 import { onMounted, ref, watchEffect } from 'vue';
+import { useTableDetail } from '@/stores/booths/tableDetail';
 
 const useOrderPopupStore = useOrderPopup();
 const { submitPopup, closePopup } = useOrderPopupStore;
+const useTableDetailStore = useTableDetail();
+
 const { selectType, menuInfoList, orderInfo, cookingInfo } = storeToRefs(useOrderPopupStore);
+const { getCustomTableNum } = useTableDetailStore;
 
 const isSubmit = ref(false);
 const submit = ref(null);
@@ -68,7 +72,7 @@ onMounted(() => {
             </thead>
             <tbody>
               <tr class="text-center h-[50px] last:rounded-b-2xl">
-                <td>{{ cookingInfo.cook.tableNum }}번</td>
+                <td>{{ getCustomTableNum(cookingInfo.cook.tableNum) }}번</td>
                 <td>{{ cookingInfo.menuName }}</td>
                 <td>{{ cookingInfo.cook.servedCount }}개</td>
                 <td>{{ cookingInfo.cook.totalCount }}개</td>
@@ -95,7 +99,7 @@ onMounted(() => {
             <tbody>
               <tr class="text-center h-[50px] last:rounded-b-2xl">
                 <td>{{ orderInfo.orderNum }}</td>
-                <td>{{ orderInfo.tableNum }}번</td>
+                <td>{{ getCustomTableNum(orderInfo.tableNum) }}번</td>
                 <td>{{ orderInfo.userName }}</td>
                 <td>{{ prettyPhoneNumber(orderInfo.phoneNum) }}</td>
                 <td>{{ prettyPrice(orderInfo.totalPrice) }}</td>

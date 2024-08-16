@@ -28,7 +28,7 @@ const { getAllBoothList } = useBoothListStore;
 const { setOrderStatus, getAllTableOrders, initBaseOrder } = useBaseOrderStore;
 const { openPopup } = useOrderPopupStore;
 const { getWaitDepositOrderList } = useDepositOrderStore;
-const { getTableList } = useTableDetailStore;
+const { getTableList, getCustomTableNum } = useTableDetailStore;
 
 const { userOwnBoothId, isAdmin } = storeToRefs(useUserStore);
 const { boothList } = storeToRefs(useBoothListStore);
@@ -280,7 +280,7 @@ onUnmounted(() => {
                 class="border-b h-[47px] last:border-none hover:bg-slate-50"
                 :tableOrderIndex
               >
-                <td>{{ tableOrder.tableNum }}번</td>
+                <td>{{ getCustomTableNum(tableOrder.tableNum) }}번</td>
                 <td>{{ tableOrder.servedCount }}/{{ tableOrder.totalCount }}</td>
                 <td>
                   <div class="flex justify-center items-center">
