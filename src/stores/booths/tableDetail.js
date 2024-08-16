@@ -32,7 +32,8 @@ export const useTableDetail = defineStore('tableDetail', () => {
       alertError(error);
     }
   };
-  const updateTableList = async (boothId) => {
+
+  const submitTableDetail = async (boothId) => {
     try {
       const res = await api.post('/admin/order/table', {
         boothId,
@@ -50,27 +51,8 @@ export const useTableDetail = defineStore('tableDetail', () => {
     }
   };
 
-  const submitTableDetail = async (boothId) => {
-    // tableNumList.value.forEach((table, index) => {
-    //   if (!table.tableNumIndex) {
-    //     table.tableNumIndex = index + 1;
-    //   }
-    // });
-    try {
-      const res = await api.post('/admin/order/table', {
-        boothId,
-        tableNumList: tableNumList.value,
-      });
-      if (res.data.success) {
-        return true;
-      } else {
-        alertError(res.data.message);
-        return false;
-      }
-    } catch (error) {
-      console.log(error);
-      alertError(error);
-    }
+  const getCustomTableNum = (tableNum) => {
+    return tableNumList.value.find((table) => table.tableNumIndex === tableNum)?.customTableNum ?? tableNum;
   };
 
   return {
@@ -80,5 +62,6 @@ export const useTableDetail = defineStore('tableDetail', () => {
     closeTableDetailModal,
     submitTableDetail,
     getTableList,
+    getCustomTableNum,
   };
 });
