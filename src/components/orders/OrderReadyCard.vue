@@ -1,6 +1,7 @@
 <script setup>
 import { useOrderPopup } from '@/stores/orders/orderPopup';
 import { prettyMenuNum, prettyPhoneNumber, prettyPrice } from '@/utils/utils';
+import { useTableDetail } from '@/stores/booths/tableDetail';
 
 const props = defineProps({
   orderId: {
@@ -36,6 +37,9 @@ const props = defineProps({
 const useOrderPopupStore = useOrderPopup();
 const { openPopup } = useOrderPopupStore;
 
+const useTableDetailStore = useTableDetail();
+const { getCustomTableNum } = useTableDetailStore;
+
 const handleClickOrderDetail = () => {
   openPopup({
     type: 'ready',
@@ -59,7 +63,7 @@ const handleClickOrderDetail = () => {
       class="flex justify-between w-full h-[73px] items-center rounded-t-xl border-x-1 border-t-1 border-danger px-[28px] text-xl font-semibold bg-danger-700"
     >
       <div>No.{{ orderNum }}</div>
-      <div>{{ tableNum }}번</div>
+      <div>{{ getCustomTableNum(tableNum) }}번</div>
       <div>{{ userName }}</div>
       <div>{{ prettyPhoneNumber(phoneNum) }}</div>
     </div>

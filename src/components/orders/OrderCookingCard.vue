@@ -1,6 +1,7 @@
 <script setup>
 import { useBaseOrder } from '@/stores/orders/baseOrder';
 import { useOrderPopup } from '@/stores/orders/orderPopup';
+import { useTableDetail } from '@/stores/booths/tableDetail';
 import { api } from '@/utils/api';
 import { storeToRefs } from 'pinia';
 import _ from 'lodash';
@@ -31,7 +32,10 @@ const props = defineProps({
 
 const useBaseOrderStore = useBaseOrder();
 const useOrderPopupStore = useOrderPopup();
+const useTableDetailStore = useTableDetail();
+
 const { openPopup } = useOrderPopupStore;
+const { getCustomTableNum } = useTableDetailStore;
 
 const { boothId } = storeToRefs(useBaseOrderStore);
 
@@ -146,7 +150,7 @@ const handleInputServeCount = async (cook, event) => {
             class="h-[57px] border-1 border-b last:border-none hover:bg-slate-50"
             :key="cookIndex"
           >
-            <td class="text-center align-middle pl-[28px] min-w-[70px]">{{ cook.tableNum }}번</td>
+            <td class="text-center align-middle pl-[28px] min-w-[70px]">{{ getCustomTableNum(cook.tableNum) }}번</td>
             <td class="min-w-[30px] text-center align-middle">{{ cook.totalCount }}개</td>
             <td class="min-w-[80px] text-center align-middle">
               <div class="w-full gap-[10px] flex justify-center items-center">

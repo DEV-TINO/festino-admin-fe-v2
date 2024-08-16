@@ -51,6 +51,10 @@ export const useTableDetail = defineStore('tableDetail', () => {
     }
   };
 
+  const getCustomTableNum = (tableNum) => {
+    return tableNumList.value.find((table) => table.tableNumIndex === tableNum)?.customTableNum ?? tableNum;
+  };
+
   return {
     tableNumList,
     tableNum,
@@ -58,5 +62,6 @@ export const useTableDetail = defineStore('tableDetail', () => {
     closeTableDetailModal,
     submitTableDetail,
     getTableList,
+    getCustomTableNum,
   };
 });

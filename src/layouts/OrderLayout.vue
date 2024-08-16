@@ -7,6 +7,7 @@ import { useBoothList } from '@/stores/booths/boothList';
 import { useBaseOrder } from '@/stores/orders/baseOrder';
 import { useOrderPopup } from '@/stores/orders/orderPopup';
 import { useDepositOrder } from '@/stores/orders/depositOrder';
+import { useTableDetail } from '@/stores/booths/tableDetail';
 import { useUser } from '@/stores/user';
 import { api } from '@/utils/api';
 import { ORDER_CATEGORY, ORDER_URL } from '@/utils/constants';
@@ -21,11 +22,13 @@ const useBoothListStore = useBoothList();
 const useBaseOrderStore = useBaseOrder();
 const useOrderPopupStore = useOrderPopup();
 const useDepositOrderStore = useDepositOrder();
+const useTableDetailStore = useTableDetail();
 
 const { getAllBoothList } = useBoothListStore;
 const { setOrderStatus, getAllTableOrders, initBaseOrder } = useBaseOrderStore;
 const { openPopup } = useOrderPopupStore;
 const { getWaitDepositOrderList } = useDepositOrderStore;
+const { getTableList } = useTableDetailStore;
 
 const { userOwnBoothId, isAdmin } = storeToRefs(useUserStore);
 const { boothList } = storeToRefs(useBoothListStore);
@@ -199,6 +202,7 @@ onMounted(async () => {
   } else {
     boothId.value = userOwnBoothId.value;
   }
+  await getTableList(boothId.value);
   refreshAllTableOrders();
   refreshWaitDepositOrderList();
 });
