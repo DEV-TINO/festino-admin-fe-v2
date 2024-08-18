@@ -59,7 +59,7 @@ onMounted(async () => {
 
     <!-- Booth Body -->
     <div
-      class="w-full flex flex-col h-full shadow-secondary rounded-b-[20px] border-1 border-primary-500 rounded-t-2xl text-secondary-700-light"
+      class="w-full flex flex-col h-full shadow-secondary rounded-b-[20px] outline outline-1 outline-primary-500 rounded-t-2xl text-secondary-700-light"
     >
       <!-- Header -->
       <div

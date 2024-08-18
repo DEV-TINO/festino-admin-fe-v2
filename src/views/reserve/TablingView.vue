@@ -301,7 +301,7 @@ onUnmounted(() => {
       </select>
     </div>
     <!-- Table.. -->
-    <div class="relative overflow-x-auto border-primary-500 border-1 rounded-2xl shadow-secondary">
+    <div class="relative overflow-x-auto outline outline-1 outline-primary-500 rounded-2xl shadow-secondary">
       <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
         <thead class="md:text-sm lg:text-lg xl:text-2xl uppercase bg-secondary-500 border-b-1 border-primary-500">
           <tr>
