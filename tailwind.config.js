@@ -192,6 +192,13 @@ export default {
         xs: '430px',
         '3xl': '1800px',
       },
+      outlineColor: {
+        primary: {
+          500: {
+            DEFAULT: '#C5E0FC',
+          },
+        },
+      },
     },
   },
   plugins: [require('flowbite/plugin'), require('tailwind-scrollbar-hide')],
