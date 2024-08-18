@@ -85,7 +85,7 @@ onUnmounted(() => {
 
 <template>
   <div
-    class="text-second-700-light text-xs lg:text-xl h-[70px] w-full flex justify-between gap-4 flex-nowrap overflow-x-auto items-center px-4 lg:px-[60px] last:rounded-b-[20px] last:border-0 border-b-2 border-secondary-500"
+    class="text-second-700-light text-xs lg:text-xl h-[70px] w-full flex justify-between gap-4 flex-nowrap overflow-x-auto items-center px-4 lg:px-[60px] last:rounded-b-[20px] last:border-0 border-b-1 border-secondary-300"
     :class="{
       'hover:bg-slate-200 bg-slate-100 font-bold': isBoothOwner && !isAdmin,
       'hover:bg-slate-50 bg-white': !isBoothOwner || isAdmin,

@@ -59,11 +59,11 @@ onMounted(async () => {
 
     <!-- Booth Body -->
     <div
-      class="w-full flex flex-col h-full shadow-primary rounded-b-[20px] border-1 border-primary-700 rounded-t-2xl text-secondary-700-light"
+      class="w-full flex flex-col h-full shadow-secondary rounded-b-[20px] border-1 border-primary-500 rounded-t-2xl text-secondary-700-light"
     >
       <!-- Header -->
       <div
-        class="text-xs lg:text-xl font-semibold h-[70px] w-full bg-primary-700 rounded-t-2xl flex justify-between gap-4 flex-nowrap overflow-x-auto items-center px-4 lg:px-[60px] border-b border-primary-700"
+        class="text-xs lg:text-xl font-semibold h-[70px] w-full bg-secondary-500 rounded-t-2xl flex justify-between gap-4 flex-nowrap overflow-x-auto items-center px-4 lg:px-[60px] border-b border-primary-700"
       >
         <div class="text-nowrap min-w-[21px] w-[21px] lg:min-w-[35px] text-center">번호</div>
         <div class="text-balance break-keep min-w-[75px] w-[75px] lg:min-w-[130px] text-center">관리자 카테고리</div>

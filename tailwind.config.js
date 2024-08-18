@@ -127,7 +127,7 @@ export default {
             DEFAULT: '#DAE8FA',
           },
           500: {
-            DEFAULT: 'rgba(0, 0, 0, 0.16)',
+            DEFAULT: '#C5E0FC',
           },
         },
         secondary: {
@@ -139,6 +139,9 @@ export default {
           },
           500: {
             DEFAULT: 'rgba(204, 204,204, 0.28)',
+          },
+          300: {
+            DEFAULT: '#F1F1F1',
           },
         },
         danger: {
