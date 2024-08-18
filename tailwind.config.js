@@ -118,6 +118,7 @@ export default {
             light: 'rgba(0, 115, 240, 0.86)',
             ligther: 'rgba(0, 115, 240, 0.16)',
           },
+
           700: {
             light: 'rgba(0, 115, 240, 0.12)',
             DEFAULT: 'rgba(0, 115, 240, 0.16)',
@@ -129,6 +130,10 @@ export default {
           500: {
             DEFAULT: '#C5E0FC',
           },
+          300: {
+            DEFAULT: '#C7C7C7',
+            light: '#D8D9DA',
+          },
         },
         secondary: {
           900: {
@@ -138,10 +143,13 @@ export default {
             DEFAULT: '#D7D7D7',
           },
           500: {
-            DEFAULT: 'rgba(204, 204,204, 0.28)',
+            DEFAULT: 'rgba(204, 204, 204, 0.28)',
           },
           300: {
             DEFAULT: '#F1F1F1',
+          },
+          200: {
+            DEFAULT: 'rgba(255, 109, 109, 0.4)',
           },
         },
         danger: {
@@ -152,6 +160,7 @@ export default {
           DEFAULT: '#66CF55',
           700: {
             DEFAULT: '#E2F5E1',
+            light: 'rgba(102, 207, 85, 0.7)',
           },
           500: {
             DEFAULT: 'rgba(102, 207, 85, 0.05)',
@@ -194,8 +203,20 @@ export default {
       },
       outlineColor: {
         primary: {
+          800: {
+            DEFAULT: 'rgba(0, 115, 240, 0.4)',
+          },
+          700: {
+            DEFAULT: 'rgba(102, 207, 85, 0.7)',
+          },
           500: {
             DEFAULT: '#C5E0FC',
+          },
+          300: {
+            DEFAULT: '#D8D9DA',
+          },
+          200: {
+            DEFAULT: 'rgba(255, 109, 109, 0.4)',
           },
         },
       },
