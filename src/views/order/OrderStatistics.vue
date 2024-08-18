@@ -141,10 +141,10 @@ onMounted(async () => {
         </button>
       </div>
       <div
-        class="max-w-[712px] w-full h-[380px] rounded-3xl flex flex-col text-secondary-500 border-2 bg-white border-[rgba(0,115,240,0.16)] relative"
+        class="max-w-[712px] w-full h-[380px] rounded-3xl flex flex-col text-secondary-500 outline outline-2 bg-white outline-[rgba(0,115,240,0.16)] relative"
       >
         <div
-          class="h-[50px] flex flex-row justify-between bg-[#E6F0FB] rounded-t-3xl font-semibold pl-7 border-b-2 border-[#C7C7C7] items-center shrink-0"
+          class="h-[50px] flex flex-row justify-between bg-[#E6F0FB] rounded-t-3xl font-semibold pl-7 border-b-1 border-[#C7C7C7] items-center shrink-0"
         >
           <p class="basis-1/3 h-full flex items-center font-semibold select-none">
             메뉴
@@ -185,7 +185,7 @@ onMounted(async () => {
         </div>
         <div class="h-full overflow-y-scroll scrollbar-hide">
           <div
-            class="flex flex-row justify-between font-normal pl-7 min-h-10 items-center border-b-2 border-[#C7C7C7] shrink-0 hover:bg-gray-200"
+            class="flex flex-row justify-between font-normal pl-7 min-h-10 items-center border-b-1 border-[#C7C7C7] shrink-0 hover:bg-gray-200"
             v-for="(menu, index) in allOrderStatistics.menuSaleList"
             :key="index"
           >
@@ -195,7 +195,7 @@ onMounted(async () => {
           </div>
         </div>
         <div
-          class="grid place-items-center text-primary-900 font-medium text-2xl h-[73px] rounded-b-3xl aboslute bottom-0 shrink-0 bg-white border-secondary-600 shadow-[0px_-3px_12px_rgba(0,0,0,0.12)]"
+          class="grid place-items-center text-primary-900 font-medium text-2xl h-[73px] rounded-b-3xl bottom-0 shrink-0 bg-white border-secondary-600 shadow-[0px_-5px_6px_0px_rgba(0,0,0,0.1)]"
         >
           총액 : {{ prettyPrice(allOrderStatistics.totalSale || 0) }}
         </div>

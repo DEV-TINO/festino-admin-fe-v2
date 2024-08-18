@@ -22,22 +22,10 @@ const chartData = ref({
     {
       label: "야간부스 매출 통계",
       data: [],
-      backgroundColor: (ctx) => {
-        const canvas = ctx.chart.ctx;
-        const gradient = canvas.createLinearGradient(0, 130, 0, 300);
-        gradient.addColorStop(0, "rgba(0, 115, 240, 0.01)");
-        gradient.addColorStop(1, "rgba(0, 115, 240, 0.34)");
-        return gradient;
-      },
+      backgroundColor: '#ADC9F5',
       borderColor: "#0073F0",
       borderWidth: 1,
-      hoverBackgroundColor: (ctx) => {
-        const canvas = ctx.chart.ctx;
-        const gradient = canvas.createLinearGradient(0, 130, 0, 300);
-        gradient.addColorStop(0, "rgba(0, 115, 240, 0.03)");
-        gradient.addColorStop(1, "rgba(0, 115, 240, 0.64)");
-        return gradient;
-      },
+      hoverBackgroundColor: 'rgba(0, 115, 240, 0.64)',
       hoverBorderColor: "#0073F0",
       borderRadius: 10,
     }
