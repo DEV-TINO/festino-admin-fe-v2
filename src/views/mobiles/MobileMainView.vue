@@ -40,8 +40,10 @@ const handleClickAdminMenu = (type) => {
         class="bg-primary-900 rounded-[20px] flex flex-col items-center w-full relative h-[190px] justify-end p-5 cursor-pointer"
         @click="handleClickAdminMenu('booth')"
       >
-        <IconBoothTino class="absolute -top-7" />
-        <div class="bg-white flex rounded-[20px] justify-between w-full h-[88px] p-5 items-center">
+        <IconBoothTino />
+        <div
+          class="bg-white flex rounded-[20px] justify-between w-full h-[88px] p-5 items-center border-[0.5px] border-primary-700"
+        >
           <div class="flex flex-col gap-[6px] font-semibold">
             {{ isAdmin ? '개발팀' : boothInfo.adminName }}
             <p class="text-xs">부스 운영을 응원합니다!</p>
@@ -56,8 +58,10 @@ const handleClickAdminMenu = (type) => {
         class="bg-primary-900 rounded-[20px] flex flex-col items-center w-full relative h-[190px] justify-end p-5 cursor-pointer"
         @click="handleClickAdminMenu('reserve')"
       >
-        <IconReserveTino class="absolute -top-7" />
-        <div class="bg-white flex rounded-[20px] justify-between w-full h-[88px] p-5 items-center">
+        <IconReserveTino />
+        <div
+          class="bg-white flex rounded-[20px] justify-between w-full h-[88px] p-5 items-center border-[0.5px] border-primary-700 shrink-0"
+        >
           <div class="flex flex-col gap-[6px]">
             <p class="font-semibold">
               {{ isAdmin ? '예약 서비스' : `${boothInfo.totalReservationNum}팀 대기 중` }}
