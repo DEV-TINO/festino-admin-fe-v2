@@ -80,7 +80,7 @@ const router = createRouter({
           path: 'statistics',
           name: 'OrderStatistics',
           component: () => import('../views/order/OrderStatistics.vue'),
-        }
+        },
       ],
     },
     {
@@ -119,6 +119,7 @@ const adminPages = [''];
 // Auth Guard
 router.beforeEach(async (to, from) => {
   const { isUserVaild, getUserOwnBoothId } = useUser();
+  const isMobile = navigator.userAgent.indexOf('iPhone') > -1 || navigator.userAgent.indexOf('Android') > -1;
 
   if (publicPages.includes(to.name)) {
     return true;
@@ -128,7 +129,7 @@ router.beforeEach(async (to, from) => {
   await getUserOwnBoothId();
 
   if (!isValidate) {
-    if (from.name?.includes('Mobile')) return { name: 'MobileLogin' };
+    if (from.name?.includes('Mobile') || isMobile) return { name: 'MobileLogin' };
     else return { name: 'Login' };
   }
 
