@@ -115,11 +115,11 @@ const router = createRouter({
 
 const publicPages = ['Login', 'MobileLogin'];
 const adminPages = [''];
+const isMobile = navigator.userAgent.indexOf('iPhone') > -1 || navigator.userAgent.indexOf('Android') > -1;
 
 // Auth Guard
 router.beforeEach(async (to, from) => {
   const { isUserVaild, getUserOwnBoothId } = useUser();
-  const isMobile = navigator.userAgent.indexOf('iPhone') > -1 || navigator.userAgent.indexOf('Android') > -1;
 
   if (publicPages.includes(to.name)) {
     return true;
@@ -166,6 +166,11 @@ router.beforeEach((to, from) => {
     //Mobile Error Page
     return {
       name: 'MobileLogin',
+    };
+  }
+  if (to.path === '/' && isMobile) {
+    return {
+      name: 'MobileMain',
     };
   }
 });
