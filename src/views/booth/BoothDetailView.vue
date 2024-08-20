@@ -3,6 +3,7 @@ import IconBoothInfo from '@/components/icons/IconBoothInfo.vue';
 import IconBoothListToggle from '@/components/icons/IconBoothListToggle.vue';
 import IconIndicator from '@/components/icons/IconIndicator.vue';
 import IconRadio from '@/components/icons/IconRadio.vue';
+import IconNotFound from '@/components/icons/IconNotFound.vue';
 import { prettyPrice } from '@/utils/utils';
 import { useBoothDetail } from '@/stores/booths/boothDetail';
 import { useTableDetail } from '@/stores/booths/tableDetail';
@@ -177,6 +178,7 @@ onMounted(async () => {
                 부스 이미지
               </div>
               <div
+                v-if="boothInfo.boothImage[0] !== ''"
                 class="min-w-[400px] overflow-x-auto overflow-y-hidden 2xl:col-span-3 flex justify-between items-center bg-white rounded-br-[20px] border-primary-700 h-[280px] py-[40px] px-[40px] gap-[23px]"
               >
                 <IconIndicator :left="true" @click="handleClickLeftIndicator()" />
@@ -189,6 +191,13 @@ onMounted(async () => {
                   ></div>
                 </div>
                 <IconIndicator :right="true" @click="handleClickRightIndicator()" />
+              </div>
+              <div
+                v-if="boothInfo.boothImage[0] === ''"
+                class="min-w-[400px] overflow-x-auto overflow-y-hidden 2xl:col-span-3 flex flex-col justify-between items-center bg-white rounded-br-[20px] border-primary-700 h-[280px] py-[20px] px-[20px] gap-[23px]"
+              >
+                <IconNotFound />
+                <div>등록된 부스 이미지가 없습니다.</div>
               </div>
             </div>
             <!-- 테이블 정보 -->

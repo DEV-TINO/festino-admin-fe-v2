@@ -124,19 +124,21 @@ watchEffect(() => {
 
       <!-- Buttons -->
       <div class="w-full flex justify-between font-semibold">
-        <div
-          @click="handleClickAddTableButton(1)"
-          class="w-[184px] rounded-2xl text-primary-900 text-xl border-1 border-primary-900 h-12 flex items-center justify-center gap-2 cursor-pointer hover:bg-primary-800"
-        >
-          <IconPlus />
-          테이블 추가
-        </div>
-        <div
-          @click="handleClickAddTableButton(10)"
-          class="w-[234px] rounded-2xl text-primary-900 text-xl border-1 border-primary-900 h-12 flex items-center justify-center gap-2 cursor-pointer hover:bg-primary-800"
-        >
-          <IconPlus />
-          테이블 10개 추가
+        <div class="flex gap-[10px]">
+          <div
+            @click="handleClickAddTableButton(1)"
+            class="w-[184px] rounded-2xl text-primary-900 text-xl border-1 border-primary-900 h-12 flex items-center justify-center gap-2 cursor-pointer hover:bg-primary-800"
+          >
+            <IconPlus />
+            테이블 추가
+          </div>
+          <div
+            @click="handleClickAddTableButton(10)"
+            class="w-[234px] rounded-2xl text-primary-900 text-xl border-1 border-primary-900 h-12 flex items-center justify-center gap-2 cursor-pointer hover:bg-primary-800"
+          >
+            <IconPlus />
+            테이블 10개 추가
+          </div>
         </div>
         <div
           @click="handleClickTotalDeleteButton()"

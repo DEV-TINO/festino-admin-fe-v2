@@ -301,9 +301,9 @@ onUnmounted(() => {
       </select>
     </div>
     <!-- Table.. -->
-    <div class="relative overflow-x-auto rounded-xl">
+    <div class="relative overflow-x-auto outline outline-1 outline-primary-500 rounded-2xl shadow-secondary">
       <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-        <thead class="md:text-sm lg:text-lg xl:text-2xl text-gray-700 uppercase bg-primary-700">
+        <thead class="md:text-sm lg:text-lg xl:text-2xl uppercase bg-secondary-500 border-b-1 border-primary-500">
           <tr>
             <th scope="col" class="px-6 py-3 text-center text-secondary-700-light font-medium capitalize">No.</th>
             <th scope="col" class="px-6 py-3 text-center text-secondary-700-light font-medium capitalize">예약 번호</th>
@@ -311,7 +311,11 @@ onUnmounted(() => {
             <th scope="col" class="px-6 py-3 text-center text-secondary-700-light font-medium">인원수</th>
             <th scope="col" class="px-6 py-3 text-center text-secondary-700-light font-medium">연락처</th>
             <th scope="col" class="px-6 py-3 text-center text-secondary-700-light font-medium">예약 시간</th>
-            <th scope="col" colspan="2" class="px-6 py-3 text-center text-secondary-700-light min-w-[140px]">
+            <th
+              scope="col"
+              colspan="2"
+              class="px-6 py-3 text-center text-secondary-700-light font-medium min-w-[140px]"
+            >
               예약 관리
             </th>
           </tr>
@@ -319,7 +323,7 @@ onUnmounted(() => {
         <tbody class="text-xs md:text-sm lg:text-lg xl:text-2xl">
           <tr
             v-if="!isLoading"
-            class="bg-white border-b text-secondary-700-light"
+            class="bg-white border-b-1 border-secondary-300 text-secondary-700-light last:border-0"
             v-for="(reserve, reserveIndex) in getFilteredReserveList({ type: selectOrderType })"
             :key="reserveIndex"
           >
