@@ -64,12 +64,14 @@ onMounted(() => {
             placeholder="아이디"
             type="text"
             @input="handleInputId($event)"
+            autocomplete="username"
           />
           <input
             class="w-full h-[59px] focus:outline-none rounded-3xl border-2 border-primary-900-light-30 px-5 focus:border-primary-900"
             placeholder="비밀번호"
             type="password"
             @input="handleInputPassword($event)"
+            autocomplete="new-password"
           />
         </div>
         <div class="flex flex-col justify-start items-center relative w-full">
