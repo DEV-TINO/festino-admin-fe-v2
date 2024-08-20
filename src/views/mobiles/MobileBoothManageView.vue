@@ -355,7 +355,7 @@ onMounted(async () => {
           rows="3"
         />
 
-        <div class="absolute bottom-4 right-5 text-sm">{{ boothIntroLength }}/100</div>
+        <div class="absolute bottom-4 right-5 text-sm text-secondary-900-light">{{ boothIntroLength }}/100</div>
       </div>
       <div class="flex flex-col gap-[10px] items-start">
         <div class="font-bold text-base">부스 사진</div>
