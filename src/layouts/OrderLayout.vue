@@ -259,15 +259,22 @@ onUnmounted(() => {
     </div>
 
     <!-- 테이블 주문 현황 -->
-    <div v-if="!isStatistics" class="flex flex-col w-full rounded-xl shadow-primary bg-white relative">
+    <div
+      v-if="!isStatistics"
+      class="flex flex-col w-full rounded-2xl shadow-secondary relative outline outline-1 outline-primary-500 bg-white"
+    >
       <!-- Thead -->
-      <div class="w-full h-[50px] bg-primary-700 flex items-center justify-center rounded-t-xl">테이블 주문 현황</div>
+      <div
+        class="w-full h-[50px] bg-secondary-500 flex items-center justify-center rounded-t-2xl border-b-1 border-primary-500"
+      >
+        테이블 주문 현황
+      </div>
       <!-- Tbody -->
-      <div class="w-full flex flex-wrap rounded-b-xl relative h-[370px] divide-x-2 px-4 mb-4">
-        <div v-for="(per, perIndex) in orderPerRow" class="min-w-[300px] shrink-0 relative grow px-2" :per>
+      <div class="w-full flex flex-wrap rounded-b-2xl relative h-[370px] divide-x-2 mb-4 px-5">
+        <div v-for="(per, perIndex) in orderPerRow" class="min-w-[300px] shrink-0 relative grow" :per>
           <table class="w-full">
-            <thead class="text-sm align-middle">
-              <tr class="border-b h-[47px]">
+            <thead class="text-sm align-middle border-b-2">
+              <tr class="h-[47px]">
                 <th>테이블 번호</th>
                 <th>서빙 현황</th>
                 <th>주문 내역</th>
@@ -277,7 +284,7 @@ onUnmounted(() => {
             <tbody class="text-sm align-middle text-center">
               <tr
                 v-for="(tableOrder, tableOrderIndex) in chunkedAllTableOrders[perIndex]"
-                class="border-b h-[47px] last:border-none hover:bg-slate-50"
+                class="border-b h-[47px] last:border-none hover:bg-slate-50 shrink-0"
                 :tableOrderIndex
               >
                 <td>{{ getCustomTableNum(tableOrder.tableNum) }}번</td>

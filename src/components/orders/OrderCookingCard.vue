@@ -123,21 +123,23 @@ const handleInputServeCount = async (cook, event) => {
 </script>
 
 <template>
-  <div class="w-full min-w-[430px] max-w-[552px] h-[500px] rounded-2xl flex flex-col justify-between">
+  <div
+    class="w-full min-w-[430px] max-w-[552px] h-[500px] rounded-3xl flex flex-col justify-between outline outline-1 outline-primary-800"
+  >
     <div
-      class="flex justify-center w-full h-[73px] items-center rounded-t-xl border-x-1 border-t-1 border-primary-900 px-[28px] text-2xl font-semibold bg-primary-500"
+      class="flex justify-center w-full h-[73px] items-center rounded-t-3xl px-[28px] text-2xl font-semibold bg-primary-500 border-b-1 border-primary-800"
     >
       {{ menuName }}
     </div>
     <div
-      class="relative h-[353px] w-full border-x-1 border-primary-900 overflow-y-auto"
+      class="relative h-[353px] w-full overflow-y-auto"
       :class="{
         'overflow-y-hidden': cookList.length < 6,
       }"
     >
       <table class="w-full bg-white relative">
         <thead>
-          <tr class="h-[43px] border-1 border-b">
+          <tr class="h-[43px] border-b-1 border-primary-300">
             <th class="text-center align-middle pl-[28px] min-w-[70px]">테이블 번호</th>
             <th class="min-w-[30px] text-center align-middle">수량</th>
             <th class="min-w-[120px] text-center align-middle">조리 현황</th>
@@ -147,7 +149,7 @@ const handleInputServeCount = async (cook, event) => {
         <tbody>
           <tr
             v-for="(cook, cookIndex) in cookList"
-            class="h-[57px] border-1 border-b last:border-none hover:bg-slate-50"
+            class="h-[57px] border-b-1 border-primary-300 last:border-none hover:bg-slate-50"
             :key="cookIndex"
           >
             <td class="text-center align-middle pl-[28px] min-w-[70px]">{{ getCustomTableNum(cook.tableNum) }}번</td>
@@ -155,7 +157,7 @@ const handleInputServeCount = async (cook, event) => {
             <td class="min-w-[80px] text-center align-middle">
               <div class="w-full gap-[10px] flex justify-center items-center">
                 <button
-                  class="is-button w-5 h-5 font-normal flex items-center justify-center"
+                  class="is-button w-5 h-5 font-normal flex items-center justify-center text-center leading-none"
                   @click="handleClickMenuMinus(cook)"
                   :class="{
                     'cursor-not-allowed': cook.servedCount === 0,
@@ -172,7 +174,7 @@ const handleInputServeCount = async (cook, event) => {
                   @input="($event) => handleInputServeCount(cook, $event)"
                 />
                 <button
-                  class="is-button w-5 h-5 font-normal flex items-center justify-center"
+                  class="is-button w-5 h-5 font-normal flex items-center justify-center text-center leading-none"
                   @click="handleClickMenuPlus(cook)"
                   :class="{
                     'cursor-not-allowed': cook.servedCount === cook.totalCount,
@@ -186,7 +188,7 @@ const handleInputServeCount = async (cook, event) => {
             </td>
             <td class="min-w-[80px] text-center align-middle pr-[28px]">
               <button
-                class="is-button w-[60px] h-[27px] rounded-full font-normal"
+                class="is-button w-[60px] h-[27px] rounded-full font-normal text-base"
                 :class="{
                   'bg-gray-400 text-white': !isComplete(cook),
                 }"
@@ -204,9 +206,7 @@ const handleInputServeCount = async (cook, event) => {
       </table>
     </div>
 
-    <div
-      class="flex justify-between items-center h-[73px] w-full border-x-1 border-b-1 border-primary-900 rounded-b-xl px-[28px] bg-primary-500"
-    >
+    <div class="flex justify-between items-center h-[73px] w-full rounded-b-3xl px-[28px] bg-primary-500">
       <div class="text-2xl">현재 주문 테이블: {{ tableCount }}</div>
       <div class="text-2xl">총 주문 수량: {{ totalRemainCount }}</div>
     </div>
