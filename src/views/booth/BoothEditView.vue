@@ -54,7 +54,11 @@ const handleFileinput = (event) => {
 const handleFiles = async (files) => {
   if (files.length > 0) {
     const urls = await imagesUpload(files);
-    fileUrls.value = [...fileUrls.value, ...urls];
+    if (fileUrls.value.length > 0 && fileUrls.value[0] === '') {
+      fileUrls.value = [...urls, ...fileUrls.value.slice(1)];
+    } else {
+      fileUrls.value = [...fileUrls.value, ...urls];
+    }
   }
 };
 
@@ -535,7 +539,7 @@ onMounted(async () => {
             <div class="flex w-full gap-2 flex-wrap xl:flex-nowrap">
               <div class="flex-shrink-0 xl:w-[92px] flex items-center justify-start w-full text-xl">부스 이미지</div>
               <label
-                v-if="fileUrls.length === 0"
+                v-if="fileUrls.length === 0 || fileUrls[0] === ''"
                 for="dropzone-file"
                 class="flex flex-col items-center justify-center w-full h-[150px] xl:h-[300px] border-dashed border-primary-500 bg-primary-300-light rounded-2xl border-[1px] cursor-pointer hover:bg-slate-200"
               >
@@ -553,7 +557,7 @@ onMounted(async () => {
                   :disabled="isSubmit"
                 />
               </label>
-              <div v-if="fileUrls.length > 0" class="flex grow flex-col items-center justify-center overflow-x-auto">
+              <div v-if="fileUrls.length > 0 && fileUrls[0] !== ''" class="flex grow flex-col items-center justify-center overflow-x-auto">
                 <div class="text-red-500 w-full flex justify-end cursor-pointer mb-2">
                   <div
                     @click="fileUrls = []"
@@ -563,7 +567,7 @@ onMounted(async () => {
                   </div>
                 </div>
                 <div class="w-full overflow-x-auto">
-                  <div class="w-full flex gap-4">
+                  <div v-if="fileUrls[0] !== ''" class="w-full flex gap-4">
                     <div
                       v-for="(urls, urlIndex) in fileUrls"
                       :key="urlIndex"
