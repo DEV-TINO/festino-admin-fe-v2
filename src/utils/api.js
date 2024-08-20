@@ -46,7 +46,14 @@ export const imagesUpload = async (files) => {
 
 export const alertError = (errorMessage, goHome = true) => {
   alert(`${errorMessage}, 관리자에게 문의하세요.`);
+
   if (goHome) {
-    router.push('/');
+    const currentPath = router.currentRoute.value.path;
+
+    if (currentPath.includes('mobile')) {
+      router.push({ name: 'MobileMain' });
+    } else {
+      router.push('/');
+    }
   }
 };

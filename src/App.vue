@@ -26,6 +26,7 @@ watch(() => route.name, checkIsMobile);
 
 onMounted(() => {
   initFlowbite();
+  isMobile.value = navigator.userAgent.indexOf('iPhone') > -1 || navigator.userAgent.indexOf('Android') > -1;
 });
 </script>
 
