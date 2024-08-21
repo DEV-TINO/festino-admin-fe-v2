@@ -47,6 +47,14 @@ const dropIndex = ref(null);
 const fileUrls = ref([]);
 
 const serviceHours = ref('');
+
+const preventScroll = () => {
+  document.getElementsByTagName('html')[0].style.overflow = 'hidden';
+};
+
+const allowScroll = () => {
+  document.getElementsByTagName('html')[0].style.overflow = 'auto';
+};
 const handleInputBoothName = (event) => {
   if (isSubmit.value) return;
   boothInfo.value.boothName = event.target.value;
@@ -99,6 +107,38 @@ const handleDrop = () => {
   dropIndex.value = null;
 };
 
+const handleMenuTouchStart = (event, index) => {
+  dragIndex.value = index;
+  isDragging.value = true;
+  event.target.style.touchAction = 'manipulation';
+  preventScroll();
+};
+
+const handleMenuTouchMove = (event) => {
+  const touch = event.touches[0];
+  const element = document.elementFromPoint(touch.clientX, touch.clientY);
+
+  if (element && element.dataset.index !== undefined) {
+    dropIndex.value = parseInt(element.dataset.index);
+  }
+};
+
+const handleMenuTouchEnd = () => {
+  if (dragIndex.value !== null && dropIndex.value !== null && dragIndex.value !== dropIndex.value) {
+    const draggedItem = menuList.value[dragIndex.value];
+    menuList.value.splice(dragIndex.value, 1);
+    menuList.value.splice(dropIndex.value, 0, draggedItem);
+    menuList.value.forEach((menuItem, index) => {
+      menuItem.menuIndex = index;
+      addPatchMenu(menuItem);
+    });
+    allowScroll();
+  }
+  dragIndex.value = null;
+  dropIndex.value = null;
+  isDragging.value = false;
+};
+
 const handleDragEnd = () => {
   isDragging.value = false;
 };
@@ -122,26 +162,9 @@ const setBackgroundImage = (url) => {
   };
 };
 
-const handleDragStartMenu = (event, index) => {
-  if (isSubmit.value) return;
-  event.dataTransfer.setData('text/plain', index);
 };
 
-const handleDropMenu = (event, dropIndex) => {
-  if (isSubmit.value) return;
-  const dragIndex = event.dataTransfer.getData('text/plain');
-  const item = menuList.value.splice(dragIndex, 1)[0];
-  menuList.value.splice(dropIndex, 0, item);
 
-  const start = Math.min(dragIndex, dropIndex);
-  const end = Math.max(dragIndex, dropIndex);
-
-  menuList.value.slice(start, end + 1).forEach((menuItem, index) => {
-    menuItem.menuIndex = start + index;
-    addPatchMenu({
-      ...menuItem,
-    });
-  });
 };
 
 const handleClickDeleteMenu = async ({ menuIndex, menuId }) => {
@@ -425,10 +448,10 @@ onMounted(async () => {
           <div
             v-for="(menu, index) in menuList"
             :key="menu.menuId"
-            :draggable="!isSubmit"
-            @dragstart="handleDragStartMenu($event, index)"
-            @dragover.prevent
-            @drop="handleDropMenu($event, index)"
+            @touchstart="(event) => handleMenuTouchStart(event, index)"
+            @touchmove="handleMenuTouchMove"
+            @touchend="handleMenuTouchEnd"
+            :data-index="index"
             class="w-full h-fit p-[14px] bg-white rounded-3xl border border-primary flex flex-col justify-between"
           >
             <div class="flex mb-[12px]">
