@@ -64,19 +64,21 @@ onMounted(() => {
             placeholder="아이디"
             type="text"
             @input="handleInputId($event)"
+            autocomplete="username"
           />
           <input
             class="w-full h-[59px] focus:outline-none rounded-3xl border-2 border-primary-900-light-30 px-5 focus:border-primary-900"
             placeholder="비밀번호"
             type="password"
             @input="handleInputPassword($event)"
+            autocomplete="new-password"
           />
         </div>
         <div class="flex flex-col justify-start items-center relative w-full">
           <p class="h-6 flex items-center text-xs text-secondary-900 underline underline-offset-2 mt-1">
             비밀번호를 잊으셨나요?
           </p>
-          <p class="text-danger absolute top-14 text-xs">{{ errorMessage }}</p>
+          <p class="text-danger absolute top-14 text-xs w-full text-center">{{ errorMessage }}</p>
         </div>
         <button class="w-full h-[56px] bg-primary-900 text-white font-semibold text-xl rounded-3xl my-14">완료</button>
       </div>
