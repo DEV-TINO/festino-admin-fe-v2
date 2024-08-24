@@ -55,6 +55,7 @@ const preventScroll = () => {
 const allowScroll = () => {
   document.getElementsByTagName('html')[0].style.overflow = 'auto';
 };
+
 const handleInputBoothName = (event) => {
   if (isSubmit.value) return;
   boothInfo.value.boothName = event.target.value;
@@ -162,9 +163,22 @@ const setBackgroundImage = (url) => {
   };
 };
 
+const handleTouchStart = (event, index) => {
+  dragIndex.value = index;
+  isDragging.value = true;
 };
 
+const handleTouchMove = (event) => {
+  const touch = event.touches[0];
+  const element = document.elementFromPoint(touch.clientX, touch.clientY);
+  if (element && element.dataset.index !== undefined) {
+    console.log(touch)
+    dropIndex.value = parseInt(element.dataset.index);
+  }
+};
 
+const handleTouchEnd = () => {
+  handleDrop();
 };
 
 const handleClickDeleteMenu = async ({ menuIndex, menuId }) => {
@@ -297,6 +311,7 @@ watch(selectedBoothId, async () => {
 });
 
 onMounted(async () => {
+  console.log(tableNumList.value)
   useBoothDetailStore.reset();
   if (!isAdmin.value) {
     const userBoothId = await useUserStore.getUserOwnBoothId();
@@ -416,6 +431,10 @@ onMounted(async () => {
             @dragstart="(event) => handleDragStart(event, index)"
             @dragenter="(event) => handleDragEnter(event, index)"
             @dragend="handleDragEnd"
+            @touchstart="(event) => handleTouchStart(event, index)"
+            @touchmove="handleTouchMove"
+            @touchend="handleTouchEnd"
+            :data-index="index"
           >
             <div :style="setBackgroundImage(url)" class="w-full h-full object-cover rounded-3xl border bg-cover"></div>
             <IconDelete @click="handleDeleteImage(index)" class="absolute top-2 right-2" />
