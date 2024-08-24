@@ -59,7 +59,7 @@ onMounted(() => {
             <tbody>
               <tr class="text-center h-[50px]">
                 <td>{{ messageInfo.reservationNum }}</td>
-                <td>{{ messageInfo.reservationNum }}</td>
+                <td>{{ messageInfo.userName }}</td>
                 <td>{{ messageInfo.phoneNum }}</td>
                 <td>{{ prettyDate(messageInfo.updateAt) }}</td>
               </tr>
