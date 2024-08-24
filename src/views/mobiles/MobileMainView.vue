@@ -7,12 +7,10 @@ import IconReserveTino from '@/components/icons/mobiles/IconReserveTino.vue';
 import { useRouter } from 'vue-router';
 import { useBoothDetail } from '@/stores/booths/boothDetail';
 import { useUser } from '@/stores/user';
-import { useBoothList } from '@/stores/booths/boothList';
 
 const router = useRouter();
 const useBoothDetailStore = useBoothDetail();
 const useUserStore = useUser();
-const useBoothListStore = useBoothList();
 
 const { userOwnBoothId, isAdmin } = storeToRefs(useUserStore);
 const { boothInfo, boothType } = storeToRefs(useBoothDetailStore);
