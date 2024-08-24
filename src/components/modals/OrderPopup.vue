@@ -62,16 +62,16 @@ onMounted(() => {
         <div class="text-secondary-700-light text-xl">조리 완료 확인</div>
         <div class="relative w-full rounded-2xl border-primary-700 border shadow-primary">
           <table class="w-full">
-            <thead class="bg-primary-700-light text-secondary-900 h-[50px] rounded-t-2xl">
+            <thead class="bg-primary-700-light text-secondary-900 h-[50px]">
               <tr>
-                <th>테이블 번호</th>
+                <th class="rounded-tl-2xl">테이블 번호</th>
                 <th>메뉴</th>
                 <th>수량</th>
-                <th>조리현황</th>
+                <th class="rounded-tr-2xl">조리현황</th>
               </tr>
             </thead>
             <tbody>
-              <tr class="text-center h-[50px] last:rounded-b-2xl">
+              <tr class="text-center h-[50px]">
                 <td>{{ getCustomTableNum(cookingInfo.cook.tableNum) }}번</td>
                 <td>{{ cookingInfo.menuName }}</td>
                 <td>{{ cookingInfo.cook.servedCount }}개</td>
@@ -87,17 +87,17 @@ onMounted(() => {
         <div class="text-secondary-700-light text-xl">예약자 정보</div>
         <div class="relative w-full rounded-2xl border-primary-700 border shadow-primary">
           <table class="w-full">
-            <thead class="bg-primary-700-light text-secondary-900 h-[50px] rounded-t-2xl">
+            <thead class="bg-primary-700-light text-secondary-900 h-[50px]">
               <tr>
-                <th>No.</th>
+                <th class="rounded-tl-2xl">No.</th>
                 <th>테이블 번호</th>
                 <th>입금자명</th>
                 <th>전화번호</th>
-                <th>가격</th>
+                <th class="rounded-tr-2xl">가격</th>
               </tr>
             </thead>
             <tbody>
-              <tr class="text-center h-[50px] last:rounded-b-2xl">
+              <tr class="text-center h-[50px]">
                 <td>{{ orderInfo.orderNum }}</td>
                 <td>{{ getCustomTableNum(orderInfo.tableNum) }}번</td>
                 <td>{{ orderInfo.userName }}</td>
@@ -115,18 +115,14 @@ onMounted(() => {
         <div class="relative w-full rounded-2xl border-primary-700 border shadow-primary">
           <table class="w-full">
             <thead class="text-secondary-900 h-[50px]">
-              <tr class="bg-primary-700-light rounded-t-2xl">
-                <th class="min-w-[400px] text-start align-middle pl-[26px]">메뉴</th>
+              <tr class="bg-primary-700-light">
+                <th class="min-w-[400px] text-start align-middle pl-[26px] rounded-tl-2xl">메뉴</th>
                 <th class="text-center align-middle">수량</th>
-                <th class="min-w-[100px] text-end align-middle pr-[40px]">가격</th>
+                <th class="min-w-[100px] text-end align-middle pr-[40px] rounded-tr-2xl">가격</th>
               </tr>
             </thead>
             <tbody>
-              <tr
-                v-for="(menu, menuIndex) in menuInfoList"
-                class="text-center h-[50px] last:rounded-b-2xl"
-                :key="menuIndex"
-              >
+              <tr v-for="(menu, menuIndex) in menuInfoList" class="text-center h-[50px]" :key="menuIndex">
                 <td class="min-w-[400px] text-start align-middle pl-[26px]">{{ menu.menuName }}</td>
                 <td class="text-center align-middle">{{ prettyMenuNum(menu.menuCount) }}</td>
                 <td class="min-w-[100px] text-end align-middle pr-[26px]">{{ prettyPrice(menu.menuPrice) }}</td>
