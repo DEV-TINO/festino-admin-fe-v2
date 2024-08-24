@@ -26,12 +26,20 @@ const handleClickCancleButton = () => {
   closeMessageModal();
 };
 
+const handleClickSendButton = () => {
+  if (message.value.length === 0) {
+    alert('메시지 내용을 입력해주세요.');
+    return;
+  }
+  sendMessage(message.value);
+};
+
 onMounted(() => {
   console.log(messageInfo.value);
 });
 </script>
 <template>
-  <div class="w-[780px] h-[716px] bg-white rounded-2xl py-[50px] px-[50px] flex flex-col justify-between">
+  <div class="w-[780px] h-[550px] bg-white rounded-2xl py-[50px] px-[50px] flex flex-col justify-between">
     <div class="flex flex-col w-full gap-[28px]">
       <div
         class="w-full flex justify-between items-center gap-5 shrink-0 font-semibold text-[30px] text-primary-900 h-9"
@@ -80,7 +88,7 @@ onMounted(() => {
         <button class="is-button is-outlined w-[100px] h-[50px] font-semibold" @click="handleClickCancleButton()">
           취소
         </button>
-        <button class="is-button w-[100px] h-[50px] font-semibold" @click="sendMessage(message)">전송</button>
+        <button class="is-button w-[100px] h-[50px] font-semibold" @click="handleClickSendButton()">전송</button>
       </div>
     </div>
   </div>
