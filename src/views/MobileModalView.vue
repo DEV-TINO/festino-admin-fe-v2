@@ -15,7 +15,7 @@ const { closeMobileModal } = baseModalStore;
 </script>
 
 <template>
-  <MobileModalBackground v-if="isMobileModalOpen" @click="closeMobileModal()">
+  <MobileModalBackground v-if="isMobileModalOpen" @click="closeMobileModal(modalType)">
     <MobileConfirmModal v-if="modalType === 'mobileConfirm'" @click.stop />
     <MobileReserveModal v-if="modalType === 'mobileReserve'" @click.stop />
     <MobileMenuModal v-if="modalType === 'mobileMenu'" @click.stop />
