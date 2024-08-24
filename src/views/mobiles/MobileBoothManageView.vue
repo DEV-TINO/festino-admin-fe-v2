@@ -390,14 +390,13 @@ onMounted(async () => {
         <textarea
           type="text"
           placeholder="부스 소개를 작성해주세요."
-          class="resize-none w-full h-[97px] bg-primary-300-light rounded-3xl text-sm border-none p-5 pr-20 overflow-hidden placeholder:text-secondary-900-light overflow-y-clip"
+          class="resize-none w-full h-[124px] bg-primary-300-light rounded-3xl text-sm border-none p-5 overflow-hidden placeholder:text-secondary-900-light overflow-y-clip"
           maxlength="100"
           @input="handleInputBoothIntro($event)"
           :value="boothInfo.boothIntro"
           :disabled="isSubmit"
           rows="3"
         />
-
         <div class="absolute bottom-4 right-5 text-sm text-secondary-900-light">{{ boothIntroLength }}/100</div>
       </div>
       <div class="flex flex-col gap-[10px] items-start">
