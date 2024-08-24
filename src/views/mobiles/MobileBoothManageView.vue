@@ -271,7 +271,7 @@ const handleClickSumbit = async () => {
   }
 
   isSubmit.value = false;
-  // TODO: 수정하고 모달 띄우기
+  router.push({ name: 'MobileMain' });
 };
 
 const handleClickCancleButton = () => {
