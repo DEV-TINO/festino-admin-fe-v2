@@ -47,6 +47,7 @@ const dropIndex = ref(null);
 const fileUrls = ref([]);
 
 const serviceHours = ref('');
+const type = ref("edit");
 
 const preventScroll = () => {
   document.getElementsByTagName('html')[0].style.overflow = 'hidden';
@@ -187,91 +188,93 @@ const handleClickDeleteMenu = async ({ menuIndex, menuId }) => {
   menuList.value.splice(menuIndex, 1);
 };
 
-const handleClickSumbit = async () => {
-  if (isSubmit.value) return;
-  isSubmit.value = true;
+const handleClickSumbit = async (type) => {
+  if(type == "edit") {
+    if (isSubmit.value) return;
+    isSubmit.value = true;
 
-  if (
-    !boothInfo.value.adminName.length ||
-    !boothInfo.value.boothName.length ||
-    !serviceHours.value.length ||
-    !boothInfo.value.boothIntro.length
-  ) {
-    return (isSubmit.value = false);
-  }
-  const pattern = /^([01]?[0-9]|2[0-3]):[0-5][0-9]\s*~\s*([01]?[0-9]|2[0-4]):([0-5][0-9]|60)$/;
-
-  if (!pattern.test(serviceHours.value.trim())) {
-    alert('올바른 운영시간을 입력해주세요. 예: 00:00 ~ 24:00');
-    return (isSubmit.value = false);
-  }
-  const [startTime, endTime] = serviceHours.value.split('~').map((time) => time.trim());
-
-  boothInfo.value.openTime = startTime;
-  boothInfo.value.closeTime = endTime;
-  boothInfo.value.boothImage = fileUrls.value;
-
-  //nightbooth
-  if (boothType.value === 'night') {
-    boothInfo.value = {
-      ...boothInfo.value,
-      isReservation: useReservation.value,
-      isOrder: useOrder.value,
-    };
-  }
-
-  const saveBoothUrl = `/admin/booth/${boothType.value}`;
-  // TODO: ADD ERROR HANDLING
-  const saveBoothResponse = await api.put(saveBoothUrl, boothInfo.value);
-
-  menuList.value.forEach((menu) => {
-    const findPatchMenu = patchMenuList.value.find((patchMenu) => patchMenu.menuId === menu.menuId);
-    const findCreateMenu = createMenuList.value.find((createMenu) => createMenu.menuName === menu.menuName);
-
-    if (findPatchMenu) {
-      findPatchMenu.isSoldOut = menu.isSoldOut;
+    if (
+      !boothInfo.value.adminName.length ||
+      !boothInfo.value.boothName.length ||
+      !serviceHours.value.length ||
+      !boothInfo.value.boothIntro.length
+    ) {
+      return (isSubmit.value = false);
     }
-    if (findCreateMenu) {
-      findCreateMenu.isSoldOut = menu.isSoldOut;
+    const pattern = /^([01]?[0-9]|2[0-3]):[0-5][0-9]\s*~\s*([01]?[0-9]|2[0-4]):([0-5][0-9]|60)$/;
+
+    if (!pattern.test(serviceHours.value.trim())) {
+      alert('올바른 운영시간을 입력해주세요. 예: 00:00 ~ 24:00');
+      return (isSubmit.value = false);
     }
-  });
+    const [startTime, endTime] = serviceHours.value.split('~').map((time) => time.trim());
 
-  const menuModifyResults = await Promise.allSettled([
-    ...deleteMenuList.value.map(async (menuId) => {
-      return await deleteMenu(menuId);
-    }),
-    ...patchMenuList.value.map(async (menu) => {
-      return await patchMenu(menu);
-    }),
-    ...createMenuList.value.map(async (menu) => {
-      return await createMenu(menu);
-    }),
-  ]);
+    boothInfo.value.openTime = startTime;
+    boothInfo.value.closeTime = endTime;
+    boothInfo.value.boothImage = fileUrls.value;
 
-  const isSoldOutModifiyResults = await Promise.allSettled([
-    ...originalMenuList.value
-      .map(async (originalMenu) => {
-        const findMenu = menuList.value.find((menu) => menu.menuId === originalMenu.menuId);
-        if (findMenu) {
-          if (findMenu.isSoldOut !== originalMenu.isSoldOut) {
-            return await api.put('/admin/menu/sold-out', {
-              menuId: findMenu.menuId,
-              isSoldOut: originalMenu.isSoldOut,
-              boothId: boothInfo.value.boothId,
-            });
+    //nightbooth
+    if (boothType.value === 'night') {
+      boothInfo.value = {
+        ...boothInfo.value,
+        isReservation: useReservation.value,
+        isOrder: useOrder.value,
+      };
+    }
+
+    const saveBoothUrl = `/admin/booth/${boothType.value}`;
+    // TODO: ADD ERROR HANDLING
+    const saveBoothResponse = await api.put(saveBoothUrl, boothInfo.value);
+
+    menuList.value.forEach((menu) => {
+      const findPatchMenu = patchMenuList.value.find((patchMenu) => patchMenu.menuId === menu.menuId);
+      const findCreateMenu = createMenuList.value.find((createMenu) => createMenu.menuName === menu.menuName);
+
+      if (findPatchMenu) {
+        findPatchMenu.isSoldOut = menu.isSoldOut;
+      }
+      if (findCreateMenu) {
+        findCreateMenu.isSoldOut = menu.isSoldOut;
+      }
+    });
+
+    const menuModifyResults = await Promise.allSettled([
+      ...deleteMenuList.value.map(async (menuId) => {
+        return await deleteMenu(menuId);
+      }),
+      ...patchMenuList.value.map(async (menu) => {
+        return await patchMenu(menu);
+      }),
+      ...createMenuList.value.map(async (menu) => {
+        return await createMenu(menu);
+      }),
+    ]);
+
+    const isSoldOutModifiyResults = await Promise.allSettled([
+      ...originalMenuList.value
+        .map(async (originalMenu) => {
+          const findMenu = menuList.value.find((menu) => menu.menuId === originalMenu.menuId);
+          if (findMenu) {
+            if (findMenu.isSoldOut !== originalMenu.isSoldOut) {
+              return await api.put('/admin/menu/sold-out', {
+                menuId: findMenu.menuId,
+                isSoldOut: originalMenu.isSoldOut,
+                boothId: boothInfo.value.boothId,
+              });
+            }
           }
-        }
-      })
-      .filter((result) => result),
-  ]);
+        })
+        .filter((result) => result),
+    ]);
 
-  if (ADMIN_CATEGORY[boothInfo.value.adminCategory] === 'night') {
-    const tableDetailResult = await submitTableDetail(boothInfo.value.boothId);
-    if (!tableDetailResult) return;
+    if (ADMIN_CATEGORY[boothInfo.value.adminCategory] === 'night') {
+      const tableDetailResult = await submitTableDetail(boothInfo.value.boothId);
+      if (!tableDetailResult) return;
+    }
+
+    isSubmit.value = false;
+    router.push({ name: 'MobileMain' });
   }
-
-  isSubmit.value = false;
-  router.push({ name: 'MobileMain' });
 };
 
 const handleClickCancleButton = () => {
@@ -311,7 +314,6 @@ watch(selectedBoothId, async () => {
 });
 
 onMounted(async () => {
-  console.log(tableNumList.value)
   useBoothDetailStore.reset();
   if (!isAdmin.value) {
     const userBoothId = await useUserStore.getUserOwnBoothId();
@@ -617,7 +619,7 @@ onMounted(async () => {
       <button class="w-full rounded-[50px] h-[54px] is-button is-outlined" @click="handleClickCancleButton()">
         취소
       </button>
-      <button class="w-full rounded-[50px] h-[54px] is-button" @click="handleClickSumbit()">수정</button>
+      <button class="w-full rounded-[50px] h-[54px] is-button" @click="handleClickSumbit(type)">수정</button>
     </div>
   </form>
 </template>
