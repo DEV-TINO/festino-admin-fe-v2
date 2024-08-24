@@ -171,7 +171,7 @@ onMounted(async () => {
             </div>
           </p>
           <p class="basis-1/5 min-w-[130px] text-center flex justify-center items-center font-semibold select-none">
-            가격
+            판매액
             <div>
               <IconDropDown 
                 class="-scale-y-100"
@@ -189,7 +189,7 @@ onMounted(async () => {
             v-for="(menu, index) in allOrderStatistics.menuSaleList"
             :key="index"
           >
-            <p class="basis-1/3 text-secondary-700-light">{{ menu.menuName }}</p>
+            <p class="basis-1/3 text-secondary-700-light">{{ menu.menuName }} ({{ prettyPrice(menu.menuPrice || 0) }})</p>
             <p class="basis-1/5 text-center text-secondary-700-light">{{ menu.menuCount }}개</p>
             <p class="basis-1/5 min-w-[130px] text-center text-secondary-700-light">{{ prettyPrice(menu.menuSale || 0) }}</p>
           </div>

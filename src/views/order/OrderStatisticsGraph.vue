@@ -131,7 +131,7 @@ watch(
 </script>
 
 <template>
-  <div class="relative h-full w-full overflow-x-scroll">
+  <div class="relative h-full w-full">
     <div v-if="isLoading" class="flex justify-center items-center h-full">Loading...</div>
     <Bar v-if="isDataReady && !isLoading" ref="chartInstance" :data="chartData" :options="options" />
     <div v-else-if="!isLoading && !isDataReady" class="flex justify-center items-center h-full">No data available</div>
