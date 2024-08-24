@@ -168,6 +168,26 @@ export const useBoothDetail = defineStore('boothDetail', () => {
     }
   };
 
+  const getNightBoothInfo = async (boothId) => {
+    if (!boothId) {
+      return false;
+    }
+    try {
+      const res = await api.get(`/admin/booth/night/${boothId}`);
+      if (res.data.success) {
+        boothInfo.value = res.data.boothInfo;
+        return true;
+      } else {
+        alertError(res.data.message);
+        return false;
+      }
+    } catch (error) {
+      console.error(error);
+      alertError(error);
+      return false;
+    }
+  };
+
   const deleteMenu = async (menuId) => {
     if (!menuId) {
       alertError('메뉴 정보가 없습니다.');
@@ -255,6 +275,7 @@ export const useBoothDetail = defineStore('boothDetail', () => {
     addPatchMenu,
     addMenuList,
     getBoothDetail,
+    getNightBoothInfo,
     originalMenuList,
     createMenuList,
     deleteMenuList,

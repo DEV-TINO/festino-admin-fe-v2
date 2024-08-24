@@ -4,6 +4,7 @@ import IconLoading from '@/components/icons/IconLoading.vue';
 import IconNotFound from '@/components/icons/IconNotFound.vue';
 import IconReservation from '@/components/icons/IconReservation.vue';
 import router from '@/router';
+import { useBoothDetail } from '@/stores/booths/boothDetail';
 import { useBoothList } from '@/stores/booths/boothList';
 import { useMessageModal } from '@/stores/reserve/messageModal';
 import { useReserveList } from '@/stores/reserve/reserveList';
@@ -19,11 +20,13 @@ const useBoothListStore = useBoothList();
 const useReserveListStore = useReserveList();
 const useReservePopupStore = useReservePopup();
 const useMessageModalStore = useMessageModal();
+const useBoothDeatilStore = useBoothDetail();
 
 const { getAllBoothList } = useBoothListStore;
 const { getReserveList, deleteReserve, confirmReserve, restoreReserve, getFilteredReserveList } = useReserveListStore;
 const { openBoothReservePopup, openPopup } = useReservePopupStore;
 const { openMessageModal } = useMessageModalStore;
+const { getNightBoothInfo } = useBoothDeatilStore;
 
 const { isAdmin, userOwnBoothId } = storeToRefs(useUserStore);
 const { boothList } = storeToRefs(useBoothListStore);
@@ -157,6 +160,7 @@ watchEffect(async () => {
   if (!selectBoothId.value) return;
   if (!selectOrderType.value) return;
   isLoading.value = true;
+  await getNightBoothInfo(selectBoothId.value);
   await getReserveList({ boothId: selectBoothId.value, type: selectOrderType.value });
   setIsUpdate({ reserveLength: reserveList.value['reserve'].length });
   clearReferesh();
@@ -203,6 +207,12 @@ onMounted(async () => {
 onUnmounted(() => {
   clearReferesh();
 });
+
+// watchEffect(() => {
+//   if (userOwnBoothId.value) {
+//     useBoothDetail.getBoothInfo(userOwnBoothId.value);
+//   }
+// });
 </script>
 <template>
   <div class="flex flex-col px-4 gap-[40px] min-w-[890px] pb-20">
