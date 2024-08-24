@@ -98,8 +98,8 @@ export const useUser = defineStore('user', () => {
   const login = async () => {
     try {
       const response = await api.post('/admin/user/login', {
-        adminId: userId.value,
-        passWord: password.value,
+        adminId: btoa(userId.value),
+        passWord: btoa(password.value),
       });
 
       const isSuccess = response.data.success;
