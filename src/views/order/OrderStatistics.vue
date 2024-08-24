@@ -144,7 +144,7 @@ onMounted(async () => {
         class="max-w-[712px] w-full h-[380px] rounded-3xl flex flex-col text-secondary-500 outline outline-2 bg-white outline-[rgba(0,115,240,0.16)] relative"
       >
         <div
-          class="h-[50px] flex flex-row justify-between bg-[#E6F0FB] rounded-t-3xl font-semibold pl-7 border-b-1 border-[#C7C7C7] items-center shrink-0"
+          class="h-[50px] flex flex-row justify-between bg-primary-800-light rounded-t-3xl font-semibold pl-7 border-b-1 border-primary-300 items-center shrink-0"
         >
           <p class="basis-1/3 h-full flex items-center font-semibold select-none">
             메뉴
@@ -185,7 +185,7 @@ onMounted(async () => {
         </div>
         <div class="h-full overflow-y-scroll scrollbar-hide">
           <div
-            class="flex flex-row justify-between font-normal pl-7 min-h-10 items-center border-b-1 border-[#C7C7C7] shrink-0 hover:bg-gray-200"
+            class="flex flex-row justify-between font-normal pl-7 min-h-10 items-center border-b-1 border-primary-300 shrink-0 hover:bg-gray-200"
             v-for="(menu, index) in allOrderStatistics.menuSaleList"
             :key="index"
           >
