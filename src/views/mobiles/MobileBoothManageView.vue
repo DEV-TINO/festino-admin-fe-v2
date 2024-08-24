@@ -15,6 +15,7 @@ import { useBoothList } from '@/stores/booths/boothList';
 import { ADMIN_CATEGORY, MENU_TYPE } from '@/utils/constants';
 import { useMenuModal } from '@/stores/menu/menuModal';
 import { useCustomTableModal } from '@/stores/mobiles/customTableModal';
+import { useReserveModal } from '@/stores/mobiles/reserve/reserveModal';
 
 const router = useRouter();
 const useBoothDetailStore = useBoothDetail();
@@ -22,6 +23,7 @@ const useUserStore = useUser();
 const useBoothListStore = useBoothList();
 const useTableDetailStore = useTableDetail();
 
+const { openLoadingModal } = useReserveModal();
 const { deleteMenu, createMenu, addDeleteMenu, patchMenu, addPatchMenu } = useBoothDetailStore;
 const { boothInfo, menuList, boothType, createMenuList, deleteMenuList, patchMenuList, originalMenuList } =
   storeToRefs(useBoothDetailStore);
@@ -190,6 +192,7 @@ const handleClickDeleteMenu = async ({ menuIndex, menuId }) => {
 
 const handleClickSumbit = async (type) => {
   if(type == "edit") {
+    openLoadingModal();
     if (isSubmit.value) return;
     isSubmit.value = true;
 

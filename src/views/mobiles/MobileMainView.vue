@@ -7,10 +7,12 @@ import IconReserveTino from '@/components/icons/mobiles/IconReserveTino.vue';
 import { useRouter } from 'vue-router';
 import { useBoothDetail } from '@/stores/booths/boothDetail';
 import { useUser } from '@/stores/user';
+import { useBaseModal } from '@/stores/baseModal';
 
 const router = useRouter();
 const useBoothDetailStore = useBoothDetail();
 const useUserStore = useUser();
+const baseModalStore = useBaseModal();
 
 const { userOwnBoothId, isAdmin } = storeToRefs(useUserStore);
 const { boothInfo, boothType } = storeToRefs(useBoothDetailStore);
@@ -18,6 +20,7 @@ const { boothInfo, boothType } = storeToRefs(useBoothDetailStore);
 onMounted(async () => {
   await useUserStore.getUserOwnBoothId();
   useBoothDetailStore.getBoothInfo(userOwnBoothId.value);
+  baseModalStore.closeMobileModal();
 });
 
 const handleClickAdminMenu = (type) => {
