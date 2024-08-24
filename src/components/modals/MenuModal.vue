@@ -1,15 +1,19 @@
 <script setup>
 import { useMenuModal } from '@/stores/menu/menuModal';
 import { storeToRefs } from 'pinia';
-import { onMounted, onUnmounted, ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import IconRadio from '../icons/IconRadio.vue';
 import IconFileUpload from '../icons/IconFileUpload.vue';
 import { imageUpload } from '@/utils/api';
+import { useBoothDetail } from '@/stores/booths/boothDetail';
+import { ADMIN_CATEGORY, MENU_TYPE } from '@/utils/constants';
 
 const useMenuModalStore = useMenuModal();
+const boothDetailStore = useBoothDetail();
 
 const { submitModal, closeModal } = useMenuModalStore;
 const { menuInfo } = storeToRefs(useMenuModalStore);
+const { boothInfo } = storeToRefs(boothDetailStore);
 
 const isMainMenu = ref(true);
 const isSubmit = ref(false);
@@ -159,7 +163,7 @@ onMounted(() => {
         </div>
 
         <!-- 메뉴 종류 선택 -->
-        <div class="flex items-center w-full">
+        <div v-if="ADMIN_CATEGORY[boothInfo.adminCategory] === 'night'" class="flex items-center w-full">
           <div class="w-[80px] shrink-0"></div>
           <div class="flex items-center gap-[28px]">
             <div class="w-[110px] flex gap-2 cursor-pointer" @click="isMainMenu = true">
@@ -167,7 +171,7 @@ onMounted(() => {
               <div>메인 메뉴</div>
             </div>
           </div>
-          <div class="flex items-center gap-[28px]">
+          <div v-if="ADMIN_CATEGORY[boothInfo.adminCategory] === 'night'" class="flex items-center gap-[28px]">
             <div class="w-[110px] flex gap-2 cursor-pointer" @click="isMainMenu = false">
               <IconRadio :is-active="!isMainMenu" />
               <div>서브 메뉴</div>
