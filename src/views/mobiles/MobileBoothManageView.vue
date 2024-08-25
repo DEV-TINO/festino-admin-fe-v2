@@ -15,6 +15,7 @@ import { useBoothList } from '@/stores/booths/boothList';
 import { ADMIN_CATEGORY, MENU_TYPE } from '@/utils/constants';
 import { useMenuModal } from '@/stores/menu/menuModal';
 import { useCustomTableModal } from '@/stores/mobiles/customTableModal';
+import { useReserveModal } from '@/stores/mobiles/reserve/reserveModal';
 
 const router = useRouter();
 const useBoothDetailStore = useBoothDetail();
@@ -22,6 +23,7 @@ const useUserStore = useUser();
 const useBoothListStore = useBoothList();
 const useTableDetailStore = useTableDetail();
 
+const { openLoadingModal } = useReserveModal();
 const { deleteMenu, createMenu, addDeleteMenu, patchMenu, addPatchMenu } = useBoothDetailStore;
 const { boothInfo, menuList, boothType, createMenuList, deleteMenuList, patchMenuList, originalMenuList } =
   storeToRefs(useBoothDetailStore);
@@ -47,6 +49,16 @@ const dropIndex = ref(null);
 const fileUrls = ref([]);
 
 const serviceHours = ref('');
+const type = ref("edit");
+
+const preventScroll = () => {
+  document.getElementsByTagName('html')[0].style.overflow = 'hidden';
+};
+
+const allowScroll = () => {
+  document.getElementsByTagName('html')[0].style.overflow = 'auto';
+};
+
 const handleInputBoothName = (event) => {
   if (isSubmit.value) return;
   boothInfo.value.boothName = event.target.value;
@@ -99,6 +111,38 @@ const handleDrop = () => {
   dropIndex.value = null;
 };
 
+const handleMenuTouchStart = (event, index) => {
+  dragIndex.value = index;
+  isDragging.value = true;
+  event.target.style.touchAction = 'manipulation';
+  preventScroll();
+};
+
+const handleMenuTouchMove = (event) => {
+  const touch = event.touches[0];
+  const element = document.elementFromPoint(touch.clientX, touch.clientY);
+
+  if (element && element.dataset.index !== undefined) {
+    dropIndex.value = parseInt(element.dataset.index);
+  }
+};
+
+const handleMenuTouchEnd = () => {
+  if (dragIndex.value !== null && dropIndex.value !== null && dragIndex.value !== dropIndex.value) {
+    const draggedItem = menuList.value[dragIndex.value];
+    menuList.value.splice(dragIndex.value, 1);
+    menuList.value.splice(dropIndex.value, 0, draggedItem);
+    menuList.value.forEach((menuItem, index) => {
+      menuItem.menuIndex = index;
+      addPatchMenu(menuItem);
+    });
+    allowScroll();
+  }
+  dragIndex.value = null;
+  dropIndex.value = null;
+  isDragging.value = false;
+};
+
 const handleDragEnd = () => {
   isDragging.value = false;
 };
@@ -122,26 +166,22 @@ const setBackgroundImage = (url) => {
   };
 };
 
-const handleDragStartMenu = (event, index) => {
-  if (isSubmit.value) return;
-  event.dataTransfer.setData('text/plain', index);
+const handleTouchStart = (event, index) => {
+  dragIndex.value = index;
+  isDragging.value = true;
 };
 
-const handleDropMenu = (event, dropIndex) => {
-  if (isSubmit.value) return;
-  const dragIndex = event.dataTransfer.getData('text/plain');
-  const item = menuList.value.splice(dragIndex, 1)[0];
-  menuList.value.splice(dropIndex, 0, item);
+const handleTouchMove = (event) => {
+  const touch = event.touches[0];
+  const element = document.elementFromPoint(touch.clientX, touch.clientY);
+  if (element && element.dataset.index !== undefined) {
+    console.log(touch)
+    dropIndex.value = parseInt(element.dataset.index);
+  }
+};
 
-  const start = Math.min(dragIndex, dropIndex);
-  const end = Math.max(dragIndex, dropIndex);
-
-  menuList.value.slice(start, end + 1).forEach((menuItem, index) => {
-    menuItem.menuIndex = start + index;
-    addPatchMenu({
-      ...menuItem,
-    });
-  });
+const handleTouchEnd = () => {
+  handleDrop();
 };
 
 const handleClickDeleteMenu = async ({ menuIndex, menuId }) => {
@@ -150,91 +190,94 @@ const handleClickDeleteMenu = async ({ menuIndex, menuId }) => {
   menuList.value.splice(menuIndex, 1);
 };
 
-const handleClickSumbit = async () => {
-  if (isSubmit.value) return;
-  isSubmit.value = true;
+const handleClickSumbit = async (type) => {
+  if(type == "edit") {
+    openLoadingModal();
+    if (isSubmit.value) return;
+    isSubmit.value = true;
 
-  if (
-    !boothInfo.value.adminName.length ||
-    !boothInfo.value.boothName.length ||
-    !serviceHours.value.length ||
-    !boothInfo.value.boothIntro.length
-  ) {
-    return (isSubmit.value = false);
-  }
-  const pattern = /^([01]?[0-9]|2[0-3]):[0-5][0-9]\s*~\s*([01]?[0-9]|2[0-4]):([0-5][0-9]|60)$/;
-
-  if (!pattern.test(serviceHours.value.trim())) {
-    alert('올바른 운영시간을 입력해주세요. 예: 00:00 ~ 24:00');
-    return (isSubmit.value = false);
-  }
-  const [startTime, endTime] = serviceHours.value.split('~').map((time) => time.trim());
-
-  boothInfo.value.openTime = startTime;
-  boothInfo.value.closeTime = endTime;
-  boothInfo.value.boothImage = fileUrls.value;
-
-  //nightbooth
-  if (boothType.value === 'night') {
-    boothInfo.value = {
-      ...boothInfo.value,
-      isReservation: useReservation.value,
-      isOrder: useOrder.value,
-    };
-  }
-
-  const saveBoothUrl = `/admin/booth/${boothType.value}`;
-  // TODO: ADD ERROR HANDLING
-  const saveBoothResponse = await api.put(saveBoothUrl, boothInfo.value);
-
-  menuList.value.forEach((menu) => {
-    const findPatchMenu = patchMenuList.value.find((patchMenu) => patchMenu.menuId === menu.menuId);
-    const findCreateMenu = createMenuList.value.find((createMenu) => createMenu.menuName === menu.menuName);
-
-    if (findPatchMenu) {
-      findPatchMenu.isSoldOut = menu.isSoldOut;
+    if (
+      !boothInfo.value.adminName.length ||
+      !boothInfo.value.boothName.length ||
+      !serviceHours.value.length ||
+      !boothInfo.value.boothIntro.length
+    ) {
+      return (isSubmit.value = false);
     }
-    if (findCreateMenu) {
-      findCreateMenu.isSoldOut = menu.isSoldOut;
+    const pattern = /^([01]?[0-9]|2[0-3]):[0-5][0-9]\s*~\s*([01]?[0-9]|2[0-4]):([0-5][0-9]|60)$/;
+
+    if (!pattern.test(serviceHours.value.trim())) {
+      alert('올바른 운영시간을 입력해주세요. 예: 00:00 ~ 24:00');
+      return (isSubmit.value = false);
     }
-  });
+    const [startTime, endTime] = serviceHours.value.split('~').map((time) => time.trim());
 
-  const menuModifyResults = await Promise.allSettled([
-    ...deleteMenuList.value.map(async (menuId) => {
-      return await deleteMenu(menuId);
-    }),
-    ...patchMenuList.value.map(async (menu) => {
-      return await patchMenu(menu);
-    }),
-    ...createMenuList.value.map(async (menu) => {
-      return await createMenu(menu);
-    }),
-  ]);
+    boothInfo.value.openTime = startTime;
+    boothInfo.value.closeTime = endTime;
+    boothInfo.value.boothImage = fileUrls.value;
 
-  const isSoldOutModifiyResults = await Promise.allSettled([
-    ...originalMenuList.value
-      .map(async (originalMenu) => {
-        const findMenu = menuList.value.find((menu) => menu.menuId === originalMenu.menuId);
-        if (findMenu) {
-          if (findMenu.isSoldOut !== originalMenu.isSoldOut) {
-            return await api.put('/admin/menu/sold-out', {
-              menuId: findMenu.menuId,
-              isSoldOut: originalMenu.isSoldOut,
-              boothId: boothInfo.value.boothId,
-            });
+    //nightbooth
+    if (boothType.value === 'night') {
+      boothInfo.value = {
+        ...boothInfo.value,
+        isReservation: useReservation.value,
+        isOrder: useOrder.value,
+      };
+    }
+
+    const saveBoothUrl = `/admin/booth/${boothType.value}`;
+    // TODO: ADD ERROR HANDLING
+    const saveBoothResponse = await api.put(saveBoothUrl, boothInfo.value);
+
+    menuList.value.forEach((menu) => {
+      const findPatchMenu = patchMenuList.value.find((patchMenu) => patchMenu.menuId === menu.menuId);
+      const findCreateMenu = createMenuList.value.find((createMenu) => createMenu.menuName === menu.menuName);
+
+      if (findPatchMenu) {
+        findPatchMenu.isSoldOut = menu.isSoldOut;
+      }
+      if (findCreateMenu) {
+        findCreateMenu.isSoldOut = menu.isSoldOut;
+      }
+    });
+
+    const menuModifyResults = await Promise.allSettled([
+      ...deleteMenuList.value.map(async (menuId) => {
+        return await deleteMenu(menuId);
+      }),
+      ...patchMenuList.value.map(async (menu) => {
+        return await patchMenu(menu);
+      }),
+      ...createMenuList.value.map(async (menu) => {
+        return await createMenu(menu);
+      }),
+    ]);
+
+    const isSoldOutModifiyResults = await Promise.allSettled([
+      ...originalMenuList.value
+        .map(async (originalMenu) => {
+          const findMenu = menuList.value.find((menu) => menu.menuId === originalMenu.menuId);
+          if (findMenu) {
+            if (findMenu.isSoldOut !== originalMenu.isSoldOut) {
+              return await api.put('/admin/menu/sold-out', {
+                menuId: findMenu.menuId,
+                isSoldOut: originalMenu.isSoldOut,
+                boothId: boothInfo.value.boothId,
+              });
+            }
           }
-        }
-      })
-      .filter((result) => result),
-  ]);
+        })
+        .filter((result) => result),
+    ]);
 
-  if (ADMIN_CATEGORY[boothInfo.value.adminCategory] === 'night') {
-    const tableDetailResult = await submitTableDetail(boothInfo.value.boothId);
-    if (!tableDetailResult) return;
+    if (ADMIN_CATEGORY[boothInfo.value.adminCategory] === 'night') {
+      const tableDetailResult = await submitTableDetail(boothInfo.value.boothId);
+      if (!tableDetailResult) return;
+    }
+
+    isSubmit.value = false;
+    router.push({ name: 'MobileMain' });
   }
-
-  isSubmit.value = false;
-  // TODO: 수정하고 모달 띄우기
 };
 
 const handleClickCancleButton = () => {
@@ -280,10 +323,12 @@ onMounted(async () => {
     const condition = await useBoothDetailStore.init(userBoothId);
     if (condition) {
       fileUrls.value = [...boothInfo.value.boothImage];
+      if (!fileUrls.value[0]) fileUrls.value = [];
       serviceHours.value = `${boothInfo.value.openTime} ~ ${boothInfo.value.closeTime}`;
       if (boothType.value === 'night') {
         useReservation.value = boothInfo.value.isReservation;
         useOrder.value = boothInfo.value.isOrder;
+        await getTableList(userBoothId);
       }
     } else {
       //부스정보 불러오기 실패
@@ -292,8 +337,8 @@ onMounted(async () => {
   if (isAdmin.value) {
     await useBoothListStore.getAllBoothList();
     selectedBoothId.value = boothList.value[0].boothId;
+    await getTableList(selectedBoothId.value);
   }
-  await getTableList(selectedBoothId.value);
 });
 </script>
 <template>
@@ -345,15 +390,14 @@ onMounted(async () => {
         <textarea
           type="text"
           placeholder="부스 소개를 작성해주세요."
-          class="resize-none w-full h-[97px] bg-primary-300-light rounded-3xl text-sm border-none p-5 pr-20 overflow-hidden placeholder:text-secondary-900-light overflow-y-clip"
+          class="resize-none w-full h-[124px] bg-primary-300-light rounded-3xl text-sm border-none p-5 overflow-hidden placeholder:text-secondary-900-light overflow-y-clip"
           maxlength="100"
           @input="handleInputBoothIntro($event)"
           :value="boothInfo.boothIntro"
           :disabled="isSubmit"
           rows="3"
         />
-
-        <div class="absolute bottom-4 right-5 text-sm">{{ boothIntroLength }}/100</div>
+        <div class="absolute bottom-4 right-5 text-sm text-secondary-900-light">{{ boothIntroLength }}/100</div>
       </div>
       <div class="flex flex-col gap-[10px] items-start">
         <div class="font-bold text-base">부스 사진</div>
@@ -391,6 +435,10 @@ onMounted(async () => {
             @dragstart="(event) => handleDragStart(event, index)"
             @dragenter="(event) => handleDragEnter(event, index)"
             @dragend="handleDragEnd"
+            @touchstart="(event) => handleTouchStart(event, index)"
+            @touchmove="handleTouchMove"
+            @touchend="handleTouchEnd"
+            :data-index="index"
           >
             <div :style="setBackgroundImage(url)" class="w-full h-full object-cover rounded-3xl border bg-cover"></div>
             <IconDelete @click="handleDeleteImage(index)" class="absolute top-2 right-2" />
@@ -423,10 +471,10 @@ onMounted(async () => {
           <div
             v-for="(menu, index) in menuList"
             :key="menu.menuId"
-            :draggable="!isSubmit"
-            @dragstart="handleDragStartMenu($event, index)"
-            @dragover.prevent
-            @drop="handleDropMenu($event, index)"
+            @touchstart="(event) => handleMenuTouchStart(event, index)"
+            @touchmove="handleMenuTouchMove"
+            @touchend="handleMenuTouchEnd"
+            :data-index="index"
             class="w-full h-fit p-[14px] bg-white rounded-3xl border border-primary flex flex-col justify-between"
           >
             <div class="flex mb-[12px]">
@@ -573,7 +621,7 @@ onMounted(async () => {
       <button class="w-full rounded-[50px] h-[54px] is-button is-outlined" @click="handleClickCancleButton()">
         취소
       </button>
-      <button class="w-full rounded-[50px] h-[54px] is-button" @click="handleClickSumbit()">수정</button>
+      <button class="w-full rounded-[50px] h-[54px] is-button" @click="handleClickSumbit(type)">수정</button>
     </div>
   </form>
 </template>

@@ -22,7 +22,8 @@ export const useBaseModal = defineStore('baseModal', () => {
     isMobileModalOpen.value = true;
   };
 
-  const closeMobileModal = () => {
+  const closeMobileModal = (type) => {
+    if(type !== 'mobileLoading')
     isMobileModalOpen.value = false;
   };
 
