@@ -51,14 +51,6 @@ const fileUrls = ref([]);
 const serviceHours = ref('');
 const type = ref("edit");
 
-const preventScroll = () => {
-  document.getElementsByTagName('html')[0].style.overflow = 'hidden';
-};
-
-const allowScroll = () => {
-  document.getElementsByTagName('html')[0].style.overflow = 'auto';
-};
-
 const handleInputBoothName = (event) => {
   if (isSubmit.value) return;
   boothInfo.value.boothName = event.target.value;
@@ -115,7 +107,6 @@ const handleMenuTouchStart = (event, index) => {
   dragIndex.value = index;
   isDragging.value = true;
   event.target.style.touchAction = 'manipulation';
-  preventScroll();
 };
 
 const handleMenuTouchMove = (event) => {
@@ -136,7 +127,6 @@ const handleMenuTouchEnd = () => {
       menuItem.menuIndex = index;
       addPatchMenu(menuItem);
     });
-    allowScroll();
   }
   dragIndex.value = null;
   dropIndex.value = null;
