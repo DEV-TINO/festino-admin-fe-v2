@@ -11,7 +11,7 @@ const useBoothListStore = useBoothList();
 
 const { getAllBoothList } = useBoothListStore;
 const { boothList } = storeToRefs(useBoothListStore);
-const { selectBoothId } = storeToRefs(useReserveModal());
+const { selectedBooth } = storeToRefs(useReserveModal());
 const { reserveList } = storeToRefs(useReserveList());
 const { isAdmin, userOwnBoothId } = storeToRefs(useUser());
 
@@ -70,9 +70,9 @@ watch(() => reserveList.value.reserve, () => {
 );
 
 watchEffect(() => {
-  if (!selectBoothId.value) return;
+  if (!selectedBooth.value.boothId) return;
   if (!reserveBoothList.value) return;
-  selectBooth.value = reserveBoothList.value.find((booth) => booth.boothId === selectBoothId.value);
+  selectBooth.value = reserveBoothList.value.find((booth) => booth.boothId === selectedBooth.value.boothId);
   toggleTab('reserve');
 });
 
@@ -80,10 +80,11 @@ onMounted(async () => {
   await getAllBoothList();
   reserveBoothList.value = boothList.value.filter((booth) => booth?.isReservation);
   if (isAdmin.value) {
-    selectBoothId.value = reserveBoothList.value[0].boothId;
+    selectedBooth.value = reserveBoothList.value[0];
   } else {
     if (userOwnBoothId.value) {
-      selectBoothId.value = userOwnBoothId.value;
+      selectedBooth.value = reserveBoothList.value.find((booth) => booth.boothId === userOwnBoothId.value);
+      console.log(selectedBooth.value)
     } else {
       alertError('부스를 소유하고 있지 않습니다.');
       router.push('/');
@@ -98,9 +99,9 @@ onMounted(async () => {
     <div class="flex justify-end w-full px-4 items-center gap-4" v-if="isAdmin">
       <select
         class="max-w-[160px] rounded-lg border-gray-400 text-secondary-900 text-sm focus:text-black focus:ring-white focus:border-primary-900 block w-full px-4"
-        v-model="selectBoothId"
+        v-model="selectedBooth"
       >
-        <option v-for="(booth, boothIndex) in reserveBoothList" :key="boothIndex" :value="booth.boothId">
+        <option v-for="(booth, boothIndex) in reserveBoothList" :key="boothIndex" :value="booth">
           {{ booth.adminName }}
         </option>
       </select>
@@ -170,7 +171,7 @@ onMounted(async () => {
         </div>
       </div>
     </div>
-    <ReserveList v-if="selectBoothId" :listType="listType" />
+    <ReserveList v-if="selectedBooth.boothId" :listType="listType" />
   </div>
 </template>
 

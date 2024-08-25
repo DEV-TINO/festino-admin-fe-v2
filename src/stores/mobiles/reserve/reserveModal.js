@@ -7,7 +7,7 @@ export const useReserveModal = defineStore('reserveModal', () => {
   const reserveData = ref([]);
   const popupType = ref('');
   const confirmType = ref('');
-  const selectBoothId = ref('');
+  const selectedBooth = ref('');
 
   const openReservePopup = (type, data) => {
     reserveData.value = data;
@@ -46,6 +46,6 @@ export const useReserveModal = defineStore('reserveModal', () => {
     openLoadingModal,
     openMessagePopup,
     reserveData,
-    selectBoothId,
+    selectedBooth,
   };
 });
