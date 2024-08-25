@@ -99,7 +99,7 @@ watchEffect(() => {
 
 <template>
   <div
-    class="w-[730px] h-[910px] flex flex-col justify-start items-center bg-white rounded-2xl overflow-y-auto px-[57px] py-11 gap-[24px]"
+    class="w-[730px] h-[910px] flex flex-col justify-start items-center bg-white rounded-2xl overflow-y-auto px-[52px] py-11 gap-[24px]"
   >
     <div class="w-full flex justify-between items-center gap-5 shrink-0 font-semibold text-[30px] text-primary-900 h-9">
       <div class="w-[25px]"></div>
@@ -156,14 +156,14 @@ watchEffect(() => {
       <IconNotFound />
       현재 테이블이 존재하지 않습니다.<br />테이블 추가 버튼을 통해 테이블을 추가해주세요!
     </div>
-    <!-- Table List -->
+    <!-- 설명 -->
+    <div v-if="newTableNumList.length !== 0" class="text-secondary-700-light font-medium text-center">
+      커스텀 테이블 번호를 입력해주세요. (예시: A-1, 최대 10글자)<br />미 입력 시 테이블 번호가 자동으로 설정됩니다.
+    </div>
     <!-- Scroll -->
-    <div id="modalContainer" ref="modalContainer" class="grow overflow-y-auto w-full flex flex-col gap-5 px-2">
-      <!-- 설명 -->
-      <div class="text-secondary-700-light font-medium text-center">
-        커스텀 테이블 번호를 입력해주세요. (예시: A-1, 최대 10글자)<br />미 입력 시 테이블 번호가 자동으로 설정됩니다.
-      </div>
-      <div class="grid grid-cols-2 gap-[18px] place-items-center">
+    <!-- Table List -->
+    <div id="modalContainer" ref="modalContainer" class="grow overflow-y-auto">
+      <div class="grid grid-cols-2 gap-[18px] place-items-start px-2">
         <div
           class="w-[304px] h-auto flex flex-col gap-3 p-2 border-1 border-transparent rounded-2xl cursor-pointer hover:border-primary-900"
           v-for="(table, tableIndex) in newTableNumList"

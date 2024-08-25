@@ -4,23 +4,29 @@ import IconLoading from '@/components/icons/IconLoading.vue';
 import IconNotFound from '@/components/icons/IconNotFound.vue';
 import IconReservation from '@/components/icons/IconReservation.vue';
 import router from '@/router';
+import { useBoothDetail } from '@/stores/booths/boothDetail';
 import { useBoothList } from '@/stores/booths/boothList';
+import { useMessageModal } from '@/stores/reserve/messageModal';
 import { useReserveList } from '@/stores/reserve/reserveList';
 import { useReservePopup } from '@/stores/reserve/reservePopup';
 import { useUser } from '@/stores/user';
 import { alertError } from '@/utils/api';
 import { prettyDate } from '@/utils/utils';
 import { storeToRefs } from 'pinia';
-import { onMounted, onUnmounted, ref, watch, watchEffect } from 'vue';
+import { onMounted, onUnmounted, ref, watchEffect } from 'vue';
 
 const useUserStore = useUser();
 const useBoothListStore = useBoothList();
 const useReserveListStore = useReserveList();
 const useReservePopupStore = useReservePopup();
+const useMessageModalStore = useMessageModal();
+const useBoothDeatilStore = useBoothDetail();
 
 const { getAllBoothList } = useBoothListStore;
 const { getReserveList, deleteReserve, confirmReserve, restoreReserve, getFilteredReserveList } = useReserveListStore;
 const { openBoothReservePopup, openPopup } = useReservePopupStore;
+const { openMessageModal } = useMessageModalStore;
+const { getNightBoothInfo } = useBoothDeatilStore;
 
 const { isAdmin, userOwnBoothId } = storeToRefs(useUserStore);
 const { boothList } = storeToRefs(useBoothListStore);
@@ -146,10 +152,15 @@ const refereshReserveList = () => {
   }, 5000);
 };
 
+const handleClickMessage = (reserve) => {
+  openMessageModal(reserve);
+};
+
 watchEffect(async () => {
   if (!selectBoothId.value) return;
   if (!selectOrderType.value) return;
   isLoading.value = true;
+  await getNightBoothInfo(selectBoothId.value);
   await getReserveList({ boothId: selectBoothId.value, type: selectOrderType.value });
   setIsUpdate({ reserveLength: reserveList.value['reserve'].length });
   clearReferesh();
@@ -196,6 +207,12 @@ onMounted(async () => {
 onUnmounted(() => {
   clearReferesh();
 });
+
+// watchEffect(() => {
+//   if (userOwnBoothId.value) {
+//     useBoothDetail.getBoothInfo(userOwnBoothId.value);
+//   }
+// });
 </script>
 <template>
   <div class="flex flex-col px-4 gap-[40px] min-w-[890px] pb-20">
@@ -313,7 +330,7 @@ onUnmounted(() => {
             <th scope="col" class="px-6 py-3 text-center text-secondary-700-light font-medium">예약 시간</th>
             <th
               scope="col"
-              colspan="2"
+              colspan="3"
               class="px-6 py-3 text-center text-secondary-700-light font-medium min-w-[140px]"
             >
               예약 관리
@@ -340,7 +357,7 @@ onUnmounted(() => {
             <td class="py-4 px-2" v-if="selectOrderType !== 'complete'">
               <div class="w-full flex justify-center">
                 <button
-                  class="is-button w-full text-sm xl:text-base h-8"
+                  class="is-button xl:w-20 w-[60px] text-sm xl:text-base h-8"
                   type="button"
                   @click="handleClickConfirm(reserve)"
                 >
@@ -352,7 +369,7 @@ onUnmounted(() => {
               <div class="w-full flex justify-center">
                 <button
                   type="button"
-                  class="is-button w-full text-sm xl:text-base h-8 is-danger is-outlined"
+                  class="is-button xl:w-20 w-[60px] text-sm xl:text-base h-8 is-danger is-outlined"
                   @click="handleClickDelete(reserve)"
                 >
                   취소
@@ -363,10 +380,21 @@ onUnmounted(() => {
               <div class="w-full flex justify-center">
                 <button
                   type="button"
-                  class="is-button w-full text-sm xl:text-base h-8 is-outlined"
+                  class="is-button xl:w-20 w-[60px] text-sm xl:text-base h-8 is-outlined"
                   @click="handleClickRestore(reserve)"
                 >
                   예약
+                </button>
+              </div>
+            </td>
+            <td class="py-4 px-2">
+              <div class="w-full flex justify-center">
+                <button
+                  type="button"
+                  class="is-button xl:w-20 w-[60px] text-sm xl:text-base h-8 is-outlined"
+                  @click="handleClickMessage(reserve)"
+                >
+                  문자
                 </button>
               </div>
             </td>
