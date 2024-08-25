@@ -6,7 +6,9 @@ import { useReserveList } from '@/stores/reserve/reserveList';
 import { useBoothList } from '@/stores/booths/boothList';
 import { useReserveModal } from '@/stores/mobiles/reserve/reserveModal';
 import { useUser } from '@/stores/user';
+import { useBoothDetail } from '@/stores/booths/boothDetail';
 
+const useBoothDetailStore = useBoothDetail();
 const useBoothListStore = useBoothList();
 
 const { getAllBoothList } = useBoothListStore;
@@ -14,6 +16,7 @@ const { boothList } = storeToRefs(useBoothListStore);
 const { selectedBooth } = storeToRefs(useReserveModal());
 const { reserveList } = storeToRefs(useReserveList());
 const { isAdmin, userOwnBoothId } = storeToRefs(useUser());
+const { boothInfo } = storeToRefs(useBoothDetailStore);
 
 const reserveBoothList = ref([]);
 const listType = ref('reserve');
@@ -88,6 +91,7 @@ onMounted(async () => {
     }
   }
   beforeReserveState.value = reserveList.value.reserve.length;
+  boothInfo.value = selectedBooth.value;
 });
 </script>
 
