@@ -63,7 +63,6 @@ export const useMessage = defineStore('message', () => {
       if (response.data === 'SEND_SUCCESS') {
         alert('메시지 전송에 성공했습니다.');
       } else {
-        console.log(response.data)
       }
     } catch (error) {
       console.error(error);

@@ -84,7 +84,6 @@ onMounted(async () => {
   } else {
     if (userOwnBoothId.value) {
       selectedBooth.value = reserveBoothList.value.find((booth) => booth.boothId === userOwnBoothId.value);
-      console.log(selectedBooth.value)
     } else {
       alertError('부스를 소유하고 있지 않습니다.');
       router.push('/');
