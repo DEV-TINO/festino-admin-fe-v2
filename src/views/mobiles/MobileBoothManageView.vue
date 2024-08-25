@@ -464,7 +464,7 @@ onMounted(async () => {
           </label>
         </div>
       </div>
-      <div v-if="ADMIN_CATEGORY[boothInfo.adminCategory] === 'night'" class="flex flex-col gap-[10px] items-start">
+      <div v-if="ADMIN_CATEGORY[boothInfo.adminCategory] !== 'food'" class="flex flex-col gap-[10px] items-start">
         <div class="font-bold text-base">메뉴 정보</div>
         <!-- <MobileMenuDetail /> -->
         <div class="w-full flex flex-col gap-[10px]">
@@ -486,7 +486,7 @@ onMounted(async () => {
                       {{ menu.menuName }}
                     </div>
                     <div class="flex">
-                      <div
+                      <div v-if="ADMIN_CATEGORY[boothInfo.adminCategory] === 'night'"
                         class="flex items-center justify-center w-[45px] h-[17px] bg-secondary-300 text-[8px] rounded-full"
                       >
                         {{ MENU_TYPE[menu.menuType] }}
