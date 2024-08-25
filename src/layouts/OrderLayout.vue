@@ -16,6 +16,7 @@ import { storeToRefs } from 'pinia';
 import { computed, onMounted, onUnmounted, ref, watchEffect } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { cloneDeep } from 'lodash';
+import IconRefresh from '@/components/icons/IconRefresh.vue';
 
 const useUserStore = useUser();
 const useBoothListStore = useBoothList();
@@ -153,6 +154,15 @@ const handleClickOrderFinish = async (tableOrder, orderId, orderType) => {
   }
 };
 
+const handleClickTableRefresh = async () => {
+  clearIntervalAllTableOrders();
+  await getAllTableOrders({
+    boothId: boothId.value,
+    date: 0,
+  });
+  refreshAllTableOrders();
+};
+
 watchEffect(async () => {
   if (boothId.value) {
     await getAllTableOrders({
@@ -259,61 +269,64 @@ onUnmounted(() => {
     </div>
 
     <!-- 테이블 주문 현황 -->
-    <div
-      v-if="!isStatistics"
-      class="flex flex-col w-full rounded-2xl shadow-secondary relative outline outline-1 outline-primary-500 bg-white"
-    >
-      <!-- Thead -->
-      <div
-        class="w-full h-[50px] bg-secondary-500 flex items-center justify-center rounded-t-2xl border-b-1 border-primary-500"
-      >
-        테이블 주문 현황
+    <div v-if="!isStatistics" class="flex flex-col relative">
+      <div class="flex w-full justify-end" @click="handleClickTableRefresh()">
+        <IconRefresh class="mb-3 cursor-pointer" />
       </div>
-      <!-- Tbody -->
-      <div class="w-full flex flex-wrap rounded-b-2xl relative h-[370px] divide-x-2 mb-4 px-5">
-        <div v-for="(per, perIndex) in orderPerRow" class="min-w-[300px] shrink-0 relative grow" :per>
-          <table class="w-full">
-            <thead class="text-sm align-middle border-b-2">
-              <tr class="h-[47px]">
-                <th>테이블 번호</th>
-                <th>서빙 현황</th>
-                <th>주문 내역</th>
-                <th>완료</th>
-              </tr>
-            </thead>
-            <tbody class="text-sm align-middle text-center">
-              <tr
-                v-for="(tableOrder, tableOrderIndex) in chunkedAllTableOrders[perIndex]"
-                class="border-b h-[47px] last:border-none hover:bg-slate-50 shrink-0"
-                :tableOrderIndex
-              >
-                <td>{{ getCustomTableNum(tableOrder.tableNum) }}번</td>
-                <td>{{ tableOrder.servedCount }}/{{ tableOrder.totalCount }}</td>
-                <td>
-                  <div class="flex justify-center items-center">
-                    <IconOrderDetail @click="handleClickOrderDetail(tableOrder.orderId, tableOrder.orderType)" />
-                  </div>
-                </td>
-                <td>
-                  <div class="flex justify-center items-center">
-                    <IconOrderCheck
-                      :is-active="isFinish(tableOrder)"
-                      :class="{ 'cursor-not-allowed': !isFinish(tableOrder) }"
-                      @click="handleClickOrderFinish(tableOrder, tableOrder.orderId, tableOrder.orderType)"
-                    />
-                  </div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+      <div
+        class="flex flex-col w-full rounded-2xl shadow-secondary relative outline outline-1 outline-primary-500 bg-white"
+      >
+        <!-- Thead -->
+        <div
+          class="w-full h-[50px] bg-secondary-500 flex items-center justify-center rounded-t-2xl border-b-1 border-primary-500"
+        >
+          테이블 주문 현황
+        </div>
+        <!-- Tbody -->
+        <div class="w-full flex flex-wrap rounded-b-2xl relative h-[370px] divide-x-2 mb-4 px-5">
+          <div v-for="(per, perIndex) in orderPerRow" class="min-w-[300px] shrink-0 relative grow" :per>
+            <table class="w-full">
+              <thead class="text-sm align-middle border-b-2">
+                <tr class="h-[47px]">
+                  <th>테이블 번호</th>
+                  <th>서빙 현황</th>
+                  <th>주문 내역</th>
+                  <th>완료</th>
+                </tr>
+              </thead>
+              <tbody class="text-sm align-middle text-center">
+                <tr
+                  v-for="(tableOrder, tableOrderIndex) in chunkedAllTableOrders[perIndex]"
+                  class="border-b h-[47px] last:border-none hover:bg-slate-50 shrink-0"
+                  :tableOrderIndex
+                >
+                  <td>{{ getCustomTableNum(tableOrder.tableNum) }}번</td>
+                  <td>{{ tableOrder.servedCount }}/{{ tableOrder.totalCount }}</td>
+                  <td>
+                    <div class="flex justify-center items-center">
+                      <IconOrderDetail @click="handleClickOrderDetail(tableOrder.orderId, tableOrder.orderType)" />
+                    </div>
+                  </td>
+                  <td>
+                    <div class="flex justify-center items-center">
+                      <IconOrderCheck
+                        :is-active="isFinish(tableOrder)"
+                        :class="{ 'cursor-not-allowed': !isFinish(tableOrder) }"
+                        @click="handleClickOrderFinish(tableOrder, tableOrder.orderId, tableOrder.orderType)"
+                      />
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="absolute bottom-[-36px] right-0 text-xl text-secondary-700-light font-semibold">
+          {{ allTableOrders.length }}/{{ 7 * orderPerRow }}
         </div>
       </div>
-
-      <div class="absolute bottom-[-36px] right-0 text-xl text-secondary-700-light font-semibold">
-        {{ allTableOrders.length }}/{{ 7 * orderPerRow }}
-      </div>
     </div>
-
     <router-view></router-view>
   </div>
 </template>
