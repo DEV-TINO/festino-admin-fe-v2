@@ -29,7 +29,7 @@ watchEffect(() => (routerName.value = router.currentRoute.value.name));
     class="w-full h-[60px] bg-white flex justify-between items-center px-6 shadow-xs"
     v-if="router.currentRoute.value.name != 'MobileLogin'"
   >
-    <div class="w-7">
+    <div class="w-[42px]">
       <IconHeaderBack @click="handleClickBackButton()" v-if="router.currentRoute.value.name != 'MobileMain'" />
     </div>
     <p class="font-medium text-xl text-secondary-700">
