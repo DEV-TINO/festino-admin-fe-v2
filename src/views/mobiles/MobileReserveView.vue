@@ -16,7 +16,6 @@ const { reserveList } = storeToRefs(useReserveList());
 const { isAdmin, userOwnBoothId } = storeToRefs(useUser());
 
 const reserveBoothList = ref([]);
-const selectBooth = ref({});
 const listType = ref('reserve');
 const checkMark = ref(false);
 const beforeReserveState = ref(0);
@@ -72,7 +71,6 @@ watch(() => reserveList.value.reserve, () => {
 watchEffect(() => {
   if (!selectedBooth.value.boothId) return;
   if (!reserveBoothList.value) return;
-  selectBooth.value = reserveBoothList.value.find((booth) => booth.boothId === selectedBooth.value.boothId);
   toggleTab('reserve');
 });
 
