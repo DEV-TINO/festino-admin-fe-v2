@@ -283,7 +283,7 @@ onUnmounted(() => {
           테이블 주문 현황
         </div>
         <!-- Tbody -->
-        <div class="w-full flex flex-wrap rounded-b-2xl relative h-[370px] divide-x-2 mb-4 px-5">
+        <div class="w-full flex flex-wrap rounded-b-2xl relative h-[376px] divide-x-2">
           <div v-for="(per, perIndex) in orderPerRow" class="min-w-[300px] shrink-0 relative grow" :per>
             <table class="w-full">
               <thead class="text-sm align-middle border-b-2">
@@ -297,7 +297,8 @@ onUnmounted(() => {
               <tbody class="text-sm align-middle text-center">
                 <tr
                   v-for="(tableOrder, tableOrderIndex) in chunkedAllTableOrders[perIndex]"
-                  class="border-b h-[47px] last:border-none hover:bg-slate-50 shrink-0"
+                  class="h-[47px] hover:bg-slate-50 shrink-0"
+                  :class="tableOrderIndex % 6 === 0 && tableOrderIndex ? 'border-none' : 'border-b-2'"
                   :tableOrderIndex
                 >
                   <td>{{ getCustomTableNum(tableOrder.tableNum) }}번</td>
