@@ -53,10 +53,10 @@ const handleClickSendButton = () => {
           <table class="w-full">
             <thead class="text-secondary-900 h-[50px]">
               <tr class="bg-primary-700-light">
-                <th class="rounded-tl-2xl">No.</th>
-                <th>이름</th>
-                <th>전화번호</th>
-                <th class="rounded-tr-2xl">예약 시간</th>
+                <th class="rounded-tl-2xl px-5">No.</th>
+                <th class="px-5">이름</th>
+                <th class="px-5">전화번호</th>
+                <th class="rounded-tr-2xl px-5">예약 시간</th>
               </tr>
             </thead>
             <tbody>
