@@ -207,12 +207,6 @@ onMounted(async () => {
 onUnmounted(() => {
   clearReferesh();
 });
-
-// watchEffect(() => {
-//   if (userOwnBoothId.value) {
-//     useBoothDetail.getBoothInfo(userOwnBoothId.value);
-//   }
-// });
 </script>
 <template>
   <div class="flex flex-col px-4 gap-[40px] min-w-[890px] pb-20">

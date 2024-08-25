@@ -1,5 +1,4 @@
 <script setup>
-import { onMounted } from 'vue';
 import { storeToRefs } from 'pinia';
 import IconClose from '../icons/IconClose.vue';
 import { useMessageModal } from '@/stores/reserve/messageModal';
@@ -33,10 +32,6 @@ const handleClickSendButton = () => {
   }
   sendMessage(message.value);
 };
-
-onMounted(() => {
-  console.log(messageInfo.value);
-});
 </script>
 <template>
   <div class="w-[780px] h-[550px] bg-white rounded-2xl py-[50px] px-[50px] flex flex-col justify-between">
