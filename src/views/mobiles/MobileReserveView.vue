@@ -145,8 +145,7 @@ onMounted(async () => {
       </div>
     </div>
     <div class="flex items-center w-full text-secondary-900 border-b border-secondary-300 py-4">
-      <div class="flex w-full items-center">
-        <div class="w-1/12"></div>
+      <div class="flex w-full items-center justify-center gap-1.5">
         <div class="w-1/12 flex flex-col items-center">
           <div>예약</div>
           <div>번호</div>
@@ -155,12 +154,20 @@ onMounted(async () => {
           <div>예약자 /</div>
           <div>인원수</div>
         </div>
-        <div class="w-5/12 flex flex-col items-center">
+        <div class="w-4/12 flex flex-col items-center">
           <div>연락처 /</div>
           <div>예약시간</div>
         </div>
-        <div class="w-2/12 text-center">예약관리</div>
-        <div class="w-1/12"></div>
+        <div class="w-3/12 flex items-center gap-1.5 justify-center">
+          <div class="w-full flex flex-col items-center">
+            <div>예약</div>
+            <div>관리</div>
+          </div>
+          <div class="w-full flex flex-col items-center">
+            <div>문자</div>
+            <div>커스텀</div>
+          </div>
+        </div>
       </div>
     </div>
     <ReserveList v-if="selectBoothId" :listType="listType" />
