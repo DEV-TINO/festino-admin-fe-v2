@@ -274,7 +274,7 @@ onMounted(async () => {
           </div>
         </div>
         <!-- 메뉴 정보 -->
-        <div v-if="ADMIN_CATEGORY[boothInfo.adminCategory] === 'night'" class="flex flex-col gap-[20px] w-full">
+        <div v-if="ADMIN_CATEGORY[boothInfo.adminCategory] !== 'food'" class="flex flex-col gap-[20px] w-full">
           <div
             class="w-[137px] h-[61px] rounded-2xl flex items-center justify-center bg-primary-700 text-primary-900-light text-xl lg:text-2xl font-semibold"
           >
@@ -304,6 +304,7 @@ onMounted(async () => {
                       </div>
                       <div class="gap-[12px] items-center text-sm flex flex-shrink-0 justify-end grow font-medium">
                         <div
+                          v-if="ADMIN_CATEGORY[boothInfo.adminCategory] !== 'day'"
                           class="w-[80px] h-[29px] rounded-full bg-secondary-300 items-center flex justify-center text-secondary-700"
                         >
                           {{ MENU_TYPE[menu.menuType] }}
