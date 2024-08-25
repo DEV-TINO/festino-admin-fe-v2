@@ -11,7 +11,7 @@ const props = defineProps({
   listType: {
     type: String,
     required: true,
-  }
+  },
 });
 
 const useReserveModalStore = useReserveModal();
@@ -39,32 +39,41 @@ const refreshReserveList = () => {
   interval.value = setInterval(async () => {
     if (!selectBoothId.value) return;
     await getReserveList({ boothId: selectBoothId.value, type: 'reserve' });
-  }, 5000);
+  }, 3000);
 };
 
-watch(() => props.listType, async () => {
-  reserveData.value = [];
-  loading.value = true;
-  await getReserveList({ boothId: selectBoothId.value, type: props.listType });
-  if (props.listType === 'reserve') reserveData.value = reserveList.value.reserve;
-  else if (props.listType === 'cancel') reserveData.value = reserveList.value.cancel;
-  else if (props.listType === 'complete') reserveData.value = reserveList.value.complete;
-  loading.value = false;
-});
+watch(
+  () => props.listType,
+  async () => {
+    reserveData.value = [];
+    loading.value = true;
+    await getReserveList({ boothId: selectBoothId.value, type: props.listType });
+    if (props.listType === 'reserve') reserveData.value = reserveList.value.reserve;
+    else if (props.listType === 'cancel') reserveData.value = reserveList.value.cancel;
+    else if (props.listType === 'complete') reserveData.value = reserveList.value.complete;
+    loading.value = false;
+  },
+);
 
-watch(() => reserveList.value, () => {
-  if (props.listType === 'reserve') reserveData.value = reserveList.value.reserve;
-  else if (props.listType === 'cancel') reserveData.value = reserveList.value.cancel;
-  else if (props.listType === 'complete') reserveData.value = reserveList.value.complete;
-});
+watch(
+  () => reserveList.value,
+  () => {
+    if (props.listType === 'reserve') reserveData.value = reserveList.value.reserve;
+    else if (props.listType === 'cancel') reserveData.value = reserveList.value.cancel;
+    else if (props.listType === 'complete') reserveData.value = reserveList.value.complete;
+  },
+);
 
-watch(() => selectBoothId.value, async () => {
-  reserveData.value = [];
-  loading.value = true;
-  await getReserveList({ boothId: selectBoothId.value, type: props.listType });
-  reserveData.value = reserveList.value.reserve;
-  loading.value = false;
-});
+watch(
+  () => selectBoothId.value,
+  async () => {
+    reserveData.value = [];
+    loading.value = true;
+    await getReserveList({ boothId: selectBoothId.value, type: props.listType });
+    reserveData.value = reserveList.value.reserve;
+    loading.value = false;
+  },
+);
 
 onMounted(async () => {
   loading.value = true;

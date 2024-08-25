@@ -149,7 +149,7 @@ const refereshReserveList = () => {
       ]);
     }
     setIsUpdate({ reserveLength: reserveList.value['reserve'].length });
-  }, 5000);
+  }, 3000);
 };
 
 const handleClickMessage = (reserve) => {

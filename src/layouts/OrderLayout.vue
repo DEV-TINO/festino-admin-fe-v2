@@ -90,7 +90,7 @@ const refreshAllTableOrders = async () => {
         date: 0,
       });
     }
-  }, 5000);
+  }, 3000);
 };
 
 const clearIntervalAllTableOrders = () => {
@@ -106,7 +106,7 @@ const refreshWaitDepositOrderList = async () => {
         date: 0,
       });
     }
-  }, 5000);
+  }, 3000);
 };
 
 const clearIntervalWaitDepositOrderList = () => {
