@@ -2,6 +2,7 @@
 import { useMessage } from '@/stores/reserve/message';
 import { useReserveModal } from '@/stores/mobiles/reserve/reserveModal';
 import { storeToRefs } from 'pinia';
+import { computed } from 'vue';
 
 const useMessageStore = useMessage();
 
@@ -10,6 +11,8 @@ const { reserveData } = storeToRefs(useReserveModal());
 
 const { sendMobileMessage } = useMessageStore;
 const { message } = storeToRefs(useMessageStore);
+
+const messageLength = computed(() => message.value?.length ?? 0);
 
 const getMobileNum = (num) => {
   return `${num.slice(0, 3)}-${num.slice(3, 7)}-${num.slice(7, 11)}`;
@@ -69,7 +72,7 @@ const clickCancel = () => {
             </div>
           </div>
         </div>
-        <div class="w-full">
+        <div class="relative w-full">
           <div class="p-1">커스텀 메세지</div>
           <textarea
             placeholder="메세지 내용을 입력해주세요"
@@ -78,6 +81,7 @@ const clickCancel = () => {
             maxlength="45"
             class="text-sm w-full resize-none border border-primary-700 p-4 h-24 rounded-2xl"
           ></textarea>
+          <div class="absolute bottom-4 right-5 text-sm text-secondary-900">{{ messageLength }}/45</div>
         </div>
       </div>
       <div class="mt-2 flex gap-5 font-semibold text-xl w-full pt-2">
