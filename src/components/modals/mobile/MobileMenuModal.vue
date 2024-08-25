@@ -1,7 +1,7 @@
 <script setup>
 import { useMenuModal } from '@/stores/menu/menuModal';
 import { storeToRefs } from 'pinia';
-import { computed, onMounted, onUnmounted, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import IconRadio from '@/components/icons/IconRadio.vue';
 import IconFileUpload from '@/components/icons/IconFileUpload.vue';
 import { imageUpload } from '@/utils/api';
