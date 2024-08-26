@@ -20,6 +20,11 @@ export const useMessage = defineStore('message', () => {
   const { boothInfo } = storeToRefs(boothDeatilStore);
   const { selectedBooth } = storeToRefs(useReserveModalStore);
 
+  const openLoadingModal = () => {
+    baseModalStore.setModalType('loadingModal');
+    baseModalStore.openModal();
+  };
+
   const sendMessage = async (message) => {
     closeMessageModal();
     if (!messageInfo.value.phoneNum || !messageInfo.value.userName || !boothInfo.value.adminName) {

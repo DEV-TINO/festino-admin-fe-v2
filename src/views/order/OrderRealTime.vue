@@ -50,7 +50,7 @@ const refreshOrderList = () => {
     if (boothId.value) {
       await getAllOrderList();
     }
-  }, 5000);
+  }, 3000);
 };
 
 const clearRefereshOrderList = () => {

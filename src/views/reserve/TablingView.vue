@@ -11,7 +11,7 @@ import { useReserveList } from '@/stores/reserve/reserveList';
 import { useReservePopup } from '@/stores/reserve/reservePopup';
 import { useUser } from '@/stores/user';
 import { alertError } from '@/utils/api';
-import { prettyDate } from '@/utils/utils';
+import { prettyDate, prettyPhoneNumber } from '@/utils/utils';
 import { storeToRefs } from 'pinia';
 import { onMounted, onUnmounted, ref, watchEffect } from 'vue';
 
@@ -149,7 +149,7 @@ const refereshReserveList = () => {
       ]);
     }
     setIsUpdate({ reserveLength: reserveList.value['reserve'].length });
-  }, 5000);
+  }, 3000);
 };
 
 const handleClickMessage = (reserve) => {
@@ -207,12 +207,6 @@ onMounted(async () => {
 onUnmounted(() => {
   clearReferesh();
 });
-
-// watchEffect(() => {
-//   if (userOwnBoothId.value) {
-//     useBoothDetail.getBoothInfo(userOwnBoothId.value);
-//   }
-// });
 </script>
 <template>
   <div class="flex flex-col px-4 gap-[40px] min-w-[890px] pb-20">
@@ -320,7 +314,7 @@ onUnmounted(() => {
     <!-- Table.. -->
     <div class="relative overflow-x-auto outline outline-1 outline-primary-500 rounded-2xl shadow-secondary">
       <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-        <thead class="md:text-sm lg:text-lg xl:text-2xl uppercase bg-secondary-500 border-b-1 border-primary-500">
+        <thead class="md:text-sm lg:text-lg xl:text-xl uppercase bg-secondary-500 border-b-1 border-primary-500">
           <tr>
             <th scope="col" class="px-6 py-3 text-center text-secondary-700-light font-medium capitalize">No.</th>
             <th scope="col" class="px-6 py-3 text-center text-secondary-700-light font-medium capitalize">예약 번호</th>
@@ -337,7 +331,7 @@ onUnmounted(() => {
             </th>
           </tr>
         </thead>
-        <tbody class="text-xs md:text-sm lg:text-lg xl:text-2xl">
+        <tbody class="text-xs md:text-sm lg:text-lg xl:text-xl">
           <tr
             v-if="!isLoading"
             class="bg-white border-b-1 border-secondary-300 text-secondary-700-light last:border-0"
@@ -351,10 +345,10 @@ onUnmounted(() => {
               {{ reserve.reservationNum }}
             </th>
             <td class="px-6 py-4 text-center min-w-[85px] lg:min-w-[100px]">{{ reserve.userName }}</td>
-            <td class="px-6 py-4 text-center">{{ reserve.personCount }}</td>
-            <td class="px-6 py-4 text-center">{{ reserve.phoneNum }}</td>
+            <td class="px-6 py-4 text-center">{{ reserve.personCount }}명</td>
+            <td class="px-6 py-4 text-center">{{ prettyPhoneNumber(reserve.phoneNum) }}</td>
             <td class="px-6 py-4 text-center">{{ prettyDate(reserve.updateAt) }}</td>
-            <td class="py-4 px-2" v-if="selectOrderType !== 'complete'">
+            <td class="py-4 px-2 xl:w-[100px] w-20" v-if="selectOrderType !== 'complete'">
               <div class="w-full flex justify-center">
                 <button
                   class="is-button xl:w-20 w-[60px] text-sm xl:text-base h-8"
@@ -365,7 +359,7 @@ onUnmounted(() => {
                 </button>
               </div>
             </td>
-            <td class="py-4 px-2" v-if="selectOrderType !== 'cancel'">
+            <td class="py-4 px-2 xl:w-[100px] w-20" v-if="selectOrderType !== 'cancel'">
               <div class="w-full flex justify-center">
                 <button
                   type="button"
@@ -376,7 +370,7 @@ onUnmounted(() => {
                 </button>
               </div>
             </td>
-            <td class="py-4 px-2" v-if="selectOrderType !== 'reserve'">
+            <td class="py-4 px-2 xl:w-[100px] w-20" v-if="selectOrderType !== 'reserve'">
               <div class="w-full flex justify-center">
                 <button
                   type="button"
@@ -387,7 +381,7 @@ onUnmounted(() => {
                 </button>
               </div>
             </td>
-            <td class="py-4 px-2">
+            <td class="py-4 pl-2 pr-4 xl:w-[100px] w-20">
               <div class="w-full flex justify-center">
                 <button
                   type="button"
