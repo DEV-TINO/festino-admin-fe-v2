@@ -2,7 +2,7 @@
 import router from '@/router';
 import IconHeaderBack from '@/components/icons/mobiles/IconHeaderBack.vue';
 import { useUser } from '@/stores/user';
-import { ref, watchEffect, onMounted } from 'vue';
+import { ref, watchEffect } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useBoothDetail } from '@/stores/booths/boothDetail';
 

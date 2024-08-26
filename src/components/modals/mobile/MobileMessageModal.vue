@@ -4,11 +4,12 @@ import { useReserveModal } from '@/stores/mobiles/reserve/reserveModal';
 import { storeToRefs } from 'pinia';
 import { computed } from 'vue';
 
+const MAX_MESSAGE_LENGTH = 45;
+
 const useMessageStore = useMessage();
-
-const { closeMobilePopup } = useReserveModal();
-const { reserveData } = storeToRefs(useReserveModal());
-
+const useReserveModalStore = useReserveModal();
+const { closeMobilePopup } = useReserveModalStore;
+const { reserveData } = storeToRefs(useReserveModalStore);
 const { sendMobileMessage } = useMessageStore;
 const { message } = storeToRefs(useMessageStore);
 
@@ -19,8 +20,8 @@ const getMobileNum = (num) => {
 };
 
 const handleInputMessage = (event) => {
-  if (event.target.value.length > 45) {
-    event.target.value = event.target.value.slice(0, 45);
+  if (event.target.value.length > MAX_MESSAGE_LENGTH) {
+    event.target.value = event.target.value.slice(0, MAX_MESSAGE_LENGTH);
   }
   message.value = event.target.value;
 };
@@ -33,11 +34,11 @@ const handleClickSendButton = () => {
   sendMobileMessage(message.value, reserveData.value);
 };
 
-const clickSave = () => {
+const handleClickSave = () => {
   handleClickSendButton();
 };
 
-const clickCancel = () => {
+const handleClickCancel = () => {
   closeMobilePopup();
 };
 </script>
@@ -78,17 +79,17 @@ const clickCancel = () => {
             placeholder="메세지 내용을 입력해주세요"
             @input="handleInputMessage($event)"
             :value="message"
-            maxlength="45"
+            maxlength="MAX_MESSAGE_LENGTH"
             class="text-sm w-full resize-none border border-primary-700 p-4 h-24 rounded-2xl"
           ></textarea>
-          <div class="absolute bottom-4 right-5 text-sm text-secondary-900">{{ messageLength }}/45</div>
+          <div class="absolute bottom-4 right-5 text-sm text-secondary-900">{{ messageLength }}/{{ MAX_MESSAGE_LENGTH }}</div>
         </div>
       </div>
       <div class="mt-2 flex gap-5 font-semibold text-xl w-full pt-2">
-        <div @click="clickCancel()" class="flex items-center justify-center w-full h-12 border-2 border-primary-900 rounded-3xl text-primary-900">
+        <div @click="handleClickCancel()" class="flex items-center justify-center w-full h-12 border-2 border-primary-900 rounded-3xl text-primary-900">
           취소
         </div>
-        <div @click="clickSave()" class="flex items-center justify-center w-full h-12 rounded-3xl bg-primary-900 text-white">
+        <div @click="handleClickSave()" class="flex items-center justify-center w-full h-12 rounded-3xl bg-primary-900 text-white">
           전송
         </div>
       </div>
