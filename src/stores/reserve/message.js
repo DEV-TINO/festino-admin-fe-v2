@@ -20,10 +20,10 @@ export const useMessage = defineStore('message', () => {
   const { boothInfo } = storeToRefs(boothDeatilStore);
   const { selectedBooth } = storeToRefs(useReserveModalStore);
 
-  const openLoadingModal = () => {
-    baseModalStore.setModalType('loadingModal');
-    baseModalStore.openModal();
-  };
+  // const openLoadingModal = () => {
+  //   baseModalStore.setModalType('loadingModal');
+  //   baseModalStore.openModal();
+  // };
 
   const sendMessage = async (message) => {
     closeMessageModal();
