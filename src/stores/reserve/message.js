@@ -20,18 +20,17 @@ export const useMessage = defineStore('message', () => {
   const { boothInfo } = storeToRefs(boothDeatilStore);
   const { selectedBooth } = storeToRefs(useReserveModalStore);
 
-  // const openLoadingModal = () => {
-  //   baseModalStore.setModalType('loadingModal');
-  //   baseModalStore.openModal();
-  // };
+  const openLoadingModalInMessage = () => {
+    baseModalStore.setModalType('loadingModal');
+    baseModalStore.openModal();
+  };
 
   const sendMessage = async (message) => {
     closeMessageModal();
     if (!messageInfo.value.phoneNum || !messageInfo.value.userName || !boothInfo.value.adminName) {
       return alertError('메시지 전송에 실패했습니다.');
     }
-    baseModalStore.setModalType('loadingModal');
-    baseModalStore.openModal();
+    openLoadingModalInMessage();
     try {
       const response = await api.post('/admin/message/send', {
         phoneNum: messageInfo.value.phoneNum,
@@ -81,5 +80,6 @@ export const useMessage = defineStore('message', () => {
     message,
     sendMessage,
     sendMobileMessage,
+    openLoadingModalInMessage
   };
 });
