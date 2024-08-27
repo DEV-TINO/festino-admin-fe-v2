@@ -51,14 +51,6 @@ const fileUrls = ref([]);
 const serviceHours = ref('');
 const type = ref("edit");
 
-const preventScroll = () => {
-  document.getElementsByTagName('html')[0].style.overflow = 'hidden';
-};
-
-const allowScroll = () => {
-  document.getElementsByTagName('html')[0].style.overflow = 'auto';
-};
-
 const handleInputBoothName = (event) => {
   if (isSubmit.value) return;
   boothInfo.value.boothName = event.target.value;
@@ -115,7 +107,6 @@ const handleMenuTouchStart = (event, index) => {
   dragIndex.value = index;
   isDragging.value = true;
   event.target.style.touchAction = 'manipulation';
-  preventScroll();
 };
 
 const handleMenuTouchMove = (event) => {
@@ -136,7 +127,6 @@ const handleMenuTouchEnd = () => {
       menuItem.menuIndex = index;
       addPatchMenu(menuItem);
     });
-    allowScroll();
   }
   dragIndex.value = null;
   dropIndex.value = null;
@@ -464,7 +454,7 @@ onMounted(async () => {
           </label>
         </div>
       </div>
-      <div v-if="ADMIN_CATEGORY[boothInfo.adminCategory] === 'night'" class="flex flex-col gap-[10px] items-start">
+      <div v-if="ADMIN_CATEGORY[boothInfo.adminCategory] !== 'food'" class="flex flex-col gap-[10px] items-start">
         <div class="font-bold text-base">메뉴 정보</div>
         <!-- <MobileMenuDetail /> -->
         <div class="w-full flex flex-col gap-[10px]">
@@ -486,7 +476,7 @@ onMounted(async () => {
                       {{ menu.menuName }}
                     </div>
                     <div class="flex">
-                      <div
+                      <div v-if="ADMIN_CATEGORY[boothInfo.adminCategory] === 'night'"
                         class="flex items-center justify-center w-[45px] h-[17px] bg-secondary-300 text-[8px] rounded-full"
                       >
                         {{ MENU_TYPE[menu.menuType] }}

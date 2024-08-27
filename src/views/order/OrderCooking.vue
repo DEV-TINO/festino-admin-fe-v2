@@ -22,7 +22,7 @@ const refreshCookingOrderList = async () => {
       boothId: boothId.value,
       date: 0,
     });
-  }, 5000);
+  }, 3000);
 };
 
 const clearCookingOrderListInterval = () => {

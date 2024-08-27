@@ -1,16 +1,18 @@
 <script setup>
 import { useMenuModal } from '@/stores/menu/menuModal';
 import { storeToRefs } from 'pinia';
-import { computed, onMounted, onUnmounted, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import IconRadio from '@/components/icons/IconRadio.vue';
 import IconFileUpload from '@/components/icons/IconFileUpload.vue';
 import { imageUpload } from '@/utils/api';
 import { MENU_TYPE } from '@/utils/constants';
+import { useBoothDetail } from '@/stores/booths/boothDetail';
 
 const useMenuModalStore = useMenuModal();
 
 const { submitModal, closeMobileModal } = useMenuModalStore;
 const { menuInfo } = storeToRefs(useMenuModalStore);
+const { boothType } = storeToRefs(useBoothDetail());
 
 const isMainMenu = ref(true);
 const isSubmit = ref(false);
@@ -153,7 +155,7 @@ onMounted(() => {
         </div>
       </div>
       <!-- 메뉴 종류 선택 -->
-      <div class="flex justify-start w-full h-14 items-center gap-7">
+      <div v-if="boothType === 'night'" class="flex justify-start w-full h-14 items-center gap-7">
         <div class="flex gap-2 cursor-pointer" @click="isMainMenu = true">
           <IconRadio :is-active="isMainMenu" />
           <div class="font-semibold" :class="isMainMenu ? 'text-primary-900' : 'text-secondary-900'">메인 메뉴</div>

@@ -37,8 +37,12 @@ export const useTableDetail = defineStore('tableDetail', () => {
     try {
       const res = await api.post('/admin/order/table', {
         boothId,
-        tableNumList: tableNumList.value,
+        tableNumList: tableNumList.value.map(({ tableNumIndex, customTableNum }) => ({
+          tableNumIndex,
+          customTableNum,
+        })),
       });
+
       if (res.data.success) {
         return true;
       } else {

@@ -7,12 +7,18 @@ export const useReserveModal = defineStore('reserveModal', () => {
   const reserveData = ref([]);
   const popupType = ref('');
   const confirmType = ref('');
-  const selectBoothId = ref('');
+  const selectedBooth = ref('');
 
   const openReservePopup = (type, data) => {
     reserveData.value = data;
     baseModalStore.setModalType('mobileReserve');
     popupType.value = type;
+    baseModalStore.openMobileModal();
+  };
+
+  const openMessagePopup = (data) => {
+    reserveData.value = data;
+    baseModalStore.setModalType('mobileMessage');
     baseModalStore.openMobileModal();
   };
 
@@ -38,7 +44,8 @@ export const useReserveModal = defineStore('reserveModal', () => {
     openConfirmPopup,
     closeMobilePopup,
     openLoadingModal,
+    openMessagePopup,
     reserveData,
-    selectBoothId,
+    selectedBooth,
   };
 });

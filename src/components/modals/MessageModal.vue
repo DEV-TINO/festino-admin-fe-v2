@@ -1,5 +1,4 @@
 <script setup>
-import { onMounted } from 'vue';
 import { storeToRefs } from 'pinia';
 import IconClose from '../icons/IconClose.vue';
 import { useMessageModal } from '@/stores/reserve/messageModal';
@@ -41,7 +40,7 @@ const handleClickSendButton = () => {
         class="w-full flex justify-between items-center gap-5 shrink-0 font-semibold text-[30px] text-primary-900 h-9"
       >
         <div class="w-[25px]"></div>
-        메시지 커스텀
+        문자 커스텀
         <IconClose @click="handleClickCancleButton()" class="cursor-pointer" />
       </div>
       <div class="text-secondary-700-light font-medium text-center">
@@ -54,10 +53,10 @@ const handleClickSendButton = () => {
           <table class="w-full">
             <thead class="text-secondary-900 h-[50px]">
               <tr class="bg-primary-700-light">
-                <th class="rounded-tl-2xl">No.</th>
-                <th>이름</th>
-                <th>전화번호</th>
-                <th class="rounded-tr-2xl">예약 시간</th>
+                <th class="rounded-tl-2xl px-5">No.</th>
+                <th class="px-5">이름</th>
+                <th class="px-5">전화번호</th>
+                <th class="rounded-tr-2xl px-5">예약 시간</th>
               </tr>
             </thead>
             <tbody>
@@ -78,7 +77,7 @@ const handleClickSendButton = () => {
         @input="handleInputMessage($event)"
         :value="message"
         maxlength="45"
-        class="w-full h-[57px] border-1 border-secondary-700 rounded-2xl px-[17px] font-medium focus:border-primary-900 focus:outline-none focus:border-2"
+        class="w-full h-[57px] border-1 border-secondary-700 rounded-2xl px-[17px] font-medium focus:border-primary-900 focus:outline-none focus:border-1"
       />
       <div class="w-full flex justify-end items-center text-xl gap-5">
         <button class="is-button is-outlined w-[100px] h-[50px] font-semibold" @click="handleClickCancleButton()">
