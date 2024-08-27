@@ -26,6 +26,13 @@ const selectBoothId = ref('');
 const isLoading = ref(false);
 const day = ref(1);
 
+const selectedSort = ref({
+  name: '',
+  price: '',
+  count: '',
+  sale: '',
+})
+
 const formattedMonth = computed(() => month.value.toString().padStart(2, '0'));
 const formattedDates = computed(() => {
   return Object.keys(DATES).reduce((acc, key) => {
@@ -71,6 +78,8 @@ const handleButtonClick = (key) => {
 const sortStrategies = {
   nameAsc: (a, b) => a.menuName.localeCompare(b.menuName),
   nameDesc: (a, b) => b.menuName.localeCompare(a.menuName),
+  priceAsc: (a, b) => a.menuPrice - b.menuPrice,
+  priceDesc: (a, b) => b.menuPrice - a.menuPrice,
   countAsc: (a, b) => a.menuCount - b.menuCount,
   countDesc: (a, b) => b.menuCount - a.menuCount,
   saleAsc: (a, b) => a.menuSale - b.menuSale,
@@ -122,12 +131,12 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="w-full h-[638px] flex overflow-x-hidden">
-    <div class="w-1/2 pt-20 pb-10 pl-10 h-full border border-primary-900 rounded-l-[20px]">
+  <div class="w-full h-[638px] flex overflow-x-scroll">
+    <div class="w-1/2 min-w-[490px] pt-20 pb-10 pl-10 h-full border border-primary-900 rounded-l-[20px]">
       <StatisticsGraph />
     </div>
     <div class="w-1/2 min-w-[490px] h-full overflow-hidden p-[40px] border-r border-y border-primary-900 rounded-r-[20px] flex flex-col justify-between items-center">
-      <div class="min-w-[432px] font-semibold text-primary-900 text-[28px] flex justify-center">{{ selectBooth?.adminName }} 야간부스 매출 통계</div>
+      <div class="min-w-[432px] font-semibold text-primary-900 text-[28px] flex justify-center select-none">{{ selectBooth?.adminName }} 야간부스 매출 통계</div>
       <div class="w-full flex justify-center gap-4">
         <button
           type="button"
@@ -146,7 +155,7 @@ onMounted(async () => {
         <div
           class="h-[50px] flex flex-row justify-between bg-primary-800-light rounded-t-3xl font-semibold pl-7 border-b-1 border-primary-300 items-center shrink-0"
         >
-          <p class="basis-1/3 h-full flex items-center font-semibold select-none">
+          <p class="basis-2/3 h-full flex items-center font-semibold select-none">
             메뉴
             <div>
               <IconDropDown 
@@ -158,7 +167,19 @@ onMounted(async () => {
               />
             </div>
           </p>
-          <p class="basis-1/4 text-center flex justify-center items-center font-semibold select-none">
+          <p class="basis-1/4 h-full flex justify-center items-center font-semibold select-none">
+            가격
+            <div>
+              <IconDropDown 
+                class="-scale-y-100"
+                @click="handleStatisticsSort('priceAsc')"
+              />
+              <IconDropDown 
+                @click="handleStatisticsSort('priceDesc')"
+              />
+            </div>
+          </p>
+          <p class="basis-1/6 min-w-fit text-center flex justify-center items-center font-semibold select-none">
             수량
             <div>
               <IconDropDown 
@@ -170,7 +191,7 @@ onMounted(async () => {
               />
             </div>
           </p>
-          <p class="basis-1/5 min-w-[130px] text-center flex justify-center items-center font-semibold select-none">
+          <p class="basis-1/4 min-w-[130px] text-center flex justify-center items-center font-semibold select-none">
             판매액
             <div>
               <IconDropDown 
@@ -189,9 +210,10 @@ onMounted(async () => {
             v-for="(menu, index) in allOrderStatistics.menuSaleList"
             :key="index"
           >
-            <p class="basis-1/3 text-secondary-700-light">{{ menu.menuName }} ({{ prettyPrice(menu.menuPrice || 0) }})</p>
-            <p class="basis-1/5 text-center text-secondary-700-light">{{ menu.menuCount }}개</p>
-            <p class="basis-1/5 min-w-[130px] text-center text-secondary-700-light">{{ prettyPrice(menu.menuSale || 0) }}</p>
+            <p class="basis-2/3 text-secondary-700-light truncate">{{ menu.menuName }}</p>
+            <p class="basis-1/4 min-w-fit text-center text-secondary-700-light">{{ prettyPrice(menu.menuPrice || 0) }}</p>
+            <p class="basis-1/6 text-center text-secondary-700-light">{{ menu.menuCount }}개</p>
+            <p class="basis-1/4 min-w-[130px] text-center text-secondary-700-light">{{ prettyPrice(menu.menuSale || 0) }}</p>
           </div>
         </div>
         <div
