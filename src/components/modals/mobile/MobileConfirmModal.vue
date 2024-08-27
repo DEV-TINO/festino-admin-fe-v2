@@ -10,20 +10,20 @@ const useReserveModalStore = useReserveModal();
 
 const { confirmReserve, deleteReserve, restoreReserve, getReserveList } = useReserveList();
 const { closeMobilePopup, openLoadingModal } = useReserveModalStore;
-const { reserveData, confirmType, popupType, selectBoothId } = storeToRefs(useReserveModalStore);
+const { reserveData, confirmType, popupType, selectedBooth } = storeToRefs(useReserveModalStore);
 const title = ref('');
 const subTitle = ref('');
 const loading = ref(false);
 
 const confirm = async() => {
   loading.value = true;
-  if (confirmType.value === 'confirm') await confirmReserve({boothId : selectBoothId.value, reserveId : reserveData.value.reservationId});
-  else if (confirmType.value === 'cancel') await deleteReserve({boothId : selectBoothId.value, reserveId : reserveData.value.reservationId});
+  if (confirmType.value === 'confirm') await confirmReserve({boothId : selectedBooth.value.boothId, reserveId : reserveData.value.reservationId});
+  else if (confirmType.value === 'cancel') await deleteReserve({boothId : selectedBooth.value.boothId, reserveId : reserveData.value.reservationId});
   else if (confirmType.value === 'restore') {
-    await restoreReserve({boothId : selectBoothId.value, reserveId : reserveData.value.reservationId, reserveType : popupType.value});
-    await getReserveList({boothId : selectBoothId.value, type : 'reserve'});
+    await restoreReserve({boothId : selectedBooth.value.boothId, reserveId : reserveData.value.reservationId, reserveType : popupType.value});
+    await getReserveList({boothId : selectedBooth.value.boothId, type : 'reserve'});
   }
-  await getReserveList({boothId : selectBoothId.value, type : popupType.value});
+  await getReserveList({boothId : selectedBooth.value.boothId, type : popupType.value});
   closeMobilePopup();
   loading.value = false;
 };

@@ -19,8 +19,8 @@ const useReserveListStore = useReserveList();
 
 const { getReserveList } = useReserveListStore;
 const { reserveList } = storeToRefs(useReserveListStore);
-const { openReservePopup } = useReserveModalStore;
-const { selectBoothId } = storeToRefs(useReserveModalStore);
+const { openReservePopup, openMessagePopup } = useReserveModalStore;
+const { selectedBooth } = storeToRefs(useReserveModalStore);
 
 const reserveData = ref([]);
 const loading = ref(false);
@@ -34,11 +34,15 @@ const handleClickOpenReservePopup = (data) => {
   openReservePopup(props.listType, data);
 };
 
+const handleClickOpenMessagePopup = (data) => {
+  openMessagePopup(data);
+};
+
 const refreshReserveList = () => {
   clearInterval(interval.value);
   interval.value = setInterval(async () => {
-    if (!selectBoothId.value) return;
-    await getReserveList({ boothId: selectBoothId.value, type: 'reserve' });
+    if (!selectedBooth.value.boothId) return;
+    await getReserveList({ boothId: selectedBooth.value.boothId, type: 'reserve' });
   }, 3000);
 };
 
@@ -47,7 +51,7 @@ watch(
   async () => {
     reserveData.value = [];
     loading.value = true;
-    await getReserveList({ boothId: selectBoothId.value, type: props.listType });
+    await getReserveList({ boothId: selectedBooth.value.boothId, type: props.listType });
     if (props.listType === 'reserve') reserveData.value = reserveList.value.reserve;
     else if (props.listType === 'cancel') reserveData.value = reserveList.value.cancel;
     else if (props.listType === 'complete') reserveData.value = reserveList.value.complete;
@@ -65,11 +69,11 @@ watch(
 );
 
 watch(
-  () => selectBoothId.value,
+  () => selectedBooth.value.boothId,
   async () => {
     reserveData.value = [];
     loading.value = true;
-    await getReserveList({ boothId: selectBoothId.value, type: props.listType });
+    await getReserveList({ boothId: selectedBooth.value.boothId, type: props.listType });
     reserveData.value = reserveList.value.reserve;
     loading.value = false;
   },
@@ -77,7 +81,7 @@ watch(
 
 onMounted(async () => {
   loading.value = true;
-  await getReserveList({ boothId: selectBoothId.value, type: props.listType });
+  await getReserveList({ boothId: selectedBooth.value.boothId, type: props.listType });
   reserveData.value = reserveList.value.reserve;
   loading.value = false;
   refreshReserveList();
@@ -95,23 +99,24 @@ onUnmounted(() => {
       <div>예약 내역을 불러오고 있습니다</div>
     </div>
     <div v-else class="flex items-center w-full py-[14px]" v-for="data in reserveData" :key="data.reservationNum">
-      <div class="w-full flex text-secondary-700-light items-center">
-        <div class="w-1/12"></div>
+      <div class="w-full gap-1.5 justify-center flex text-secondary-700-light items-center">
         <div class="w-1/12 text-xl font-semibold text-center">{{ data.reservationNum }}</div>
         <div class="w-2/12 text-sm flex flex-col gap-1 items-center">
           <div>{{ data.userName }}</div>
           <div>{{ data.personCount }}명</div>
         </div>
-        <div class="w-5/12 items-center flex flex-col">
+        <div class="w-4/12 items-center flex flex-col">
           <div class="text-sm">{{ getMobileNum(data.phoneNum) }}</div>
           <div class="text-secondary-900 text-xs">{{ prettyDate(data.updateAt) }}</div>
         </div>
-        <div class="w-2/12 flex justify-center">
-          <div @click="handleClickOpenReservePopup(data)" class="px-4 py-1 rounded-full bg-restore text-primary-900">
+        <div class="w-3/12 flex justify-center gap-1.5">
+          <div @click="handleClickOpenReservePopup(data)" class="w-full text-center py-0.5 text-sm rounded-full bg-primary-900 border border-primary-900 text-white">
             관리
           </div>
+          <div @click="handleClickOpenMessagePopup(data)" class="w-full text-center py-0.5 text-sm rounded-full border border-primary-900 text-primary-900">
+            문자
+          </div>
         </div>
-        <div class="w-1/12"></div>
       </div>
     </div>
     <div

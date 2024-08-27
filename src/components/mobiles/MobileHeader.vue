@@ -2,7 +2,7 @@
 import router from '@/router';
 import IconHeaderBack from '@/components/icons/mobiles/IconHeaderBack.vue';
 import { useUser } from '@/stores/user';
-import { ref, watchEffect, onMounted } from 'vue';
+import { ref, watchEffect } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useBoothDetail } from '@/stores/booths/boothDetail';
 
@@ -29,7 +29,7 @@ watchEffect(() => (routerName.value = router.currentRoute.value.name));
     class="w-full h-[60px] bg-white flex justify-between items-center px-6 shadow-xs"
     v-if="router.currentRoute.value.name != 'MobileLogin'"
   >
-    <div class="w-7">
+    <div class="w-[42px]">
       <IconHeaderBack @click="handleClickBackButton()" v-if="router.currentRoute.value.name != 'MobileMain'" />
     </div>
     <p class="font-medium text-xl text-secondary-700">
