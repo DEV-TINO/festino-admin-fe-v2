@@ -57,7 +57,7 @@ watchEffect(() => {
           type="text"
           placeholder="ㅇㅇㅇ학과 예약이 완료되었습니다."
           @input="handleInputMessage($event, 0)"
-          :value="messageList[0].message"
+          :value="messageList[0].message || ''"
           maxlength="35"
           class="w-full h-[57px] border-1 border-secondary-700 rounded-2xl px-[17px] font-medium focus:border-primary-900 focus:outline-none focus:border-1"
         />
@@ -69,7 +69,7 @@ watchEffect(() => {
           type="text"
           placeholder="ㅇㅇㅇ학과에서 즐거운 시간 보내시기 바랍니다."
           @input="handleInputMessage($event, 1)"
-          :value="messageList[1].message"
+          :value="messageList[1]?.message || ''"
           maxlength="35"
           class="w-full h-[57px] border-1 border-secondary-700 rounded-2xl px-[17px] font-medium focus:border-primary-900 focus:outline-none focus:border-1"
         />
@@ -81,7 +81,7 @@ watchEffect(() => {
           type="text"
           placeholder="ㅇㅇㅇ학과 예약이 취소 되었습니다."
           @input="handleInputMessage($event, 2)"
-          :value="messageList[2].message"
+          :value="messageList[2]?.message || ''"
           maxlength="35"
           class="w-full h-[57px] border-1 border-secondary-700 rounded-2xl px-[17px] font-medium focus:border-primary-900 focus:outline-none focus:border-1"
         />

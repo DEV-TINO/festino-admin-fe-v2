@@ -47,7 +47,20 @@ export const useMessage = defineStore('message', () => {
           messageType,
         }));
       } else {
-        customMessageList.value = [];
+        customMessageList.value = [
+          {
+            message: '',
+            messageType: 0,
+          },
+          {
+            message: '',
+            messageTyp: 1,
+          },
+          {
+            message: '',
+            messageType: 2,
+          },
+        ];
       }
     } catch (error) {
       console.error(error);
