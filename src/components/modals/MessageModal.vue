@@ -38,6 +38,7 @@ const handleClickSendButton = () => {
         class="w-full flex justify-between items-center gap-5 shrink-0 font-semibold text-[30px] text-primary-900 h-9"
       >
         <div class="w-[25px]"></div>
+        문자 커스텀
         <IconClose @click="closeModal()" class="cursor-pointer" />
       </div>
       <div class="text-secondary-700-light font-medium text-center">보낼 메시지 내용을 45글자 이내로 입력해주세요.</div>
@@ -65,15 +66,17 @@ const handleClickSendButton = () => {
           </table>
         </div>
       </div>
-
-      <input
-        type="text"
-        placeholder="메시지 내용을 입력해주세요"
-        @input="handleInputMessage($event)"
-        :value="message"
-        maxlength="45"
-        class="w-full h-[57px] border-1 border-secondary-700 rounded-2xl px-[17px] font-medium focus:border-primary-900 focus:outline-none focus:border-1"
-      />
+      <div class="relative">
+        <input
+          type="text"
+          placeholder="메시지 내용을 입력해주세요"
+          @input="handleInputMessage($event)"
+          :value="message"
+          maxlength="45"
+          class="w-full h-[57px] border-1 border-secondary-700 rounded-2xl px-[17px] font-medium focus:border-primary-900 focus:outline-none focus:border-2 pr-[80px]"
+        />
+        <div class="absolute bottom-4 right-5 text-secondary-900-light">{{ message.length }}/45</div>
+      </div>
       <div class="w-full flex justify-end items-center text-xl gap-5">
         <button class="is-button is-outlined w-[100px] h-[50px] font-semibold" @click="closeModal()">취소</button>
         <button class="is-button w-[100px] h-[50px] font-semibold" @click="handleClickSendButton()">전송</button>
