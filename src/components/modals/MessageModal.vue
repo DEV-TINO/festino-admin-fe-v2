@@ -1,5 +1,4 @@
 <script setup>
-import { onMounted } from 'vue';
 import { storeToRefs } from 'pinia';
 import IconClose from '../icons/IconClose.vue';
 import { useMessageModal } from '@/stores/reserve/messageModal';
@@ -31,10 +30,6 @@ const handleClickSendButton = () => {
   }
   sendMessage(message.value);
 };
-
-onMounted(() => {
-  console.log(messageInfo.value);
-});
 </script>
 <template>
   <div class="w-[780px] h-fit bg-white rounded-2xl py-[50px] px-[50px] flex flex-col justify-between">
@@ -53,10 +48,10 @@ onMounted(() => {
           <table class="w-full">
             <thead class="text-secondary-900 h-[50px]">
               <tr class="bg-primary-700-light">
-                <th class="rounded-tl-2xl">No.</th>
-                <th>이름</th>
-                <th>전화번호</th>
-                <th class="rounded-tr-2xl">예약 시간</th>
+                <th class="rounded-tl-2xl px-5">No.</th>
+                <th class="px-5">이름</th>
+                <th class="px-5">전화번호</th>
+                <th class="rounded-tr-2xl px-5">예약 시간</th>
               </tr>
             </thead>
             <tbody>
@@ -77,7 +72,7 @@ onMounted(() => {
         @input="handleInputMessage($event)"
         :value="message"
         maxlength="45"
-        class="w-full h-[57px] border-1 border-secondary-700 rounded-2xl px-[17px] font-medium focus:border-primary-900 focus:outline-none focus:border-2"
+        class="w-full h-[57px] border-1 border-secondary-700 rounded-2xl px-[17px] font-medium focus:border-primary-900 focus:outline-none focus:border-1"
       />
       <div class="w-full flex justify-end items-center text-xl gap-5">
         <button class="is-button is-outlined w-[100px] h-[50px] font-semibold" @click="closeModal()">취소</button>

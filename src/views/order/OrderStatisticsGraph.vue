@@ -1,9 +1,9 @@
 <script setup>
-import { ref, watch, nextTick, onMounted } from 'vue';
+import { ref, watch, nextTick, computed } from 'vue';
 import { useOrderStatistics } from '@/stores/orders/orderStatistics';
 import { storeToRefs } from 'pinia';
-import { Bar } from "vue-chartjs";
-import { Chart as ChartJS, registerables } from "chart.js";
+import { Bar } from 'vue-chartjs';
+import { Chart as ChartJS, registerables } from 'chart.js';
 import { prettyPrice } from '@/utils/utils';
 
 ChartJS.register(...registerables);
@@ -14,7 +14,7 @@ const { allOrderStatistics } = storeToRefs(useOrderStatisticsStore);
 const menuData = ref([]);
 const isDataReady = ref(false);
 const isLoading = ref(false);
-const chartInstance = ref('');
+const chartInstance = ref(null);
 
 const chartData = ref({
   labels: [],
@@ -33,9 +33,8 @@ const chartData = ref({
 });
 
 const options = ref({
-  responsive: true,
+  responsive: false,
   maintainAspectRatio: false,
-  animation: { duration: 1000 },
   plugins: {
     title: { display: false },
     legend: { display: false },
@@ -47,16 +46,6 @@ const options = ref({
           return `총 판매 금액 : ${prettyPrice(menuData.value[index]?.menuSale || 0)}`;
         },
       },
-      backgroundColor: "rgba(0, 0, 0, 0.58)",
-      titleFont: { size: 14, weight: "bold" },
-      bodyFont: { size: 14 },
-      displayColors: false,
-      padding: 20,
-      titleAlign: "center",
-      bodyAlign: "center",
-      cornerRadius: 12,
-      xAlign: "center",
-      yAlign: "bottom",
     },
   },
   scales: {
@@ -64,24 +53,49 @@ const options = ref({
       grid: { display: true },
       title: {
         display: true,
-        text: '[ 메뉴 ]'
-      }
+        text: '[ 메뉴 ]',
+        font: { size: 14 }
+      },
+      ticks: {
+        maxRotation: 30,
+        minRotation: 0,
+        autoSkip: false,
+        font: {
+          size: 12,
+        },
+      },
+      barThickness: 60,
+      categoryPercentage: 1.0,
+      barPercentage: 1.0,
     },
     y: {
-      min: 0,
-      max: 100,
-      ticks: { stepSize: 10 },
       grid: { display: true },
       title: {
         display: true,
-        text: '[ 판매량 ]'
-      }
-    },
-  },
+        text: '[ 판매량 ]',
+        font: { size: 14 }
+      },
+      ticks: {
+        stepSize: 10,
+      },
+      min: 0,
+      max: 1000,
+      beginAtZero: true,
+    }
+  }
 });
 
+// 너비를 동적으로 계산하는 함수
+const calculateContainerWidth = () => {
+  const baseWidth = 700; // 기본 너비
+  const labelWidth = 60; // 레이블 하나당 추가되는 너비
+  const totalLabels = chartData.value.labels.length;
+
+  return totalLabels <= 7 ? baseWidth : baseWidth + (totalLabels - 7) * labelWidth;
+};
+
 const updateYScaleMax = () => {
-  const maxValue = Math.max(...menuData.value.map(menu => menu.menuCount));
+  const maxValue = Math.max(...menuData.value.map(menu => menu.menuCount), 0);
   options.value.scales.y.max = Math.ceil(maxValue / 10) * 10;
 };
 
@@ -97,6 +111,11 @@ const initializeChart = () => {
     nextTick(() => {
       if (chartInstance.value?.chartInstance) {
         chartInstance.value.chartInstance.update({ lazy: false, duration: 1000 });
+        // `containerBody`의 너비를 업데이트합니다.
+        const container = document.querySelector('.containerBody');
+        if (container) {
+          container.style.width = `${calculateContainerWidth()}px`;
+        }
       }
     });
 
@@ -106,7 +125,7 @@ const initializeChart = () => {
   }
 };
 
-const fetchStatisticsData = async() => {
+const fetchStatisticsData = async () => {
   isLoading.value = true;
   try {
     await initializeChart();
@@ -131,10 +150,20 @@ watch(
 </script>
 
 <template>
-  <div class="relative h-full w-full">
+  <div class="w-full p-[20px]">
+    <div class="w-full overflow-x-auto">
+      <div class="min-w-[700px] h-[500px]">
+        <Bar 
+          v-if="isDataReady && !isLoading"
+          ref="chartInstance"
+          :data="chartData"
+          :options="options"
+          class="h-[500px]"
+        />
+      </div>
+    </div>
     <div v-if="isLoading" class="flex justify-center items-center h-full">Loading...</div>
-    <Bar v-if="isDataReady && !isLoading" ref="chartInstance" :data="chartData" :options="options" />
-    <div v-else-if="!isLoading && !isDataReady" class="flex justify-center items-center h-full">No data available</div>
+    <div v-if="!isLoading && !isDataReady" class="flex justify-center items-center h-full">No data available</div>
   </div>
 </template>
 
