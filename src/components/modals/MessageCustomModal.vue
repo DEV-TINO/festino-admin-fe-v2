@@ -27,10 +27,7 @@ const handleClickSaveButton = async () => {
     alert('메시지 내용을 입력해주세요.');
     return;
   }
-  const response = await saveCustomMessage(messageList.value);
-  if (response.data.success) {
-    customMessageList.value = [...messageList.value];
-  }
+  saveCustomMessage(messageList.value);
 };
 
 watchEffect(() => {
