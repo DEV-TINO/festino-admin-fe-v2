@@ -16,13 +16,14 @@ export const useMessageModal = defineStore('messageModal', () => {
     baseModalStore.openModal();
   };
 
-  const closeMessageModal = () => {
-    baseModalStore.closeModal();
+  const openMessageCusotmModal = () => {
+    baseModalStore.setModalType('messageCustomModal');
+    baseModalStore.openModal();
   };
 
   return {
     messageInfo,
     openMessageModal,
-    closeMessageModal,
+    openMessageCusotmModal,
   };
 });

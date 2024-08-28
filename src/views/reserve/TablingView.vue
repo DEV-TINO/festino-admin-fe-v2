@@ -25,7 +25,7 @@ const useBoothDeatilStore = useBoothDetail();
 const { getAllBoothList } = useBoothListStore;
 const { getReserveList, deleteReserve, confirmReserve, restoreReserve, getFilteredReserveList } = useReserveListStore;
 const { openBoothReservePopup, openPopup } = useReservePopupStore;
-const { openMessageModal } = useMessageModalStore;
+const { openMessageModal, openMessageCusotmModal } = useMessageModalStore;
 const { getNightBoothInfo } = useBoothDeatilStore;
 
 const { isAdmin, userOwnBoothId } = storeToRefs(useUserStore);
@@ -156,6 +156,8 @@ const handleClickMessage = (reserve) => {
   openMessageModal(reserve);
 };
 
+const handleClickMessageCustom = () => {};
+
 watchEffect(async () => {
   if (!selectBoothId.value) return;
   if (!selectOrderType.value) return;
@@ -222,20 +224,23 @@ onUnmounted(() => {
         <IconReservation />
         <div class="text-primary-900 text-4xl font-semibold">{{ selectBooth.adminName }} 예약 현황</div>
       </div>
-      <div
-        class="w-[320px] min-w-[300px] h-[55px] rounded-2xl bg-primary-800-light text-primary-900 flex justify-center items-center lg:text-2xl text-xl gap-[10px]"
-      >
-        예약 기능 ON/OFF
-        <IconBoothListToggle
-          :width="70"
-          :is-active="selectBooth.isReservation"
-          @click="
-            openBoothReservePopup({
-              booth: selectBooth,
-              callback: setSelectBooth,
-            })
-          "
-        />
+      <div class="flex gap-5">
+        <button class="is-button w-[150px] text-xl h-[55px]" @click="openMessageCusotmModal()">문자 커스텀</button>
+        <div
+          class="w-[320px] min-w-[300px] h-[55px] rounded-2xl bg-primary-800-light text-primary-900 flex justify-center items-center lg:text-2xl text-xl gap-[10px]"
+        >
+          예약 기능 ON/OFF
+          <IconBoothListToggle
+            :width="70"
+            :is-active="selectBooth.isReservation"
+            @click="
+              openBoothReservePopup({
+                booth: selectBooth,
+                callback: setSelectBooth,
+              })
+            "
+          />
+        </div>
       </div>
     </div>
     <!-- Reserve Category -->
