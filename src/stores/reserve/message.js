@@ -6,22 +6,6 @@ import { useMessageModal } from '@/stores/reserve/messageModal';
 import { useBaseModal } from '@/stores/baseModal';
 
 export const useMessage = defineStore('message', () => {
-  const message = ref('');
-  const customMessageList = ref([
-    {
-      message: '1',
-      messageType: 0,
-    },
-    {
-      message: '2',
-      messageType: 1,
-    },
-    {
-      message: '3',
-      messageType: 2,
-    },
-  ]);
-
   const useMessageModalStore = useMessageModal();
   const boothDeatilStore = useBoothDetail();
   const baseModalStore = useBaseModal();
@@ -29,22 +13,46 @@ export const useMessage = defineStore('message', () => {
   const { messageInfo } = storeToRefs(useMessageModalStore);
   const { boothInfo } = storeToRefs(boothDeatilStore);
 
+  const message = ref('');
+  const customMessageList = ref([
+    {
+      message: '',
+      messageType: 0,
+    },
+    {
+      message: '',
+      messageTyp: 1,
+    },
+    {
+      message: '',
+      messageType: 2,
+    },
+  ]);
+
   const openLoadingModal = () => {
     baseModalStore.setModalType('loadingModal');
     baseModalStore.openModal();
   };
 
-  const getMessage = async () => {
+  const getMessage = async (boothId) => {
     try {
-      const response = await api.get();
+      const response = await api.get('/admin/message/all', {
+        params: {
+          boothId,
+        },
+      });
       if (response.data.success) {
-        customMessageList.value = response.data.customMessageList;
+        customMessageList.value = response.data.customMessageList.map(({ message, messageType }) => ({
+          message,
+          messageType,
+        }));
       } else {
         customMessageList.value = [];
       }
     } catch (error) {
       console.error(error);
-      alertError(error);
+      alertError(error, false);
+      baseModalStore.closeModal();
     }
   };
 
@@ -77,20 +85,20 @@ export const useMessage = defineStore('message', () => {
 
   const saveCustomMessage = async (message) => {
     try {
-      const response = await api.get('/admin/message', {
+      const response = await api.post('/admin/message', {
         boothId: boothInfo.value.boothId,
-        customMessageList: customMessageList.value,
+        customMessageList: message,
       });
       if (response.data.success) {
         alert('메시지 수정에 성공했습니다.');
       } else {
         alert('메시지 수정에 실패했습니다.');
-        baseModalStore.closeModal();
       }
     } catch (error) {
-      baseModalStore.closeModal();
       console.error(error);
-      alertError(error);
+      alertError(error, false);
+    } finally {
+      baseModalStore.closeModal();
     }
   };
 

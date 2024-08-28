@@ -3,14 +3,14 @@ import { storeToRefs } from 'pinia';
 import IconClose from '../icons/IconClose.vue';
 import { useMessage } from '@/stores/reserve/message';
 import { useBaseModal } from '@/stores/baseModal';
-import { ref } from 'vue';
+import { onMounted, ref, watchEffect } from 'vue';
 import _ from 'lodash';
 
 const useMessageStore = useMessage();
 const useBaseModalStore = useBaseModal();
 
 const { closeModal } = useBaseModalStore;
-const { getMessage, sendMessage, saveCustomMessage } = useMessageStore;
+const { saveCustomMessage } = useMessageStore;
 
 const { customMessageList } = storeToRefs(useMessageStore);
 const messageList = ref(_.cloneDeep(customMessageList.value));
@@ -23,14 +23,15 @@ const handleInputMessage = (event, type) => {
 };
 
 const handleClickSaveButton = async () => {
-  console.log(messageList.value);
-
-  //  const response = await saveCustomMessage(message.value);
-  //   if (response.data.success) {
-  //     customMessageList.value = [...messageList.value];
-  //   }
-  //   saveCustomMessage();
+  const response = await saveCustomMessage(messageList.value);
+  if (response.data.success) {
+    customMessageList.value = [...messageList.value];
+  }
 };
+
+watchEffect(() => {
+  messageList.value = _.cloneDeep(customMessageList.value);
+});
 </script>
 <template>
   <div class="w-[780px] h-fit bg-white rounded-2xl py-[50px] px-[50px] flex flex-col justify-between">
@@ -50,8 +51,8 @@ const handleClickSaveButton = async () => {
         <div class="text-xl font-medium">예약 완료</div>
         <input
           type="text"
-          placeholder="ㅇㅇㅇ님 ㅇㅇㅇ학과 예약이 완료되었습니다."
-          @input="handleInputMessage($event, messageList[0].messageType)"
+          placeholder="ㅇㅇㅇ학과 예약이 완료되었습니다."
+          @input="handleInputMessage($event, 0)"
           :value="messageList[0].message"
           maxlength="35"
           class="w-full h-[57px] border-1 border-secondary-700 rounded-2xl px-[17px] font-medium focus:border-primary-900 focus:outline-none focus:border-1"
@@ -61,8 +62,8 @@ const handleClickSaveButton = async () => {
         <div class="text-xl font-medium">입장 완료</div>
         <input
           type="text"
-          placeholder="ㅇㅇㅇ님 ㅇㅇㅇ학과에서 즐거운 시간 보내시기 바랍니다."
-          @input="handleInputMessage($event, messageList[1].messageType)"
+          placeholder="ㅇㅇㅇ학과에서 즐거운 시간 보내시기 바랍니다."
+          @input="handleInputMessage($event, 1)"
           :value="messageList[1].message"
           maxlength="35"
           class="w-full h-[57px] border-1 border-secondary-700 rounded-2xl px-[17px] font-medium focus:border-primary-900 focus:outline-none focus:border-1"
@@ -72,8 +73,8 @@ const handleClickSaveButton = async () => {
         <div class="text-xl font-medium">예약 취소</div>
         <input
           type="text"
-          placeholder="ㅇㅇㅇ님 ㅇㅇㅇ학과 예약이 취소 되었습니다."
-          @input="handleInputMessage($event, messageList[2].messageType)"
+          placeholder="ㅇㅇㅇ학과 예약이 취소 되었습니다."
+          @input="handleInputMessage($event, 2)"
           :value="messageList[2].message"
           maxlength="35"
           class="w-full h-[57px] border-1 border-secondary-700 rounded-2xl px-[17px] font-medium focus:border-primary-900 focus:outline-none focus:border-1"
