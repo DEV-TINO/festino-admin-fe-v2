@@ -47,7 +47,7 @@ watchEffect(() => {
         메시지 앞에 <span class="text-danger font-bold">ㅇㅇㅇ님</span>이 고정으로 붙습니다.<br />보낼 메시지 내용을
         35글자 이내로 입력해주세요.
       </div>
-      <div class="flex flex-col gap-[10px]">
+      <div class="flex flex-col gap-[10px] relative">
         <div class="text-xl font-medium">예약 완료</div>
         <input
           type="text"
@@ -57,8 +57,9 @@ watchEffect(() => {
           maxlength="35"
           class="w-full h-[57px] border-1 border-secondary-700 rounded-2xl px-[17px] font-medium focus:border-primary-900 focus:outline-none focus:border-1"
         />
+        <div class="absolute bottom-4 right-5 text-secondary-900-light">{{ messageList[0].message.length }}/35</div>
       </div>
-      <div class="flex flex-col gap-[10px]">
+      <div class="flex flex-col gap-[10px] relative">
         <div class="text-xl font-medium">입장 완료</div>
         <input
           type="text"
@@ -68,8 +69,9 @@ watchEffect(() => {
           maxlength="35"
           class="w-full h-[57px] border-1 border-secondary-700 rounded-2xl px-[17px] font-medium focus:border-primary-900 focus:outline-none focus:border-1"
         />
+        <div class="absolute bottom-4 right-5 text-secondary-900-light">{{ messageList[1].message.length }}/35</div>
       </div>
-      <div class="flex flex-col gap-[10px]">
+      <div class="flex flex-col gap-[10px] relative">
         <div class="text-xl font-medium">예약 취소</div>
         <input
           type="text"
@@ -79,6 +81,7 @@ watchEffect(() => {
           maxlength="35"
           class="w-full h-[57px] border-1 border-secondary-700 rounded-2xl px-[17px] font-medium focus:border-primary-900 focus:outline-none focus:border-1"
         />
+        <div class="absolute bottom-4 right-5 text-secondary-900-light">{{ messageList[2].message.length }}/35</div>
       </div>
       <div class="w-full flex justify-end items-center text-xl gap-5">
         <button class="is-button is-outlined w-[100px] h-[50px] font-semibold" @click="closeModal()">취소</button>
