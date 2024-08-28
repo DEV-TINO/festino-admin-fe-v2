@@ -4,6 +4,7 @@ import BoothPopup from '../components/modals/BoothPopup.vue';
 import MenuModal from '../components/modals/MenuModal.vue';
 import TableCustomModal from '@/components/modals/TableCustomModal.vue';
 import MessageModal from '@/components/modals/MessageModal.vue';
+import ServiceModal from '@/components/modals/ServiceModal.vue';
 
 import { useBaseModal } from '@/stores/baseModal';
 import { storeToRefs } from 'pinia';
@@ -23,6 +24,7 @@ const { isModalOpen, modalType } = storeToRefs(baseModalStore);
     <OrderPopup v-if="modalType === 'orderPopup'" />
     <TableCustomModal v-if="modalType === 'tableDetail'" />
     <MessageModal v-if="modalType === 'messageModal'" />
+    <ServiceModal v-if="modalType === 'serviceModal'" />
   </ModalBackground>
 </template>
 
