@@ -10,6 +10,7 @@ import { useBoothDetail } from '@/stores/booths/boothDetail';
 
 const useBoothDetailStore = useBoothDetail();
 const useBoothListStore = useBoothList();
+const useReserveModalStore = useReserveModal();
 
 const { getAllBoothList } = useBoothListStore;
 const { boothList } = storeToRefs(useBoothListStore);
@@ -17,6 +18,11 @@ const { selectedBooth } = storeToRefs(useReserveModal());
 const { reserveList } = storeToRefs(useReserveList());
 const { isAdmin, userOwnBoothId } = storeToRefs(useUser());
 const { boothInfo } = storeToRefs(useBoothDetailStore);
+const { openCustomMessagePopup } = useReserveModalStore;
+
+const reserveData = ref([]);
+const loading = ref(false);
+const interval = ref(null);
 
 const reserveBoothList = ref([]);
 const listType = ref('reserve');
@@ -63,6 +69,10 @@ const visibility = () => {
   else return 'invisible';
 };
 
+const handleClickOpenCustomMessage = () => {
+  openCustomMessagePopup();
+};
+
 watch(() => reserveList.value.reserve, () => {
   if (listType.value !== 'reserve') {
     if (reserveList.value.reserve.length !== beforeReserveState.value) checkMark.value = true;
@@ -97,8 +107,8 @@ onMounted(async () => {
 
 <template>
   <div class="w-full h-full">
-    <div class="flex justify-end w-full px-4 items-center gap-4" v-if="isAdmin">
-      <select
+    <div class="flex justify-end w-full px-4 items-center gap-4">
+      <select v-if="isAdmin"
         class="max-w-[160px] rounded-lg border-gray-400 text-secondary-900 text-sm focus:text-black focus:ring-white focus:border-primary-900 block w-full px-4"
         v-model="selectedBooth"
       >
@@ -106,6 +116,7 @@ onMounted(async () => {
           {{ booth.adminName }}
         </option>
       </select>
+      <div @click="handleClickOpenCustomMessage()" class="h-[38px] bg-primary-900 rounded-xl text-white px-3 py-1 flex items-center">문자 커스텀</div>
     </div>
     <div class="pt-4 flex justify-center font-semibold text-xl border-b border-secondary-300 relative gap-5">
       <div>
