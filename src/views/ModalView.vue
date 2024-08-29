@@ -10,6 +10,7 @@ import { storeToRefs } from 'pinia';
 import ReservePopup from '@/components/modals/ReservePopup.vue';
 import LoadingModal from '@/components/modals/LoadingModal.vue';
 import OrderPopup from '@/components/modals/OrderPopup.vue';
+import MessageCustomModal from '@/components/modals/MessageCustomModal.vue';
 
 const baseModalStore = useBaseModal();
 const { isModalOpen, modalType } = storeToRefs(baseModalStore);
@@ -23,6 +24,7 @@ const { isModalOpen, modalType } = storeToRefs(baseModalStore);
     <OrderPopup v-if="modalType === 'orderPopup'" />
     <TableCustomModal v-if="modalType === 'tableDetail'" />
     <MessageModal v-if="modalType === 'messageModal'" />
+    <MessageCustomModal v-if="modalType === 'messageCustomModal'" />
   </ModalBackground>
 </template>
 
