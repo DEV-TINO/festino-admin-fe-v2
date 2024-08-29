@@ -6,6 +6,7 @@ import { onMounted, ref, watch, watchEffect } from 'vue';
 import { useTableDetail } from '@/stores/booths/tableDetail';
 import { storeToRefs } from 'pinia';
 import { useServiceModal } from '@/stores/orders/serviceModal';
+import { prettyPrice } from '@/utils/utils';
 
 const useBaseModalStore = useBaseModal();
 const useTableDetailStore = useTableDetail();
@@ -22,6 +23,28 @@ const selectedTableNum = ref('');
 const selectedMenu = ref('');
 const orderList = ref([]);
 const totalPrice = ref(0);
+const isTableDropdownOpen = ref(false);
+const isMenuDropdownOpen = ref(false);
+
+const toggleDropdown = (type) => {
+  if (type === 'table') {
+    isMenuDropdownOpen.value = false;
+    isTableDropdownOpen.value = !isTableDropdownOpen.value;
+  } else {
+    isTableDropdownOpen.value = false;
+    isMenuDropdownOpen.value = !isMenuDropdownOpen.value;
+  }
+};
+
+const selectTable = (tableNum) => {
+  selectedTableNum.value = tableNum;
+  isTableDropdownOpen.value = false;
+};
+
+const selectMenu = (menu) => {
+  selectedMenu.value = menu;
+  isMenuDropdownOpen.value = false;
+};
 
 const addOrderList = () => {
   if (!selectedTableNum.value || !selectedMenu.value) {
@@ -57,7 +80,7 @@ onMounted(() => {
 </script>
 <template>
   <div
-    class="w-[730px] h-fit flex flex-col justify-start items-center bg-white rounded-2xl overflow-y-auto px-[52px] py-11 gap-[24px]"
+    class="w-[730px] h-fit flex flex-col justify-start items-center bg-white rounded-2xl overflow-y-auto px-[52px] py-11 gap-5"
   >
     <div class="w-full flex justify-between items-center gap-5 shrink-0 font-semibold text-[30px] text-primary-900 h-9">
       <div class="w-[25px]"></div>
@@ -81,29 +104,102 @@ onMounted(() => {
     </div>
     <!-- 테이블 선택 -->
     <div class="flex flex-col w-full gap-[10px]">
-      <div class="text-xl font-medium">테이블 선택</div>
-      <select
-        v-model="selectedTableNum"
-        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+      <!-- <div class="text-xl font-medium">테이블 선택</div> -->
+      <button
+        id="dropdownDefaultButton"
+        data-dropdown-toggle="dropdown"
+        class="focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 justify-between"
+        :class="selectedTableNum ? 'is-button text-white' : 'is-button is-outlined text-primary-900'"
+        type="button"
+        @click="toggleDropdown('table')"
       >
-        <option hidden="" disabled="disabled" value="">===== 테이블을 선택해주세요 =====</option>
-        <option v-for="(table, tableIndex) in tableNumList" :key="tableIndex" :value="table.customTableNum">
-          {{ table.customTableNum }}
-        </option>
-      </select>
+        {{ selectedTableNum ? `테이블 번호 - ${selectedTableNum}` : '테이블 번호를 선택해주세요.' }}
+        <svg
+          class="w-2.5 h-2.5 ms-3"
+          aria-hidden="true"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 10 6"
+        >
+          <path
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="m1 1 4 4 4-4"
+          />
+        </svg>
+      </button>
+
+      <!-- Dropdown menu -->
+      <div
+        id="dropdown"
+        class="z-10 bg-white divide-y divide-gray-100 rounded-lg shadow w-full dark:bg-gray-700 max-h-[135px] overflow-auto"
+        :class="isTableDropdownOpen ? '' : 'hidden'"
+      >
+        <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefaultButton">
+          <li
+            v-for="(table, tableIndex) in tableNumList"
+            :key="tableIndex"
+            :value="table.customTableNum"
+            @click="selectTable(table.customTableNum)"
+          >
+            <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">{{
+              table.customTableNum
+            }}</a>
+          </li>
+        </ul>
+      </div>
     </div>
+
     <!-- 메뉴 선택 -->
     <div class="flex flex-col w-full gap-[10px]">
-      <div class="text-xl font-medium">메뉴 선택</div>
-      <select
-        v-model="selectedMenu"
-        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+      <!-- <div class="text-xl font-medium">메뉴 선택</div> -->
+      <button
+        id="dropdownDefaultButton"
+        data-dropdown-toggle="dropdown"
+        class="focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 justify-between"
+        :class="selectedMenu ? 'is-button text-white' : 'is-button is-outlined text-primary-900'"
+        type="button"
+        @click="toggleDropdown('menu')"
       >
-        <option hidden="" disabled="disabled" value="">====== 메뉴를 선택해주세요 ======</option>
-        <option v-for="(menu, menuIndex) in menuList" :key="menuIndex" :value="menu">
-          {{ menu.menuName }} {{ menu.menuPrice }}원
-        </option>
-      </select>
+        {{
+          selectedMenu ? `${selectedMenu.menuName} - ${prettyPrice(selectedMenu.menuPrice)} ` : '메뉴를 선택해주세요.'
+        }}
+        <svg
+          class="w-2.5 h-2.5 ms-3"
+          aria-hidden="true"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 10 6"
+        >
+          <path
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="m1 1 4 4 4-4"
+          />
+        </svg>
+      </button>
+
+      <!-- Dropdown menu -->
+      <div
+        id="dropdown"
+        class="z-10 bg-white divide-y divide-gray-100 rounded-lg shadow w-full dark:bg-gray-700"
+        :class="isMenuDropdownOpen ? '' : 'hidden'"
+      >
+        <ul
+          class="py-2 text-sm text-gray-700 dark:text-gray-200 max-h-[135px] overflow-auto"
+          aria-labelledby="dropdownDefaultButton"
+        >
+          <li v-for="(menu, menuIndex) in menuList" :key="menuIndex" :value="menu" @click="selectMenu(menu)">
+            <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+              >{{ menu.menuName }} - {{ prettyPrice(menu.menuPrice) }}</a
+            >
+          </li>
+        </ul>
+      </div>
     </div>
     <!-- Buttons -->
     <div class="w-full flex justify-end items-center text-xl gap-5">
@@ -115,17 +211,17 @@ onMounted(() => {
     <!-- 메뉴 리스트 -->
     <div class="flex flex-col w-full gap-[10px]" v-if="orderList.length > 0">
       <div class="text-xl font-medium">주문 목록</div>
-      <div class="bg-primary-700 rounded-2xl p-4 overflow-auto max-h-[210px]" id="orderContainer">
+      <div class="bg-primary-700 rounded-2xl p-4 overflow-auto max-h-[170px]" id="orderContainer">
         <div v-for="(order, orderIndex) in orderList" :key="orderIndex" class="grid grid-cols-4 pb-[12px]">
           <div class="text-left">{{ order.tableNum }}번 테이블</div>
           <div class="text-center">{{ order.menuName }}</div>
           <div class="text-center">{{ order.menuCount }}개</div>
-          <div class="text-right">{{ order.menuPrice }}원</div>
+          <div class="text-right">{{ prettyPrice(order.menuPrice) }}</div>
         </div>
         <div class="w-full border-secondary-900 border-1"></div>
         <div class="pt-[10px] pb-[4px] flex justify-between text-secondary-700">
           <div>총 가격</div>
-          <div class="font-bold">{{ totalPrice }}원</div>
+          <div class="font-bold">{{ prettyPrice(totalPrice) }}</div>
         </div>
       </div>
     </div>
