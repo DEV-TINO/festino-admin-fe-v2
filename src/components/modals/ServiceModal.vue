@@ -45,7 +45,6 @@ const selectTable = (tableNum) => {
   } else {
     selectedTableNum.value.splice(index, 1);
   }
-  console.log(selectedTableNum.value);
 };
 
 const selectMenu = (menu) => {
@@ -55,8 +54,26 @@ const selectMenu = (menu) => {
   } else {
     selectedMenu.value.splice(index, 1);
   }
-  console.log(selectedMenu.value);
 };
+
+const filteredTableList = computed(() => {
+  if (!searchTable.value) return tableNumList.value;
+  return tableNumList.value.filter((table) => table.customTableNum.includes(searchTable.value));
+});
+
+const filteredMenuList = computed(() => {
+  if (!searchMenu.value) return menuList.value;
+  return menuList.value.filter((menu) => menu.menuName.includes(searchMenu.value));
+});
+
+const handleClickTotalDelete = (type) => {
+  if (type === 'table') {
+    selectedTableNum.value = [];
+  } else {
+    selectedMenu.value = [];
+  }
+};
+
 const addOrderList = () => {
   if (!selectedTableNum.value.length || !selectedMenu.value.length) {
     alert('테이블 번호와 메뉴를 선택해주세요.');
@@ -86,14 +103,6 @@ const addOrderList = () => {
       totalPrice.value += price;
     });
   });
-};
-
-const handleClickDelete = (type) => {
-  if (type === 'table') {
-    selectedTableNum.value = [];
-  } else {
-    selectedMenu.value = [];
-  }
 };
 
 const handleClickMenuMinus = (menu) => {
@@ -134,15 +143,25 @@ const handleInputOrderCount = (menu, event) => {
   totalPrice.value = orderList.value.reduce((acc, cur) => acc + cur.menuPrice * cur.menuCount, 0);
 };
 
-const filteredTableList = computed(() => {
-  if (!searchTable.value) return tableNumList.value;
-  return tableNumList.value.filter((table) => table.customTableNum.includes(searchTable.value));
+const orderByTableNum = computed(() => {
+  return orderList.value.reduce((acc, order) => {
+    if (!acc[order.tableNum]) {
+      acc[order.tableNum] = [];
+    }
+    acc[order.tableNum].push(order);
+    return acc;
+  }, {});
 });
 
-const filteredMenuList = computed(() => {
-  if (!searchMenu.value) return menuList.value;
-  return menuList.value.filter((menu) => menu.menuName.includes(searchMenu.value));
-});
+const handleClickDeleteOrder = (menu) => {
+  const index = orderList.value.findIndex(
+    (order) => order.menuId === menu.menuId && order.menuPrice === menu.menuPrice && order.tableNum === menu.tableNum,
+  );
+  if (index === -1) return;
+
+  totalPrice.value -= orderList.value[index].menuPrice * orderList.value[index].menuCount;
+  orderList.value.splice(index, 1);
+};
 
 onMounted(() => {
   getMenuList();
@@ -254,7 +273,7 @@ onMounted(() => {
       <a
         href="#"
         class="flex items-center justify-center p-3 text-sm text-danger border-t border-gray-200 rounded-b-lg bg-gray-50 font-bold"
-        @click="handleClickDelete('table')"
+        @click="handleClickTotalDelete('table')"
       >
         전체 삭제
       </a>
@@ -335,7 +354,7 @@ onMounted(() => {
       <a
         href="#"
         class="flex items-center justify-center p-3 text-sm text-danger border-t border-gray-200 rounded-b-lg bg-gray-50 font-bold"
-        @click="handleClickDelete('menu')"
+        @click="handleClickTotalDelete('menu')"
       >
         전체 삭제
       </a>
@@ -355,34 +374,51 @@ onMounted(() => {
     <!-- 메뉴 리스트 -->
     <div class="flex flex-col w-full gap-[10px]" v-if="orderList.length > 0">
       <div class="text-xl font-medium">주문 목록</div>
-      <div class="bg-primary-700 rounded-2xl p-4 overflow-auto max-h-[170px]" id="orderContainer">
-        <div v-for="(order, orderIndex) in orderList" :key="orderIndex" class="grid grid-cols-4 pb-[12px]">
-          <div class="text-left">{{ order.tableNum }}번 테이블</div>
-          <div class="text-left">{{ order.menuName }}</div>
-          <div class="w-full gap-[10px] flex justify-center items-center">
-            <button
-              class="is-button w-5 h-5 text-base flex justify-center items-center"
-              type="button"
-              @click="handleClickMenuMinus(order)"
+      <div
+        class="bg-primary-700 rounded-2xl p-4 overflow-auto"
+        :class="isMenuDropdownOpen || isTableDropdownOpen ? 'max-h-[240px]' : ' max-h-[500px]'"
+        id="orderContainer"
+      >
+        <div v-for="(orders, tableNum) in orderByTableNum" :key="tableNum" class="mb-4">
+          <div class="font-bold pb-[20px]">{{ tableNum }}번 테이블</div>
+          <div
+            v-for="(order, orderIndex) in orders"
+            :key="orderIndex"
+            class="grid grid-cols-[1fr_1fr_1fr_auto] pb-[5px]"
+          >
+            <div class="text-left">{{ order.menuName }}</div>
+            <div class="text-center">{{ prettyPrice(order.menuPrice) }}</div>
+
+            <div class="w-full gap-[10px] flex justify-center items-center">
+              <button
+                class="is-button w-5 h-5 text-base flex justify-center items-center"
+                type="button"
+                @click="handleClickMenuMinus(order)"
+              >
+                -
+              </button>
+              <input
+                type="text"
+                class="is-button font-normal is-outlined w-[60px] h-[27px] text-center text-black"
+                :value="order.menuCount"
+                @input="($event) => handleInputOrderCount(order, $event)"
+                maxlength="2"
+              />
+              <button
+                class="is-button w-5 h-5 text-base flex justify-center items-center"
+                type="button"
+                @click="handleClickMenuPlus(order)"
+              >
+                +
+              </button>
+            </div>
+            <div
+              class="w-fit px-[10px] text-danger cursor-pointer place-self-end"
+              @click="handleClickDeleteOrder(order)"
             >
-              -
-            </button>
-            <input
-              type="text"
-              class="is-button font-normal is-outlined w-[60px] h-[27px] text-center text-black"
-              :value="order.menuCount"
-              @input="($event) => handleInputOrderCount(menu, $event)"
-              maxlength="2"
-            />
-            <button
-              class="is-button w-5 h-5 text-base flex justify-center items-center"
-              type="button"
-              @click="handleClickMenuPlus(order)"
-            >
-              +
-            </button>
+              X
+            </div>
           </div>
-          <div class="text-right">{{ prettyPrice(order.menuPrice) }}</div>
         </div>
         <div class="w-full border-secondary-900 border-1"></div>
         <div class="pt-[10px] pb-[4px] flex justify-between text-secondary-700">
