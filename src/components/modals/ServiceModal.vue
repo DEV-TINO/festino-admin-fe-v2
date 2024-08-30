@@ -2,7 +2,7 @@
 import IconClose from '../icons/IconClose.vue';
 import { useBaseModal } from '@/stores/baseModal';
 import IconRadio from '../icons/IconRadio.vue';
-import { onMounted, ref, watch, watchEffect } from 'vue';
+import { computed, onMounted, ref, watch, watchEffect } from 'vue';
 import { useTableDetail } from '@/stores/booths/tableDetail';
 import { storeToRefs } from 'pinia';
 import { useServiceModal } from '@/stores/orders/serviceModal';
@@ -19,12 +19,14 @@ const { tableNumList } = storeToRefs(useTableDetailStore);
 const { menuList } = storeToRefs(useServiceModalStore);
 
 const isService = ref(false);
-const selectedTableNum = ref('');
-const selectedMenu = ref('');
+const selectedTableNum = ref([]);
+const selectedMenu = ref([]);
 const orderList = ref([]);
 const totalPrice = ref(0);
 const isTableDropdownOpen = ref(false);
 const isMenuDropdownOpen = ref(false);
+const searchTable = ref('');
+const searchMenu = ref('');
 
 const toggleDropdown = (type) => {
   if (type === 'table') {
@@ -37,42 +39,72 @@ const toggleDropdown = (type) => {
 };
 
 const selectTable = (tableNum) => {
-  selectedTableNum.value = tableNum;
-  isTableDropdownOpen.value = false;
+  const index = selectedTableNum.value.indexOf(tableNum);
+  if (index === -1) {
+    selectedTableNum.value.push(tableNum);
+  } else {
+    selectedTableNum.value.splice(index, 1);
+  }
+  console.log(selectedTableNum.value);
 };
 
 const selectMenu = (menu) => {
-  selectedMenu.value = menu;
-  isMenuDropdownOpen.value = false;
+  const index = selectedMenu.value.indexOf(menu);
+  if (index === -1) {
+    selectedMenu.value.push(menu);
+  } else {
+    selectedMenu.value.splice(index, 1);
+  }
+  console.log(selectedMenu.value);
 };
-
 const addOrderList = () => {
-  if (!selectedTableNum.value || !selectedMenu.value) {
+  if (!selectedTableNum.value.length || !selectedMenu.value.length) {
     alert('테이블 번호와 메뉴를 선택해주세요.');
     return;
   }
 
-  const price = isService.value ? 0 : selectedMenu.value.menuPrice;
-  const existingOrder = orderList.value.find(
-    (order) =>
-      order.menuId === selectedMenu.value.menuId &&
-      order.tableNum === selectedTableNum.value &&
-      order.menuPrice === price,
-  );
+  selectedTableNum.value.forEach((tableNum) => {
+    selectedMenu.value.forEach((menu) => {
+      const price = isService.value ? 0 : menu.menuPrice;
 
-  if (existingOrder) {
-    existingOrder.menuCount += 1;
-  } else {
-    orderList.value.push({
-      menuId: selectedMenu.value.menuId,
-      menuName: selectedMenu.value.menuName,
-      menuCount: 1,
-      menuPrice: price,
-      tableNum: selectedTableNum.value,
+      const existingOrder = orderList.value.find(
+        (order) => order.menuId === menu.menuId && order.tableNum === tableNum && order.menuPrice === price,
+      );
+
+      if (existingOrder) {
+        existingOrder.menuCount += 1;
+      } else {
+        orderList.value.push({
+          menuId: menu.menuId,
+          menuName: menu.menuName,
+          menuCount: 1,
+          menuPrice: price,
+          tableNum: tableNum,
+        });
+      }
+
+      totalPrice.value += price;
     });
-  }
-  totalPrice.value += price;
+  });
 };
+
+const handleClickDelete = (type) => {
+  if (type === 'table') {
+    selectedTableNum.value = [];
+  } else {
+    selectedMenu.value = [];
+  }
+};
+
+const filteredTableList = computed(() => {
+  if (!searchTable.value) return tableNumList.value;
+  return tableNumList.value.filter((table) => table.customTableNum.includes(searchTable.value));
+});
+
+const filteredMenuList = computed(() => {
+  if (!searchMenu.value) return menuList.value;
+  return menuList.value.filter((menu) => menu.menuName.includes(searchMenu.value));
+});
 
 onMounted(() => {
   getMenuList();
@@ -80,7 +112,7 @@ onMounted(() => {
 </script>
 <template>
   <div
-    class="w-[730px] h-fit flex flex-col justify-start items-center bg-white rounded-2xl overflow-y-auto px-[52px] py-11 gap-5"
+    class="w-[650px] h-fit flex flex-col justify-start items-center bg-white rounded-2xl overflow-y-auto px-[52px] py-11 gap-5"
   >
     <div class="w-full flex justify-between items-center gap-5 shrink-0 font-semibold text-[30px] text-primary-900 h-9">
       <div class="w-[25px]"></div>
@@ -103,107 +135,181 @@ onMounted(() => {
       </div>
     </div>
     <!-- 테이블 선택 -->
-    <div class="flex flex-col w-full gap-[10px]">
-      <!-- <div class="text-xl font-medium">테이블 선택</div> -->
-      <button
-        id="dropdownDefaultButton"
-        data-dropdown-toggle="dropdown"
-        class="focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 justify-between"
-        :class="selectedTableNum ? 'is-button text-white' : 'is-button is-outlined text-primary-900'"
-        type="button"
-        @click="toggleDropdown('table')"
-      >
-        {{ selectedTableNum ? `테이블 번호 - ${selectedTableNum}` : '테이블 번호를 선택해주세요.' }}
-        <svg
-          class="w-2.5 h-2.5 ms-3"
-          aria-hidden="true"
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 10 6"
-        >
-          <path
-            stroke="currentColor"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="m1 1 4 4 4-4"
-          />
-        </svg>
-      </button>
 
-      <!-- Dropdown menu -->
-      <div
-        id="dropdown"
-        class="z-10 bg-white divide-y divide-gray-100 rounded-lg shadow w-full dark:bg-gray-700 max-h-[135px] overflow-auto"
-        :class="isTableDropdownOpen ? '' : 'hidden'"
+    <button
+      id="dropdownSearchButton"
+      data-dropdown-toggle="dropdownSearch"
+      data-dropdown-placement="bottom"
+      class="w-full focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center justify-between"
+      :class="selectedTableNum.length > 0 ? 'is-button ' : 'is-button is-outlined'"
+      type="button"
+      @click="toggleDropdown('table')"
+    >
+      테이블 번호를 선택해주세요.
+      <svg
+        class="w-2.5 h-2.5 ms-3"
+        aria-hidden="true"
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 10 6"
       >
-        <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefaultButton">
-          <li
-            v-for="(table, tableIndex) in tableNumList"
-            :key="tableIndex"
-            :value="table.customTableNum"
-            @click="selectTable(table.customTableNum)"
-          >
-            <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">{{
-              table.customTableNum
-            }}</a>
-          </li>
-        </ul>
+        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4" />
+      </svg>
+    </button>
+
+    <!-- Dropdown menu -->
+    <div
+      id="dropdownSearch"
+      class="z-10 bg-white rounded-lg shadow w-full"
+      :class="isTableDropdownOpen ? '' : 'hidden'"
+    >
+      <div class="p-3">
+        <label for="input-group-search" class="sr-only">Search</label>
+        <div class="relative">
+          <div class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
+            <svg
+              class="w-4 h-4 text-gray-500"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 20 20"
+            >
+              <path
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
+              />
+            </svg>
+          </div>
+          <input
+            type="text"
+            id="input-group-search"
+            class="block w-full p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
+            placeholder="테이블 번호 검색"
+            v-model="searchTable"
+          />
+        </div>
       </div>
+      <ul class="py-2 text-sm max-h-[170px] overflow-auto" aria-labelledby="dropdownSearchButton">
+        <li
+          v-for="(table, tableIndex) in filteredTableList"
+          :key="tableIndex"
+          :value="table.customTableNum"
+          @click="selectTable(table.customTableNum)"
+          class="flex items-center ps-2 rounded hover:bg-gray-100 cursor-pointer"
+        >
+          <div class="flex items-center ps-2 rounded hover:bg-gray-100">
+            <input
+              type="checkbox"
+              :value="table.customTableNum"
+              :checked="selectedTableNum.includes(table.customTableNum)"
+              class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+            />
+            <label class="w-full py-2 ms-2 text-sm font-medium text-gray-900 rounded"
+              >{{ table.customTableNum }}번</label
+            >
+          </div>
+        </li>
+      </ul>
+      <a
+        href="#"
+        class="flex items-center justify-center p-3 text-sm text-danger border-t border-gray-200 rounded-b-lg bg-gray-50 font-bold"
+        @click="handleClickDelete('table')"
+      >
+        전체 삭제
+      </a>
     </div>
 
     <!-- 메뉴 선택 -->
-    <div class="flex flex-col w-full gap-[10px]">
-      <!-- <div class="text-xl font-medium">메뉴 선택</div> -->
-      <button
-        id="dropdownDefaultButton"
-        data-dropdown-toggle="dropdown"
-        class="focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 justify-between"
-        :class="selectedMenu ? 'is-button text-white' : 'is-button is-outlined text-primary-900'"
-        type="button"
-        @click="toggleDropdown('menu')"
+    <button
+      id="dropdownSearchButton"
+      data-dropdown-toggle="dropdownSearch"
+      data-dropdown-placement="bottom"
+      class="w-full focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center justify-between"
+      :class="selectedMenu.length > 0 ? 'is-button ' : 'is-button is-outlined'"
+      type="button"
+      @click="toggleDropdown('menu')"
+    >
+      메뉴를 선택해주세요.
+      <svg
+        class="w-2.5 h-2.5 ms-3"
+        aria-hidden="true"
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 10 6"
       >
-        {{
-          selectedMenu ? `${selectedMenu.menuName} - ${prettyPrice(selectedMenu.menuPrice)} ` : '메뉴를 선택해주세요.'
-        }}
-        <svg
-          class="w-2.5 h-2.5 ms-3"
-          aria-hidden="true"
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 10 6"
-        >
-          <path
-            stroke="currentColor"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="m1 1 4 4 4-4"
-          />
-        </svg>
-      </button>
+        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4" />
+      </svg>
+    </button>
 
-      <!-- Dropdown menu -->
-      <div
-        id="dropdown"
-        class="z-10 bg-white divide-y divide-gray-100 rounded-lg shadow w-full dark:bg-gray-700"
-        :class="isMenuDropdownOpen ? '' : 'hidden'"
-      >
-        <ul
-          class="py-2 text-sm text-gray-700 dark:text-gray-200 max-h-[135px] overflow-auto"
-          aria-labelledby="dropdownDefaultButton"
-        >
-          <li v-for="(menu, menuIndex) in menuList" :key="menuIndex" :value="menu" @click="selectMenu(menu)">
-            <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-              >{{ menu.menuName }} - {{ prettyPrice(menu.menuPrice) }}</a
+    <!-- Dropdown menu -->
+    <div id="dropdownSearch" class="z-10 bg-white rounded-lg shadow w-full" :class="isMenuDropdownOpen ? '' : 'hidden'">
+      <div class="p-3">
+        <label for="input-group-search" class="sr-only">Search</label>
+        <div class="relative">
+          <div class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
+            <svg
+              class="w-4 h-4 text-gray-500"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 20 20"
             >
-          </li>
-        </ul>
+              <path
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
+              />
+            </svg>
+          </div>
+          <input
+            type="text"
+            id="input-group-search"
+            class="block w-full p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
+            placeholder="메뉴 검색"
+            v-model="searchMenu"
+          />
+        </div>
       </div>
+      <ul class="py-2 text-sm max-h-[170px] overflow-auto" aria-labelledby="dropdownSearchButton">
+        <li
+          v-for="(menu, menuIndex) in filteredMenuList"
+          :key="menuIndex"
+          :value="menu.menuName"
+          @click="selectMenu(menu)"
+          class="flex items-center ps-2 rounded hover:bg-gray-100 cursor-pointer"
+        >
+          <div class="flex items-center ps-2 rounded hover:bg-gray-100">
+            <input
+              type="checkbox"
+              :value="menu.menuName"
+              :checked="selectedMenu.includes(menu)"
+              class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+            />
+            <label class="w-full py-2 ms-2 text-sm font-medium text-gray-900 rounded">{{ menu.menuName }}</label>
+          </div>
+        </li>
+      </ul>
+      <a
+        href="#"
+        class="flex items-center justify-center p-3 text-sm text-danger border-t border-gray-200 rounded-b-lg bg-gray-50 font-bold"
+        @click="handleClickDelete('menu')"
+      >
+        전체 삭제
+      </a>
     </div>
+
     <!-- Buttons -->
     <div class="w-full flex justify-end items-center text-xl gap-5">
-      <button class="is-button is-outlined w-[100px] h-[50px] font-semibold" type="button" @click="addOrderList()">
+      <button
+        class="is-button is-outlined w-[50px] h-[30px] font-semibold text-sm rounded-lg"
+        type="button"
+        @click="addOrderList()"
+      >
         추가
       </button>
     </div>
