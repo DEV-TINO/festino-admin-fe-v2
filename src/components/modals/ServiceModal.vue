@@ -18,7 +18,7 @@ const { getMenuList } = useServiceModalStore;
 const { tableNumList } = storeToRefs(useTableDetailStore);
 const { menuList } = storeToRefs(useServiceModalStore);
 
-const isService = ref(false);
+const isService = ref(true);
 const selectedTableNum = ref([]);
 const selectedMenu = ref([]);
 const orderList = ref([]);
@@ -96,6 +96,44 @@ const handleClickDelete = (type) => {
   }
 };
 
+const handleClickMenuMinus = (menu) => {
+  const index = orderList.value.findIndex(
+    (order) => order.menuId === menu.menuId && order.menuPrice === menu.menuPrice && order.tableNum === menu.tableNum,
+  );
+  if (index === -1 || orderList.value[index].menuCount === 0) return;
+
+  if (orderList.value[index].menuCount > 0) {
+    orderList.value[index].menuCount -= 1;
+    totalPrice.value -= orderList.value[index].menuPrice;
+  }
+};
+
+const handleClickMenuPlus = (menu) => {
+  const index = orderList.value.findIndex(
+    (order) => order.menuId === menu.menuId && order.menuPrice === menu.menuPrice && order.tableNum === menu.tableNum,
+  );
+  if (index === -1 || orderList.value[index].menuCount === 99) return;
+
+  orderList.value[index].menuCount += 1;
+  totalPrice.value += orderList.value[index].menuPrice;
+};
+
+const handleInputOrderCount = (menu, event) => {
+  let value = event.target.value.replace(/[^0-9]/g, '');
+  if (value === '') {
+    value = '0';
+  }
+
+  value = parseInt(value, 10);
+  event.target.value = value;
+
+  const index = orderList.value.findIndex(
+    (order) => order.menuId === menu.menuId && order.menuPrice === menu.menuPrice && order.tableNum === menu.tableNum,
+  );
+  orderList.value[index].menuCount = value;
+  totalPrice.value = orderList.value.reduce((acc, cur) => acc + cur.menuPrice * cur.menuCount, 0);
+};
+
 const filteredTableList = computed(() => {
   if (!searchTable.value) return tableNumList.value;
   return tableNumList.value.filter((table) => table.customTableNum.includes(searchTable.value));
@@ -120,17 +158,17 @@ onMounted(() => {
       <IconClose @click="closeModal()" class="cursor-pointer" />
     </div>
     <!-- 주문/서비스 -->
-    <div class="flex items-center w-full">
-      <div class="flex items-center gap-[28px]">
-        <div class="w-[110px] flex gap-2 cursor-pointer" @click="isService = false">
-          <IconRadio :is-active="!isService" />
-          <div>일반 주문</div>
-        </div>
-      </div>
+    <div class="flex items-center w-full gap-5">
       <div class="flex items-center gap-[28px]">
         <div class="w-[110px] flex gap-2 cursor-pointer" @click="isService = true">
           <IconRadio :is-active="isService" />
           <div>서비스 주문</div>
+        </div>
+      </div>
+      <div class="flex items-center gap-[28px]">
+        <div class="w-[110px] flex gap-2 cursor-pointer" @click="isService = false">
+          <IconRadio :is-active="!isService" />
+          <div>일반 주문</div>
         </div>
       </div>
     </div>
@@ -188,7 +226,7 @@ onMounted(() => {
             id="input-group-search"
             class="block w-full p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
             placeholder="테이블 번호 검색"
-            v-model="searchTable"
+            :value="searchTable"
           />
         </div>
       </div>
@@ -271,7 +309,7 @@ onMounted(() => {
             id="input-group-search"
             class="block w-full p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
             placeholder="메뉴 검색"
-            v-model="searchMenu"
+            :value="searchMenu"
           />
         </div>
       </div>
@@ -320,8 +358,30 @@ onMounted(() => {
       <div class="bg-primary-700 rounded-2xl p-4 overflow-auto max-h-[170px]" id="orderContainer">
         <div v-for="(order, orderIndex) in orderList" :key="orderIndex" class="grid grid-cols-4 pb-[12px]">
           <div class="text-left">{{ order.tableNum }}번 테이블</div>
-          <div class="text-center">{{ order.menuName }}</div>
-          <div class="text-center">{{ order.menuCount }}개</div>
+          <div class="text-left">{{ order.menuName }}</div>
+          <div class="w-full gap-[10px] flex justify-center items-center">
+            <button
+              class="is-button w-5 h-5 text-base flex justify-center items-center"
+              type="button"
+              @click="handleClickMenuMinus(order)"
+            >
+              -
+            </button>
+            <input
+              type="text"
+              class="is-button font-normal is-outlined w-[60px] h-[27px] text-center text-black"
+              :value="order.menuCount"
+              @input="($event) => handleInputOrderCount(menu, $event)"
+              maxlength="2"
+            />
+            <button
+              class="is-button w-5 h-5 text-base flex justify-center items-center"
+              type="button"
+              @click="handleClickMenuPlus(order)"
+            >
+              +
+            </button>
+          </div>
           <div class="text-right">{{ prettyPrice(order.menuPrice) }}</div>
         </div>
         <div class="w-full border-secondary-900 border-1"></div>
