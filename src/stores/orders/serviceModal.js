@@ -41,24 +41,38 @@ export const useServiceModal = defineStore('serviceModal', () => {
       return { ...menuInfo };
     });
 
-    const response = await api.post(`/admin/booth/${boothId.value}/order/service`, {
-      tableNum,
-      menuInfo: menus,
-      totalPrice,
-      isCoupon: false,
-    });
+    try {
+      const response = await api.post(`/admin/booth/${boothId.value}/order/service`, {
+        tableNum,
+        menuInfo: menus,
+        totalPrice,
+        isCoupon: false,
+      });
+      return response;
+    } catch (error) {
+      console.error(`Error saving service for table ${tableNum}:`, error);
+      throw error;
+    }
   };
 
-  const saveService = (orderList) => {
+  const saveService = async (orderList) => {
+    const orderListArray = Object.keys(orderList).map((key) => ({
+      [key]: orderList[key],
+    }));
+
     try {
-      Promise.all(
-        orderList.map((order) => {
-          saveServiceByTableNum(order.tableNum, order.orders);
+      await Promise.all(
+        orderListArray.map((item) => {
+          const [tableNum, orders] = Object.entries(item)[0];
+          return saveServiceByTableNum(parseInt(tableNum), orders);
         }),
       );
+      alert('주문이 완료되었습니다.');
+      closeModal();
     } catch (error) {
-      console.error(error);
+      console.error('Error saving services:', error);
       alertError(error, false);
+      closeModal();
     }
   };
 

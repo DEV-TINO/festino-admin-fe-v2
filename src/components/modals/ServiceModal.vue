@@ -2,7 +2,7 @@
 import IconClose from '../icons/IconClose.vue';
 import { useBaseModal } from '@/stores/baseModal';
 import IconRadio from '../icons/IconRadio.vue';
-import { computed, onMounted, ref, watch, watchEffect } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { useTableDetail } from '@/stores/booths/tableDetail';
 import { storeToRefs } from 'pinia';
 import { useServiceModal } from '@/stores/orders/serviceModal';
@@ -21,7 +21,8 @@ const { menuList } = storeToRefs(useServiceModalStore);
 const isService = ref(true);
 const selectedTableNum = ref([]);
 const selectedMenu = ref([]);
-const orderList = ref([]);
+const orderList = ref({});
+
 const totalPrice = ref(0);
 const isTableDropdownOpen = ref(false);
 const isMenuDropdownOpen = ref(false);
@@ -75,50 +76,56 @@ const addOrderList = () => {
     selectedMenu.value.forEach((menu) => {
       const price = isService.value ? 0 : menu.menuPrice;
 
-      const existingOrder = orderList.value.find(
-        (order) => order.menuId === menu.menuId && order.tableNum === tableNum && order.menuPrice === price,
+      const currentTableOrders = orderList.value[tableNum] || [];
+
+      const existingOrder = currentTableOrders.find(
+        (order) => order.menuId === menu.menuId && order.menuPrice === price,
       );
 
       if (existingOrder) {
         existingOrder.menuCount += 1;
       } else {
-        orderList.value.push({
+        currentTableOrders.push({
           menuId: menu.menuId,
           menuName: menu.menuName,
           menuCount: 1,
           menuPrice: price,
-          tableNum: tableNum,
         });
       }
+
+      orderList.value[tableNum] = currentTableOrders;
 
       totalPrice.value += price;
     });
   });
 };
 
-const handleClickMenuMinus = (menu) => {
-  const index = orderList.value.findIndex(
-    (order) => order.menuId === menu.menuId && order.menuPrice === menu.menuPrice && order.tableNum === menu.tableNum,
+const handleClickMenuMinus = (tableNum, menu) => {
+  const findOrder = orderList.value[tableNum]?.find(
+    (order) => order.menuId === menu.menuId && order.menuPrice === menu.menuPrice,
   );
-  if (index === -1 || orderList.value[index].menuCount === 0) return;
 
-  if (orderList.value[index].menuCount > 0) {
-    orderList.value[index].menuCount -= 1;
-    totalPrice.value -= orderList.value[index].menuPrice;
+  if (!findOrder || findOrder.menuCount === 0) return;
+
+  if (findOrder.menuCount > 0) {
+    findOrder.menuCount -= 1;
+    totalPrice.value -= findOrder.menuPrice;
   }
 };
 
-const handleClickMenuPlus = (menu) => {
-  const index = orderList.value.findIndex(
-    (order) => order.menuId === menu.menuId && order.menuPrice === menu.menuPrice && order.tableNum === menu.tableNum,
+const handleClickMenuPlus = (tableNum, menu) => {
+  const findOrder = orderList.value[tableNum]?.find(
+    (order) => order.menuId === menu.menuId && order.menuPrice === menu.menuPrice,
   );
-  if (index === -1 || orderList.value[index].menuCount === 99) return;
+  if (!findOrder || findOrder.menuCount === 99) return;
 
-  orderList.value[index].menuCount += 1;
-  totalPrice.value += orderList.value[index].menuPrice;
+  if (findOrder.menuCount < 99) {
+    findOrder.menuCount += 1;
+    totalPrice.value += findOrder.menuPrice;
+  }
 };
 
-const handleInputOrderCount = (menu, event) => {
+const handleInputOrderCount = (tableNum, menu, event) => {
   let value = event.target.value.replace(/[^0-9]/g, '');
   if (value === '') {
     value = '0';
@@ -127,45 +134,37 @@ const handleInputOrderCount = (menu, event) => {
   value = parseInt(value, 10);
   event.target.value = value;
 
-  const index = orderList.value.findIndex(
-    (order) => order.menuId === menu.menuId && order.menuPrice === menu.menuPrice && order.tableNum === menu.tableNum,
+  const findOrder = orderList.value[tableNum]?.find(
+    (order) => order.menuId === menu.menuId && order.menuPrice === menu.menuPrice,
   );
-  orderList.value[index].menuCount = value;
-  totalPrice.value = orderList.value.reduce((acc, cur) => acc + cur.menuPrice * cur.menuCount, 0);
+  if (findOrder === -1) return;
+  findOrder.menuCount = value;
+  totalPrice.value = Object.values(orderList.value).reduce((acc, orders) => {
+    return acc + orders.reduce((sum, order) => sum + order.menuPrice * order.menuCount, 0);
+  }, 0);
 };
 
-const orderByTableNum = computed(() => {
-  return orderList.value.reduce((acc, order) => {
-    if (!acc[order.tableNum]) {
-      acc[order.tableNum] = [];
-    }
-    acc[order.tableNum].push(order);
-    return acc;
-  }, {});
-});
+const handleClickDeleteOrder = (tableNum, menu) => {
+  const orders = orderList.value[tableNum];
+  if (!orders) return;
 
-const tableOrders = computed(() => {
-  const ordersByTable = orderByTableNum.value;
+  const orderIndex = orders.findIndex((order) => order.menuId === menu.menuId && order.menuPrice === menu.menuPrice);
+  if (orderIndex === -1) return;
 
-  return Object.entries(ordersByTable).map(([tableNum, orders]) => ({
-    tableNum,
-    orders,
-  }));
-});
+  totalPrice.value -= orders[orderIndex].menuPrice * orders[orderIndex].menuCount;
+  orders.splice(orderIndex, 1);
 
-const handleClickDeleteOrder = (menu) => {
-  const index = orderList.value.findIndex(
-    (order) => order.menuId === menu.menuId && order.menuPrice === menu.menuPrice && order.tableNum === menu.tableNum,
-  );
-  if (index === -1) return;
-
-  totalPrice.value -= orderList.value[index].menuPrice * orderList.value[index].menuCount;
-  orderList.value.splice(index, 1);
+  if (orders.length === 0) {
+    delete orderList.value[tableNum];
+  }
 };
 
 const handleClickSaveButton = () => {
-  saveService(tableOrders.value);
-  console.log(tableOrders.value);
+  if (Object.keys(orderList.value).length === 0) {
+    alert('주문을 추가해주세요.');
+    return;
+  }
+  saveService(orderList.value);
 };
 
 onMounted(() => {
@@ -377,14 +376,14 @@ onMounted(() => {
     </div>
 
     <!-- 메뉴 리스트 -->
-    <div class="flex flex-col w-full gap-[10px]" v-if="orderList.length > 0">
+    <div class="flex flex-col w-full gap-[10px]" v-if="Object.keys(orderList).length != 0">
       <div class="text-xl font-medium">주문 목록</div>
       <div
         class="bg-primary-700 rounded-2xl p-4 overflow-auto"
         :class="isMenuDropdownOpen || isTableDropdownOpen ? 'max-h-[240px]' : ' max-h-[500px]'"
         id="orderContainer"
       >
-        <div v-for="(orders, tableNum) in orderByTableNum" :key="tableNum" class="mb-4">
+        <div v-for="(orders, tableNum) in orderList" :key="tableNum" class="mb-4">
           <div class="font-bold pb-[20px]">{{ tableNum }}번 테이블</div>
           <div
             v-for="(order, orderIndex) in orders"
@@ -392,13 +391,13 @@ onMounted(() => {
             class="grid grid-cols-[1fr_1fr_1fr_auto] pb-[5px]"
           >
             <div class="text-left">{{ order.menuName }}</div>
-            <div class="text-center">{{ prettyPrice(order.menuPrice) }}</div>
+            <div class="text-left">{{ prettyPrice(order.menuPrice) }}</div>
 
             <div class="w-full gap-[10px] flex justify-center items-center">
               <button
                 class="is-button w-5 h-5 text-base flex justify-center items-center"
                 type="button"
-                @click="handleClickMenuMinus(order)"
+                @click="handleClickMenuMinus(tableNum, order)"
               >
                 -
               </button>
@@ -406,20 +405,20 @@ onMounted(() => {
                 type="text"
                 class="is-button font-normal is-outlined w-[60px] h-[27px] text-center text-black"
                 :value="order.menuCount"
-                @input="($event) => handleInputOrderCount(order, $event)"
+                @input="($event) => handleInputOrderCount(tableNum, order, $event)"
                 maxlength="2"
               />
               <button
                 class="is-button w-5 h-5 text-base flex justify-center items-center"
                 type="button"
-                @click="handleClickMenuPlus(order)"
+                @click="handleClickMenuPlus(tableNum, order)"
               >
                 +
               </button>
             </div>
             <div
               class="w-fit px-[10px] text-danger cursor-pointer place-self-end"
-              @click="handleClickDeleteOrder(order)"
+              @click="handleClickDeleteOrder(tableNum, order)"
             >
               X
             </div>
