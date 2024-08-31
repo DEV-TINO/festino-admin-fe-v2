@@ -5,6 +5,7 @@ import MobileReserveModal from '../components/modals/mobile/MobileReserveModal.v
 import MobileLoadingModal from '../components/modals/mobile/MobileLoadingModal.vue';
 import MobileTableCustomModal from '../components/modals/mobile/MobileTableCustomModal.vue';
 import MobileMessageModal from '@/components/modals/mobile/MobileMessageModal.vue';
+import MobileCustomMessageModal from '@/components/modals/mobile/MobileCustomMessageModal.vue';
 
 import { useBaseModal } from '@/stores/baseModal';
 import { storeToRefs } from 'pinia';
@@ -22,6 +23,7 @@ const { closeMobileModal } = baseModalStore;
     <MobileMenuModal v-if="modalType === 'mobileMenu'" @click.stop />
     <MobileTableCustomModal v-if="modalType === 'mobileTableCustom'" @click.stop />
     <MobileMessageModal v-if="modalType === 'mobileMessage'" @click.stop />
+    <MobileCustomMessageModal v-if="modalType === 'mobileCustomMessage'" @click.stop />
     <MobileLoadingModal v-if="modalType === 'mobileLoading'" />
   </MobileModalBackground>
 </template>

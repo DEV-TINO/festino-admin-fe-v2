@@ -10,6 +10,7 @@ import { useMessageModal } from '@/stores/reserve/messageModal';
 import { useReserveList } from '@/stores/reserve/reserveList';
 import { useReservePopup } from '@/stores/reserve/reservePopup';
 import { useUser } from '@/stores/user';
+import { useMessage } from '@/stores/reserve/message';
 import { alertError } from '@/utils/api';
 import { prettyDate, prettyPhoneNumber } from '@/utils/utils';
 import { storeToRefs } from 'pinia';
@@ -21,12 +22,14 @@ const useReserveListStore = useReserveList();
 const useReservePopupStore = useReservePopup();
 const useMessageModalStore = useMessageModal();
 const useBoothDeatilStore = useBoothDetail();
+const useMessageStore = useMessage();
 
 const { getAllBoothList } = useBoothListStore;
 const { getReserveList, deleteReserve, confirmReserve, restoreReserve, getFilteredReserveList } = useReserveListStore;
 const { openBoothReservePopup, openPopup } = useReservePopupStore;
-const { openMessageModal } = useMessageModalStore;
+const { openMessageModal, openMessageCusotmModal } = useMessageModalStore;
 const { getNightBoothInfo } = useBoothDeatilStore;
+const { getMessage } = useMessageStore;
 
 const { isAdmin, userOwnBoothId } = storeToRefs(useUserStore);
 const { boothList } = storeToRefs(useBoothListStore);
@@ -156,6 +159,12 @@ const handleClickMessage = (reserve) => {
   openMessageModal(reserve);
 };
 
+const handleClickMessageCustom = async () => {
+  if (!selectBoothId.value) return;
+  await getMessage(selectBoothId.value);
+  openMessageCusotmModal();
+};
+
 watchEffect(async () => {
   if (!selectBoothId.value) return;
   if (!selectOrderType.value) return;
@@ -216,20 +225,23 @@ onUnmounted(() => {
         <IconReservation />
         <div class="text-primary-900 text-4xl font-semibold">{{ selectBooth.adminName }} 예약 현황</div>
       </div>
-      <div
-        class="w-[320px] min-w-[300px] h-[55px] rounded-2xl bg-primary-800-light text-primary-900 flex justify-center items-center lg:text-2xl text-xl gap-[10px]"
-      >
-        예약 기능 ON/OFF
-        <IconBoothListToggle
-          :width="70"
-          :is-active="selectBooth.isReservation"
-          @click="
-            openBoothReservePopup({
-              booth: selectBooth,
-              callback: setSelectBooth,
-            })
-          "
-        />
+      <div class="flex gap-5">
+        <button class="is-button w-[150px] text-xl h-[55px]" @click="handleClickMessageCustom()">문자 커스텀</button>
+        <div
+          class="w-[320px] min-w-[300px] h-[55px] rounded-2xl bg-primary-800-light text-primary-900 flex justify-center items-center lg:text-2xl text-xl gap-[10px]"
+        >
+          예약 기능 ON/OFF
+          <IconBoothListToggle
+            :width="70"
+            :is-active="selectBooth.isReservation"
+            @click="
+              openBoothReservePopup({
+                booth: selectBooth,
+                callback: setSelectBooth,
+              })
+            "
+          />
+        </div>
       </div>
     </div>
     <!-- Reserve Category -->

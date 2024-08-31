@@ -22,6 +22,11 @@ export const useReserveModal = defineStore('reserveModal', () => {
     baseModalStore.openMobileModal();
   };
 
+  const openCustomMessagePopup = () => {
+    baseModalStore.setModalType('mobileCustomMessage');
+    baseModalStore.openMobileModal();
+  };
+
   const openConfirmPopup = (type) => {
     baseModalStore.setModalType('mobileConfirm');
     confirmType.value = type;
@@ -45,6 +50,7 @@ export const useReserveModal = defineStore('reserveModal', () => {
     closeMobilePopup,
     openLoadingModal,
     openMessagePopup,
+    openCustomMessagePopup,
     reserveData,
     selectedBooth,
   };
