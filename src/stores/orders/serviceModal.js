@@ -34,5 +34,33 @@ export const useServiceModal = defineStore('serviceModal', () => {
     }
   };
 
-  return { menuList, openServiceModal, getMenuList };
+  const saveServiceByTableNum = async (tableNum, orders) => {
+    const totalPrice = orders.reduce((acc, cur) => acc + cur.menuPrice * cur.menuCount, 0);
+    const menus = orders.map((order) => {
+      const { tableNum, ...menuInfo } = order;
+      return { ...menuInfo };
+    });
+
+    const response = await api.post(`/admin/booth/${boothId.value}/order/service`, {
+      tableNum,
+      menuInfo: menus,
+      totalPrice,
+      isCoupon: false,
+    });
+  };
+
+  const saveService = (orderList) => {
+    try {
+      Promise.all(
+        orderList.map((order) => {
+          saveServiceByTableNum(order.tableNum, order.orders);
+        }),
+      );
+    } catch (error) {
+      console.error(error);
+      alertError(error, false);
+    }
+  };
+
+  return { menuList, openServiceModal, getMenuList, saveService };
 });

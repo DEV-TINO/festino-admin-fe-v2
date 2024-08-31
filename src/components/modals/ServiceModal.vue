@@ -13,7 +13,7 @@ const useTableDetailStore = useTableDetail();
 const useServiceModalStore = useServiceModal();
 
 const { closeModal } = useBaseModalStore;
-const { getMenuList } = useServiceModalStore;
+const { getMenuList, saveService } = useServiceModalStore;
 
 const { tableNumList } = storeToRefs(useTableDetailStore);
 const { menuList } = storeToRefs(useServiceModalStore);
@@ -40,20 +40,14 @@ const toggleDropdown = (type) => {
 
 const selectTable = (tableNum) => {
   const index = selectedTableNum.value.indexOf(tableNum);
-  if (index === -1) {
-    selectedTableNum.value.push(tableNum);
-  } else {
-    selectedTableNum.value.splice(index, 1);
-  }
+  if (index === -1) selectedTableNum.value.push(tableNum);
+  else selectedTableNum.value.splice(index, 1);
 };
 
 const selectMenu = (menu) => {
   const index = selectedMenu.value.indexOf(menu);
-  if (index === -1) {
-    selectedMenu.value.push(menu);
-  } else {
-    selectedMenu.value.splice(index, 1);
-  }
+  if (index === -1) selectedMenu.value.push(menu);
+  else selectedMenu.value.splice(index, 1);
 };
 
 const filteredTableList = computed(() => {
@@ -67,11 +61,8 @@ const filteredMenuList = computed(() => {
 });
 
 const handleClickTotalDelete = (type) => {
-  if (type === 'table') {
-    selectedTableNum.value = [];
-  } else {
-    selectedMenu.value = [];
-  }
+  if (type === 'table') selectedTableNum.value = [];
+  else selectedMenu.value = [];
 };
 
 const addOrderList = () => {
@@ -153,6 +144,15 @@ const orderByTableNum = computed(() => {
   }, {});
 });
 
+const tableOrders = computed(() => {
+  const ordersByTable = orderByTableNum.value;
+
+  return Object.entries(ordersByTable).map(([tableNum, orders]) => ({
+    tableNum,
+    orders,
+  }));
+});
+
 const handleClickDeleteOrder = (menu) => {
   const index = orderList.value.findIndex(
     (order) => order.menuId === menu.menuId && order.menuPrice === menu.menuPrice && order.tableNum === menu.tableNum,
@@ -161,6 +161,11 @@ const handleClickDeleteOrder = (menu) => {
 
   totalPrice.value -= orderList.value[index].menuPrice * orderList.value[index].menuCount;
   orderList.value.splice(index, 1);
+};
+
+const handleClickSaveButton = () => {
+  saveService(tableOrders.value);
+  console.log(tableOrders.value);
 };
 
 onMounted(() => {
@@ -245,7 +250,7 @@ onMounted(() => {
             id="input-group-search"
             class="block w-full p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
             placeholder="테이블 번호 검색"
-            :value="searchTable"
+            v-model="searchTable"
           />
         </div>
       </div>
@@ -328,7 +333,7 @@ onMounted(() => {
             id="input-group-search"
             class="block w-full p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
             placeholder="메뉴 검색"
-            :value="searchMenu"
+            v-model="searchMenu"
           />
         </div>
       </div>
