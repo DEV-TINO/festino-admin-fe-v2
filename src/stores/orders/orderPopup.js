@@ -28,6 +28,7 @@ export const useOrderPopup = defineStore('orderPopup', () => {
   const menuInfoList = ref([]);
   const orderInfo = ref({});
   const cookingInfo = ref({});
+  const note = ref("");
 
   const selectType = ref(''); // ready, cooking, finish, cancel
 
@@ -222,6 +223,15 @@ export const useOrderPopup = defineStore('orderPopup', () => {
     baseModalStore.openModal();
   };
 
+  const getNote = async() => {
+    try {
+      const res = await api.get(`/admin/booth/${boothId.value}/order/${orderInfo.value.orderId}`)
+      note.value = res.data.orderInfo.note;
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const closePopup = () => {
     baseModalStore.closeModal();
   };
@@ -231,6 +241,7 @@ export const useOrderPopup = defineStore('orderPopup', () => {
     orderInfo,
     cookingInfo,
     selectType,
+    note,
     submitPopup,
     openPopup,
     closePopup,
@@ -239,5 +250,6 @@ export const useOrderPopup = defineStore('orderPopup', () => {
     patchOrderDeposit,
     patchOrderComplete,
     patchCookingComplete,
+    getNote,
   };
 });
