@@ -48,3 +48,16 @@ export const prettyDate = (date) => {
 
 export const chunkArray = (arr, size) =>
   Array.from({ length: Math.ceil(arr.length / size) }, (_, index) => arr.slice(index * size, (index + 1) * size));
+
+export const getHourandMinute = (date) => {
+  const dateObject = new Date(date);
+
+  const options = {
+    timeZone: 'Asia/Seoul',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+  };
+
+  return new Intl.DateTimeFormat('ko-KR', options).format(dateObject);
+};

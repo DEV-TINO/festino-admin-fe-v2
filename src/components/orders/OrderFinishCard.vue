@@ -1,10 +1,12 @@
 <script setup>
 import { ref } from 'vue';
-import { prettyMenuNum, prettyPhoneNumber, prettyPrice } from '@/utils/utils';
+import { getHourandMinute, prettyMenuNum, prettyPhoneNumber, prettyPrice } from '@/utils/utils';
 import { useOrderPopup } from '@/stores/orders/orderPopup';
 import { useTableDetail } from '@/stores/booths/tableDetail';
 import { useBaseOrder } from '@/stores/orders/baseOrder';
 import IconAccordion from '../icons/IconAccordion.vue';
+import IconPeople from '../icons/IconPeople.vue';
+import IconClock from '../icons/IconClock.vue';
 
 const props = defineProps({
   orderId: {
@@ -15,10 +17,7 @@ const props = defineProps({
     type: Number,
     required: true,
   },
-  phoneNum: {
-    type: String,
-    required: true,
-  },
+
   tableNum: {
     type: Number,
     required: true,
@@ -35,6 +34,14 @@ const props = defineProps({
     type: String,
     required: true,
   },
+  createAt: {
+    type: String,
+    required: true,
+  },
+  // personNum: {
+  //   type: Number,
+  //   required: true,
+  // },
 });
 
 const useOrderPopupStore = useOrderPopup();
@@ -77,7 +84,17 @@ const handleClickOrderRestore = () => {
       <div>No.{{ orderNum }}</div>
       <div>{{ getCustomTableNum(tableNum) }}번</div>
       <div>{{ userName }}</div>
-      <div>{{ prettyPhoneNumber(phoneNum) }}</div>
+      <div class="flex items-center gap-2">
+        <IconPeople />
+        <div class="text-lg font-medium">
+          7명
+          <!-- {{ personNum }}명 -->
+        </div>
+      </div>
+      <div class="flex items-center gap-2">
+        <IconClock />
+        <div class="text-lg font-medium">{{ getHourandMinute(createAt) }}</div>
+      </div>
 
       <div v-if="orderStatus === 'realTime'" @click="isOpen = !isOpen" class="cursor-pointer">
         <IconAccordion :class="{ 'rotate-180': isOpen }" />
