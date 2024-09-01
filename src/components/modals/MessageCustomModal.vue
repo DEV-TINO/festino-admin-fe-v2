@@ -3,7 +3,7 @@ import { storeToRefs } from 'pinia';
 import IconClose from '../icons/IconClose.vue';
 import { useMessage } from '@/stores/reserve/message';
 import { useBaseModal } from '@/stores/baseModal';
-import { onMounted, ref, watchEffect } from 'vue';
+import { ref, watchEffect } from 'vue';
 import _ from 'lodash';
 
 const useMessageStore = useMessage();
