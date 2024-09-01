@@ -24,7 +24,7 @@ const useBoothListStore = useBoothList();
 const useTableDetailStore = useTableDetail();
 
 const { openLoadingModal } = useReserveModal();
-const { deleteMenu, createMenu, addDeleteMenu, patchMenu, addPatchMenu } = useBoothDetailStore;
+const { deleteMenu, createMenu, addDeleteMenu, patchMenu, addPatchMenu, getAdminBoothInfo } = useBoothDetailStore;
 const { boothInfo, menuList, boothType, createMenuList, deleteMenuList, patchMenuList, originalMenuList } =
   storeToRefs(useBoothDetailStore);
 const { isAdmin } = storeToRefs(useUserStore);
@@ -295,6 +295,7 @@ const handleInputAccount = (event) => {
 
 watch(selectedBoothId, async () => {
   useBoothDetailStore.reset();
+  fileUrls.value = [];
   const selectedBoothInfo = boothList.value.find((booth) => booth.boothId === selectedBoothId.value);
   boothType.value = ADMIN_CATEGORY[selectedBoothInfo.adminCategory];
   serviceHours.value = `${selectedBoothInfo.openTime} ~ ${selectedBoothInfo.closeTime}`;
@@ -304,6 +305,8 @@ watch(selectedBoothId, async () => {
   }
   const res = await useBoothDetailStore.getBoothDetail({ boothId: selectedBoothId.value, type: boothType.value });
   await getTableList(selectedBoothId.value);
+  await getAdminBoothInfo(selectedBoothId.value);
+  fileUrls.value = [...boothInfo.value.boothImage];
 });
 
 onMounted(async () => {
@@ -328,6 +331,8 @@ onMounted(async () => {
     await useBoothListStore.getAllBoothList();
     selectedBoothId.value = boothList.value[0].boothId;
     await getTableList(selectedBoothId.value);
+    await getAdminBoothInfo(selectedBoothId.value);
+    fileUrls.value = [...boothInfo.value.boothImage];
   }
 });
 </script>
