@@ -102,20 +102,14 @@ const handleClickOrderDetail = () => {
 
     <div class="flex justify-between items-center h-[73px] w-full rounded-b-3xl px-[28px] bg-danger-700">
       <div
-        class="w-36 h-12 is-button is-danger is-outlined rounded-xl flex items-center justify-center cursor-pointer"
+        class="w-[112px] h-12 rounded-2xl flex items-center justify-center cursor-pointer bg-white text-danger font-semibold"
         @click="handleClickOrderDetail()"
       >
         입금 확인
       </div>
-      <div class="font-bold text-2xl">{{ prettyPrice(totalPrice) }}</div>
+      <div class="font-bold text-2xl text-secondary-700-light">{{ prettyPrice(totalPrice) }}</div>
     </div>
   </div>
-  <!-- <div
-    class="w-full min-w-[430px] max-w-[500px] flex justify-end pt-[20px] font-bold underline cursor-pointer"
-    @click="handleClickOrderDetail()"
-  >
-    주문 내역 상세보기
-  </div> -->
 </template>
 
 <style lang="scss" scoped></style>

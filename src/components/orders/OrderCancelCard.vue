@@ -111,7 +111,7 @@ const handleClickCancelRestore = () => {
       >
         주문 복구
       </button>
-      <div class="font-bold text-2xl">{{ prettyPrice(totalPrice) }}</div>
+      <div class="font-bold text-2xl text-secondary-700-light">{{ prettyPrice(totalPrice) }}</div>
     </div>
   </div>
   <!-- <div class="w-full min-w-[430px] max-w-[500px] flex justify-end pt-[20px] font-bold underline">

@@ -122,7 +122,7 @@ const handleClickOrderRestore = () => {
       >
         주문 복구
       </div>
-      <div class="font-bold text-2xl">{{ prettyPrice(totalPrice) }}</div>
+      <div class="font-bold text-2xl text-secondary-700-light">{{ prettyPrice(totalPrice) }}</div>
     </div>
   </div>
 </template>
