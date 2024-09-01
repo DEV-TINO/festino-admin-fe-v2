@@ -165,6 +165,7 @@ const handleClickSaveButton = () => {
     alert('주문을 추가해주세요.');
     return;
   }
+  // console.log(orderList.value);
   saveService(orderList.value);
 };
 

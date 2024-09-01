@@ -34,10 +34,10 @@ export const useServiceModal = defineStore('serviceModal', () => {
     }
   };
 
-  const saveServiceByTableNum = async (tableNum, orders) => {
+  const saveServiceByTableNum = async (tableNum, orders, isService) => {
     const totalPrice = orders.reduce((acc, cur) => acc + cur.menuPrice * cur.menuCount, 0);
     const menus = orders.map((order) => {
-      const { tableNum, ...menuInfo } = order;
+      const { tableNum, isService, ...menuInfo } = order;
       return { ...menuInfo };
     });
 
@@ -47,30 +47,44 @@ export const useServiceModal = defineStore('serviceModal', () => {
         menuInfo: menus,
         totalPrice,
         isCoupon: false,
+        note: '',
+        isService,
       });
       return response;
     } catch (error) {
-      console.error(`Error saving service for table ${tableNum}:`, error);
+      console.error(error);
       throw error;
     }
   };
-
   const saveService = async (orderList) => {
-    const orderListArray = Object.keys(orderList).map((key) => ({
-      [key]: orderList[key],
+    const orderListArray = Object.entries(orderList).map(([tableNum, orders]) => ({
+      tableNum,
+      orders,
     }));
 
+    const serviceOrder = orderListArray
+      .map(({ tableNum, orders }) => ({
+        tableNum,
+        orders: orders.filter((order) => order.isService),
+      }))
+      .filter(({ orders }) => orders.length > 0);
+
+    const generalOrder = orderListArray
+      .map(({ tableNum, orders }) => ({
+        tableNum,
+        orders: orders.filter((order) => !order.isService),
+      }))
+      .filter(({ orders }) => orders.length > 0);
+
     try {
-      await Promise.all(
-        orderListArray.map((item) => {
-          const [tableNum, orders] = Object.entries(item)[0];
-          return saveServiceByTableNum(parseInt(tableNum), orders);
-        }),
-      );
+      await Promise.all([
+        ...serviceOrder.map(({ tableNum, orders }) => saveServiceByTableNum(tableNum, orders, true)),
+        ...generalOrder.map(({ tableNum, orders }) => saveServiceByTableNum(tableNum, orders, false)),
+      ]);
       alert('주문이 완료되었습니다.');
       closeModal();
     } catch (error) {
-      console.error('Error saving services:', error);
+      console.error(error);
       alertError(error, false);
       closeModal();
     }
