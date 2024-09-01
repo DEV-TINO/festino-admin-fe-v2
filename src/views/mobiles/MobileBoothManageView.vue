@@ -36,16 +36,14 @@ const menuModalStore = useMenuModal();
 const { openMobileModal } = menuModalStore;
 const { openCustomTablePopup } = useCustomTableModal();
 
+const selectedMenuIndex = ref(-1);
+const selectedImageIndex = ref(-1);
 const isSubmit = ref(false);
 const useReservation = ref(false);
 const useOrder = ref(false);
 const selectedBoothId = ref('');
 
 const boothIntroLength = computed(() => boothInfo.value?.boothIntro?.length ?? 0);
-
-const isDragging = ref(false);
-const dragIndex = ref(null);
-const dropIndex = ref(null);
 const fileUrls = ref([]);
 
 const serviceHours = ref('');
@@ -80,63 +78,6 @@ const handleDeleteImage = (id) => {
   fileUrls.value = fileUrls.value.filter((_, index) => index !== id);
 };
 
-const handleDragStart = (event, index) => {
-  dragIndex.value = index;
-  event.dataTransfer.effectAllowed = 'move';
-};
-
-const handleDragOver = (event) => {
-  event.preventDefault();
-};
-
-const handleDragEnter = (event, index) => {
-  dropIndex.value = index;
-};
-
-const handleDrop = () => {
-  if (dragIndex.value !== null && dropIndex.value !== null && dragIndex.value !== dropIndex.value) {
-    const draggedItem = fileUrls.value[dragIndex.value];
-    fileUrls.value.splice(dragIndex.value, 1);
-    fileUrls.value.splice(dropIndex.value, 0, draggedItem);
-  }
-  dragIndex.value = null;
-  dropIndex.value = null;
-};
-
-const handleMenuTouchStart = (event, index) => {
-  dragIndex.value = index;
-  isDragging.value = true;
-  event.target.style.touchAction = 'manipulation';
-};
-
-const handleMenuTouchMove = (event) => {
-  const touch = event.touches[0];
-  const element = document.elementFromPoint(touch.clientX, touch.clientY);
-
-  if (element && element.dataset.index !== undefined) {
-    dropIndex.value = parseInt(element.dataset.index);
-  }
-};
-
-const handleMenuTouchEnd = () => {
-  if (dragIndex.value !== null && dropIndex.value !== null && dragIndex.value !== dropIndex.value) {
-    const draggedItem = menuList.value[dragIndex.value];
-    menuList.value.splice(dragIndex.value, 1);
-    menuList.value.splice(dropIndex.value, 0, draggedItem);
-    menuList.value.forEach((menuItem, index) => {
-      menuItem.menuIndex = index;
-      addPatchMenu(menuItem);
-    });
-  }
-  dragIndex.value = null;
-  dropIndex.value = null;
-  isDragging.value = false;
-};
-
-const handleDragEnd = () => {
-  isDragging.value = false;
-};
-
 const handleFileinput = (event) => {
   if (isSubmit.value) return;
   const files = event.target.files;
@@ -154,24 +95,6 @@ const setBackgroundImage = (url) => {
   return {
     backgroundImage: `url(${url})`,
   };
-};
-
-const handleTouchStart = (event, index) => {
-  dragIndex.value = index;
-  isDragging.value = true;
-};
-
-const handleTouchMove = (event) => {
-  const touch = event.touches[0];
-  const element = document.elementFromPoint(touch.clientX, touch.clientY);
-  if (element && element.dataset.index !== undefined) {
-    console.log(touch)
-    dropIndex.value = parseInt(element.dataset.index);
-  }
-};
-
-const handleTouchEnd = () => {
-  handleDrop();
 };
 
 const handleClickDeleteMenu = async ({ menuIndex, menuId }) => {
@@ -293,6 +216,57 @@ const handleInputAccount = (event) => {
   boothInfo.value.accountInfo.account = inputValue;
 };
 
+const handleSelectMenu = (index) => {
+  if (selectedMenuIndex.value === index) {
+    selectedMenuIndex.value = -1;
+    return;
+  }
+  if (selectedMenuIndex.value === -1) selectedMenuIndex.value = index;
+  else {
+    menuList.value[index].menuIndex = selectedMenuIndex.value;
+    menuList.value[selectedMenuIndex.value].menuIndex = index;
+
+    const temp = menuList.value[index];
+    menuList.value[index] = menuList.value[selectedMenuIndex.value];
+    menuList.value[selectedMenuIndex.value] = temp;
+
+    addPatchMenu(menuList.value[index]);
+    addPatchMenu(menuList.value[selectedMenuIndex.value]);
+
+    selectedMenuIndex.value = -1;
+  }
+};
+
+const isSelectedMenu = (index) => {
+  if (selectedMenuIndex.value !== -1) {
+    if (index === selectedMenuIndex.value) return "border-primary-900";
+    else return "border-primary";
+  }
+  else return "border-primary";
+};
+
+const handleSelectImage = (index) => {
+  if (selectedImageIndex.value === index) {
+    selectedImageIndex.value = -1;
+    return;
+  }
+  if (selectedImageIndex.value === -1) selectedImageIndex.value = index;
+  else {
+    const temp = fileUrls.value[index];
+    fileUrls.value[index] = fileUrls.value[selectedImageIndex.value];
+    fileUrls.value[selectedImageIndex.value] = temp;
+    selectedImageIndex.value = -1;
+  }
+};
+
+const isSelectedImage = (index) => {
+  if (selectedImageIndex.value !== -1) {
+    if (index === selectedImageIndex.value) return "border-primary-900";
+    else return "border-secondary-300";
+  }
+  else return "border-secondary-300";
+};
+
 watch(selectedBoothId, async () => {
   useBoothDetailStore.reset();
   fileUrls.value = [];
@@ -398,8 +372,6 @@ onMounted(async () => {
         <div class="font-bold text-base">부스 사진</div>
         <div
           class="w-full h-[150]px flex flex-row bg-primary-300-light rounded-3xl p-3.5 border-2 border-dashed overflow-y-hidden overflow-x-scroll cursor-pointer"
-          @dragover="handleDragOver"
-          @drop="handleDrop"
           id="imagezone"
         >
           <label
@@ -425,15 +397,9 @@ onMounted(async () => {
           <div
             v-for="(url, index) in fileUrls"
             :key="index"
-            class="relative w-[120px] h-[120px] flex-shrink-0 mr-2"
-            draggable="true"
-            @dragstart="(event) => handleDragStart(event, index)"
-            @dragenter="(event) => handleDragEnter(event, index)"
-            @dragend="handleDragEnd"
-            @touchstart="(event) => handleTouchStart(event, index)"
-            @touchmove="handleTouchMove"
-            @touchend="handleTouchEnd"
-            :data-index="index"
+            class="relative w-[120px] h-[120px] flex-shrink-0 mr-2 rounded-3xl border"
+            @click="handleSelectImage(index)"
+            :class="isSelectedImage(index)"
           >
             <div :style="setBackgroundImage(url)" class="w-full h-full object-cover rounded-3xl border bg-cover"></div>
             <IconDelete @click="handleDeleteImage(index)" class="absolute top-2 right-2" />
@@ -466,11 +432,9 @@ onMounted(async () => {
           <div
             v-for="(menu, index) in menuList"
             :key="menu.menuId"
-            @touchstart="(event) => handleMenuTouchStart(event, index)"
-            @touchmove="handleMenuTouchMove"
-            @touchend="handleMenuTouchEnd"
-            :data-index="index"
-            class="w-full h-fit p-[14px] bg-white rounded-3xl border border-primary flex flex-col justify-between"
+            @click = "handleSelectMenu(index)"
+            class="w-full h-fit p-[14px] bg-white rounded-3xl border flex flex-col justify-between"
+            :class="isSelectedMenu(index)"
           >
             <div class="flex mb-[12px]">
               <img :src="menu.menuImage" class="rounded-3xl w-[94px] h-[94px] mr-3" />
