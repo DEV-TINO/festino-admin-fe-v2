@@ -90,6 +90,7 @@ const addOrderList = () => {
           menuName: menu.menuName,
           menuCount: 1,
           menuPrice: price,
+          isService: isService.value,
         });
       }
 
@@ -165,6 +166,11 @@ const handleClickSaveButton = () => {
     return;
   }
   saveService(orderList.value);
+};
+
+const getTableCustomNum = (tableNum) => {
+  const tableInfo = tableNumList.value.find((table) => table.tableNumIndex === Number(tableNum));
+  return tableInfo.customTableNum;
 };
 
 onMounted(() => {
@@ -257,19 +263,19 @@ onMounted(() => {
         <li
           v-for="(table, tableIndex) in filteredTableList"
           :key="tableIndex"
-          :value="table.customTableNum"
-          @click="selectTable(table.customTableNum)"
+          :value="table.tableNumIndex"
+          @click="selectTable(table.tableNumIndex)"
           class="flex items-center ps-2 rounded hover:bg-gray-100 cursor-pointer"
         >
           <div class="flex items-center ps-2 rounded hover:bg-gray-100">
             <input
               type="checkbox"
-              :value="table.customTableNum"
-              :checked="selectedTableNum.includes(table.customTableNum)"
+              :value="table.tableNumIndex"
+              :checked="selectedTableNum.includes(table.tableNumIndex)"
               class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
             />
             <label class="w-full py-2 ms-2 text-sm font-medium text-gray-900 rounded"
-              >{{ table.customTableNum }}번</label
+              >{{ table.tableNumIndex }} - {{ table.customTableNum }}번 테이블</label
             >
           </div>
         </li>
@@ -384,7 +390,7 @@ onMounted(() => {
         id="orderContainer"
       >
         <div v-for="(orders, tableNum) in orderList" :key="tableNum" class="mb-4">
-          <div class="font-bold pb-[20px]">{{ tableNum }}번 테이블</div>
+          <div class="font-bold pb-[20px]">{{ getTableCustomNum(tableNum) }}번 테이블</div>
           <div
             v-for="(order, orderIndex) in orders"
             :key="orderIndex"
