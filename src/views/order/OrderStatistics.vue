@@ -8,6 +8,7 @@ import StatisticsGraph from '@/views/order/OrderStatisticsGraph.vue';
 import { prettyPrice } from '@/utils/utils';
 import { DATES } from '@/utils/constants';
 import IconDropDown from '@/components/icons/IconDropDown.vue';
+import IconScroll from '@/components/icons/IconScroll.vue';
 
 const useBaseOrderStore = useBaseOrder();
 const useOrderStatisticsStore = useOrderStatistics();
@@ -131,9 +132,13 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="w-full h-[638px] flex overflow-x-scroll">
-    <div class="w-1/2 min-w-[490px] pt-20 pb-10 pl-10 h-full border border-primary-900 rounded-l-[20px]">
+  <div class="w-full h-[638px] flex overflow-x-scroll scrollbar-hide">
+    <div class="w-1/2 min-w-[490px] pt-14 pl-10 h-full border border-primary-900 rounded-l-[20px]">
       <StatisticsGraph />
+      <div class="flex justify-end items-center pr-4">
+        <IconScroll class="w-5 h-5 mr-1" />
+        <p class="text-xs text-gray-500 font-semibold">스크롤</p>
+      </div>
     </div>
     <div class="w-1/2 min-w-[490px] h-full overflow-hidden p-[40px] border-r border-y border-primary-900 rounded-r-[20px] flex flex-col justify-between items-center">
       <div class="min-w-[432px] font-semibold text-primary-900 text-[28px] flex justify-center select-none">{{ selectBooth?.adminName }} 야간부스 매출 통계</div>
