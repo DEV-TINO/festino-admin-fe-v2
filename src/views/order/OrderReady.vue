@@ -1,12 +1,11 @@
 <script setup>
-import { computed, onMounted, ref, watchEffect } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 import { useDepositOrder } from '@/stores/orders/depositOrder';
 import { useBaseOrder } from '@/stores/orders/baseOrder';
 import { storeToRefs } from 'pinia';
 import IconNotFound from '@/components/icons/IconNotFound.vue';
 import OrderReadyCard from '@/components/orders/OrderReadyCard.vue';
 import { ORDER_FILTER } from '@/utils/constants';
-import IconRefresh from '@/components/icons/IconRefresh.vue';
 import IconRefreshVector from '@/components/icons/IconRefreshVector.vue';
 import IconSearch from '@/components/icons/IconSearch.vue';
 
@@ -21,22 +20,35 @@ const { boothId } = storeToRefs(useBaseOrderStore);
 const selectedFilterMenu = ref(ORDER_FILTER['all']);
 const searchMenu = ref('');
 
-const filteredMenuList = computed(() => {
-  let sortedList = [...waitDepositOrderList.value];
-  if (selectedFilterMenu.value === ORDER_FILTER.table) {
-    sortedList.sort((a, b) => a.tableNum - b.tableNum);
-  } else if (selectedFilterMenu.value === ORDER_FILTER.price) {
-    sortedList.sort((a, b) => a.totalPrice - b.totalPrice);
-  }
-  return sortedList;
-});
+const isFocus = ref(false);
+const filteredMenuList = ref([]);
 
-const handleClickFilterMenu = (orderMenu) => {
-  selectedFilterMenu.value = orderMenu;
+const updateFilteredMenuList = () => {
+  let filteredList = [...waitDepositOrderList.value];
+
+  if (searchMenu.value) {
+    filteredList = filteredList.filter((order) => {
+      const basicInfo = `${order.tableNum}${order.userName}${order.phoneNum}`;
+      const menuNames = order.menuList.map((menu) => menu.menuName).join('');
+      return basicInfo.includes(searchMenu.value) || menuNames.includes(searchMenu.value);
+    });
+  }
+
+  if (selectedFilterMenu.value === ORDER_FILTER.table) {
+    filteredList.sort((a, b) => a.tableNum - b.tableNum);
+  } else if (selectedFilterMenu.value === ORDER_FILTER.price) {
+    filteredList.sort((a, b) => a.totalPrice - b.totalPrice);
+  }
+
+  filteredMenuList.value = filteredList;
 };
 
+watch([waitDepositOrderList, selectedFilterMenu, searchMenu], () => {
+  updateFilteredMenuList();
+});
+
 onMounted(async () => {
-  initDepositOrder();
+  await initDepositOrder();
   await getWaitDepositOrderList({
     boothId: boothId.value,
     date: 0,
@@ -53,7 +65,7 @@ onMounted(async () => {
           :key="index"
           class="cursor-pointer text-xl"
           :class="selectedFilterMenu === orderMenu ? 'font-bold' : ''"
-          @click="handleClickFilterMenu(orderMenu)"
+          @click="selectedFilterMenu = orderMenu"
         >
           {{ orderMenu }}
         </div>
@@ -64,10 +76,13 @@ onMounted(async () => {
       </div>
     </div>
     <div
-      class="w-[410px] h-[40px] rounded-xl outline outline-1 outline-primary-900 flex items-center px-[11px] bg-white gap-1"
+      class="w-[410px] h-[40px] rounded-xl flex items-center px-[11px] bg-white gap-1 outline"
+      :class="{ 'outline-primary-900 outline-2': isFocus, 'outline-gray-300 outline-1': !isFocus }"
+      @focusin="isFocus = true"
+      @focusout="isFocus = false"
     >
       <IconSearch />
-      <input :value="searchMenu" @input="searchMenu = $event.target.value" placeholder="주문 검색" class="grow" />
+      <input v-model="searchMenu" placeholder="주문 검색" class="grow focus:outline-none focus:border-none" />
       <button class="w-[75px] h-[30px] rounded-[4px] bg-primary-900 text-white">Search</button>
     </div>
   </div>
@@ -78,7 +93,7 @@ onMounted(async () => {
       v-bind="waitDepositOrder"
     />
 
-    <div v-if="waitDepositOrderList.length < 1" class="flex flex-col justify-center items-center">
+    <div v-if="filteredMenuList.length < 1" class="flex flex-col justify-center items-center">
       <IconNotFound :width="200" />
       <div class="text-lg text-gray-500">입금 대기중인 주문이 없어요...</div>
     </div>
