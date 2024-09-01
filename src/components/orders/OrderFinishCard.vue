@@ -5,8 +5,7 @@ import { useOrderPopup } from '@/stores/orders/orderPopup';
 import { useTableDetail } from '@/stores/booths/tableDetail';
 import { useBaseOrder } from '@/stores/orders/baseOrder';
 import IconAccordion from '../icons/IconAccordion.vue';
-import IconPeople from '../icons/IconPeople.vue';
-import IconClock from '../icons/IconClock.vue';
+import IconClock from '@/components/icons/IconClock.vue';
 
 const props = defineProps({
   orderId: {
@@ -35,6 +34,10 @@ const props = defineProps({
     required: true,
   },
   createAt: {
+    type: String,
+    required: true,
+  },
+  phoneNum: {
     type: String,
     required: true,
   },
@@ -74,13 +77,13 @@ const handleClickOrderRestore = () => {
     :class="isOpen ? ' h-[500px]' : 'h-fit'"
   >
     <div
-      class="flex justify-between w-full h-[73px] items-center px-[28px] text-xl font-semibold bg-success-700"
+      class="flex justify-between w-full h-[73px] items-center px-[28px] text-xl font-semibold bg-success-700 flex-wrap gap-x-2"
       :class="isOpen ? ' rounded-t-3xl border-b-1 border-success-700-light' : 'rounded-3xl'"
     >
       <div>No.{{ orderNum }}</div>
       <div>{{ getCustomTableNum(tableNum) }}번</div>
       <div>{{ userName }}</div>
-
+      <div class="text-lg">{{ prettyPhoneNumber(phoneNum) }}</div>
       <div class="flex items-center gap-2">
         <IconClock />
         <div class="text-lg font-medium">{{ getHourandMinute(createAt) }}</div>

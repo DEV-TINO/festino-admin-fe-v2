@@ -65,7 +65,7 @@ const handleClickCancelRestore = () => {
     class="w-full min-w-[430px] max-w-[552px] h-[500px] flex flex-col justify-between outline outline-1 outline-primary-300 rounded-3xl"
   >
     <div
-      class="flex justify-between w-full h-[73px] items-center rounded-t-3xl border-b-1 border-primary-300-light px-[28px] text-xl font-semibold bg-cancel"
+      class="flex justify-between w-full h-[73px] items-center rounded-t-3xl border-b-1 border-primary-300-light px-[28px] text-xl font-semibold bg-cancel flex-wrap gap-x-2"
     >
       <div>No.{{ orderNum }}</div>
       <div>{{ getCustomTableNum(tableNum) }}번</div>
