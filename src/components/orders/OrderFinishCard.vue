@@ -1,7 +1,10 @@
 <script setup>
-import { useOrderPopup } from '@/stores/orders/orderPopup';
+import { ref } from 'vue';
 import { prettyMenuNum, prettyPhoneNumber, prettyPrice } from '@/utils/utils';
+import { useOrderPopup } from '@/stores/orders/orderPopup';
 import { useTableDetail } from '@/stores/booths/tableDetail';
+import { useBaseOrder } from '@/stores/orders/baseOrder';
+import IconAccordion from '../icons/IconAccordion.vue';
 
 const props = defineProps({
   orderId: {
@@ -40,6 +43,11 @@ const { openPopup } = useOrderPopupStore;
 const useTableDetailStore = useTableDetail();
 const { getCustomTableNum } = useTableDetailStore;
 
+const useBaseOrderStore = useBaseOrder();
+const { orderStatus } = useBaseOrderStore;
+
+const isOpen = ref(orderStatus === 'realTime' ? false : true);
+
 const handleClickOrderRestore = () => {
   openPopup({
     type: 'finish',
@@ -59,17 +67,24 @@ const handleClickOrderRestore = () => {
 
 <template>
   <div
-    class="w-full min-w-[430px] max-w-[552px] h-[500px] rounded-3xl flex flex-col justify-between outline outline-1 outline-primary-700"
+    class="w-full min-w-[430px] max-w-[552px] rounded-3xl flex flex-col justify-between outline outline-1 outline-primary-700"
+    :class="isOpen ? ' h-[500px]' : 'h-fit'"
   >
     <div
-      class="flex justify-between w-full h-[73px] items-center rounded-t-3xl px-[28px] text-xl font-semibold bg-success-700 border-b-1 border-success-700-light"
+      class="flex justify-between w-full h-[73px] items-center px-[28px] text-xl font-semibold bg-success-700"
+      :class="isOpen ? ' rounded-t-3xl border-b-1 border-success-700-light' : 'rounded-3xl'"
     >
       <div>No.{{ orderNum }}</div>
       <div>{{ getCustomTableNum(tableNum) }}번</div>
       <div>{{ userName }}</div>
       <div>{{ prettyPhoneNumber(phoneNum) }}</div>
+
+      <div v-if="orderStatus === 'realTime'" @click="isOpen = !isOpen" class="cursor-pointer">
+        <IconAccordion :class="{ 'rotate-180': isOpen }" />
+      </div>
     </div>
     <div
+      v-if="isOpen"
       class="relative h-[353px] w-full overflow-y-auto"
       :class="{
         'overflow-y-hidden': menuList.length < 7,
@@ -100,20 +115,16 @@ const handleClickOrderRestore = () => {
       </table>
     </div>
 
-    <div class="flex justify-between items-center h-[73px] w-full rounded-b-3xl px-[28px] bg-success-700">
-      <button
-        class="w-36 h-12 is-button is-success is-outlined rounded-xl flex items-center justify-center cursor-pointer"
-        type="button"
+    <div v-if="isOpen" class="flex justify-between items-center h-[73px] w-full rounded-b-3xl px-[28px] bg-success-700">
+      <div
+        class="font-semibold cursor-pointer underline underline-offset-2 text-secondary-700-light"
         @click="handleClickOrderRestore()"
       >
         주문 복구
-      </button>
+      </div>
       <div class="font-bold text-2xl">{{ prettyPrice(totalPrice) }}</div>
     </div>
   </div>
-  <!-- <div class="w-full min-w-[430px] max-w-[500px] flex justify-end pt-[20px] font-bold underline">
-    주문 내역 상세보기
-  </div> -->
 </template>
 
 <style lang="scss" scoped></style>
