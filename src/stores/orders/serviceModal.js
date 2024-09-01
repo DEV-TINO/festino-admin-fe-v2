@@ -44,7 +44,7 @@ export const useServiceModal = defineStore('serviceModal', () => {
 
     try {
       const response = await api.post(`/admin/booth/${boothId.value}/order/service`, {
-        tableNum,
+        tableNum: Number(tableNum),
         menuInfo: menus,
         totalPrice,
         isCoupon: false,
@@ -82,6 +82,7 @@ export const useServiceModal = defineStore('serviceModal', () => {
         ...serviceOrder.map(({ tableNum, orders }) => saveServiceByTableNum(tableNum, orders, true)),
         ...generalOrder.map(({ tableNum, orders }) => saveServiceByTableNum(tableNum, orders, false)),
       ]);
+      memo.value = '';
       alert('주문이 완료되었습니다.');
       closeModal();
     } catch (error) {
