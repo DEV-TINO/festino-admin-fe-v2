@@ -17,6 +17,7 @@ const { getMenuList, saveService } = useServiceModalStore;
 
 const { tableNumList } = storeToRefs(useTableDetailStore);
 const { menuList } = storeToRefs(useServiceModalStore);
+const { memo } = storeToRefs(useServiceModalStore);
 
 const isService = ref(true);
 const selectedTableNum = ref([]);
@@ -165,7 +166,6 @@ const handleClickSaveButton = () => {
     alert('주문을 추가해주세요.');
     return;
   }
-  // console.log(orderList.value);
   saveService(orderList.value);
 };
 
@@ -382,6 +382,18 @@ onMounted(() => {
       </button>
     </div>
 
+    <!-- 메모 -->
+    <div class="w-full">
+      <div class="text-left w-full pb-1">메모를 작성해주세요.</div>
+      <textarea
+        maxlength="50"
+        :value="memo"
+        @input="($event) => (memo = $event.target.value)"
+        placeholder="메모를 작성해주세요"
+        class="w-full h-[66px] resize-none"
+        >{{ memo }}</textarea
+      >
+    </div>
     <!-- 메뉴 리스트 -->
     <div class="flex flex-col w-full gap-[10px]" v-if="Object.keys(orderList).length != 0">
       <div class="text-xl font-medium">주문 목록</div>

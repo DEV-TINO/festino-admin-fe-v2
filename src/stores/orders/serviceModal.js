@@ -13,6 +13,7 @@ export const useServiceModal = defineStore('serviceModal', () => {
   const { boothId } = storeToRefs(useBaseOrderStore);
 
   const menuList = ref([]);
+  const memo = ref('');
 
   const openServiceModal = () => {
     setModalType('serviceModal');
@@ -47,7 +48,7 @@ export const useServiceModal = defineStore('serviceModal', () => {
         menuInfo: menus,
         totalPrice,
         isCoupon: false,
-        note: '',
+        note: memo.value,
         isService,
       });
       return response;
@@ -90,5 +91,5 @@ export const useServiceModal = defineStore('serviceModal', () => {
     }
   };
 
-  return { menuList, openServiceModal, getMenuList, saveService };
+  return { menuList, memo, openServiceModal, getMenuList, saveService };
 });
