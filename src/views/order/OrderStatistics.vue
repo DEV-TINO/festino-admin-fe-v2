@@ -25,7 +25,7 @@ const isLoading = ref(false);
 const day = ref(1);
 const type = ref('all');  // 기본 토글 선택 값을 1로 설정
 
-const myBooth = ref(null);  // boothId와 일치하는 부스를 저장할 변수
+const myBooth = ref('');  // boothId와 일치하는 부스를 저장할 변수
 
 const statisticsType = ref({
   1: {
