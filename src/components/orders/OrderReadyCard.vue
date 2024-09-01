@@ -56,6 +56,7 @@ const handleClickOrderDetail = () => {
       tableNum: props.tableNum,
       totalPrice: props.totalPrice,
       userName: props.userName,
+      createAt: props.createAt,
     },
     selectMenuInfoList: props.menuList,
   });

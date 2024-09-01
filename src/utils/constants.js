@@ -88,7 +88,7 @@ export const ORDER_CATEGORY = {
 };
 
 export const ORDER_STATUS = {
-  ready: '주문내역 상세보기',
+  ready: '주문 내역 상세보기',
   cooking: '조리 완료',
   finish: '주문 복구',
   complete: '조리 완료',

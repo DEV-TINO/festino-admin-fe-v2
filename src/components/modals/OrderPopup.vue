@@ -1,10 +1,11 @@
 <script setup>
 import { useOrderPopup } from '@/stores/orders/orderPopup';
 import { ORDER_STATUS } from '@/utils/constants';
-import { prettyMenuNum, prettyPhoneNumber, prettyPrice } from '@/utils/utils';
+import { getHourandMinute, prettyMenuNum, prettyPhoneNumber, prettyPrice } from '@/utils/utils';
 import { storeToRefs } from 'pinia';
 import { onMounted, ref, watchEffect } from 'vue';
 import { useTableDetail } from '@/stores/booths/tableDetail';
+import IconClock from '../icons/IconClock.vue';
 
 const useOrderPopupStore = useOrderPopup();
 const { submitPopup, closePopup } = useOrderPopupStore;
@@ -83,8 +84,12 @@ onMounted(() => {
       </div>
 
       <!-- OrderInfo -->
-      <div v-if="selectType !== 'cooking'" class="w-full flex flex-col gap-4">
-        <div class="text-secondary-700-light text-xl">예약자 정보</div>
+      <div v-if="selectType !== 'cooking'" class="w-full flex flex-col gap-4 text-sm">
+        <div class="text-secondary-700-light">예약자 정보</div>
+        <div class="flex gap-[5px] items-center text-secondary-700-light">
+          <IconClock />
+          <div>{{ getHourandMinute(orderInfo.createAt) }}</div>
+        </div>
         <div class="relative w-full rounded-2xl border-primary-700 border shadow-primary">
           <table class="w-full">
             <thead class="bg-primary-700-light text-secondary-900 h-[50px]">
@@ -110,8 +115,8 @@ onMounted(() => {
       </div>
 
       <!-- MenuList -->
-      <div v-if="selectType !== 'cooking'" class="w-full flex flex-col gap-4">
-        <div class="text-secondary-700-light text-xl">상세 메뉴</div>
+      <div v-if="selectType !== 'cooking'" class="w-full flex flex-col gap-4 text-sm">
+        <div class="text-secondary-700-light">상세 메뉴</div>
         <div class="relative w-full rounded-2xl border-primary-700 border shadow-primary">
           <table class="w-full">
             <thead class="text-secondary-900 h-[50px]">
@@ -129,6 +134,17 @@ onMounted(() => {
               </tr>
             </tbody>
           </table>
+        </div>
+      </div>
+
+      <!-- Memo -->
+      <div
+        v-if="selectType === 'ready' || selectType === 'detail' || selectType === 'finish'"
+        class="w-full flex flex-col gap-[11px] text-sm"
+      >
+        <div class="text-secondary-700-light">메모</div>
+        <div class="w-full h-[90px] p-[13px] rounded-xl border-1 border-secondary-700">
+          <div class="text-xs">메모자리</div>
         </div>
       </div>
 
