@@ -38,10 +38,6 @@ const props = defineProps({
     type: String,
     required: true,
   },
-  // personNum: {
-  //   type: Number,
-  //   required: true,
-  // },
 });
 
 const useOrderPopupStore = useOrderPopup();
@@ -84,13 +80,7 @@ const handleClickOrderRestore = () => {
       <div>No.{{ orderNum }}</div>
       <div>{{ getCustomTableNum(tableNum) }}번</div>
       <div>{{ userName }}</div>
-      <div class="flex items-center gap-2">
-        <IconPeople />
-        <div class="text-lg font-medium">
-          7명
-          <!-- {{ personNum }}명 -->
-        </div>
-      </div>
+
       <div class="flex items-center gap-2">
         <IconClock />
         <div class="text-lg font-medium">{{ getHourandMinute(createAt) }}</div>

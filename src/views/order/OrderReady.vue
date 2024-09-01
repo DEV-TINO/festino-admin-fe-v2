@@ -1,10 +1,14 @@
 <script setup>
-import { onMounted } from 'vue';
+import { computed, onMounted, ref, watchEffect } from 'vue';
 import { useDepositOrder } from '@/stores/orders/depositOrder';
 import { useBaseOrder } from '@/stores/orders/baseOrder';
 import { storeToRefs } from 'pinia';
 import IconNotFound from '@/components/icons/IconNotFound.vue';
 import OrderReadyCard from '@/components/orders/OrderReadyCard.vue';
+import { ORDER_FILTER } from '@/utils/constants';
+import IconRefresh from '@/components/icons/IconRefresh.vue';
+import IconRefreshVector from '@/components/icons/IconRefreshVector.vue';
+import IconSearch from '@/components/icons/IconSearch.vue';
 
 const useDepositOrderStore = useDepositOrder();
 const useBaseOrderStore = useBaseOrder();
@@ -13,6 +17,23 @@ const { getWaitDepositOrderList, initDepositOrder } = useDepositOrderStore;
 
 const { waitDepositOrderList } = storeToRefs(useDepositOrderStore);
 const { boothId } = storeToRefs(useBaseOrderStore);
+
+const selectedFilterMenu = ref(ORDER_FILTER['all']);
+const searchMenu = ref('');
+
+const filteredMenuList = computed(() => {
+  let sortedList = [...waitDepositOrderList.value];
+  if (selectedFilterMenu.value === ORDER_FILTER.table) {
+    sortedList.sort((a, b) => a.tableNum - b.tableNum);
+  } else if (selectedFilterMenu.value === ORDER_FILTER.price) {
+    sortedList.sort((a, b) => a.totalPrice - b.totalPrice);
+  }
+  return sortedList;
+});
+
+const handleClickFilterMenu = (orderMenu) => {
+  selectedFilterMenu.value = orderMenu;
+};
 
 onMounted(async () => {
   initDepositOrder();
@@ -24,13 +45,35 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="flex gap-4 items-center">
-    <div class="w-[20px] h-[20px] rounded-full bg-danger"></div>
-    <div class="text-lg">입금 대기</div>
+  <div class="w-full flex justify-between">
+    <div class="flex items-center">
+      <div class="flex gap-[13px] px-5">
+        <div
+          v-for="(orderMenu, index) in ORDER_FILTER"
+          :key="index"
+          class="cursor-pointer text-xl"
+          :class="selectedFilterMenu === orderMenu ? 'font-bold' : ''"
+          @click="handleClickFilterMenu(orderMenu)"
+        >
+          {{ orderMenu }}
+        </div>
+      </div>
+      <div class="is-button w-[94px] h-[30px] gap-1 text-sm flex justify-center items-center cursor-pointer">
+        <IconRefreshVector />
+        새로고침
+      </div>
+    </div>
+    <div
+      class="w-[410px] h-[40px] rounded-xl outline outline-1 outline-primary-900 flex items-center px-[11px] bg-white gap-1"
+    >
+      <IconSearch />
+      <input :value="searchMenu" @input="searchMenu = $event.target.value" placeholder="주문 검색" class="grow" />
+      <button class="w-[75px] h-[30px] rounded-[4px] bg-primary-900 text-white">Search</button>
+    </div>
   </div>
   <div class="grid 2xl:grid-cols-3 lg:grid-cols-2 place-items-center gap-10">
     <OrderReadyCard
-      v-for="(waitDepositOrder, waitDepositOrderIndex) in waitDepositOrderList"
+      v-for="(waitDepositOrder, waitDepositOrderIndex) in filteredMenuList"
       :key="waitDepositOrderIndex"
       v-bind="waitDepositOrder"
     />

@@ -101,11 +101,17 @@ export const ORDER_URL = {
   cooking: 'cooking',
   finish: 'finish',
   cancel: 'cancel',
-  statistics: 'statistics'
+  statistics: 'statistics',
 };
 
 export const DATES = {
   11: '수',
   12: '목',
   13: '금',
-}
+};
+
+export const ORDER_FILTER = {
+  all: '전체보기',
+  table: '테이블 번호순',
+  price: '가격순',
+};
