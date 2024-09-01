@@ -43,6 +43,13 @@ const updateFilteredMenuList = () => {
   filteredMenuList.value = filteredList;
 };
 
+const handleClickRefreshButton = async () => {
+  await getWaitDepositOrderList({
+    boothId: boothId.value,
+    date: 0,
+  });
+};
+
 watch([waitDepositOrderList, selectedFilterMenu, searchMenu], () => {
   updateFilteredMenuList();
 });
@@ -70,7 +77,10 @@ onMounted(async () => {
           {{ orderMenu }}
         </div>
       </div>
-      <div class="is-button w-[94px] h-[30px] gap-1 text-sm flex justify-center items-center cursor-pointer">
+      <div
+        class="is-button w-[94px] h-[30px] gap-1 text-sm flex justify-center items-center cursor-pointer"
+        @click="handleClickRefreshButton()"
+      >
         <IconRefreshVector />
         새로고침
       </div>
