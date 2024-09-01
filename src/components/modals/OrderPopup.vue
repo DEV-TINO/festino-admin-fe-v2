@@ -3,15 +3,15 @@ import { useOrderPopup } from '@/stores/orders/orderPopup';
 import { ORDER_STATUS } from '@/utils/constants';
 import { getHourandMinute, prettyMenuNum, prettyPhoneNumber, prettyPrice } from '@/utils/utils';
 import { storeToRefs } from 'pinia';
-import { onMounted, ref, watchEffect } from 'vue';
+import { onMounted, ref } from 'vue';
 import { useTableDetail } from '@/stores/booths/tableDetail';
 import IconClock from '../icons/IconClock.vue';
 
 const useOrderPopupStore = useOrderPopup();
-const { submitPopup, closePopup } = useOrderPopupStore;
+const { submitPopup, closePopup, getNote } = useOrderPopupStore;
 const useTableDetailStore = useTableDetail();
 
-const { selectType, menuInfoList, orderInfo, cookingInfo } = storeToRefs(useOrderPopupStore);
+const { selectType, menuInfoList, orderInfo, cookingInfo, note } = storeToRefs(useOrderPopupStore);
 const { getCustomTableNum } = useTableDetailStore;
 
 const isSubmit = ref(false);
@@ -27,8 +27,9 @@ const handleSubmit = async (event) => {
   isSubmit.value = false;
 };
 
-onMounted(() => {
+onMounted(async() => {
   submit.value?.focus();
+  await getNote();
 });
 </script>
 <template>
@@ -137,14 +138,10 @@ onMounted(() => {
         </div>
       </div>
 
-      <!-- Memo -->
-      <div
-        v-if="selectType === 'ready' || selectType === 'detail' || selectType === 'finish'"
-        class="w-full flex flex-col gap-[11px] text-sm"
-      >
-        <div class="text-secondary-700-light">메모</div>
-        <div class="w-full h-[90px] p-[13px] rounded-xl border-1 border-secondary-700">
-          <div class="text-xs">메모자리</div>
+      <div v-if="note" class="flex flex-col gap-4">
+        <div class="text-secondary-700-light text-xl">메모</div>
+        <div class="w-full h-24 border-primary-700 border rounded-2xl">
+          <p class="text-secondary-700-light p-6">{{ note }}</p>
         </div>
       </div>
 
