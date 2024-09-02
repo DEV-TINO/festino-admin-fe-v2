@@ -88,7 +88,7 @@ export const ORDER_CATEGORY = {
 };
 
 export const ORDER_STATUS = {
-  ready: '주문내역 상세보기',
+  ready: '주문 내역 상세보기',
   cooking: '조리 완료',
   finish: '주문 복구',
   complete: '조리 완료',
@@ -101,11 +101,17 @@ export const ORDER_URL = {
   cooking: 'cooking',
   finish: 'finish',
   cancel: 'cancel',
-  statistics: 'statistics'
+  statistics: 'statistics',
 };
 
 export const DATES = {
   11: '수',
   12: '목',
   13: '금',
-}
+};
+
+export const ORDER_FILTER = {
+  all: '전체보기',
+  table: '테이블 번호순',
+  price: '가격순',
+};

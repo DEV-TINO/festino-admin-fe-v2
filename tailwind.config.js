@@ -203,6 +203,9 @@ export default {
       },
       outlineColor: {
         primary: {
+          900: {
+            DEFAULT: 'rgba(0, 115, 240, 0.8)',
+          },
           800: {
             DEFAULT: 'rgba(0, 115, 240, 0.4)',
           },
