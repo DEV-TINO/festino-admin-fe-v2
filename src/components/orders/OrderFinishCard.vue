@@ -86,7 +86,7 @@ const handleClickOrderRestore = () => {
         <tbody>
           <tr
             v-for="(menu, menuIndex) in menuList"
-            class="h-[57px] border-b-1 border-primary-500 last:border-none hover:bg-slate-50"
+            class="h-[57px] border-b-1 border-primary-300 last:border-none hover:bg-slate-50"
             :key="menuIndex"
           >
             <td class="text-start align-middle pl-[28px]">{{ menu.menuName }}</td>
