@@ -34,6 +34,14 @@ const props = defineProps({
     type: Array,
     required: true,
   },
+  createAt: {
+    type: String,
+    required: true,
+  },
+  finishAt: {
+    type: String,
+    required: false,
+  },
 });
 
 const useOrderPopupStore = useOrderPopup();
@@ -54,6 +62,8 @@ const handleClickCancelRestore = () => {
       tableNum: props.tableNum,
       totalPrice: props.totalPrice,
       userName: props.userName,
+      createAt: props.createAt,
+      finishAt: props.finishAt,
     },
     selectMenuInfoList: props.menuList,
   });
