@@ -150,9 +150,9 @@ watch(
 </script>
 
 <template>
-  <div class="w-full p-[20px]">
+  <div class="w-full flex flex-col justify-center">
     <div class="w-full overflow-x-auto scrollbar-hide">
-      <div class="min-w-[700px] h-[500px]">
+      <div v-if="!isLoading && isDataReady" class="min-w-[700px] h-[500px]">
         <Bar 
           v-if="isDataReady && !isLoading"
           ref="chartInstance"
