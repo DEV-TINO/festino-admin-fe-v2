@@ -109,3 +109,18 @@ export const DATES = {
   12: '목',
   13: '금',
 }
+
+export const STATISTICS_TYPE = {
+  1: {
+    type: 'all',
+    value: '전체',
+  },
+  2: {
+    type: 'normal',
+    value: '일반',
+  },
+  3: {
+    type: 'service',
+    value: '서비스',
+  },
+};
