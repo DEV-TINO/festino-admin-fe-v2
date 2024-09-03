@@ -3,10 +3,10 @@ import { useBaseOrder } from '@/stores/orders/baseOrder';
 import { useOrderStatistics } from '@/stores/orders/orderStatistics';
 import { useBoothList } from '@/stores/booths/boothList';
 import { storeToRefs } from 'pinia';
-import { computed, ref, watch, onMounted } from 'vue';
+import { ref, watchEffect, onMounted } from 'vue';
 import StatisticsGraph from '@/views/order/OrderStatisticsGraph.vue';
 import { prettyPrice } from '@/utils/utils';
-import { DATES } from '@/utils/constants';
+import { DATES, STATISTICS_TYPE } from '@/utils/constants';
 import IconDropDown from '@/components/icons/IconDropDown.vue';
 import IconScroll from '@/components/icons/IconScroll.vue';
 
@@ -24,31 +24,21 @@ const { allOrderStatistics } = storeToRefs(useOrderStatisticsStore);
 const month = ref(9);
 const isLoading = ref(false);
 const day = ref(1);
-const type = ref('all');  // 기본 토글 선택 값을 1로 설정
+const type = ref('all');  // 기본 토글 선택 값을 'all'로 설정
 
 const myBooth = ref('');  // boothId와 일치하는 부스를 저장할 변수
 
-const statisticsType = ref({
-  1: {
-    type: 'all',
-    value: '전체',
-  },
-  2: {
-    type: 'normal',
-    value: '일반',
-  },
-  3: {
-    type: 'service',
-    value: '서비스',
-  },
-});
+function formattedMonth() {
+  return month.value.toString().padStart(2, '0');
+}
 
-const formattedMonth = computed(() => month.value.toString().padStart(2, '0'));
-const formattedDates = computed(() => {
-  return Object.keys(DATES).reduce((acc, key) => {
-    acc[key.padStart(2, '0')] = DATES[key];
-    return acc;
-  }, {});
+const formattedDateList = ref([]);
+
+onMounted(() => {
+  formattedDateList.value = Object.keys(DATES).map(key => ({
+    day: key.padStart(2, '0'),
+    dateName: DATES[key]
+  }));
 });
 
 const currentMonth = new Date().getMonth() + 1;
@@ -115,52 +105,41 @@ const fetchStatistics = async () => {
 };
 
 // boothId 변경 시 통계 데이터를 다시 가져오기
-watch(
-  () => boothId.value,
-  async (newBoothId) => {
-    if (newBoothId) {
-      myBooth.value = boothList.value.find(booth => booth.boothId === boothId.value);
-      activeDate.value = determineActiveDate();
-      boothId.value = newBoothId;
-      await fetchStatistics({
-        boothId: boothId.value,
-        date: day.value,
-        type: type.value,
-      });
-    }
+watchEffect(async () => {
+  if (boothId.value) {
+    myBooth.value = boothList.value.find(booth => booth.boothId === boothId.value);
+    activeDate.value = determineActiveDate();
+    await fetchStatistics({
+      boothId: boothId.value,
+      date: day.value,
+      type: type.value,
+    });
   }
-);
+});
 
 // activeDate 변경 시 통계 데이터를 다시 가져오기
-watch(
-  () => activeDate.value,
-  async () => {
-    await fetchStatistics({
-      boothId: boothId.value,
-      date: day.value,
-      type: type.value,
-    });
-  }
-);
+watchEffect(async () => {
+  await fetchStatistics({
+    boothId: boothId.value,
+    date: day.value,
+    type: type.value,
+  });
+});
 
 // type이 변경될 때마다 getStatistics 호출
-watch(
-  () => type.value,
-  async () => {
-    await fetchStatistics({
-      boothId: boothId.value,
-      date: day.value,
-      type: type.value,
-    });
-  }
-);
+watchEffect(async () => {
+  await fetchStatistics({
+    boothId: boothId.value,
+    date: day.value,
+    type: type.value,
+  });
+});
 
 onMounted(async () => {
   await getAllBoothList();
 
   // boothList에서 boothId와 일치하는 부스를 찾아서 myBooth에 저장
   myBooth.value = boothList.value.find(booth => booth.boothId === boothId.value);
-
   await fetchStatistics({
     boothId: boothId.value,
     date: day.value,
@@ -173,7 +152,7 @@ onMounted(async () => {
   <div class="flex flex-col">
     <!-- 정렬 기준 선택 -->
     <div class="flex justify-end gap-4 mb-4 mr-4">
-      <div v-for="(toggle, index) in statisticsType" :key="index" class="flex">
+      <div v-for="(toggle, index) in STATISTICS_TYPE" :key="index" class="flex">
         <div :id="index">
           <input
             v-model="type"
@@ -214,12 +193,12 @@ onMounted(async () => {
           <button
             type="button"
             class="min-w-[120px] w-[200px] h-[50px] is-button relative"
-            v-for="(date, key, day) in formattedDates"
-            :key="day"
-            :class="{ 'is-outlined': day !== activeDate }"
-            @click="handleButtonClick(day)"
+            v-for="(dateInfo, key) in formattedDateList"
+            :key="key"
+            :class="{ 'is-outlined': key !== activeDate }"
+            @click="handleButtonClick(dateInfo.day)"
           >
-            {{ formattedMonth }}/{{ key }} ({{ date }})
+            {{ formattedMonth(month) }}/{{ dateInfo.day }} ({{ dateInfo.dateName }})
           </button>
         </div>
         <div

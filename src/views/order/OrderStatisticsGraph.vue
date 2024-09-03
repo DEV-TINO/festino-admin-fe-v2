@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watch, nextTick, computed } from 'vue';
+import { ref, nextTick, watchEffect } from 'vue';
 import { useOrderStatistics } from '@/stores/orders/orderStatistics';
 import { storeToRefs } from 'pinia';
 import { Bar } from 'vue-chartjs';
@@ -136,16 +136,14 @@ const fetchStatisticsData = async () => {
   }
 };
 
-watch(
-  () => allOrderStatistics.value,
+watchEffect(
   async () => {
     if (allOrderStatistics.value) {
       await fetchStatisticsData();
     } else {
       console.warn('No statistics data available');
     }
-  },
-  { immediate: true }
+  }
 );
 </script>
 
