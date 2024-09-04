@@ -493,7 +493,7 @@ onMounted(async () => {
               <div class="w-full flex items-center gap-2">
                 <div class="relative w-fit">
                   <input
-                    class="xl:w-[520px] h-[45px] border border-gray-500 rounded-xl px-[20px] focus:border-primary-900 text-sm"
+                    class="2xl:w-[520px] h-[45px] border border-gray-500 rounded-xl px-[20px] focus:border-primary-900 text-sm"
                     type="text"
                     maxlength="100"
                     placeholder="예시) 17:00 ~ 24:00"
@@ -621,7 +621,7 @@ onMounted(async () => {
                   테이블 커스텀
                 </div>
               </div>
-              <div class="grid 3xl:grid-cols-4 2xl:grid-cols-3 lg:grid-cols-2 gap-5 place-items-center">
+              <div class="grid 3xl:grid-cols-4 2xl:grid-cols-3 grid-cols-2 gap-5 place-items-center">
                 <div
                   v-for="(table, tableIndex) in tableNumList"
                   :key="tableIndex"
