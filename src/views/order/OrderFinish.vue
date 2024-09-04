@@ -1,5 +1,5 @@
 <script setup>
-import { computed, onMounted, ref, watch } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import { useFinishOrder } from '@/stores/orders/finishOrder';
 import { useBaseOrder } from '@/stores/orders/baseOrder';
 import { storeToRefs } from 'pinia';
@@ -24,7 +24,7 @@ const isFocus = ref(false);
 const filteredMenuList = ref([]);
 
 const updateFilteredMenuList = () => {
-  let filteredList = [...finishOrderList.value];
+  const filteredList = [...finishOrderList.value];
 
   if (searchMenu.value) {
     filteredList = filteredList.filter((order) => {

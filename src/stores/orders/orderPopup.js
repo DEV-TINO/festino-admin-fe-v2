@@ -28,7 +28,7 @@ export const useOrderPopup = defineStore('orderPopup', () => {
   const menuInfoList = ref([]);
   const orderInfo = ref({});
   const cookingInfo = ref({});
-  const note = ref("");
+  const note = ref('');
 
   const selectType = ref(''); // ready, cooking, finish, cancel
 
@@ -223,9 +223,11 @@ export const useOrderPopup = defineStore('orderPopup', () => {
     baseModalStore.openModal();
   };
 
-  const getNote = async() => {
+  const getNote = async () => {
     try {
-      const res = await api.get(`/admin/booth/${boothId.value}/order/${orderInfo.value.orderId}`)
+      console.log(cookingInfo.value.cook.orderId);
+      const orderId = selectType.value === 'cooking' ? cookingInfo.value.cook.orderId : orderInfo.value.orderId;
+      const res = await api.get(`/admin/booth/${boothId.value}/order/${orderId}`);
       note.value = res.data.orderInfo.note;
     } catch (error) {
       console.error(error);
