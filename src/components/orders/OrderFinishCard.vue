@@ -5,7 +5,6 @@ import { useOrderPopup } from '@/stores/orders/orderPopup';
 import { useTableDetail } from '@/stores/booths/tableDetail';
 import { useBaseOrder } from '@/stores/orders/baseOrder';
 import IconClock from '@/components/icons/IconClock.vue';
-import IconOrderDetail from '../icons/IconOrderDetail.vue';
 import IconRecipe from '../icons/IconRecipe.vue';
 import IconOrderCheck from '../icons/IconOrderCheck.vue';
 
@@ -70,6 +69,7 @@ const handleClickOrderRestore = () => {
       totalPrice: props.totalPrice,
       userName: props.userName,
       createAt: props.createAt,
+      finishAt: props.finishAt,
     },
     selectMenuInfoList: props.menuList,
   });

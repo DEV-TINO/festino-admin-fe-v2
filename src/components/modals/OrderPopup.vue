@@ -6,6 +6,8 @@ import { storeToRefs } from 'pinia';
 import { onMounted, ref } from 'vue';
 import { useTableDetail } from '@/stores/booths/tableDetail';
 import IconClock from '../icons/IconClock.vue';
+import IconOrderCheck from '../icons/IconOrderCheck.vue';
+import IconRecipe from '../icons/IconRecipe.vue';
 
 const useOrderPopupStore = useOrderPopup();
 const { submitPopup, closePopup, getNote } = useOrderPopupStore;
@@ -61,11 +63,11 @@ onMounted(async () => {
 
       <!-- completeInfo -->
       <div v-if="selectType === 'cooking'" class="w-full flex flex-col gap-4">
+        <div class="text-secondary-700-light text-xl">조리 완료 확인</div>
         <div class="flex gap-[5px] items-center text-secondary-700-light">
           <IconClock />
           <div>{{ getHourandMinute(orderInfo.createAt) }}</div>
         </div>
-        <div class="text-secondary-700-light text-xl">조리 완료 확인</div>
         <div class="relative w-full rounded-2xl border-primary-700 border shadow-primary">
           <table class="w-full">
             <thead class="bg-primary-700-light text-secondary-900 h-[50px]">
@@ -91,10 +93,15 @@ onMounted(async () => {
       <!-- OrderInfo -->
       <div v-if="selectType !== 'cooking'" class="w-full flex flex-col gap-4 text-sm">
         <div class="text-secondary-700-light">예약자 정보</div>
-        <div class="flex gap-[5px] items-center text-secondary-700-light">
-          <IconClock />
+        <div class="flex gap-[2px] items-center text-secondary-700-light">
+          <IconRecipe />
           <div>{{ getHourandMinute(orderInfo.createAt) }}</div>
+          <IconOrderCheck v-if="selectType === 'finish'" class="ml-3" />
+          <div v-if="selectType === 'finish'">
+            {{ getHourandMinute(orderInfo.finishAt) }}
+          </div>
         </div>
+
         <div class="relative w-full rounded-2xl border-primary-700 border shadow-primary">
           <table class="w-full">
             <thead class="bg-primary-700-light text-secondary-900 h-[50px]">

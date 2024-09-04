@@ -557,7 +557,10 @@ onMounted(async () => {
                   :disabled="isSubmit"
                 />
               </label>
-              <div v-if="fileUrls.length > 0 && fileUrls[0] !== ''" class="flex grow flex-col items-center justify-center overflow-x-auto">
+              <div
+                v-if="fileUrls.length > 0 && fileUrls[0] !== ''"
+                class="flex grow flex-col items-center justify-center overflow-x-auto"
+              >
                 <div class="text-red-500 w-full flex justify-end cursor-pointer mb-2">
                   <div
                     @click="fileUrls = []"
@@ -605,7 +608,7 @@ onMounted(async () => {
 
             <!-- 테이블 정보 -->
             <div v-if="ADMIN_CATEGORY[boothInfo.adminCategory] === 'night'">
-              <div class="flex items-center justify-between py-10 flex-col gap-10 sm:flex-row">
+              <div class="flex items-center justify-between py-10 gap-10">
                 <div
                   class="w-[200px] h-[45px] rounded-xl flex items-center justify-center bg-primary-700 text-primary-900-light text-md font-semibold px-5 gap-3 shrink-0"
                 >
@@ -733,7 +736,9 @@ onMounted(async () => {
                       >
                         {{ menu.menuName }}
                       </div>
-                      <div class="w-2/5 gap-[5px] items-center text-sm flex flex-shrink-0 justify-end grow font-medium 2xl:max-w-[130px]">
+                      <div
+                        class="w-2/5 gap-[5px] items-center text-sm flex flex-shrink-0 justify-end grow font-medium 2xl:max-w-[130px]"
+                      >
                         <div
                           v-if="ADMIN_CATEGORY[boothInfo.adminCategory] !== 'day'"
                           class="w-[55px] h-[25px] text-[10px] rounded-full bg-secondary-300 items-center flex justify-center text-secondary-700"
@@ -865,7 +870,10 @@ onMounted(async () => {
       <div class="flex justify-end items-center gap-4 pt-[40px] mr-8">
         <!-- TODO: Check does it need? -->
         <!-- <button type="button" class="is-button is-outlined w-[120px] h-[60px] text-3xl">삭제</button> -->
-        <button type="submit" class="is-button font-semibold w-[60px] h-[35px] rounded-xl text-sm flex items-center justify-center text-white lg:text-md bg-primary-900cursor-pointer select-none">
+        <button
+          type="submit"
+          class="is-button font-semibold w-[60px] h-[35px] rounded-xl text-sm flex items-center justify-center text-white lg:text-md bg-primary-900cursor-pointer select-none"
+        >
           등록
         </button>
       </div>
