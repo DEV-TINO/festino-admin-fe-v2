@@ -327,19 +327,20 @@ onUnmounted(() => {
           <div
             v-for="(tableOrder, tableOrderIndex) in chunkedAllTableOrders[pageIndex - 1]"
             :key="tableOrderIndex"
-            class="w-[240px] h-[124px] bg-white rounded-2xl p-[18px] flex justify-between font-bold"
+            class="w-full min-w-[240px] h-[124px] bg-white rounded-2xl p-[18px] flex justify-between font-bold"
           >
             <div class="flex flex-col justify-between">
               <div class="flex-col">
                 <div class="text-2xs text-secondary-700-lighter">테이블</div>
-                <div class="text-xl text-primary-900-lighter -translate-y-1">
+                <div
+                  class="text-xl text-primary-900-lighter -translate-y-1 max-w-[130px] text-ellipsis whitespace-nowrap overflow-hidden"
+                >
                   {{ getCustomTableNum(tableOrder.tableNum) }}번
                 </div>
               </div>
               <div class="flex-col">
                 <div class="text-2xs text-secondary-700-lighter translate-y-1">주문시간</div>
                 <div class="text-xl text-primary-900-lighter">
-                  <!-- {{ tableOrder }} -->
                   {{ getHourandMinute(tableOrder.createAt) }}
                 </div>
               </div>
