@@ -109,6 +109,7 @@ const handleRestore = async (reserveId) => {
 };
 
 const handleClickOrderType = (type) => {
+  if (!selectBooth.value.isReservation) return;
   if (type === 'reserve') isUserChecked.value = true;
   else isUserChecked.value = false;
   selectOrderType.value = type;
@@ -181,6 +182,9 @@ watchEffect(() => {
   if (!selectBoothId.value) return;
   if (!reserveBoothList.value) return;
   selectBooth.value = reserveBoothList.value.find((booth) => booth.boothId === selectBoothId.value);
+  if (!selectBooth.value) {
+    selectBooth.value = boothList.value.find((booth) => booth.boothId === selectBoothId.value);
+  }
 });
 
 watchEffect(() => {
@@ -226,9 +230,14 @@ onUnmounted(() => {
         <div class="text-primary-900 text-xl md:text-2xl font-semibold">{{ selectBooth.adminName }} 예약 현황</div>
       </div>
       <div class="flex gap-5 items-center">
-        <button class="is-button font-semibold w-[100px] h-[35px] rounded-xl text-sm flex items-center justify-center text-white lg:text-md bg-primary-900 cursor-pointer select-none" @click="handleClickMessageCustom()">문자 커스텀</button>
+        <button
+          class="is-button font-semibold w-[100px] h-[40px] rounded-xl text-sm flex items-center justify-center text-white lg:text-md bg-primary-900 cursor-pointer select-none"
+          @click="handleClickMessageCustom()"
+        >
+          문자 커스텀
+        </button>
         <div
-          class="w-[255px] h-[45px] rounded-xl bg-primary-800-light text-primary-900 flex justify-center items-center lg:text-lg text-md gap-[10px] font-semibold"
+          class="w-[255px] h-[40px] rounded-xl bg-primary-800-light text-primary-900 flex justify-center items-center lg:text-lg text-md gap-[10px] font-semibold"
         >
           예약 기능 ON/OFF
           <IconBoothListToggle
@@ -345,7 +354,7 @@ onUnmounted(() => {
         </thead>
         <tbody class="text-xs md:text-sm">
           <tr
-            v-if="!isLoading"
+            v-if="!isLoading && selectBooth.isReservation"
             class="bg-white border-b-1 border-secondary-300 text-secondary-700-light last:border-0"
             v-for="(reserve, reserveIndex) in getFilteredReserveList({ type: selectOrderType })"
             :key="reserveIndex"
@@ -362,11 +371,7 @@ onUnmounted(() => {
             <td class="px-6 py-4 text-center">{{ prettyDate(reserve.updateAt) }}</td>
             <td class="py-4 px-2 xl:w-[20px] w-20" v-if="selectOrderType !== 'complete'">
               <div class="w-full flex justify-center">
-                <button
-                  class="is-button w-14 h-[30px] text-xs"
-                  type="button"
-                  @click="handleClickConfirm(reserve)"
-                >
+                <button class="is-button w-14 h-[30px] text-xs" type="button" @click="handleClickConfirm(reserve)">
                   입장
                 </button>
               </div>
@@ -405,19 +410,31 @@ onUnmounted(() => {
               </div>
             </td>
           </tr>
-          <tr v-if="isLoading">
-            <td scope="col" colspan="7">
+          <tr v-if="isLoading && selectBooth.isReservation">
+            <td scope="col" colspan="9">
               <div class="w-full justify-center items-center flex flex-col py-14 bg-white rounded-b-[20px]">
                 <IconLoading :width="200" />
                 <p class="text-lg py-4">에약 내역을 불러오는 중이에요...</p>
               </div>
             </td>
           </tr>
-          <tr v-if="!isLoading && getFilteredReserveList({ type: selectOrderType }).length === 0">
-            <td scope="col" colspan="7">
+          <tr
+            v-if="
+              !isLoading && getFilteredReserveList({ type: selectOrderType }).length === 0 && selectBooth.isReservation
+            "
+          >
+            <td scope="col" colspan="9">
               <div class="w-full justify-center items-center flex flex-col py-10 bg-white rounded-b-[20px]">
                 <IconNotFound :width="200" />
                 <p class="text-lg py-4">검색 내역이 없습니다...</p>
+              </div>
+            </td>
+          </tr>
+          <tr v-if="!selectBooth.isReservation">
+            <td scope="col" colspan="9">
+              <div class="w-full justify-center items-center flex flex-col py-10 bg-white rounded-b-[20px]">
+                <IconNotFound :width="200" />
+                <p class="text-lg py-4">예약 기능이 꺼져있습니다...</p>
               </div>
             </td>
           </tr>
