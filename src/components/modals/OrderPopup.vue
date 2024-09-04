@@ -27,7 +27,7 @@ const handleSubmit = async (event) => {
   isSubmit.value = false;
 };
 
-onMounted(async() => {
+onMounted(async () => {
   submit.value?.focus();
   await getNote();
 });
@@ -61,6 +61,10 @@ onMounted(async() => {
 
       <!-- completeInfo -->
       <div v-if="selectType === 'cooking'" class="w-full flex flex-col gap-4">
+        <div class="flex gap-[5px] items-center text-secondary-700-light">
+          <IconClock />
+          <div>{{ getHourandMinute(orderInfo.createAt) }}</div>
+        </div>
         <div class="text-secondary-700-light text-xl">조리 완료 확인</div>
         <div class="relative w-full rounded-2xl border-primary-700 border shadow-primary">
           <table class="w-full">
