@@ -110,6 +110,21 @@ export const DATES = {
   13: '금',
 };
 
+export const STATISTICS_TYPE = {
+  1: {
+    type: 'all',
+    value: '전체',
+  },
+  2: {
+    type: 'normal',
+    value: '일반',
+  },
+  3: {
+    type: 'service',
+    value: '서비스',
+  },
+};
+
 export const ORDER_FILTER = {
   all: '전체보기',
   table: '테이블 번호순',
