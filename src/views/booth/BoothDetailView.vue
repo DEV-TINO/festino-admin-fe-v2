@@ -236,7 +236,7 @@ onMounted(async () => {
         <!-- 계좌 정보  -->
         <div v-if="ADMIN_CATEGORY[boothInfo.adminCategory] === 'night'" class="flex flex-col gap-[20px] w-full">
           <div
-            class="ㅡㅑㅞ=0=세w-[95px] h-[45px] rounded-xl flex items-center justify-center bg-primary-700 text-primary-900-light text-md font-semibold"
+            class="w-[95px] h-[45px] rounded-xl flex items-center justify-center bg-primary-700 text-primary-900-light text-md font-semibold"
           >
             계좌 정보
           </div>
