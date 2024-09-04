@@ -2,8 +2,9 @@
 import { useBaseOrder } from '@/stores/orders/baseOrder';
 import { useOrderPopup } from '@/stores/orders/orderPopup';
 import _ from 'lodash';
-import { prettyMenuNum, prettyPhoneNumber, prettyPrice } from '@/utils/utils';
+import { getHourandMinute, prettyMenuNum, prettyPhoneNumber, prettyPrice } from '@/utils/utils';
 import { useTableDetail } from '@/stores/booths/tableDetail';
+import IconClock from '../icons/IconClock.vue';
 
 const props = defineProps({
   orderId: {
@@ -38,10 +39,6 @@ const props = defineProps({
     type: String,
     required: true,
   },
-  finishAt: {
-    type: String,
-    required: false,
-  },
 });
 
 const useOrderPopupStore = useOrderPopup();
@@ -63,7 +60,6 @@ const handleClickCancelRestore = () => {
       totalPrice: props.totalPrice,
       userName: props.userName,
       createAt: props.createAt,
-      finishAt: props.finishAt,
     },
     selectMenuInfoList: props.menuList,
   });
@@ -75,12 +71,16 @@ const handleClickCancelRestore = () => {
     class="w-full min-w-[430px] max-w-[552px] h-[500px] flex flex-col justify-between outline outline-1 outline-primary-300 rounded-3xl"
   >
     <div
-      class="flex justify-between w-full h-[73px] items-center rounded-t-3xl border-b-1 border-primary-300-light px-[28px] text-xl font-semibold bg-cancel flex-wrap gap-x-2"
+      class="flex justify-between w-full h-[73px] items-center rounded-t-3xl border-b-1 border-primary-300-light px-[28px] text-lg font-semibold bg-cancel flex-wrap gap-x-2"
     >
       <div>No.{{ orderNum }}</div>
       <div>{{ getCustomTableNum(tableNum) }}번</div>
       <div>{{ userName }}</div>
       <div>{{ prettyPhoneNumber(phoneNum) }}</div>
+      <div class="flex items-center gap-2">
+        <IconClock />
+        <div class="font-medium">{{ getHourandMinute(createAt) }}</div>
+      </div>
     </div>
     <div
       class="relative h-[353px] w-full overflow-y-auto"
