@@ -130,7 +130,7 @@ onMounted(async () => {
           </div>
           <div class="w-full bg-primary-500-light h-auto rounded-2xl px-[40px] py-[40px] border-1 border-primary-700">
             <div
-              class="w-full bg-primary-700 h-full rounded-2xl border border-primary-700 grid grid-cols-[110px_1fr] grid-rows-[80px_80px_200px_280px] 2xl:grid-cols-[140px_1fr_140px_1fr] 2xl:grid-rows-[65px_150px_280px] place-items-stretch"
+              class="w-full bg-primary-700 h-full rounded-2xl border border-primary-700 grid grid-cols-[110px_1fr] grid-rows-[80px_80px_minmax(200px,_1fr)_280px] 2xl:grid-cols-[140px_1fr_140px_1fr] 2xl:grid-rows-[65px_minmax(150px,_1fr)_280px] place-items-stretch"
             >
               <div
                 class="flex items-center justify-center border-b border-r border-primary-700 px-4 text-sm font-medium"
@@ -169,7 +169,9 @@ onMounted(async () => {
               >
                 부스 소개
               </div>
-              <div class="px-6 lg:px-10 2xl:col-span-3 bg-white flex items-center border-b border-primary-700 text-sm">
+              <div
+                class="px-6 lg:px-10 2xl:col-span-3 bg-white flex items-center border-b border-primary-700 text-sm py-5"
+              >
                 <p class="whitespace-pre-line">{{ boothInfo.boothIntro }}</p>
               </div>
               <div
@@ -267,7 +269,9 @@ onMounted(async () => {
               <div class="flex items-center justify-center border-r border-primary-700 px-4 text-sm font-medium">
                 계좌번호
               </div>
-              <div class="px-6 lg:px-10 2xl:col-span-3 bg-white flex items-center border-primary-700 rounded-br-2xl text-sm">
+              <div
+                class="px-6 lg:px-10 2xl:col-span-3 bg-white flex items-center border-primary-700 rounded-br-2xl text-sm"
+              >
                 {{ boothInfo.accountInfo?.account }}
               </div>
             </div>
@@ -302,7 +306,9 @@ onMounted(async () => {
                       >
                         {{ menu.menuName }}
                       </div>
-                      <div class="w-2/5 gap-[5px] items-center text-sm flex flex-shrink-0 justify-end grow font-medium 2xl:max-w-[130px]">
+                      <div
+                        class="w-2/5 gap-[5px] items-center text-sm flex flex-shrink-0 justify-end grow font-medium 2xl:max-w-[130px]"
+                      >
                         <div
                           v-if="ADMIN_CATEGORY[boothInfo.adminCategory] !== 'day'"
                           class="w-[55px] h-[25px] text-[10px] rounded-full bg-secondary-300 items-center flex justify-center text-secondary-700"
