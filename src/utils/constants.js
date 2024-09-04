@@ -132,7 +132,6 @@ export const ORDER_FILTER = {
 };
 
 export const TABLE_FILTER = {
-  all: '전체보기',
-  order: '주문시간순',
-  complete: '완료시간순',
+  timeAsc: '최신순(기본)',
+  timeDesc: '오래된순',
 };

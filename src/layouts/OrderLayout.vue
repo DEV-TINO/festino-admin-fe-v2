@@ -49,7 +49,7 @@ const isNewOrderExist = ref(false);
 const prevOrderList = ref([]);
 const isFirstLoad = ref(true);
 const isStatistics = ref(false);
-const selectedFilterMenu = ref(TABLE_FILTER['all']);
+const selectedFilterMenu = ref(TABLE_FILTER['timeAsc']);
 const pageIndex = ref(1);
 
 const { width } = useWindowSize();
@@ -174,6 +174,14 @@ const handleClickTableRefresh = async () => {
   refreshAllTableOrders();
 };
 
+watchEffect(() => {
+  if (selectedFilterMenu.value === TABLE_FILTER['timeAsc']) {
+    allTableOrders.value.sort((a, b) => new Date(b.createAt) - new Date(a.createAt));
+  } else if (selectedFilterMenu.value === TABLE_FILTER['timeDesc']) {
+    allTableOrders.value.sort((a, b) => new Date(a.createAt) - new Date(b.createAt));
+  }
+});
+
 watchEffect(async () => {
   if (boothId.value) {
     await getAllTableOrders({
@@ -224,8 +232,8 @@ onMounted(async () => {
     boothId.value = userOwnBoothId.value;
   }
   await getTableList(boothId.value);
-  // refreshAllTableOrders();
-  // refreshWaitDepositOrderList();
+  refreshAllTableOrders();
+  refreshWaitDepositOrderList();
 });
 
 onUnmounted(() => {
