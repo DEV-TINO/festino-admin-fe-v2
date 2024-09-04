@@ -729,11 +729,11 @@ onMounted(async () => {
                     <!-- Menu header -->
                     <div class="flex justify-between items-center h-[29px] w-full min-w-fit gap-2">
                       <div
-                        class="w-3/5 text-base font-semibold text-secondary-700 text-nowrap truncate"
+                        class="w-3/5 text-base font-semibold text-secondary-700 text-nowrap truncate 2xl:max-w-[110px]"
                       >
                         {{ menu.menuName }}
                       </div>
-                      <div class="w-1/2 gap-[5px] items-center text-sm flex flex-shrink-0 justify-end grow font-medium">
+                      <div class="w-2/5 gap-[5px] items-center text-sm flex flex-shrink-0 justify-end grow font-medium 2xl:max-w-[130px]">
                         <div
                           v-if="ADMIN_CATEGORY[boothInfo.adminCategory] !== 'day'"
                           class="w-[55px] h-[25px] text-[10px] rounded-full bg-secondary-300 items-center flex justify-center text-secondary-700"
