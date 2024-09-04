@@ -7,6 +7,8 @@ export const useCancelOrder = defineStore('cancelOrder', () => {
 
   const getCancelOrderList = async ({ boothId, date }) => {
     try {
+      if (!boothId) return;
+
       const response = await api.get(`/admin/booth/${boothId}/order/cancel/all/${date}`);
       const data = response.data;
 

@@ -7,6 +7,7 @@ export const useAllOrder = defineStore('allOrder', () => {
 
   const getAllOrder = async ({ boothId, date }) => {
     try {
+      if (!boothId) return;
       const response = await api.get(`/admin/booth/${boothId}/order/all/${date}`);
       const data = response.data;
 

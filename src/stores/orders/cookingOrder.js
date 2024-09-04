@@ -7,6 +7,8 @@ export const useCookingOrder = defineStore('cookingOrder', () => {
 
   const getCookingOrderList = async ({ boothId, date }) => {
     try {
+      if (!boothId) return;
+
       const response = await api.get(`/admin/booth/${boothId}/order/cooking/all/${date}`);
       const data = response.data;
 
