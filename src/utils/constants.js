@@ -130,3 +130,9 @@ export const ORDER_FILTER = {
   table: '테이블 번호순',
   price: '가격순',
 };
+
+export const TABLE_FILTER = {
+  all: '전체보기',
+  order: '주문시간순',
+  complete: '완료시간순',
+};

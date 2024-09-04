@@ -83,7 +83,7 @@ onMounted(async () => {
   initDepositOrder();
   initCookingOrderList();
   initFinishOrderList();
-  refreshOrderList();
+  // refreshOrderList();
 });
 
 onUnmounted(() => {
