@@ -1,7 +1,8 @@
 <script setup>
 import { useOrderPopup } from '@/stores/orders/orderPopup';
-import { prettyMenuNum, prettyPhoneNumber, prettyPrice } from '@/utils/utils';
+import { getHourandMinute, prettyDate, prettyMenuNum, prettyPhoneNumber, prettyPrice } from '@/utils/utils';
 import { useTableDetail } from '@/stores/booths/tableDetail';
+import IconClock from '@/components/icons/IconClock.vue';
 
 const props = defineProps({
   orderId: {
@@ -10,10 +11,6 @@ const props = defineProps({
   },
   orderNum: {
     type: Number,
-    required: true,
-  },
-  phoneNum: {
-    type: String,
     required: true,
   },
   tableNum: {
@@ -29,6 +26,14 @@ const props = defineProps({
     required: true,
   },
   userName: {
+    type: String,
+    required: true,
+  },
+  createAt: {
+    type: String,
+    required: true,
+  },
+  phoneNum: {
     type: String,
     required: true,
   },
@@ -51,6 +56,7 @@ const handleClickOrderDetail = () => {
       tableNum: props.tableNum,
       totalPrice: props.totalPrice,
       userName: props.userName,
+      createAt: props.createAt,
     },
     selectMenuInfoList: props.menuList,
   });
@@ -62,12 +68,17 @@ const handleClickOrderDetail = () => {
     class="w-full min-w-[430px] max-w-[552px] h-[500px] flex flex-col justify-between outline outline-1 outline-primary-200 rounded-3xl"
   >
     <div
-      class="flex justify-between w-full h-[73px] items-center px-[28px] text-xl font-semibold bg-danger-700 rounded-t-3xl border-b-1 border-secondary-200"
+      class="flex justify-between w-full h-[73px] items-center px-[28px] text-lg font-semibold bg-danger-700 rounded-t-3xl border-b-1 border-secondary-200 flex-wrap gap-x-2"
     >
       <div>No.{{ orderNum }}</div>
       <div>{{ getCustomTableNum(tableNum) }}번</div>
       <div>{{ userName }}</div>
       <div>{{ prettyPhoneNumber(phoneNum) }}</div>
+
+      <div class="flex items-center gap-2">
+        <IconClock />
+        <div>{{ getHourandMinute(createAt) }}</div>
+      </div>
     </div>
     <div
       class="relative h-[353px] w-full overflow-y-auto"
@@ -102,20 +113,14 @@ const handleClickOrderDetail = () => {
 
     <div class="flex justify-between items-center h-[73px] w-full rounded-b-3xl px-[28px] bg-danger-700">
       <div
-        class="w-36 h-12 is-button is-danger is-outlined rounded-xl flex items-center justify-center cursor-pointer"
+        class="w-[112px] h-12 rounded-2xl flex items-center justify-center cursor-pointer bg-white text-danger font-semibold"
         @click="handleClickOrderDetail()"
       >
         입금 확인
       </div>
-      <div class="font-bold text-2xl">{{ prettyPrice(totalPrice) }}</div>
+      <div class="font-bold text-2xl text-secondary-700-light">{{ prettyPrice(totalPrice) }}</div>
     </div>
   </div>
-  <!-- <div
-    class="w-full min-w-[430px] max-w-[500px] flex justify-end pt-[20px] font-bold underline cursor-pointer"
-    @click="handleClickOrderDetail()"
-  >
-    주문 내역 상세보기
-  </div> -->
 </template>
 
 <style lang="scss" scoped></style>

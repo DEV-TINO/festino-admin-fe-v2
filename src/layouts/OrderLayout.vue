@@ -8,6 +8,7 @@ import { useBaseOrder } from '@/stores/orders/baseOrder';
 import { useOrderPopup } from '@/stores/orders/orderPopup';
 import { useDepositOrder } from '@/stores/orders/depositOrder';
 import { useTableDetail } from '@/stores/booths/tableDetail';
+import { useServiceModal } from '@/stores/orders/serviceModal';
 import { useUser } from '@/stores/user';
 import { api } from '@/utils/api';
 import { ORDER_CATEGORY, ORDER_URL } from '@/utils/constants';
@@ -24,12 +25,14 @@ const useBaseOrderStore = useBaseOrder();
 const useOrderPopupStore = useOrderPopup();
 const useDepositOrderStore = useDepositOrder();
 const useTableDetailStore = useTableDetail();
+const useServiceModalStore = useServiceModal();
 
 const { getAllBoothList } = useBoothListStore;
 const { setOrderStatus, getAllTableOrders, initBaseOrder } = useBaseOrderStore;
 const { openPopup } = useOrderPopupStore;
 const { getWaitDepositOrderList } = useDepositOrderStore;
 const { getTableList, getCustomTableNum } = useTableDetailStore;
+const { openServiceModal } = useServiceModalStore;
 
 const { userOwnBoothId, isAdmin } = storeToRefs(useUserStore);
 const { boothList } = storeToRefs(useBoothListStore);
@@ -128,6 +131,7 @@ const handleClickOrderDetail = async (orderId, orderType) => {
         tableNum: orderInfo.tableNum,
         totalPrice: orderInfo.totalPrice,
         userName: orderInfo.userName,
+        createAt: orderInfo.createAt,
       },
       selectMenuInfoList: orderInfo.menuList,
     });
@@ -148,6 +152,7 @@ const handleClickOrderFinish = async (tableOrder, orderId, orderType) => {
         tableNum: orderInfo.tableNum,
         totalPrice: orderInfo.totalPrice,
         userName: orderInfo.userName,
+        createAt: orderInfo.createAt,
       },
       selectMenuInfoList: orderInfo.menuList,
     });
@@ -270,8 +275,9 @@ onUnmounted(() => {
 
     <!-- 테이블 주문 현황 -->
     <div v-if="!isStatistics" class="flex flex-col relative">
-      <div class="flex w-full justify-end" @click="handleClickTableRefresh()">
-        <IconRefresh class="mb-3 cursor-pointer" />
+      <div class="flex w-full justify-between mb-3 items-center" @click="handleClickTableRefresh()">
+        <button type="button" class="is-button w-[150px] h-[50px]" @click="openServiceModal()">주문 추가</button>
+        <IconRefresh class="cursor-pointer" />
       </div>
       <div
         class="flex flex-col w-full rounded-2xl shadow-secondary relative outline outline-1 outline-primary-500 bg-white"
