@@ -72,7 +72,7 @@ onMounted(async () => {
         <div class="text-balance w-fit lg:min-w-[70px] lg:w-[70px] text-center">예약가능</div>
         <div class="text-balance w-fit lg:min-w-[70px] lg:w-[70px] text-center">오픈</div>
         <div class="text-balance w-fit lg:min-w-[70px] lg:w-[70px] text-center">주문가능</div>
-        <div class="text-balance text-center w-[60px] lg:min-w-[75px]">부스정보</div>
+        <div class="text-balance text-center w-[60px] lg:min-w-[75px]">바로가기</div>
       </div>
 
       <!-- Body -->

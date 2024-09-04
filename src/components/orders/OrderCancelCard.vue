@@ -112,21 +112,16 @@ const handleClickCancelRestore = () => {
         </tbody>
       </table>
     </div>
-
     <div class="flex justify-between items-center h-[73px] w-full rounded-b-3xl px-[28px] bg-cancel">
-      <button
-        class="w-36 h-12 is-button is-cancel is-outlined rounded-xl flex items-center justify-center cursor-pointer"
-        type="button"
+      <div
+        class="flex justify-center items-center rounded-2xl w-[107px] h-[42px] bg-white shrink-0 text-secondary-700-light font-semibold text-sm cursor-pointer"
         @click="handleClickCancelRestore()"
       >
         주문 복구
-      </button>
+      </div>
       <div class="font-bold text-2xl text-secondary-700-light">{{ prettyPrice(totalPrice) }}</div>
     </div>
   </div>
-  <!-- <div class="w-full min-w-[430px] max-w-[500px] flex justify-end pt-[20px] font-bold underline">
-      주문 내역 상세보기
-    </div> -->
 </template>
 
 <style lang="scss" scoped></style>
