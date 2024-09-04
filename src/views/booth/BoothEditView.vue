@@ -403,13 +403,13 @@ onMounted(async () => {
 
 <template>
   <!-- Booth Edit -->
-  <div class="flex flex-col px-4 gap-[40px] min-w-[500px] pb-20 text-secondary-700-light">
+  <div class="flex flex-col px-4 gap-[20px] min-w-[630px] pb-20">
     <form @submit.prevent="handleClickSubmit()">
-      <div class="flex justify-between pt-[50px] lg:pt-[100pt] min-w-[350px] pb-[40px]">
+      <div class="flex justify-between pt-[100px] min-w-[350px] pb-[40px]">
         <!-- Booth Header -->
         <div class="flex items-center gap-4">
           <IconBoothEdit />
-          <div class="text-primary-900 text-4xl font-semibold">부스 정보 관리</div>
+          <div class="text-primary-900 text-xl md:text-2xl font-semibold">부스 정보 관리</div>
         </div>
       </div>
       <div
@@ -418,20 +418,20 @@ onMounted(async () => {
         <!-- 부스 정보 -->
         <div class="flex flex-col gap-[20px] w-full">
           <div
-            class="w-[137px] h-[61px] rounded-2xl flex items-center justify-center bg-primary-700 text-primary-900-light text-2xl font-semibold"
+            class="w-[95px] h-[45px] rounded-xl flex items-center justify-center bg-primary-700 text-primary-900-light text-md font-semibold"
           >
             부스 정보
           </div>
 
           <div
-            class="bg-primary-500-light rounded-2xl w-full py-4 px-4 lg:py-[40px] lg:px-[40px] flex flex-col gap-[30px] xl:gap-[20px] border-1 border-primary-700"
+            class="bg-primary-500-light rounded-xl w-full py-4 px-4 lg:py-[40px] lg:px-[40px] flex flex-col gap-[30px] xl:gap-[20px] border-1 border-primary-700"
           >
             <!-- 학과명 -->
             <div class="flex gap-2 flex-wrap xl:flex-nowrap">
-              <div class="w-[92px] flex items-center justify-start text-xl shrink-0">학과명</div>
+              <div class="w-[92px] flex items-center justify-start text-sm shrink-0">학과명</div>
               <div class="relative w-full">
                 <input
-                  class="w-full xl:w-[390px] h-[60px] border border-gray-500 rounded-2xl px-[20px] focus:border-primary-900"
+                  class="w-full xl:w-[390px] h-[45px] border border-gray-500 rounded-xl px-[20px] focus:border-primary-900 text-sm"
                   type="text"
                   maxlength="100"
                   placeholder="학과명을 입력하세요."
@@ -450,11 +450,11 @@ onMounted(async () => {
 
             <!-- 부스 타입 -->
             <div class="flex flex-wrap xl:flex-nowrap gap-2">
-              <div class="w-[92px] flex items-center justify-start text-xl shrink-0">부스 타입</div>
+              <div class="w-[92px] flex items-center justify-start text-sm shrink-0">부스 타입</div>
               <div class="relative w-full xl:w-[390px]">
                 <select
                   :disabled="!isAdmin || isSubmit"
-                  class="appearance-none w-full xl:w-[390px] h-[60px] border border-gray-500 rounded-2xl px-[20px] focus:border-primary-900"
+                  class="appearance-none w-full xl:w-[390px] h-[45px] border border-gray-500 rounded-xl px-[20px] focus:border-primary-900 text-sm"
                   @input="handleInputAdminCategory($event)"
                   :value="boothInfo.adminCategory"
                 >
@@ -467,10 +467,10 @@ onMounted(async () => {
 
             <!-- 부스이름 -->
             <div class="flex gap-2 flex-wrap xl:flex-nowrap">
-              <div class="w-[92px] flex items-center justify-start text-xl shrink-0">부스 이름</div>
+              <div class="w-[92px] flex items-center justify-start text-sm shrink-0">부스 이름</div>
               <div class="relative w-full">
                 <input
-                  class="w-full h-[60px] border border-gray-500 rounded-2xl px-[20px] focus:border-primary-900"
+                  class="w-full h-[45px] border border-gray-500 rounded-xl px-[20px] focus:border-primary-900 text-sm"
                   type="text"
                   maxlength="100"
                   placeholder="학과명을 입력하세요."
@@ -489,11 +489,11 @@ onMounted(async () => {
 
             <!-- 운영시간 -->
             <div class="flex gap-2 flex-wrap xl:flex-nowrap items-center">
-              <div class="w-[92px] flex items-center justify-start text-xl shrink-0">운영 시간</div>
+              <div class="w-[92px] flex items-center justify-start text-sm shrink-0">운영 시간</div>
               <div class="w-full flex items-center gap-2">
                 <div class="relative w-fit">
                   <input
-                    class="xl:w-[520px] h-[60px] border border-gray-500 rounded-2xl px-[20px] focus:border-primary-900"
+                    class="xl:w-[520px] h-[45px] border border-gray-500 rounded-xl px-[20px] focus:border-primary-900 text-sm"
                     type="text"
                     maxlength="100"
                     placeholder="예시) 17:00 ~ 24:00"
@@ -514,10 +514,10 @@ onMounted(async () => {
 
             <!-- 부스소개 -->
             <div class="flex w-full gap-2 flex-wrap xl:flex-nowrap">
-              <div class="w-[92px] flex items-center justify-start text-xl shrink-0">학과 소개</div>
+              <div class="w-[92px] flex items-center justify-start text-sm shrink-0">학과 소개</div>
               <div class="relative w-full">
                 <textarea
-                  class="w-full h-[150px] xl:h-[300px] border-[1px] border-gray-500 rounded-2xl px-[20px] py-[20px] focus:border-primary-900 resize-none"
+                  class="w-full h-[150px] border-[1px] border-gray-500 rounded-2xl px-[20px] py-[20px] focus:border-primary-900 resize-none text-sm"
                   type="text"
                   maxlength="300"
                   placeholder="학과 소개를 작성해주세요."
@@ -537,16 +537,16 @@ onMounted(async () => {
 
             <!-- 부스 이미지 -->
             <div class="flex w-full gap-2 flex-wrap xl:flex-nowrap">
-              <div class="flex-shrink-0 xl:w-[92px] flex items-center justify-start w-full text-xl">부스 이미지</div>
+              <div class="flex-shrink-0 xl:w-[92px] flex items-center justify-start w-full text-sm">부스 이미지</div>
               <label
                 v-if="fileUrls.length === 0 || fileUrls[0] === ''"
                 for="dropzone-file"
-                class="flex flex-col items-center justify-center w-full h-[150px] xl:h-[300px] border-dashed border-primary-500 bg-primary-300-light rounded-2xl border-[1px] cursor-pointer hover:bg-slate-200"
+                class="flex flex-col items-center justify-center w-full h-[150px] xl:h-[200px] border-dashed border-primary-500 bg-primary-300-light rounded-2xl border-[1px] cursor-pointer hover:bg-slate-200"
               >
-                <IconFileUpload />
+                <IconFileUpload class="mb-2" />
 
-                <p class="mb-2 text-secondary-900-light">부스 사진을 등록해주세요.</p>
-                <p class="text-secondary-900-light">최대 10장까지 첨부 가능</p>
+                <p class="mb-2 text-secondary-900-light text-sm">부스 사진을 등록해주세요.</p>
+                <p class="text-secondary-900-light text-sm">최대 10장까지 첨부 가능</p>
                 <input
                   type="file"
                   id="dropzone-file"
@@ -561,7 +561,7 @@ onMounted(async () => {
                 <div class="text-red-500 w-full flex justify-end cursor-pointer mb-2">
                   <div
                     @click="fileUrls = []"
-                    class="w-12 h-6 rounded border-danger bg-white text-danger flex items-center justify-center border"
+                    class="w-12 h-6 rounded border-danger bg-white text-danger text-sm flex items-center justify-center border"
                   >
                     reset
                   </div>
@@ -572,7 +572,7 @@ onMounted(async () => {
                       v-for="(urls, urlIndex) in fileUrls"
                       :key="urlIndex"
                       :style="setBackgroundImage(urls)"
-                      class="flex-shrink-0 w-[150px] h-[150px] xl:w-[300px] xl:h-[300px] rounded-2xl bg-cover bg-no-repeat bg-center border-2 border-gray-300 bg-white hover:border-primary-900"
+                      class="flex-shrink-0 w-[150px] h-[150px] xl:w-[200px] xl:h-[200px] rounded-2xl bg-cover bg-no-repeat bg-center border-2 border-gray-300 bg-white hover:border-primary-900"
                       :draggable="!isSubmit"
                       @dragstart="handleDragStartBoothImage($event, urlIndex)"
                       @dragover.prevent
@@ -582,12 +582,12 @@ onMounted(async () => {
                     <label
                       v-if="fileUrls.length < 10"
                       for="dropzone-file"
-                      class="flex-shrink-0 flex flex-col items-center justify-center w-[150px] xl:w-[300px] h-[150px] xl:h-[300px] border-dashed border-gray-500 bg-primary-300-light rounded-2xl border-[1px] cursor-pointer hover:bg-slate-200"
+                      class="flex-shrink-0 flex flex-col items-center justify-center w-[150px] xl:w-[200px] h-[150px] xl:h-[200px] border-dashed border-gray-500 bg-primary-300-light rounded-2xl border-[1px] cursor-pointer hover:bg-slate-200"
                     >
-                      <IconFileUpload />
+                      <IconFileUpload class="mb-2" />
 
-                      <p class="mb-2 text-secondary-900-light">부스 사진을 등록해주세요.</p>
-                      <p class="text-secondary-900-light">최대 10장까지 첨부 가능</p>
+                      <p class="mb-2 text-secondary-900-light text-sm">부스 사진을 등록해주세요.</p>
+                      <p class="text-secondary-900-light text-sm">최대 10장까지 첨부 가능</p>
                       <input
                         type="file"
                         id="dropzone-file"
@@ -605,15 +605,15 @@ onMounted(async () => {
 
             <!-- 테이블 정보 -->
             <div v-if="ADMIN_CATEGORY[boothInfo.adminCategory] === 'night'">
-              <div class="flex items-start justify-between py-10 flex-col gap-10 sm:flex-row">
+              <div class="flex items-center justify-between py-10 flex-col gap-10 sm:flex-row">
                 <div
-                  class="w-[280px] h-[61px] rounded-2xl flex items-center justify-center bg-primary-700 text-primary-900-light text-xl lg:text-2xl font-semibold px-5 gap-7 shrink-0"
+                  class="w-[200px] h-[45px] rounded-xl flex items-center justify-center bg-primary-700 text-primary-900-light text-md font-semibold px-5 gap-3 shrink-0"
                 >
-                  현재 테이블 개수 <span class="text-secondary-700-light">{{ tableNum }}개</span>
+                  현재 테이블 개수<span class="text-secondary-700-light">{{ tableNum }}개</span>
                 </div>
                 <div
                   @click="handleClickTableCusotm()"
-                  class="is-button h-[53px] w-[195px] lg:w-[175px] font-semibold text-xl lg:text-2xl shrink-0 cursor-pointer grid place-items-center"
+                  class="is-button font-semibold w-[100px] h-[35px] rounded-xl text-sm flex items-center justify-center text-white lg:text-md bg-primary-900cursor-pointer select-none"
                 >
                   테이블 커스텀
                 </div>
@@ -622,15 +622,15 @@ onMounted(async () => {
                 <div
                   v-for="(table, tableIndex) in tableNumList"
                   :key="tableIndex"
-                  class="w-full h-20 flex text-center rounded-3lg shadow-secondary"
+                  class="h-14 flex text-center rounded-3lg shadow-secondary w-full"
                 >
                   <div
-                    class="w-[180px] bg-primary-700 rounded-l-3lg border-1 border-primary-700-dark text-secondary-700-light font-medium lg:text-xl text-base grid place-items-center"
+                    class="w-[100px] bg-primary-700 rounded-l-3lg border-1 border-primary-700-dark text-secondary-700-light font-medium text-sm grid place-items-center select-none"
                   >
                     테이블 {{ tableIndex + 1 }}
                   </div>
                   <div
-                    class="grow min-w-[210px] bg-white rounded-r-3lg border-1 border-primary-900-ligther border-l-0 grid place-items-center text-secondary-700 lg:text-2xl text-xl font-semibold"
+                    class="grow min-w-[120px] bg-white rounded-r-3lg border-1 border-primary-900-ligther border-l-0 grid place-items-center text-secondary-700 text-sm font-semibold select-none"
                   >
                     {{ table.customTableNum }}
                   </div>
@@ -643,7 +643,7 @@ onMounted(async () => {
         <!-- 계좌정보 -->
         <div v-if="ADMIN_CATEGORY[boothInfo.adminCategory] === 'night'" class="flex flex-col gap-[20px] w-full">
           <div
-            class="w-[137px] h-[61px] rounded-2xl flex items-center justify-center bg-primary-700 text-primary-900-light text-2xl font-semibold"
+            class="w-[95px] h-[45px] rounded-xl flex items-center justify-center bg-primary-700 text-primary-900-light text-md font-semibold"
           >
             계좌 정보
           </div>
@@ -653,10 +653,10 @@ onMounted(async () => {
           >
             <!-- 예금주 -->
             <div class="flex gap-2 flex-wrap xl:flex-nowrap">
-              <div class="w-[92px] flex items-center justify-start text-xl shrink-0">예금주</div>
+              <div class="w-[92px] flex items-center justify-start text-sm shrink-0">예금주</div>
               <div class="relative w-full">
                 <input
-                  class="md:w-[520px] w-full h-[60px] border border-gray-500 rounded-2xl px-[20px] focus:border-primary-900"
+                  class="text-sm md:w-[520px] w-full h-[45px] border border-gray-500 rounded-xl px-[20px] focus:border-primary-900"
                   type="text"
                   maxlength="100"
                   placeholder="예금주를 입력하세요."
@@ -668,10 +668,10 @@ onMounted(async () => {
             </div>
             <!-- 은행명 -->
             <div class="flex gap-2 flex-wrap xl:flex-nowrap">
-              <div class="w-[92px] flex items-center justify-start text-xl shrink-0">은행명</div>
+              <div class="w-[92px] flex items-center justify-start text-sm shrink-0">은행명</div>
               <div class="relative w-full">
                 <input
-                  class="md:w-[520px] w-full h-[60px] border border-gray-500 rounded-2xl px-[20px] focus:border-primary-900"
+                  class="md:w-[520px] w-full h-[45px] border border-gray-500 rounded-xl px-[20px] focus:border-primary-900 text-sm"
                   type="text"
                   maxlength="100"
                   placeholder="은행명을 입력하세요."
@@ -683,10 +683,10 @@ onMounted(async () => {
             </div>
             <!-- 계좌번호 -->
             <div class="flex gap-2 flex-wrap xl:flex-nowrap">
-              <div class="w-[92px] flex items-center justify-start text-xl shrink-0">계좌번호</div>
+              <div class="w-[92px] flex items-center justify-start text-sm shrink-0">계좌번호</div>
               <div class="relative w-full">
                 <input
-                  class="md:w-[520px] w-full h-[60px] border border-gray-500 rounded-2xl px-[20px] focus:border-primary-900"
+                  class="md:w-[520px] w-full h-[45px] border border-gray-500 rounded-xl px-[20px] focus:border-primary-900 text-sm"
                   type="text"
                   maxlength="100"
                   placeholder="계좌번호를 입력하세요."
@@ -702,18 +702,18 @@ onMounted(async () => {
         <!-- 메뉴 정보 -->
         <div v-if="ADMIN_CATEGORY[boothInfo.adminCategory] !== 'food'" class="flex flex-col gap-[20px] w-full">
           <div
-            class="w-[137px] h-[61px] rounded-2xl flex items-center justify-center bg-primary-700 text-primary-900-light text-2xl font-semibold"
+            class="w-[95px] h-[45px] rounded-xl flex items-center justify-center bg-primary-700 text-primary-900-light text-md font-semibold"
           >
             메뉴 정보
           </div>
           <div
-            class="bg-primary-500-light rounded-2xl w-full lg:py-[40px] lg:px-[60px] px-4 py-4 flex flex-col border-1 border-primary-700"
+            class="bg-primary-500-light rounded-2xl w-full lg:py-[30px] lg:px-[30px] px-4 py-4 flex flex-col border-1 border-primary-700"
           >
-            <div class="grid gap-4 grid-cols-1 xl:grid-cols-2">
+            <div class="grid gap-4 grid-cols-1 2xl:grid-cols-2">
               <div
                 v-for="(menu, menuIndex) in menuList"
                 :key="menuIndex"
-                class="h-[220px] rounded-2xl flex items-center text-2xl font-bold px-[25px] py-[25px] gap-[28px] bg-white hover:border-primary-900 border-1 border-primary-700"
+                class="h-[170px] rounded-2xl flex text-sm items-center font-bold p-5 gap-[28px] bg-white hover:border-primary-900 border-1 border-primary-700"
                 :draggable="!isSubmit"
                 @dragstart="handleDragStartMenu($event, menuIndex)"
                 @dragover.prevent
@@ -721,7 +721,7 @@ onMounted(async () => {
                 @drop="handleDropMenu($event, menuIndex)"
               >
                 <div
-                  class="hidden md:block w-[180px] h-[180px] bg-contain bg-no-repeat bg-center bg-white rounded-2xl flex-shrink-0 border-gray-200 border"
+                  class="hidden md:block w-[120px] h-[120px] bg-contain bg-no-repeat bg-center bg-white rounded-xl flex-shrink-0 border-gray-200 border"
                   :style="setBackgroundImage(menu.menuImage)"
                 ></div>
                 <div class="flex flex-col w-full justify-between">
@@ -729,26 +729,26 @@ onMounted(async () => {
                     <!-- Menu header -->
                     <div class="flex justify-between items-center h-[29px] w-full min-w-fit gap-2">
                       <div
-                        class="text-lg font-semibold text-secondary-700 text-nowrap truncate xl:w-[100px] 3xl:w-full 3xl:max-w-[226px]"
+                        class="w-3/5 text-base font-semibold text-secondary-700 text-nowrap truncate"
                       >
                         {{ menu.menuName }}
                       </div>
-                      <div class="gap-[12px] items-center text-sm flex flex-shrink-0 justify-end grow">
+                      <div class="w-1/2 gap-[5px] items-center text-sm flex flex-shrink-0 justify-end grow font-medium">
                         <div
                           v-if="ADMIN_CATEGORY[boothInfo.adminCategory] !== 'day'"
-                          class="w-[80px] h-[29px] rounded-full bg-secondary-300 items-center 2xl:flex hidden justify-center text-secondary-700"
+                          class="w-[55px] h-[25px] text-[10px] rounded-full bg-secondary-300 items-center flex justify-center text-secondary-700"
                         >
                           {{ MENU_TYPE[menu.menuType] }}
                         </div>
                         <button
-                          class="w-[53px] h-[29px] rounded-full flex items-center justify-center bg-primary-800 text-primary-900"
+                          class="w-[45px] h-[25px] rounded-full flex items-center justify-center cursor-text text-[10px] text-primary-900 bg-primary-800"
                           type="button"
                           @click="openModal(menu)"
                         >
                           수정
                         </button>
                         <button
-                          class="w-[53px] h-[29px] lg:max-xl:flex rounded-full 2xl:flex hidden items-center justify-center bg-danger-light text-danger"
+                          class="w-[45px] h-[25px] lg:max-xl:flex rounded-full 2xl:flex items-center justify-center bg-danger-light text-danger text-[10px]"
                           type="button"
                           @click="
                             handleClickDeleteMenu({
@@ -763,27 +763,26 @@ onMounted(async () => {
                     </div>
                     <!-- Menu Body -->
                     <p
-                      class="pt-[12px] pb-[12px] h-[78px] text-secondary-700-light font-normal text-base break-all text-wrap line-clamp-3"
+                      class="pt-[12px] pb-[12px] h-[78px] text-secondary-700-light font-normal text-xs break-all text-wrap line-clamp-3"
                     >
                       {{ menu.menuDescription }}
                     </p>
                   </div>
                   <!-- Menu Footer -->
                   <div class="flex justify-between items-center w-full">
-                    <div class="text-secondary-700 font-bold text-2xl">
-                      {{ prettyPrice(menu.menuPrice)
-                      }}<span class="text-secondary-700-light font-normal text-2xl"></span>
+                    <div class="text-secondary-700 font-bold text-base">
+                      {{ prettyPrice(menu.menuPrice) }}
                     </div>
                     <IconBoothListToggle :is-active="!menu.isSoldOut" @click="menu.isSoldOut = !menu.isSoldOut" />
                   </div>
                 </div>
               </div>
               <div
-                class="h-[220px] bg-primary-300-light rounded-2xl border-2 border-dashed border-primay-500 flex flex-col items-center justify-center text-secondary-900-light cursor-pointer"
+                class="h-[170px] bg-primary-300-light rounded-2xl border-2 border-dashed border-primay-500 flex flex-col items-center justify-center text-secondary-900-light cursor-pointer"
                 @click="openModal({})"
               >
                 <IconAdd class="mb-2" />
-                <div>메뉴 추가하기</div>
+                <div class="text-sm">메뉴 추가하기</div>
               </div>
             </div>
           </div>
@@ -794,9 +793,9 @@ onMounted(async () => {
           v-if="ADMIN_CATEGORY[boothInfo.adminCategory] === 'night'"
           class="flex gap-6 md:gap-[40px] items-center flex-wrap"
         >
-          <div class="w-[232px] h-[60px]">
+          <div class="w-[170px]">
             <div
-              class="w-[226px] h-[60px] rounded-2xl text-primary-900-light flex items-center justify-center font-semibold text-2xl bg-primary-700 px-[24px]"
+              class="h-[45px] rounded-xl text-primary-900-light flex items-center justify-center font-semibold text-md bg-primary-700"
             >
               예약기능 사용 여부
             </div>
@@ -807,23 +806,23 @@ onMounted(async () => {
               @click="useReservation = true"
             >
               <IconRadio :is-active="useReservation" />
-              <div class="text-secondary-900 text-xl font-semibold">사용 동의</div>
+              <div class="text-secondary-900 text-sm font-semibold">사용 동의</div>
             </div>
             <div
               class="flex items-center justify-center gap-2 flex-shrink-0 cursor-pointer"
               @click="useReservation = false"
             >
               <IconRadio :is-active="!useReservation" />
-              <div class="text-secondary-900 text-xl font-semibold">사용 비동의</div>
+              <div class="text-secondary-900 text-sm font-semibold">사용 비동의</div>
             </div>
           </div>
         </div>
 
         <!-- 쿠폰 진행 여부 -->
         <div v-if="false" class="flex gap-6 md:gap-[40px] items-center flex-wrap">
-          <div class="w-[232px] h-[60px]">
+          <div class="w-[170px]">
             <div
-              class="w-[184px] h-[60px] rounded-2xl text-primary-900-light flex items-center justify-center font-semibold text-2xl bg-primary-700 px-[24px]"
+              class="h-[45px] rounded-xl text-primary-900-light flex items-center justify-center font-semibold text-md bg-primary-700"
             >
               쿠폰 진행 여부
             </div>
@@ -831,11 +830,11 @@ onMounted(async () => {
           <div class="flex gap-[28px]">
             <div class="flex items-center justify-center gap-2 flex-shrink-0 cursor-pointer" @click="useCoupon = true">
               <IconRadio :is-active="useCoupon" />
-              <div class="text-secondary-900 text-xl font-semibold">사용 동의</div>
+              <div class="text-secondary-900 text-sm font-semibold">사용 동의</div>
             </div>
             <div class="flex items-center justify-center gap-2 flex-shrink-0 cursor-pointer" @click="useCoupon = false">
               <IconRadio :is-active="!useCoupon" />
-              <div class="text-secondary-900 text-xl font-semibold">사용 비동의</div>
+              <div class="text-secondary-900 text-sm font-semibold">사용 비동의</div>
             </div>
           </div>
         </div>
@@ -846,27 +845,27 @@ onMounted(async () => {
           class="flex gap-6 md:gap-[40px] items-center flex-wrap"
         >
           <div
-            class="w-[232px] h-[60px] rounded-2xl text-primary-900-light flex items-center justify-center font-semibold text-2xl bg-primary-700 px-[24px]"
+            class="w-[170px] h-[45px] rounded-xl text-primary-900-light flex items-center justify-center font-semibold text-md bg-primary-700"
           >
             주문 기능 사용 여부
           </div>
           <div class="flex gap-[28px]">
             <div class="flex items-center justify-center gap-2 flex-shrink-0 cursor-pointer" @click="useOrder = true">
               <IconRadio :is-active="useOrder" />
-              <div class="text-secondary-900 text-xl font-semibold">사용 동의</div>
+              <div class="text-secondary-900 text-sm font-semibold">사용 동의</div>
             </div>
             <div class="flex items-center justify-center gap-2 flex-shrink-0 cursor-pointer" @click="useOrder = false">
               <IconRadio :is-active="!useOrder" />
-              <div class="text-secondary-900 text-xl font-semibold">사용 비동의</div>
+              <div class="text-secondary-900 text-sm font-semibold">사용 비동의</div>
             </div>
           </div>
         </div>
       </div>
 
-      <div class="flex justify-end items-center gap-4 pt-[40px]">
+      <div class="flex justify-end items-center gap-4 pt-[40px] mr-8">
         <!-- TODO: Check does it need? -->
         <!-- <button type="button" class="is-button is-outlined w-[120px] h-[60px] text-3xl">삭제</button> -->
-        <button type="submit" class="is-button w-[100px] h-[50px] lg:w-[120px] lg:h-[60px] text-xl lg:text-2xl">
+        <button type="submit" class="is-button font-semibold w-[60px] h-[35px] rounded-xl text-sm flex items-center justify-center text-white lg:text-md bg-primary-900cursor-pointer select-none">
           등록
         </button>
       </div>

@@ -220,15 +220,15 @@ onUnmounted(() => {
 <template>
   <div class="flex flex-col px-4 gap-[40px] min-w-[890px] pb-20">
     <!-- Reserve Header -->
-    <div class="flex justify-between pt-[50px] lg:pt-[100px] min-w-[350px] gap-4">
+    <div class="flex flex-col justify-between pt-[100px] gap-4 lg:flex-row">
       <div class="flex items-center gap-4">
         <IconReservation />
-        <div class="text-primary-900 text-4xl font-semibold">{{ selectBooth.adminName }} 예약 현황</div>
+        <div class="text-primary-900 text-xl md:text-2xl font-semibold">{{ selectBooth.adminName }} 예약 현황</div>
       </div>
-      <div class="flex gap-5">
-        <button class="is-button w-[150px] text-xl h-[55px]" @click="handleClickMessageCustom()">문자 커스텀</button>
+      <div class="flex gap-5 items-center">
+        <button class="is-button font-semibold w-[100px] h-[35px] rounded-xl text-sm flex items-center justify-center text-white lg:text-md bg-primary-900 cursor-pointer select-none" @click="handleClickMessageCustom()">문자 커스텀</button>
         <div
-          class="w-[320px] min-w-[300px] h-[55px] rounded-2xl bg-primary-800-light text-primary-900 flex justify-center items-center lg:text-2xl text-xl gap-[10px]"
+          class="w-[255px] h-[45px] rounded-xl bg-primary-800-light text-primary-900 flex justify-center items-center lg:text-lg text-md gap-[10px] font-semibold"
         >
           예약 기능 ON/OFF
           <IconBoothListToggle
@@ -248,7 +248,7 @@ onUnmounted(() => {
     <div class="flex justify-between min-w-[350px] gap-4">
       <div class="flex items-center gap-4">
         <button
-          class="is-button w-[120px] h-[50px] relative"
+          class="is-button w-[100px] h-[40px] relative text-sm rounded-[16px]"
           :class="{ 'is-outlined': selectOrderType !== 'reserve' }"
           @click="handleClickOrderType('reserve')"
         >
@@ -259,14 +259,14 @@ onUnmounted(() => {
           ></div>
         </button>
         <button
-          class="is-button w-[120px] h-[50px]"
+          class="is-button w-[100px] h-[40px] text-sm rounded-[16px]"
           :class="{ 'is-outlined': selectOrderType !== 'complete' }"
           @click="handleClickOrderType('complete')"
         >
           입장 목록
         </button>
         <button
-          class="is-button w-[120px] h-[50px] is-danger"
+          class="is-button w-[100px] h-[40px] is-danger text-sm rounded-[16px]"
           :class="{ 'is-outlined': selectOrderType !== 'cancel' }"
           @click="handleClickOrderType('cancel')"
         >
@@ -274,7 +274,7 @@ onUnmounted(() => {
         </button>
       </div>
       <div
-        class="w-[450px] h-[55px] rounded-2xl bg-primary-800-light text-primary-900 flex justify-center items-center text-2xl gap-[10px]"
+        class="w-[450px] h-[40px] rounded-2xl bg-primary-800-light text-primary-900 flex justify-center items-center text-2xl gap-[10px]"
       >
         <div class="relative w-full">
           <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
@@ -296,13 +296,13 @@ onUnmounted(() => {
           </div>
           <input
             type="search"
-            class="peer block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-xl bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
+            class="peer block w-full p-3 ps-10 text-sm text-gray-900 border border-gray-300 rounded-xl bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
             placeholder="예약 검색(예약자, 전화번호...)"
             v-model="searchKeyword"
           />
           <button
             type="button"
-            class="absolute end-2.5 bottom-2.5 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 is-button"
+            class="absolute end-2.5 bottom-2.5 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-xs px-3 py-[5px] is-button"
           >
             Search
           </button>
@@ -326,7 +326,7 @@ onUnmounted(() => {
     <!-- Table.. -->
     <div class="relative overflow-x-auto outline outline-1 outline-primary-500 rounded-2xl shadow-secondary">
       <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-        <thead class="md:text-sm lg:text-lg xl:text-xl uppercase bg-secondary-500 border-b-1 border-primary-500">
+        <thead class="md:text-sm uppercase bg-secondary-500 border-b-1 border-primary-500">
           <tr>
             <th scope="col" class="px-6 py-3 text-center text-secondary-700-light font-medium capitalize">No.</th>
             <th scope="col" class="px-6 py-3 text-center text-secondary-700-light font-medium capitalize">예약 번호</th>
@@ -343,7 +343,7 @@ onUnmounted(() => {
             </th>
           </tr>
         </thead>
-        <tbody class="text-xs md:text-sm lg:text-lg xl:text-xl">
+        <tbody class="text-xs md:text-sm">
           <tr
             v-if="!isLoading"
             class="bg-white border-b-1 border-secondary-300 text-secondary-700-light last:border-0"
@@ -360,10 +360,10 @@ onUnmounted(() => {
             <td class="px-6 py-4 text-center">{{ reserve.personCount }}명</td>
             <td class="px-6 py-4 text-center">{{ prettyPhoneNumber(reserve.phoneNum) }}</td>
             <td class="px-6 py-4 text-center">{{ prettyDate(reserve.updateAt) }}</td>
-            <td class="py-4 px-2 xl:w-[100px] w-20" v-if="selectOrderType !== 'complete'">
+            <td class="py-4 px-2 xl:w-[20px] w-20" v-if="selectOrderType !== 'complete'">
               <div class="w-full flex justify-center">
                 <button
-                  class="is-button xl:w-20 w-[60px] text-sm xl:text-base h-8"
+                  class="is-button w-14 h-[30px] text-xs"
                   type="button"
                   @click="handleClickConfirm(reserve)"
                 >
@@ -371,33 +371,33 @@ onUnmounted(() => {
                 </button>
               </div>
             </td>
-            <td class="py-4 px-2 xl:w-[100px] w-20" v-if="selectOrderType !== 'cancel'">
+            <td class="py-4 px-2 w-[20px]" v-if="selectOrderType !== 'cancel'">
               <div class="w-full flex justify-center">
                 <button
                   type="button"
-                  class="is-button xl:w-20 w-[60px] text-sm xl:text-base h-8 is-danger is-outlined"
+                  class="is-button w-14 h-[30px] text-xs is-danger is-outlined"
                   @click="handleClickDelete(reserve)"
                 >
                   취소
                 </button>
               </div>
             </td>
-            <td class="py-4 px-2 xl:w-[100px] w-20" v-if="selectOrderType !== 'reserve'">
+            <td class="py-4 px-2 xl:w-[20px] w-20" v-if="selectOrderType !== 'reserve'">
               <div class="w-full flex justify-center">
                 <button
                   type="button"
-                  class="is-button xl:w-20 w-[60px] text-sm xl:text-base h-8 is-outlined"
+                  class="is-button w-14 h-[30px] text-xs is-outlined"
                   @click="handleClickRestore(reserve)"
                 >
                   예약
                 </button>
               </div>
             </td>
-            <td class="py-4 pl-2 pr-4 xl:w-[100px] w-20">
+            <td class="py-4 pl-2 pr-4 xl:w-[20px] w-20">
               <div class="w-full flex justify-center">
                 <button
                   type="button"
-                  class="is-button xl:w-20 w-[60px] text-sm xl:text-base h-8 is-outlined"
+                  class="is-button w-14 h-[30px] text-xs is-outlined"
                   @click="handleClickMessage(reserve)"
                 >
                   문자
@@ -409,7 +409,7 @@ onUnmounted(() => {
             <td scope="col" colspan="7">
               <div class="w-full justify-center items-center flex flex-col py-14 bg-white rounded-b-[20px]">
                 <IconLoading :width="200" />
-                <p class="text-xl py-4">에약 내역을 불러오는 중이에요...</p>
+                <p class="text-lg py-4">에약 내역을 불러오는 중이에요...</p>
               </div>
             </td>
           </tr>
@@ -417,7 +417,7 @@ onUnmounted(() => {
             <td scope="col" colspan="7">
               <div class="w-full justify-center items-center flex flex-col py-10 bg-white rounded-b-[20px]">
                 <IconNotFound :width="200" />
-                <p class="text-xl py-4">검색 내역이 없습니다...</p>
+                <p class="text-lg py-4">검색 내역이 없습니다...</p>
               </div>
             </td>
           </tr>

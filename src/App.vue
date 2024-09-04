@@ -35,11 +35,11 @@ onMounted(() => {
   <MobileModalView />
   <div
     id="container"
-    class="grid grid-cols-1 md:grid-cols-[minmax(50px,_1fr)_minmax(auto,_1920px)_minmax(50px,_1fr)] grid-rows-[100px_1fr_200px] min-h-screen w-full gap-0"
+    class="grid grid-cols-1 md:grid-cols-[minmax(50px,_1fr)_minmax(auto,_1680px)_minmax(50px,_1fr)] xl:grid-cols-[minmax(220px,_1fr)_minmax(auto,_1680px)_minmax(220px,_1fr)] grid-rows-[50px_1fr_200px] min-h-screen w-full gap-0"
     v-if="!isMobile"
   >
     <!-- Header -->
-    <div class="col-span-1 md:col-span-3 h-[100px]">
+    <div class="col-span-1 md:col-span-3 h-[60px]">
       <NavBar v-if="showNavBar" />
     </div>
 

@@ -10,8 +10,8 @@ const props = defineProps({
   <div class="select-none">
     <svg
       v-if="type === 'info'"
-      width="48"
-      height="48"
+      width="32"
+      height="32"
       viewBox="0 0 48 48"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
@@ -29,8 +29,8 @@ const props = defineProps({
     </svg>
     <svg
       v-if="type === 'danger'"
-      width="48"
-      height="48"
+      width="32"
+      height="32"
       viewBox="0 0 48 48"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
