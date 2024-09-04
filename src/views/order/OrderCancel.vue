@@ -24,7 +24,7 @@ const isFocus = ref(false);
 const filteredMenuList = ref([]);
 
 const updateFilteredMenuList = () => {
-  const filteredList = [...cancelOrderList.value];
+  let filteredList = [...cancelOrderList.value];
 
   if (searchMenu.value) {
     filteredList = filteredList.filter((order) => {
