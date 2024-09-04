@@ -13,13 +13,13 @@ const height = ref(30);
 
 watchEffect(() => {
   if (props.width) {
-    height.value = (props.width * 30) / 60;
+    height.value = (props.width * 30) / 90;
   }
 });
 
 onMounted(() => {
   if (props.width) {
-    height.value = (props.width * 30) / 60;
+    height.value = (props.width * 30) / 90;
   }
 });
 </script>

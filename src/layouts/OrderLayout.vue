@@ -234,7 +234,7 @@ onUnmounted(() => {
     <div class="flex justify-between pt-[50px] lg:pt-[100px] min-w-[670px] gap-4">
       <div class="flex items-center gap-4">
         <IconOrder />
-        <div class="text-primary-900 text-4xl font-semibold">주문 조회</div>
+        <div class="text-primary-900 text-xl md:text-2xl font-semibold">주문 조회</div>
       </div>
 
       <!-- For Admin -->
@@ -254,7 +254,7 @@ onUnmounted(() => {
     <div class="flex gap-[10px] overflow-x-auto pb-[40px]">
       <button
         type="button"
-        class="min-w-[120px] w-[200px] h-[50px] is-button no-scroll"
+        class="is-button w-[120px] h-[40px] relative text-sm rounded-[16px]"
         :class="{
           'is-outlined': orderStatus !== orderCategory,
         }"
@@ -267,7 +267,7 @@ onUnmounted(() => {
           <!-- 실시간 빨간 점 -->
           <div
             v-if="orderCategory === 'realTime' && orderStatus != 'realTime' && isNewOrderExist"
-            class="absolute bg-secondary-200 w-4 h-4 rounded-full top-[6px] right-3"
+            class="absolute bg-secondary-200 w-3 h-3 rounded-full top-[4px] right-4"
           ></div>
         </div>
       </button>
@@ -276,8 +276,8 @@ onUnmounted(() => {
     <!-- 테이블 주문 현황 -->
     <div v-if="!isStatistics" class="flex flex-col relative">
       <div class="flex w-full justify-between mb-3 items-center" @click="handleClickTableRefresh()">
-        <button type="button" class="is-button w-[150px] h-[50px]" @click="openServiceModal()">주문 추가</button>
-        <IconRefresh class="cursor-pointer" />
+        <button type="button" class="is-button w-[100px] h-[40px] rounded-[16px] text-sm" @click="openServiceModal()">주문 추가</button>
+        <IconRefresh class="w-6 h-6 cursor-pointer" />
       </div>
       <div
         class="flex flex-col w-full rounded-2xl shadow-secondary relative outline outline-1 outline-primary-500 bg-white"

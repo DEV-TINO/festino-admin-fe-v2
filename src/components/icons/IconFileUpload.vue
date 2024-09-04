@@ -1,7 +1,7 @@
 <script setup></script>
 <template>
   <div>
-    <svg width="41" height="40" viewBox="0 0 41 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg width="31" height="30" viewBox="0 0 41 40" fill="none" xmlns="http://www.w3.org/2000/svg">
       <mask id="mask0_1753_5038" style="mask-type: alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="41" height="40">
         <rect x="0.5" width="40" height="40" fill="#D9D9D9" />
       </mask>

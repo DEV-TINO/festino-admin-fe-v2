@@ -45,12 +45,12 @@ onMounted(() => {
 <template>
   <form @submit.prevent="handleSubmit()">
     <div
-      class="w-[500px] rounded-2xl flex flex-col justify-between items-center py-[32px] px-[40px] bg-white gap-[20px]"
+      class="w-[400px] h-[260px] flex flex-col justify-between items-center bg-white rounded-2xl p-8"
     >
       <!-- Info -->
       <div class="flex flex-col justify-center items-center w-full">
         <IconBoothInfo :type="popupType === 'cancel' ? 'danger' : 'info'" />
-        <p class="text-xl font-bold text-secondary-700 pt-[20px]">
+        <p class="text-md font-bold text-secondary-700 pt-[20px]">
           {{ title }}
         </p>
 
@@ -77,16 +77,16 @@ onMounted(() => {
           </div>
         </div>
 
-        <p class="pt-[12px] text-secondary-700-light text-base whitespace-pre-wrap text-center">
+        <p class="pt-[12px] text-secondary-700-light text-sm whitespace-pre-wrap text-center">
           {{ subTitle }}
         </p>
       </div>
 
       <!-- Button Row -->
-      <div class="flex justify-between gap-[20px] w-full h-[72px] items-end">
+      <div class="flex justify-between gap-[20px] w-full items-end">
         <button
           type="button"
-          class="grow h-[48px] is-button is-outlined"
+          class="grow h-[40px] is-button is-outlined text-sm"
           :class="{
             'is-danger': popupType === 'cancel',
           }"
@@ -96,7 +96,7 @@ onMounted(() => {
         </button>
         <button
           type="submit"
-          class="grow h-[48px] is-button"
+          class="grow h-[40px] is-button text-sm"
           :class="{
             'is-danger': popupType === 'cancel',
           }"

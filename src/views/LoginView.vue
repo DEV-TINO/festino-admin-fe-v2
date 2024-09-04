@@ -51,23 +51,23 @@ const handleClickSubmit = async () => {
 <template>
   <div class="flex flex-col justify-center items-center w-full h-full overflow-hidden">
     <!-- Logo -->
-    <div class="text-primary-900 font-semibold pb-[75px]">
-      <IconLogo class="w-[181px] h-[91px]" />
+    <div class="text-primary-900 font-semibold pb-[60px]">
+      <IconLogo class="w-[120px] h-[91px]" />
     </div>
 
     <form @submit.prevent="handleClickSubmit()">
-      <div class="w-[660px] h-[555px] bg-white flex flex-col justify-between items-center shadow-md rounded-2xl">
-        <div class="text-primary-900 text-[30px] font-semibold pt-[50px]">로그인</div>
-        <div class="flex flex-col w-[540px] gap-[20px]">
+      <div class="w-[630px] h-[500px] bg-white flex flex-col justify-between items-center shadow-md rounded-2xl py-14 px-16">
+        <div class="text-primary-900 text-2xl font-semibold">로그인</div>
+        <div class="flex flex-col w-full gap-[20px]">
           <!-- ID -->
           <div class="flex justify-between w-full items-center">
-            <div class="text-xl">아이디</div>
+            <div class="text-md">아이디</div>
             <input
               lang="en"
               autofocus
               autocomplete="username"
               type="text"
-              class="w-[390px] h-[64px] focus:border-primary-900 rounded-xl border-[1px] px-[20px]"
+              class="w-[390px] h-[55px] focus:border-primary-900 rounded-xl border-[1px] px-[20px] text-sm"
               :class="{
                 'border-red-700': isError,
               }"
@@ -78,11 +78,11 @@ const handleClickSubmit = async () => {
           </div>
           <!-- Password -->
           <div class="flex justify-between w-full items-center">
-            <div class="text-xl">비밀번호</div>
+            <div class="text-md">비밀번호</div>
             <input
               type="password"
               autocomplete="new-password"
-              class="w-[390px] h-[64px] focus:border-primary-900 rounded-xl border-[1px] px-[20px]"
+              class="w-[390px] h-[55px] focus:border-primary-900 rounded-xl border-[1px] px-[20px] text-sm"
               :class="{
                 'border-red-700': isError,
               }"
@@ -93,11 +93,11 @@ const handleClickSubmit = async () => {
           </div>
         </div>
         <!-- Submit Button -->
-        <div class="flex flex-col justify-center items-center w-[540px] gap-[30px] pb-[50px]">
-          <button class="text-2xl is-button w-full h-[77px] flex items-center justify-center" type="submit">
+        <div class="flex flex-col justify-center items-center w-full gap-[30px]">
+          <button class="text-lg is-button w-full h-[55px] flex items-center justify-center" type="submit">
             완료
           </button>
-          <div class="text-lg text-secondary-900 underline cursor-pointer" @click="logout()">Cannot Login?</div>
+          <div class="text-md text-secondary-900 underline cursor-pointer" @click="logout()">Cannot Login?</div>
         </div>
       </div>
     </form>

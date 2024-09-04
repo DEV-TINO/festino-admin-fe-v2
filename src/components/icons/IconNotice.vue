@@ -5,7 +5,7 @@ const props = defineProps({
   type: String,
   width: {
     type: Number,
-    default: 48,
+    default: 32,
   },
 });
 

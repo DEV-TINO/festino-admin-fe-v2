@@ -65,13 +65,13 @@ watch(() => route.name, updateActive, {
 
 <template>
   <div
-    class="bg-white w-full flex justify-between px-20px 2xl:px-[50px] px-4 items-center h-full shadow-primary select-none"
+    class="bg-white w-full flex justify-between px-[40px] 2xl:px-[50px] items-center h-full shadow-primary select-none"
   >
     <div class="text-3xl text-primary-900 font-semibold cursor-pointer" @click="handleClickHome()">
-      <IconLogo class="w-[86px] h-[43.23px]" />
+      <IconLogo class="w-[55px] md:w-[50px] lg:w-[60px]" />
     </div>
     <div
-      class="flex justify-end gap-4 md:gap-[40px] lg:gap-[80px] text-secondary-900 md:text-xl lg:text-2xl font-medium"
+      class="flex justify-end gap-4 md:gap-[50px] lg:gap-[70px] text-secondary-900 text-xs md:text-sm lg:text-[16px] font-medium"
     >
       <div
         class="hover:text-primary-900 hover:font-semibold cursor-pointer hidden sm:block"
