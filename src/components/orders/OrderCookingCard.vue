@@ -206,7 +206,9 @@ const handleInputServeCount = async (cook, event) => {
       </table>
     </div>
 
-    <div class="flex justify-between items-center h-[73px] w-full rounded-b-3xl px-[28px] bg-primary-500">
+    <div
+      class="flex justify-between items-center h-[73px] w-full rounded-b-3xl px-[28px] bg-primary-500 text-secondary-700-light"
+    >
       <div class="text-2xl">현재 주문 테이블: {{ tableCount }}</div>
       <div class="text-2xl">총 주문 수량: {{ totalRemainCount }}</div>
     </div>

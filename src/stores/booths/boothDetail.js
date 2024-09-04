@@ -98,6 +98,27 @@ export const useBoothDetail = defineStore('boothDetail', () => {
     }
   };
 
+  const getAdminBoothInfo = async (boothId) => {
+    await getAllBoothList();
+    const booth = boothList.value.find((booth) => booth.boothId === boothId);
+    boothInfo.value = booth;
+    boothType.value = ADMIN_CATEGORY[booth.adminCategory];
+
+    try {
+      if (ADMIN_CATEGORY[booth.adminCategory] === 'night') {
+        const res = await api.get(`/admin/booth/night/${boothId}`);
+        if (res.data.success) {
+          boothInfo.value = res.data.boothInfo;
+        } else {
+          alertError(res.data.message);
+        }
+      }
+    } catch (error) {
+      console.error(error);
+      alertError(error);
+    }
+  };
+
   const reset = () => {
     boothInfo.value = {
       boothId: '',
@@ -276,6 +297,7 @@ export const useBoothDetail = defineStore('boothDetail', () => {
     addMenuList,
     getBoothDetail,
     getNightBoothInfo,
+    getAdminBoothInfo,
     originalMenuList,
     createMenuList,
     deleteMenuList,

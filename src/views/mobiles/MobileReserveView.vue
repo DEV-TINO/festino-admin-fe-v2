@@ -7,6 +7,7 @@ import { useBoothList } from '@/stores/booths/boothList';
 import { useReserveModal } from '@/stores/mobiles/reserve/reserveModal';
 import { useUser } from '@/stores/user';
 import { useBoothDetail } from '@/stores/booths/boothDetail';
+import { useMessage } from '@/stores/reserve/message';
 
 const useBoothDetailStore = useBoothDetail();
 const useBoothListStore = useBoothList();
@@ -19,6 +20,7 @@ const { reserveList } = storeToRefs(useReserveList());
 const { isAdmin, userOwnBoothId } = storeToRefs(useUser());
 const { boothInfo } = storeToRefs(useBoothDetailStore);
 const { openCustomMessagePopup } = useReserveModalStore;
+const { getMessage } = useMessage();
 
 const reserveData = ref([]);
 const loading = ref(false);
@@ -69,7 +71,8 @@ const visibility = () => {
   else return 'invisible';
 };
 
-const handleClickOpenCustomMessage = () => {
+const handleClickOpenCustomMessage = async() => {
+  await getMessage(selectedBooth.value.boothId);
   openCustomMessagePopup();
 };
 
