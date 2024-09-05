@@ -69,6 +69,7 @@ const gridColumnStyle = computed(() => {
 });
 
 const maxPageIndex = computed(() => {
+  pageIndex.value = 1;
   return Math.ceil(allTableOrders.value.length / (orderPerCol.value * 2));
 });
 
