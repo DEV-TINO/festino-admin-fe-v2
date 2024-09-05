@@ -14,7 +14,7 @@ import { api } from '@/utils/api';
 import { ORDER_CATEGORY, ORDER_URL, TABLE_FILTER } from '@/utils/constants';
 import { chunkArray, getHourandMinute } from '@/utils/utils';
 import { storeToRefs } from 'pinia';
-import { computed, onMounted, onUnmounted, ref, watchEffect } from 'vue';
+import { computed, onMounted, onUnmounted, ref, watch, watchEffect } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { cloneDeep } from 'lodash';
 import IconRefresh from '@/components/icons/IconRefresh.vue';
@@ -69,8 +69,13 @@ const gridColumnStyle = computed(() => {
 });
 
 const maxPageIndex = computed(() => {
-  pageIndex.value = 1;
   return Math.ceil(allTableOrders.value.length / (orderPerCol.value * 2));
+});
+
+watch(orderPerCol, (newOrderPerCol, oldOrderPerCol) => {
+  if (newOrderPerCol !== oldOrderPerCol) {
+    pageIndex.value = 1;
+  }
 });
 
 const getDetailOrder = async (orderId) => {
