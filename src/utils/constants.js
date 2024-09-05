@@ -130,3 +130,8 @@ export const ORDER_FILTER = {
   table: '테이블 번호순',
   price: '가격순',
 };
+
+export const TABLE_FILTER = {
+  timeAsc: '최신순(기본)',
+  timeDesc: '오래된순',
+};

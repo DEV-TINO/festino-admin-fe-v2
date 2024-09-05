@@ -11,8 +11,8 @@ import { useTableDetail } from '@/stores/booths/tableDetail';
 import { useServiceModal } from '@/stores/orders/serviceModal';
 import { useUser } from '@/stores/user';
 import { api } from '@/utils/api';
-import { ORDER_CATEGORY, ORDER_URL } from '@/utils/constants';
-import { chunkArray } from '@/utils/utils';
+import { ORDER_CATEGORY, ORDER_URL, TABLE_FILTER } from '@/utils/constants';
+import { chunkArray, getHourandMinute } from '@/utils/utils';
 import { storeToRefs } from 'pinia';
 import { computed, onMounted, onUnmounted, ref, watchEffect } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
@@ -49,21 +49,27 @@ const isNewOrderExist = ref(false);
 const prevOrderList = ref([]);
 const isFirstLoad = ref(true);
 const isStatistics = ref(false);
+const selectedFilterMenu = ref(TABLE_FILTER['timeAsc']);
+const pageIndex = ref(1);
 
 const { width } = useWindowSize();
 
-const orderPerRow = computed(() => {
-  if (width.value < 760) {
-    return 1;
-  } else if (width.value < 1080) {
-    return 2;
-  } else if (width.value < 1380) {
-    return 3;
-  } else if (width.value < 1680) {
-    return 4;
-  } else {
-    return 5;
-  }
+const orderPerCol = computed(() => {
+  if (width.value < 950) return 2;
+  else if (width.value < 1550) return 3;
+  else if (width.value < 1800) return 4;
+  else if (width.value < 2050) return 5;
+  else return 6;
+});
+
+const gridColumnStyle = computed(() => {
+  return {
+    'grid-template-columns': `repeat(${orderPerCol.value}, 1fr)`,
+  };
+});
+
+const maxPageIndex = computed(() => {
+  return Math.ceil(allTableOrders.value.length / (orderPerCol.value * 2));
 });
 
 const getDetailOrder = async (orderId) => {
@@ -168,6 +174,14 @@ const handleClickTableRefresh = async () => {
   refreshAllTableOrders();
 };
 
+watchEffect(() => {
+  if (selectedFilterMenu.value === TABLE_FILTER['timeAsc']) {
+    allTableOrders.value.sort((a, b) => new Date(b.createAt) - new Date(a.createAt));
+  } else if (selectedFilterMenu.value === TABLE_FILTER['timeDesc']) {
+    allTableOrders.value.sort((a, b) => new Date(a.createAt) - new Date(b.createAt));
+  }
+});
+
 watchEffect(async () => {
   if (boothId.value) {
     await getAllTableOrders({
@@ -178,7 +192,7 @@ watchEffect(async () => {
 });
 
 watchEffect(() => {
-  chunkedAllTableOrders.value = chunkArray(allTableOrders.value, 7);
+  chunkedAllTableOrders.value = chunkArray(allTableOrders.value, orderPerCol.value * 2);
 });
 
 watchEffect(() => {
@@ -275,62 +289,98 @@ onUnmounted(() => {
 
     <!-- 테이블 주문 현황 -->
     <div v-if="!isStatistics" class="flex flex-col relative">
-      <div class="flex w-full justify-between mb-3 items-center" @click="handleClickTableRefresh()">
-        <button type="button" class="is-button w-[100px] h-[40px] rounded-[16px] text-sm" @click="openServiceModal()">주문 추가</button>
-        <IconRefresh class="w-6 h-6 cursor-pointer" />
-      </div>
-      <div
-        class="flex flex-col w-full rounded-2xl shadow-secondary relative outline outline-1 outline-primary-500 bg-white"
-      >
-        <!-- Thead -->
-        <div
-          class="w-full h-[50px] bg-secondary-500 flex items-center justify-center rounded-t-2xl border-b-1 border-primary-500"
-        >
-          테이블 주문 현황
-        </div>
-        <!-- Tbody -->
-        <div class="w-full flex flex-wrap rounded-b-2xl relative h-[376px] divide-x-2">
-          <div v-for="(per, perIndex) in orderPerRow" class="min-w-[300px] shrink-0 relative grow" :per>
-            <table class="w-full">
-              <thead class="text-sm align-middle border-b-2">
-                <tr class="h-[47px]">
-                  <th>테이블 번호</th>
-                  <th>서빙 현황</th>
-                  <th>주문 내역</th>
-                  <th>완료</th>
-                </tr>
-              </thead>
-              <tbody class="text-sm align-middle text-center">
-                <tr
-                  v-for="(tableOrder, tableOrderIndex) in chunkedAllTableOrders[perIndex]"
-                  class="h-[47px] hover:bg-slate-50 shrink-0"
-                  :class="tableOrderIndex % 6 === 0 && tableOrderIndex ? 'border-none' : 'border-b-2'"
-                  :tableOrderIndex
-                >
-                  <td>{{ getCustomTableNum(tableOrder.tableNum) }}번</td>
-                  <td>{{ tableOrder.servedCount }}/{{ tableOrder.totalCount }}</td>
-                  <td>
-                    <div class="flex justify-center items-center">
-                      <IconOrderDetail @click="handleClickOrderDetail(tableOrder.orderId, tableOrder.orderType)" />
-                    </div>
-                  </td>
-                  <td>
-                    <div class="flex justify-center items-center">
-                      <IconOrderCheck
-                        :is-active="isFinish(tableOrder)"
-                        :class="{ 'cursor-not-allowed': !isFinish(tableOrder) }"
-                        @click="handleClickOrderFinish(tableOrder, tableOrder.orderId, tableOrder.orderType)"
-                      />
-                    </div>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+      <!-- Header -->
+      <div class="flex justify-between items-center pb-[10px]">
+        <div class="flex gap-[14px]">
+          <div
+            v-for="(filter, filterIndex) in TABLE_FILTER"
+            :key="filterIndex"
+            class="cursor-pointer"
+            :class="selectedFilterMenu === filter ? 'font-bold text-secondary-700' : 'text-secondary-700-light'"
+            @click="selectedFilterMenu = filter"
+          >
+            {{ filter }}
           </div>
         </div>
-
-        <div class="absolute bottom-[-36px] right-0 text-xl text-secondary-700-light font-semibold">
-          {{ allTableOrders.length }}/{{ 7 * orderPerRow }}
+        <!-- Table Header -->
+        <div class="flex gap-[14px] justify-center items-center">
+          <button type="button" class="is-button w-[100px] h-[40px] rounded-[16px] text-sm" @click="openServiceModal()">
+            주문 추가
+          </button>
+          <IconRefresh class="w-6 h-6 cursor-pointer" @click="handleClickTableRefresh()" />
+        </div>
+      </div>
+      <!-- Orders -->
+      <div class="bg-primary-700-light rounded-2xl p-8">
+        <div class="flex justify-between items-center">
+          <div class="xl:w-[207px] w-[160px]"></div>
+          <div class="font-bold text-primary-800 xl:text-2xl text-xl">테이블 주문 현황</div>
+          <div
+            class="xl:w-[207px] w-[160px] h-[54px] bg-white rounded-2xl flex justify-center items-center cursor-pointer gap-3"
+          >
+            <div class="text-secondary-700-lighter font-bold">현재 주문 수</div>
+            <div class="text-[22px] font-bold text-primary-800">{{ allTableOrders.length }}개</div>
+          </div>
+        </div>
+        <div class="py-7 grid gap-x-[22px] gap-y-4 place-items-center grid-rows-2" :style="gridColumnStyle">
+          <!-- Order -->
+          <div
+            v-for="(tableOrder, tableOrderIndex) in chunkedAllTableOrders[pageIndex - 1]"
+            :key="tableOrderIndex"
+            class="w-full min-w-[240px] h-[124px] bg-white rounded-2xl p-[18px] flex justify-between font-bold"
+          >
+            <div class="flex flex-col justify-between">
+              <div class="flex-col">
+                <div class="text-2xs text-secondary-700-lighter">테이블</div>
+                <div
+                  class="text-xl text-primary-900-lighter -translate-y-1 max-w-[130px] text-ellipsis whitespace-nowrap overflow-hidden"
+                >
+                  {{ getCustomTableNum(tableOrder.tableNum) }}번
+                </div>
+              </div>
+              <div class="flex-col">
+                <div class="text-2xs text-secondary-700-lighter translate-y-1">주문시간</div>
+                <div class="text-xl text-primary-900-lighter">
+                  {{ getHourandMinute(tableOrder.createAt) }}
+                </div>
+              </div>
+            </div>
+            <div class="grid grid-rows-3 text-secondary-700-light text-sm w-[100px]">
+              <!-- 서빙현황 -->
+              <div class="flex items-start justify-between">
+                <div class="text-left">서빙현황</div>
+                <div class="text-right font-normal">{{ tableOrder.servedCount }}/{{ tableOrder.totalCount }}</div>
+              </div>
+              <!-- 주문내역 -->
+              <div class="flex items-center justify-between">
+                <div class="text-left">주문내역</div>
+                <IconOrderDetail
+                  class="justify-self-end -translate-x-[3px]"
+                  @click="handleClickOrderDetail(tableOrder.orderId, tableOrder.orderType)"
+                />
+              </div>
+              <!-- 완료 -->
+              <div class="flex items-end justify-between">
+                <div class="text-left">완료</div>
+                <IconOrderCheck
+                  class="justify-self-end"
+                  :is-active="isFinish(tableOrder)"
+                  :class="{ 'cursor-not-allowed': !isFinish(tableOrder) }"
+                  @click="handleClickOrderFinish(tableOrder, tableOrder.orderId, tableOrder.orderType)"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="flex justify-center items-center text-xl font-medium text-secondary-900">
+          <div
+            v-for="(page, index) in maxPageIndex"
+            @click="pageIndex = page"
+            class="w-10 h-10 flex justify-center items-center cursor-pointer"
+            :class="pageIndex === page ? 'bg-primary-900-light rounded-full text-white' : ''"
+          >
+            {{ page }}
+          </div>
         </div>
       </div>
     </div>

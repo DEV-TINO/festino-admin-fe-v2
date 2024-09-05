@@ -9,16 +9,22 @@ export default {
             DEFAULT: '#0073F0',
             dark: '#0052CC',
             light: 'rgba(0, 115, 240, 0.86)',
+            lighter: 'rgba(0, 115, 240, 0.7)',
+          },
+          800: {
+            DEFAULT: '#4D9DF5',
           },
         },
         secondary: {
           900: {
             DEFAULT: '#999999',
             light: 'rgba(153, 153, 153, 0.7)',
+            lighter: 'rgba(153, 153, 153, 0.5)',
           },
           700: {
             DEFAULT: '#222222',
             light: '#444444',
+            lighter: 'rgba(0, 115, 240, 0.5)',
           },
           500: {
             DEFAULT: '#4B4B4B',
