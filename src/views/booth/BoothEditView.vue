@@ -746,7 +746,7 @@ onMounted(async () => {
                           {{ MENU_TYPE[menu.menuType] }}
                         </div>
                         <button
-                          class="w-[45px] h-[25px] rounded-full flex items-center justify-center cursor-text text-[10px] text-primary-900 bg-primary-800"
+                          class="w-[45px] h-[25px] rounded-full flex items-center justify-center text-[10px] text-primary-900 bg-primary-800 cursor-pointer"
                           type="button"
                           @click="openModal(menu)"
                         >
