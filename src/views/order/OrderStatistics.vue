@@ -143,8 +143,8 @@ onMounted(async () => {
     </div>
 
     <!-- 통계 영역 -->
-    <div class="w-full h-[638px] flex overflow-x-scroll scrollbar-hide">
-      <div class="w-1/2 min-w-[490px] pt-20 pl-10 h-full border border-primary-900 rounded-l-[20px]">
+    <div class="w-full h-[530px] flex overflow-x-scroll scrollbar-hide">
+      <div class="w-1/2 min-w-[300px] pt-20 pl-10 h-full border border-primary-900 rounded-l-[20px]">
         <div v-if="isLoading" class="text-primary-900 font-semibold h-[500px] flex justify-center items-center">
           Loading...
         </div>
@@ -159,28 +159,30 @@ onMounted(async () => {
       <div
         class="w-1/2 min-w-[490px] h-full overflow-hidden p-[40px] border-r border-y border-primary-900 rounded-r-[20px] flex flex-col justify-between items-center"
       >
-        <div
-          class="min-w-[432px] font-semibold text-primary-900 text-[28px] flex justify-center select-none"
-        >
-          {{ myBooth?.adminName }} 야간부스 매출 통계
-        </div>
-        <div class="w-full flex justify-center gap-4">
-          <button
-            type="button"
-            class="min-w-[120px] w-[200px] h-[50px] is-button relative"
-            v-for="(dateInfo, key) in formattedDateList"
-            :key="key"
-            :class="{ 'is-outlined': activeDateMap[dateInfo.day] !== day }"
-            @click="handleButtonClick(dateInfo.day)"
+        <div>
+          <div
+            class="min-w-[432px] font-semibold text-primary-900 text-xl flex justify-center select-none pb-5"
           >
-            {{ formattedMonth(month) }}/{{ dateInfo.day }} ({{ dateInfo.dateName }})
-          </button>
+            {{ myBooth?.adminName }} 야간부스 매출 통계
+          </div>
+          <div class="w-full flex justify-center gap-3">
+            <button
+              type="button"
+              class="min-w-[110px] h-[35px] is-button relative rounded-[16px] text-sm"
+              v-for="(dateInfo, key) in formattedDateList"
+              :key="key"
+              :class="{ 'is-outlined': activeDateMap[dateInfo.day] !== day }"
+              @click="handleButtonClick(dateInfo.day)"
+            >
+              {{ formattedMonth(month) }}/{{ dateInfo.day }} ({{ dateInfo.dateName }})
+            </button>
+          </div>
         </div>
         <div
-          class="max-w-[712px] w-full h-[380px] rounded-3xl flex flex-col text-secondary-500 outline outline-2 bg-white outline-[rgba(0,115,240,0.16)] relative"
+          class="max-w-[712px] w-full h-[330px] rounded-3xl flex flex-col text-secondary-500 outline outline-2 bg-white outline-[rgba(0,115,240,0.16)] relative"
         >
           <div
-            class="h-[50px] flex flex-row justify-between bg-primary-800-light rounded-t-3xl font-semibold pl-7 border-b-1 border-primary-300 items-center shrink-0"
+            class="h-[38px] flex flex-row justify-between bg-primary-800-light rounded-t-3xl font-semibold pl-7 border-b-1 border-primary-300 items-center shrink-0 text-[13px]"
           >
             <p class="basis-2/3 h-full flex items-center font-semibold select-none">
               메뉴
@@ -217,7 +219,7 @@ onMounted(async () => {
               </div>
             </p>
             <p
-              class="basis-1/4 min-w-[130px] text-center flex justify-center items-center font-semibold select-none"
+              class="basis-1/4 min-w-[130px] text-right flex justify-end items-center font-semibold select-none pr-8"
             >
               판매액
               <div>
@@ -232,7 +234,7 @@ onMounted(async () => {
 
           <div class="h-full overflow-y-scroll scrollbar-hide">
             <div
-              class="flex flex-row justify-between font-normal pl-7 min-h-10 items-center border-b-1 border-primary-300 shrink-0 hover:bg-gray-200"
+              class="flex flex-row justify-between font-normal pl-7 min-h-8 items-center border-b-1 border-primary-300 shrink-0 hover:bg-gray-200 text-[13px]"
               v-for="(menu, index) in allOrderStatistics.menuSaleList"
               :key="index"
             >
@@ -248,7 +250,7 @@ onMounted(async () => {
                 {{ menu.menuCount }}개
               </p>
               <p
-                class="basis-1/4 min-w-[130px] text-center text-secondary-700-light"
+                class="basis-1/4 min-w-[130px] text-secondary-700-light text-right pr-8"
               >
                 {{ prettyPrice(menu.menuSale || 0) }}
               </p>
@@ -256,7 +258,7 @@ onMounted(async () => {
           </div>
 
           <div
-            class="grid place-items-center text-primary-900 font-medium text-2xl h-[73px] rounded-b-3xl bottom-0 shrink-0 bg-white border-secondary-600 shadow-[0px_-5px_6px_0px_rgba(0,0,0,0.1)]"
+            class="grid place-items-center text-primary-900 font-medium text-lg h-14 rounded-b-3xl bottom-0 shrink-0 bg-white border-secondary-600 shadow-[0px_-5px_6px_0px_rgba(0,0,0,0.1)]"
           >
             총액 : {{ prettyPrice(allOrderStatistics.totalSale || 0) }}
           </div>

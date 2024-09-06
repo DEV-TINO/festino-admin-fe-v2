@@ -2,7 +2,7 @@
 
 <template>
   <svg
-    class="w-2.5 h-2.5 ms-3 icon"
+    class="w-2 h-2 ms-3 icon"
     aria-hidden="true"
     xmlns="http://www.w3.org/2000/svg"
     fill="none"

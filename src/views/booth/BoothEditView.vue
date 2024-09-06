@@ -514,13 +514,13 @@ onMounted(async () => {
 
             <!-- 부스소개 -->
             <div class="flex w-full gap-2 flex-wrap xl:flex-nowrap">
-              <div class="w-[92px] flex items-center justify-start text-sm shrink-0">학과 소개</div>
+              <div class="w-[92px] flex items-center justify-start text-sm shrink-0">부스 소개</div>
               <div class="relative w-full">
                 <textarea
                   class="w-full h-[150px] border-[1px] border-gray-500 rounded-2xl px-[20px] py-[20px] focus:border-primary-900 resize-none text-sm"
                   type="text"
                   maxlength="300"
-                  placeholder="학과 소개를 작성해주세요."
+                  placeholder="부스 소개를 작성해주세요."
                   @input="handleInputBoothIntro($event)"
                   :value="boothInfo?.boothIntro ?? ''"
                   :disabled="isSubmit"

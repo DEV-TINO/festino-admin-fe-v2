@@ -180,23 +180,23 @@ onMounted(() => {
 </script>
 <template>
   <div
-    class="w-[650px] h-fit flex flex-col justify-start items-center bg-white rounded-2xl overflow-y-auto px-[52px] py-11 gap-5"
+    class="w-[570px] h-fit flex flex-col justify-start items-center bg-white rounded-2xl overflow-y-scroll p-8 gap-5"
   >
-    <div class="w-full flex justify-between items-center gap-5 shrink-0 font-semibold text-[30px] text-primary-900 h-9">
+    <div class="w-full flex justify-between items-center gap-5 shrink-0 font-semibold text-xl text-primary-900 h-9">
       <div class="w-[25px]"></div>
       주문 추가
-      <IconClose @click="closeModal()" class="cursor-pointer" />
+      <IconClose @click="closeModal()" class="cursor-pointer p-1 hover:bg-gray-100" />
     </div>
     <!-- 주문/서비스 -->
     <div class="flex items-center w-full gap-5">
       <div class="flex items-center gap-[28px]">
-        <div class="w-[110px] flex gap-2 cursor-pointer" @click="isService = true">
+        <div class="flex gap-2 cursor-pointer items-center text-sm" @click="isService = true">
           <IconRadio :is-active="isService" />
           <div>서비스 주문</div>
         </div>
       </div>
       <div class="flex items-center gap-[28px]">
-        <div class="w-[110px] flex gap-2 cursor-pointer" @click="isService = false">
+        <div class="flex gap-2 cursor-pointer items-center text-sm" @click="isService = false">
           <IconRadio :is-active="!isService" />
           <div>일반 주문</div>
         </div>
@@ -208,7 +208,7 @@ onMounted(() => {
       id="dropdownSearchButton"
       data-dropdown-toggle="dropdownSearch"
       data-dropdown-placement="bottom"
-      class="w-full focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center justify-between"
+      class="w-full focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-xs px-5 py-2.5 text-center inline-flex items-center justify-between"
       :class="selectedTableNum.length > 0 ? 'is-button ' : 'is-button is-outlined'"
       type="button"
       @click="toggleDropdown('table')"
@@ -254,13 +254,13 @@ onMounted(() => {
           <input
             type="text"
             id="input-group-search"
-            class="block w-full p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
+            class="block w-full p-2 ps-10 text-xs text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
             placeholder="테이블 번호 검색"
             v-model="searchTable"
           />
         </div>
       </div>
-      <ul class="py-2 text-sm max-h-[170px] overflow-auto" aria-labelledby="dropdownSearchButton">
+      <ul class="py-2 text-xs max-h-[170px] overflow-auto" aria-labelledby="dropdownSearchButton">
         <li
           v-for="(table, tableIndex) in filteredTableList"
           :key="tableIndex"
@@ -275,7 +275,7 @@ onMounted(() => {
               :checked="selectedTableNum.includes(table.tableNumIndex)"
               class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
             />
-            <label class="w-full py-2 ms-2 text-sm font-medium text-gray-900 rounded"
+            <label class="w-full py-2 ms-2 text-xs font-medium text-gray-900 rounded"
               >{{ table.tableNumIndex }} - {{ table.customTableNum }}번 테이블</label
             >
           </div>
@@ -283,7 +283,7 @@ onMounted(() => {
       </ul>
       <a
         href="#"
-        class="flex items-center justify-center p-3 text-sm text-danger border-t border-gray-200 rounded-b-lg bg-gray-50 font-bold"
+        class="flex items-center justify-center p-2 text-xs text-danger border-t border-gray-200 rounded-b-lg bg-gray-50 font-bold"
         @click="handleClickTotalDelete('table')"
       >
         전체 삭제
@@ -295,7 +295,7 @@ onMounted(() => {
       id="dropdownSearchButton"
       data-dropdown-toggle="dropdownSearch"
       data-dropdown-placement="bottom"
-      class="w-full focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center justify-between"
+      class="w-full focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-xs px-5 py-2.5 text-center inline-flex items-center justify-between"
       :class="selectedMenu.length > 0 ? 'is-button ' : 'is-button is-outlined'"
       type="button"
       @click="toggleDropdown('menu')"
@@ -337,13 +337,13 @@ onMounted(() => {
           <input
             type="text"
             id="input-group-search"
-            class="block w-full p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
+            class="block w-full p-2 ps-10 text-xs text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
             placeholder="메뉴 검색"
             v-model="searchMenu"
           />
         </div>
       </div>
-      <ul class="py-2 text-sm max-h-[170px] overflow-auto" aria-labelledby="dropdownSearchButton">
+      <ul class="py-2 text-xs max-h-[170px] overflow-auto" aria-labelledby="dropdownSearchButton">
         <li
           v-for="(menu, menuIndex) in filteredMenuList"
           :key="menuIndex"
@@ -358,13 +358,13 @@ onMounted(() => {
               :checked="selectedMenu.includes(menu)"
               class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
             />
-            <label class="w-full py-2 ms-2 text-sm font-medium text-gray-900 rounded">{{ menu.menuName }}</label>
+            <label class="w-full py-2 ms-2 text-xs font-medium text-gray-900 rounded">{{ menu.menuName }}</label>
           </div>
         </li>
       </ul>
       <a
         href="#"
-        class="flex items-center justify-center p-3 text-sm text-danger border-t border-gray-200 rounded-b-lg bg-gray-50 font-bold"
+        class="flex items-center justify-center p-2 text-xs text-danger border-t border-gray-200 rounded-b-lg bg-gray-50 font-bold"
         @click="handleClickTotalDelete('menu')"
       >
         전체 삭제
@@ -372,9 +372,9 @@ onMounted(() => {
     </div>
 
     <!-- Buttons -->
-    <div class="w-full flex justify-end items-center text-xl gap-5">
+    <div class="w-full flex justify-end items-center text-md gap-5">
       <button
-        class="is-button is-outlined w-[50px] h-[30px] font-semibold text-sm rounded-lg"
+        class="is-button is-outlined w-[50px] h-[30px] font-semibold text-xs rounded-lg"
         type="button"
         @click="addOrderList()"
       >
@@ -384,30 +384,30 @@ onMounted(() => {
 
     <!-- 메모 -->
     <div class="w-full">
-      <div class="text-left w-full pb-1">메모를 작성해주세요.</div>
+      <div class="text-left w-full pb-1 text-sm ml-1">메모</div>
       <textarea
         maxlength="50"
         :value="memo"
         @input="($event) => (memo = $event.target.value)"
         placeholder="메모를 작성해주세요"
-        class="w-full h-[66px] resize-none"
+        class="w-full h-[66px] resize-none text-sm rounded-xl"
         >{{ memo }}</textarea
       >
     </div>
     <!-- 메뉴 리스트 -->
     <div class="flex flex-col w-full gap-[10px]" v-if="Object.keys(orderList).length != 0">
-      <div class="text-xl font-medium">주문 목록</div>
+      <div class="text-sm font-medium">주문 목록</div>
       <div
         class="bg-primary-700 rounded-2xl p-4 overflow-auto"
         :class="isMenuDropdownOpen || isTableDropdownOpen ? 'max-h-[240px]' : ' max-h-[500px]'"
         id="orderContainer"
       >
-        <div v-for="(orders, tableNum) in orderList" :key="tableNum" class="mb-4">
-          <div class="font-bold pb-[20px]">{{ getTableCustomNum(tableNum) }}번 테이블</div>
+        <div v-for="(orders, tableNum) in orderList" :key="tableNum" class="mb-2 text-sm">
+          <div class="font-bold pb-1">{{ getTableCustomNum(tableNum) }}번 테이블</div>
           <div
             v-for="(order, orderIndex) in orders"
             :key="orderIndex"
-            class="grid grid-cols-[1fr_1fr_1fr_auto] pb-[5px]"
+            class="grid grid-cols-[1fr_1fr_1fr_auto] pb-[5px] items-center justify-center"
           >
             <div class="text-left">{{ order.menuName }}</div>
             <div class="text-left">{{ prettyPrice(order.menuPrice) }}</div>
@@ -422,7 +422,7 @@ onMounted(() => {
               </button>
               <input
                 type="text"
-                class="is-button font-normal is-outlined w-[60px] h-[27px] text-center text-black"
+                class="is-button font-normal is-outlined w-[50px] h-[25px] text-center text-black text-sm"
                 :value="order.menuCount"
                 @input="($event) => handleInputOrderCount(tableNum, order, $event)"
                 maxlength="2"
@@ -439,12 +439,12 @@ onMounted(() => {
               class="w-fit px-[10px] text-danger cursor-pointer place-self-end"
               @click="handleClickDeleteOrder(tableNum, order)"
             >
-              X
+              <IconClose class="w-3 h-3 my-[10px]" />
             </div>
           </div>
         </div>
         <div class="w-full border-secondary-900 border-1"></div>
-        <div class="pt-[10px] pb-[4px] flex justify-between text-secondary-700">
+        <div class="pt-[10px] pb-[4px] flex justify-between text-secondary-700 text-sm">
           <div>총 가격</div>
           <div class="font-bold">{{ prettyPrice(totalPrice) }}</div>
         </div>
@@ -452,11 +452,11 @@ onMounted(() => {
     </div>
 
     <!-- Buttons -->
-    <div class="w-full flex justify-end items-center text-xl gap-5">
-      <button class="is-button is-outlined w-[100px] h-[50px] font-semibold" type="button" @click="closeModal()">
+    <div class="w-full flex justify-end items-center text-xl gap-3">
+      <button class="is-button is-outlined font-semibold w-[60px] h-[35px] rounded-xl text-sm flex items-center justify-center text-primary-900 lg:text-md bg-primary-900cursor-pointer select-none" type="button" @click="closeModal()">
         취소
       </button>
-      <button @click="handleClickSaveButton()" class="is-button w-[100px] h-[50px] font-semibold">저장</button>
+      <button @click="handleClickSaveButton()" class="is-button font-semibold w-[60px] h-[35px] rounded-xl text-sm flex items-center justify-center text-white lg:text-md bg-primary-900cursor-pointer select-none">저장</button>
     </div>
   </div>
 </template>
