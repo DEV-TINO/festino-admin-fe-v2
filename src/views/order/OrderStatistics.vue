@@ -72,7 +72,6 @@ const handleButtonClick = async (key) => {
   if (key !== activeDate.value) {
     activeDate.value = key;
     day.value = activeDateMap[key];
-    console.log(day.value);
   }
   await fetchStatistics();
 };
