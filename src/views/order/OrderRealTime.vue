@@ -140,7 +140,7 @@ onUnmounted(() => {
         <div class="text-md font-semibold">조리 완료</div>
       </div>
       <div
-        class="min-w-[300px] flex 2xl:flex-col rounded-xl bg-success-500 gap-[20px] py-[30px] px-[20px] 2xl:justify-center 2xl:items-center overflow-x-auto 2xl:w-[420px]"
+        class="min-w-full flex 2xl:flex-col rounded-xl bg-success-500 gap-[20px] py-[30px] px-[20px] 2xl:justify-center 2xl:items-center overflow-x-auto 2xl:w-[420px]"
       >
         <OrderCard
           type="finish"

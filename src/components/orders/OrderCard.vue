@@ -18,7 +18,7 @@ const props = defineProps({
 </script>
 
 <template>
-  <div class="w-fit flex flex-col 2xl:items-center">
+  <div class="w-full flex flex-col 2xl:items-center 2xl:px-8">
     <OrderReadyCard v-if="type === 'ready'" v-bind="cardData" />
     <OrderCookingCard v-if="type === 'cooking'" v-bind="cardData" />
     <OrderFinishCard v-if="type === 'finish'" v-bind="cardData" />

@@ -65,7 +65,7 @@ const handleClickOrderDetail = () => {
 
 <template>
   <div
-    class="w-full min-w-[350px] max-w-[400px] h-[400px] flex flex-col justify-between outline outline-1 outline-primary-200 rounded-3xl"
+    class="w-full min-w-[350px] h-[400px] flex flex-col justify-between outline outline-1 outline-primary-200 rounded-3xl"
   >
     <div
       class="flex justify-between w-full h-[65px] items-center px-[28px] text-[13px] font-semibold bg-danger-700 rounded-t-3xl border-b-1 border-secondary-200 flex-wrap gap-x-2"

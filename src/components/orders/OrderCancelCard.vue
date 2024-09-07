@@ -68,7 +68,7 @@ const handleClickCancelRestore = () => {
 
 <template>
   <div
-    class="w-full min-w-[350px] max-w-[400px] h-[400px] flex flex-col justify-between outline outline-1 outline-primary-300 rounded-3xl"
+    class="w-full min-w-[350px] h-[400px] flex flex-col justify-between outline outline-1 outline-primary-300 rounded-3xl"
   >
     <div
       class="flex justify-between w-full h-[73px] items-center rounded-t-3xl border-b-1 border-primary-300-light px-[28px] text-sm font-semibold bg-cancel flex-wrap gap-x-2"
