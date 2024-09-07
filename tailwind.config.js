@@ -140,6 +140,9 @@ export default {
             DEFAULT: '#C7C7C7',
             light: '#D8D9DA',
           },
+          200: {
+            DEFAULT: '#B9B9B9',
+          },
         },
         secondary: {
           900: {
@@ -211,7 +214,7 @@ export default {
         primary: {
           900: {
             DEFAULT: 'rgba(0, 115, 240, 0.8)',
-            light: 'rgba(0, 115, 240, 0.16)'
+            light: 'rgba(0, 115, 240, 0.16)',
           },
           800: {
             DEFAULT: 'rgba(0, 115, 240, 0.4)',
