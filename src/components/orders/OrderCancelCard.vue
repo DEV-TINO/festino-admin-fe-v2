@@ -68,17 +68,17 @@ const handleClickCancelRestore = () => {
 
 <template>
   <div
-    class="w-full min-w-[430px] max-w-[552px] h-[500px] flex flex-col justify-between outline outline-1 outline-primary-300 rounded-3xl"
+    class="w-full min-w-[350px] max-w-[400px] h-[400px] flex flex-col justify-between outline outline-1 outline-primary-300 rounded-3xl"
   >
     <div
-      class="flex justify-between w-full h-[73px] items-center rounded-t-3xl border-b-1 border-primary-300-light px-[28px] text-lg font-semibold bg-cancel flex-wrap gap-x-2"
+      class="flex justify-between w-full h-[73px] items-center rounded-t-3xl border-b-1 border-primary-300-light px-[28px] text-sm font-semibold bg-cancel flex-wrap gap-x-2"
     >
       <div>No.{{ orderNum }}</div>
       <div>{{ getCustomTableNum(tableNum) }}번</div>
       <div>{{ userName }}</div>
       <div>{{ prettyPhoneNumber(phoneNum) }}</div>
       <div class="flex items-center gap-2">
-        <IconClock />
+        <IconClock class="p-[1px]" />
         <div class="font-medium">{{ getHourandMinute(createAt) }}</div>
       </div>
     </div>
@@ -90,8 +90,8 @@ const handleClickCancelRestore = () => {
     >
       <table class="w-full bg-white relative">
         <thead>
-          <tr class="h-[43px] border-b-1 border-primary-300">
-            <th class="text-start min-w-[250px] align-middle pl-[28px]">메뉴</th>
+          <tr class="h-[38px] border-b-1 border-primary-300 text-sm">
+            <th class="text-start min-w-[230px] align-middle pl-[28px]">메뉴</th>
             <th class="min-w-[30px] text-center align-middle">수량</th>
             <th class="min-w-[80px] text-right align-middle pr-[28px]">가격</th>
           </tr>
@@ -99,7 +99,7 @@ const handleClickCancelRestore = () => {
         <tbody>
           <tr
             v-for="(menu, menuIndex) in menuList"
-            class="h-[57px] border-b-1 border-primary-300 last:border-none hover:bg-slate-50"
+            class="h-[40px] border-b-1 border-primary-300 last:border-none hover:bg-slate-50 text-sm"
             :key="menuIndex"
           >
             <td class="text-start align-middle pl-[28px]">{{ menu.menuName }}</td>
@@ -114,12 +114,12 @@ const handleClickCancelRestore = () => {
     </div>
     <div class="flex justify-between items-center h-[73px] w-full rounded-b-3xl px-[28px] bg-cancel">
       <div
-        class="flex justify-center items-center rounded-2xl w-[107px] h-[42px] bg-white shrink-0 text-secondary-700-light font-semibold text-sm cursor-pointer"
+        class="flex justify-center items-center rounded-2xl w-[100px] h-9 bg-white shrink-0 text-secondary-700-light font-semibold text-sm cursor-pointer"
         @click="handleClickCancelRestore()"
       >
         주문 복구
       </div>
-      <div class="font-bold text-2xl text-secondary-700-light">{{ prettyPrice(totalPrice) }}</div>
+      <div class="font-bold text-md text-secondary-700-light">{{ prettyPrice(totalPrice) }}</div>
     </div>
   </div>
 </template>

@@ -94,13 +94,13 @@ onUnmounted(() => {
 <template>
   <div class="w-full flex justify-between gap-[20px] flex-wrap">
     <div class="flex flex-col grow gap-4 w-full 2xl:w-fit">
-      <div class="flex gap-4 items-center">
-        <div class="w-[20px] h-[20px] rounded-full bg-danger"></div>
-        <div class="text-lg">입금 대기</div>
-        <div v-if="isNewWaitDepositExist" class="text-lg text-danger pl-5">새로운 입금 대기가 들어왔어요!</div>
+      <div class="flex gap-2 items-center">
+        <div class="w-[14px] h-[14px] rounded-full bg-danger"></div>
+        <div class="text-md font-semibold">입금 대기</div>
+        <div v-if="isNewWaitDepositExist" class="text-sm text-danger pl-5">새로운 입금 대기가 들어왔어요!</div>
       </div>
       <div
-        class="min-w-[478px] flex 2xl:flex-col rounded-xl bg-danger-lighter gap-[40px] py-[40px] px-[24px] 2xl:justify-center 2xl:items-center overflow-x-auto"
+        class="min-w-full flex 2xl:flex-col rounded-xl bg-danger-lighter gap-[40px] py-[30px] px-[20px] 2xl:justify-center 2xl:items-center overflow-x-auto 2xl:w-[420px]"
       >
         <OrderCard
           type="ready"
@@ -110,17 +110,17 @@ onUnmounted(() => {
         ></OrderCard>
         <div v-if="waitDepositOrderList.length < 1" class="flex flex-col justify-center items-center">
           <IconNotFound :width="200" />
-          <div class="text-lg text-gray-500">입금 대기중인 주문이 없어요...</div>
+          <div class="text-md text-gray-500 pt-3">입금 대기중인 주문이 없어요...</div>
         </div>
       </div>
     </div>
     <div class="flex flex-col grow gap-4 w-full 2xl:w-fit">
-      <div class="flex gap-4 items-center">
-        <div class="w-[20px] h-[20px] rounded-full bg-primary-900"></div>
-        <div class="text-lg">조리중</div>
+      <div class="flex gap-2 items-center">
+        <div class="w-[14px] h-[14px] rounded-full bg-primary-900"></div>
+        <div class="text-md font-semibold">조리중</div>
       </div>
       <div
-        class="min-w-[478px] flex 2xl:flex-col rounded-xl bg-primary-500 gap-[40px] py-[40px] px-[24px] 2xl:justify-center 2xl:items-center overflow-x-auto"
+        class="min-w-full flex 2xl:flex-col rounded-xl bg-primary-500 gap-[40px] py-[30px] px-[20px] 2xl:justify-center 2xl:items-center overflow-x-auto 2xl:w-[420px]"
       >
         <OrderCard
           type="cooking"
@@ -130,17 +130,17 @@ onUnmounted(() => {
         ></OrderCard>
         <div v-if="cookingOrderList.length < 1" class="flex flex-col justify-center items-center">
           <IconNotFound :width="200" />
-          <div class="text-lg text-gray-500">조리할 메뉴가 없어요...</div>
+          <div class="text-md text-gray-500 pt-3">조리할 메뉴가 없어요...</div>
         </div>
       </div>
     </div>
     <div class="flex flex-col grow gap-4 w-full 2xl:w-fit">
       <div class="flex gap-4 items-center">
         <div class="w-[20px] h-[20px] rounded-full bg-success"></div>
-        <div class="text-lg">조리 완료</div>
+        <div class="text-md font-semibold">조리 완료</div>
       </div>
       <div
-        class="min-w-[478px] flex 2xl:flex-col rounded-xl bg-success-500 gap-[40px] py-[40px] px-[24px] 2xl:justify-center 2xl:items-center overflow-x-auto"
+        class="min-w-[300px] flex 2xl:flex-col rounded-xl bg-success-500 gap-[20px] py-[30px] px-[20px] 2xl:justify-center 2xl:items-center overflow-x-auto 2xl:w-[420px]"
       >
         <OrderCard
           type="finish"
@@ -150,7 +150,7 @@ onUnmounted(() => {
         ></OrderCard>
         <div v-if="finishOrderList.length < 1" class="flex flex-col justify-center items-center">
           <IconNotFound :width="200" />
-          <div class="text-lg text-gray-500">조리 완료된 주문이 없어요...</div>
+          <div class="text-md text-gray-500 pt-3">조리 완료된 주문이 없어요...</div>
         </div>
       </div>
     </div>

@@ -99,23 +99,23 @@ watchEffect(() => {
 
 <template>
   <div
-    class="w-[730px] h-[910px] flex flex-col justify-start items-center bg-white rounded-2xl overflow-y-auto px-[52px] py-11 gap-[24px]"
+    class="min-w-[515px] w-[610px] h-[700px] flex flex-col justify-start items-center bg-white rounded-2xl overflow-y-auto px-[52px] py-11 gap-[24px]"
   >
-    <div class="w-full flex justify-between items-center gap-5 shrink-0 font-semibold text-[30px] text-primary-900 h-9">
+    <div class="w-full flex justify-between items-center gap-5 shrink-0 font-semibold text-xl text-primary-900 h-9">
       <div class="w-[25px]"></div>
       테이블 커스텀
-      <IconClose @click="closeTableDetailModal()" class="cursor-pointer" />
+      <IconClose @click="closeTableDetailModal()" class="w-8 h-8 p-2 cursor-pointer hover:bg-gray-100 hover:rounded:2xl" />
     </div>
 
     <div class="w-full flex flex-col gap-5">
       <!-- Table Number -->
       <div class="flex flex-col justify-between items-center">
         <div
-          class="w-[262px] h-[51px] rounded-2xl flex gap-[10px] justify-center items-center bg-secondary-500 text-lg"
+          class="w-[230px] h-[48px] rounded-2xl flex gap-[10px] justify-center items-center bg-secondary-500 text-md"
         >
           <div class="text-primary-900 font-bold">현재 테이블 개수</div>
           <div
-            class="w-[68px] h-[34px] rounded-2xl border-1 border-secondary-700 text-secondary-500 text-center font-bold bg-white grid place-items-center"
+            class="w-[60px] h-[30px] rounded-2xl border-1 border-secondary-700 text-secondary-500 text-center font-bold bg-white grid place-items-center text-md"
           >
             {{ newTableNumList.length }}
           </div>
@@ -127,14 +127,14 @@ watchEffect(() => {
         <div class="flex gap-[10px]">
           <div
             @click="handleClickAddTableButton(1)"
-            class="w-[184px] rounded-2xl text-primary-900 text-xl border-1 border-primary-900 h-12 flex items-center justify-center gap-2 cursor-pointer hover:bg-primary-800"
+            class="w-[130px] rounded-2xl text-primary-900 text-sm border-1 border-primary-900 h-11 flex items-center justify-center gap-2 cursor-pointer hover:bg-primary-800"
           >
             <IconPlus />
             테이블 추가
           </div>
           <div
             @click="handleClickAddTableButton(10)"
-            class="w-[234px] rounded-2xl text-primary-900 text-xl border-1 border-primary-900 h-12 flex items-center justify-center gap-2 cursor-pointer hover:bg-primary-800"
+            class="w-[155px] rounded-2xl text-primary-900 text-sm border-1 border-primary-900 h-11 flex items-center justify-center gap-2 cursor-pointer hover:bg-primary-800"
           >
             <IconPlus />
             테이블 10개 추가
@@ -142,7 +142,7 @@ watchEffect(() => {
         </div>
         <div
           @click="handleClickTotalDeleteButton()"
-          class="w-[138px] rounded-2xl text-danger text-xl border-1 border-danger h-12 flex items-center justify-center gap-2 cursor-pointer hover:bg-danger-light"
+          class="w-[100px] rounded-2xl text-danger text-sm border-1 border-danger h-11 flex items-center justify-center gap-2 cursor-pointer hover:bg-danger-light"
         >
           전체 삭제
         </div>
@@ -151,21 +151,21 @@ watchEffect(() => {
     <!-- No Table -->
     <div
       v-if="newTableNumList.length === 0"
-      class="h-full flex flex-col justify-center items-center gap-8 text-center text-xl font-medium text-secondary-700-light"
+      class="h-full flex flex-col justify-center items-center gap-8 text-center text-md font-medium text-secondary-700-light"
     >
       <IconNotFound />
       현재 테이블이 존재하지 않습니다.<br />테이블 추가 버튼을 통해 테이블을 추가해주세요!
     </div>
     <!-- 설명 -->
-    <div v-if="newTableNumList.length !== 0" class="text-secondary-700-light font-medium text-center">
+    <div v-if="newTableNumList.length !== 0" class="text-secondary-700-light font-medium text-center text-sm">
       커스텀 테이블 번호를 입력해주세요. (예시: A-1, 최대 10글자)<br />미 입력 시 테이블 번호가 자동으로 설정됩니다.
     </div>
     <!-- Scroll -->
     <!-- Table List -->
     <div id="modalContainer" ref="modalContainer" class="grow overflow-y-auto">
-      <div class="grid grid-cols-2 gap-[18px] place-items-start px-2">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-[18px] place-items-start px-2">
         <div
-          class="w-[304px] h-auto flex flex-col gap-3 p-2 border-1 border-transparent rounded-2xl cursor-pointer hover:border-primary-900"
+          class="w-[250px] h-auto flex flex-col gap-3 p-2 border-1 border-transparent rounded-2xl cursor-pointer hover:border-primary-900"
           v-for="(table, tableIndex) in newTableNumList"
           :key="tableIndex"
           :id="'table-' + tableIndex"
@@ -176,9 +176,9 @@ watchEffect(() => {
           @drop="handleDropTable($event, tableIndex)"
         >
           <div class="flex justify-between">
-            <div class="text-xl font-medium">테이블 {{ tableIndex + 1 }}</div>
+            <div class="text-sm font-medium">테이블 {{ tableIndex + 1 }}</div>
             <div
-              class="w-[53px] h-[29px] rounded-5xl bg-danger-light text-danger cursor-pointer grid place-items-center font-medium text-sm"
+              class="w-[40px] h-[25px] rounded-full bg-danger-light text-danger cursor-pointer grid place-items-center font-medium text-xs"
               @click="handleClickDeleteButton(tableIndex)"
             >
               삭제
@@ -190,16 +190,16 @@ watchEffect(() => {
             @input="handleInputCustomTableNum($event, tableIndex)"
             :value="table.customTableNum"
             maxlength="10"
-            class="w-full h-[57px] border-1 border-secondary-700 rounded-2xl px-[17px] font-medium focus:border-primary-900 focus:outline-none focus:border-2"
+            class="w-full h-[45px] border-1 border-secondary-700 rounded-xl px-[17px] font-medium focus:border-primary-900 focus:outline-none focus:border-1 text-sm"
           />
         </div>
       </div>
     </div>
 
     <!-- Buttons -->
-    <div class="w-full flex justify-end items-center text-xl gap-5">
+    <div class="w-full flex justify-end items-center text-xl gap-3">
       <button
-        class="is-button is-outlined w-[100px] h-[50px] font-semibold"
+        class="is-button is-outlined font-semibold w-[60px] h-[35px] rounded-xl text-sm flex items-center justify-center text-primary-900 lg:text-md bg-primary-900cursor-pointer select-none"
         type="button"
         @click="handleClickCancelButton()"
       >
@@ -207,7 +207,7 @@ watchEffect(() => {
       </button>
       <button
         @click="handleClickSaveButton()"
-        class="is-button w-[100px] h-[50px] font-semibold"
+        class="is-button font-semibold w-[60px] h-[35px] rounded-xl text-sm flex items-center justify-center text-white lg:text-md bg-primary-900cursor-pointer select-none"
         type="submit"
         ref="submit"
         autofocus

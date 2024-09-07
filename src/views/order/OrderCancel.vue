@@ -65,12 +65,12 @@ onMounted(async () => {
 
 <template>
   <div class="w-full flex justify-between">
-    <div class="flex items-center">
+    <div class="min-w-[320px] flex items-center mr-5">
       <div class="flex gap-[13px] px-5">
         <div
           v-for="(orderMenu, index) in ORDER_FILTER"
           :key="index"
-          class="cursor-pointer text-xl"
+          class="cursor-pointer text-sm"
           :class="selectedFilterMenu === orderMenu ? 'font-bold' : ''"
           @click="selectedFilterMenu = orderMenu"
         >
@@ -78,10 +78,10 @@ onMounted(async () => {
         </div>
       </div>
       <div
-        class="is-button w-[94px] h-[30px] gap-1 text-sm flex justify-center items-center cursor-pointer"
+        class="is-button w-[90px] h-[30px] gap-1 text-xs flex justify-center items-center cursor-pointer"
         @click="handleClickRefreshButton()"
       >
-        <IconRefreshVector />
+        <IconRefreshVector class="w-4 h-4 p-[2px]" />
         새로고침
       </div>
     </div>
@@ -92,8 +92,8 @@ onMounted(async () => {
       @focusout="isFocus = false"
     >
       <IconSearch />
-      <input v-model="searchMenu" placeholder="주문 검색" class="grow focus:outline-none focus:border-none" />
-      <button class="w-[75px] h-[30px] rounded-[4px] bg-primary-900 text-white">Search</button>
+      <input v-model="searchMenu" placeholder="주문 검색" class="grow focus:outline-none focus:border-none text-sm" />
+      <button class="w-[75px] h-[30px] rounded-xl text-sm bg-primary-900 text-white">Search</button>
     </div>
   </div>
   <div class="grid 2xl:grid-cols-3 lg:grid-cols-2 place-items-center gap-10">

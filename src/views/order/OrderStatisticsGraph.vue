@@ -34,7 +34,7 @@ const chartData = ref({
 
 const options = ref({
   responsive: false,
-  maintainAspectRatio: false,
+  maintainAspectRatio: true,
   plugins: {
     title: { display: false },
     legend: { display: false },
@@ -54,14 +54,14 @@ const options = ref({
       title: {
         display: true,
         text: '[ 메뉴 ]',
-        font: { size: 14 }
+        font: { size: 12 }
       },
       ticks: {
         maxRotation: 30,
         minRotation: 0,
         autoSkip: false,
         font: {
-          size: 12,
+          size: 10,
         },
       },
       barThickness: 60,
@@ -73,7 +73,7 @@ const options = ref({
       title: {
         display: true,
         text: '[ 판매량 ]',
-        font: { size: 14 }
+        font: { size: 12 }
       },
       ticks: {
         stepSize: 10,
@@ -150,13 +150,13 @@ watchEffect(
 <template>
   <div class="w-full flex flex-col justify-center">
     <div class="w-full overflow-x-auto scrollbar-hide">
-      <div v-if="!isLoading && isDataReady" class="min-w-[700px] h-[500px]">
+      <div v-if="!isLoading && isDataReady" class="h-[400px]">
         <Bar 
           v-if="isDataReady && !isLoading"
           ref="chartInstance"
           :data="chartData"
           :options="options"
-          class="h-[500px]"
+          class="h-[400px]"
         />
       </div>
     </div>

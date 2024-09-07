@@ -67,21 +67,21 @@ onMounted(() => {
 </script>
 <template>
   <form @submit.prevent="handleSubmit()">
-    <div class="w-[780px] h-[716px] bg-white rounded-2xl py-[50px] px-[50px] flex flex-col justify-between">
+    <div class="w-[600px] h-[600px] bg-white rounded-2xl p-10 flex flex-col justify-between">
       <!-- Inputs -->
       <div class="flex flex-col w-full gap-[28px]">
         <!-- 메뉴 -->
         <div class="flex items-center w-full">
-          <div class="w-[80px] flex-shrink-0 text-2xl">메뉴</div>
+          <div class="w-[80px] flex-shrink-0 text-md">메뉴</div>
           <div class="grow relative">
             <input
-              class="w-full h-[60px] border border-gray-400 bg-white px-[20px] rounded-2xl active:border-primary-900"
+              class="w-full h-[45px] border border-gray-400 bg-white px-[20px] rounded-xl active:border-primary-900 text-sm"
               type="text"
               placeholder="메뉴 이름을 작성해주세요"
               @input="handleInputMenuName($event)"
               :value="menuInfo.menuName"
             />
-            <div v-if="menuInfo.menuName === '' && isSubmit" class="absolute left-4 top-[64px] text-danger text-sm">
+            <div v-if="menuInfo.menuName === '' && isSubmit" class="absolute left-4 top-[51px] text-danger text-xs">
               * 메뉴 이름을 작성해주세요.
             </div>
           </div>
@@ -89,17 +89,17 @@ onMounted(() => {
 
         <!-- 가격 -->
         <div class="flex items-center w-full">
-          <div class="w-[80px] flex-shrink-0 text-2xl">가격</div>
+          <div class="w-[80px] flex-shrink-0 text-md">가격</div>
           <div class="grow relative">
             <input
-              class="w-full h-[60px] border border-gray-400 bg-white px-[20px] rounded-2xl active:border-primary-900"
+              class="w-full h-[45px] border border-gray-400 bg-white px-[20px] rounded-xl active:border-primary-900 text-sm"
               type="text"
               placeholder="가격을 작성해주세요"
               @input="handleInputMenuPrice($event)"
               :value="menuInfo.menuPrice"
               maxlength="6"
             />
-            <div v-if="menuInfo.menuPrice === '' && isSubmit" class="absolute left-4 top-[64px] text-danger text-sm">
+            <div v-if="menuInfo.menuPrice === '' && isSubmit" class="absolute left-4 top-[51px] text-danger text-xs">
               * 가격을 작성해주세요.
             </div>
           </div>
@@ -107,10 +107,10 @@ onMounted(() => {
 
         <!-- 설명 -->
         <div class="flex items-center w-full">
-          <div class="w-[80px] flex-shrink-0 text-2xl">설명</div>
+          <div class="w-[80px] flex-shrink-0 text-md">설명</div>
           <div class="grow relative">
             <textarea
-              class="w-full h-[120px] border border-gray-400 bg-white px-[20px] py-[20px] rounded-2xl active:border-primary-900 resize-none"
+              class="w-full h-[120px] border border-gray-400 bg-white px-[20px] py-[20px] rounded-2xl active:border-primary-900 resize-none text-sm"
               type="text"
               maxlength="60"
               placeholder="메뉴 설명을 작성해주세요"
@@ -119,7 +119,7 @@ onMounted(() => {
             ></textarea>
             <div
               v-if="menuInfo.menuDescription === '' && isSubmit"
-              class="absolute left-4 top-[124px] text-danger text-sm"
+              class="absolute left-4 top-[124px] text-danger text-xs"
             >
               * 메뉴 설명을 작성해주세요.
             </div>
@@ -128,12 +128,12 @@ onMounted(() => {
 
         <!-- 이미지 -->
         <div class="flex items-center w-full">
-          <div class="w-[80px] flex-shrink-0 text-2xl">이미지</div>
+          <div class="w-[80px] flex-shrink-0 text-md">이미지</div>
           <div class="grow relative">
             <label
               v-if="menuInfo.menuImage === ''"
               for="menu-image"
-              class="flex flex-col items-center justify-center w-full h-[150px] border border-dashed border-gray-500 bg-secondary-300 hover:bg-slate-200 px-[20px] rounded-2xl active:border-primary-900"
+              class="flex flex-col items-center justify-center w-full h-[130px] border border-dashed border-gray-500 bg-secondary-300 hover:bg-slate-200 px-[20px] rounded-2xl active:border-primary-900"
             >
               <IconFileUpload />
               <p class="mb-2 text-sm text-gray-500">메뉴 사진을 등록해주세요.</p>
@@ -166,13 +166,13 @@ onMounted(() => {
         <div v-if="ADMIN_CATEGORY[boothInfo.adminCategory] === 'night'" class="flex items-center w-full">
           <div class="w-[80px] shrink-0"></div>
           <div class="flex items-center gap-[28px]">
-            <div class="w-[110px] flex gap-2 cursor-pointer" @click="isMainMenu = true">
+            <div class="w-[110px] flex gap-2 cursor-pointer text-sm" @click="isMainMenu = true">
               <IconRadio :is-active="isMainMenu" />
               <div>메인 메뉴</div>
             </div>
           </div>
           <div v-if="ADMIN_CATEGORY[boothInfo.adminCategory] === 'night'" class="flex items-center gap-[28px]">
-            <div class="w-[110px] flex gap-2 cursor-pointer" @click="isMainMenu = false">
+            <div class="w-[110px] flex gap-2 cursor-pointer text-sm" @click="isMainMenu = false">
               <IconRadio :is-active="!isMainMenu" />
               <div>서브 메뉴</div>
             </div>
@@ -183,13 +183,13 @@ onMounted(() => {
       <!-- Buttons -->
       <div class="w-full flex justify-end items-center gap-[10px]">
         <button
-          class="is-button is-outlined w-[100px] h-[50px] font-semibold text-xl"
+          class="is-button is-outlined font-semibold w-[60px] h-[35px] rounded-xl text-sm flex items-center justify-center text-primary-900 lg:text-md bg-primary-900cursor-pointer select-none"
           type="button"
           @click="closeModal()"
         >
           취소
         </button>
-        <button class="is-button w-[100px] h-[50px] font-semibold text-xl" type="submit" ref="submit" autofocus>
+        <button class="is-button font-semibold w-[60px] h-[35px] rounded-xl text-sm flex items-center justify-center text-white lg:text-md bg-primary-900cursor-pointer select-none" type="submit" ref="submit" autofocus>
           확인
         </button>
       </div>

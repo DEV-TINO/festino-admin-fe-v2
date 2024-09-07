@@ -37,10 +37,10 @@ onMounted(async () => {
 <template>
   <form @submit.prevent="handleSubmit($event)">
     <div
-      class="w-[880px] min-h-[350px] bg-white shadow-primary rounded-2xl flex flex-col justify-between gap-[20px] px-[40px] py-[32px]"
+      class="w-[600px] min-h-[350px] bg-white shadow-primary rounded-2xl flex flex-col justify-between gap-[20px] px-[40px] py-[32px]"
     >
       <!-- Header -->
-      <div class="flex w-full items-center justify-center text-primary-900 text-3xl font-semibold relative">
+      <div class="flex w-full items-center justify-center text-primary-900 text-xl font-semibold relative">
         {{ ORDER_STATUS?.[selectType] ?? ORDER_STATUS.ready }}
 
         <button
@@ -93,33 +93,33 @@ onMounted(async () => {
       <!-- OrderInfo -->
       <div v-if="selectType !== 'cooking'" class="w-full flex flex-col gap-4 text-sm">
         <div class="text-secondary-700-light">예약자 정보</div>
-        <div class="flex gap-[2px] items-center text-secondary-700-light">
-          <IconRecipe />
+        <div class="flex gap-1 items-center text-secondary-700-light text-xs">
+          <IconClock class="w-4 h-4 p-[1px]" />
           <div>{{ getHourandMinute(orderInfo.createAt) }}</div>
-          <IconOrderCheck v-if="selectType === 'finish'" class="ml-3" />
+          <IconOrderCheck v-if="selectType === 'finish'" class="ml-2 p-[1px]" />
           <div v-if="selectType === 'finish'">
             {{ getHourandMinute(orderInfo.finishAt) }}
           </div>
         </div>
 
-        <div class="relative w-full rounded-2xl border-primary-700 border shadow-primary">
-          <table class="w-full">
-            <thead class="bg-primary-700-light text-secondary-900 h-[50px]">
+        <div class="relative w-full rounded-2xl outline outline-primary-900-light outline-1">
+          <table class="w-full text-xs">
+            <thead class="bg-primary-800-light text-secondary-900 h-[50px] font-semibold">
               <tr>
-                <th class="rounded-tl-2xl">No.</th>
+                <th class="rounded-tl-2xl pl-2">No.</th>
                 <th>테이블 번호</th>
                 <th>입금자명</th>
                 <th>전화번호</th>
-                <th class="rounded-tr-2xl">가격</th>
+                <th class="rounded-tr-2xl pr-2">가격</th>
               </tr>
             </thead>
             <tbody>
               <tr class="text-center h-[50px]">
-                <td>{{ orderInfo.orderNum }}</td>
+                <td class="pl-2">{{ orderInfo.orderNum }}</td>
                 <td>{{ getCustomTableNum(orderInfo.tableNum) }}번</td>
                 <td>{{ orderInfo.userName }}</td>
                 <td>{{ prettyPhoneNumber(orderInfo.phoneNum) }}</td>
-                <td>{{ prettyPrice(orderInfo.totalPrice) }}</td>
+                <td class="pr-2">{{ prettyPrice(orderInfo.totalPrice) }}</td>
               </tr>
             </tbody>
           </table>
@@ -129,18 +129,18 @@ onMounted(async () => {
       <!-- MenuList -->
       <div v-if="selectType !== 'cooking'" class="w-full flex flex-col gap-4 text-sm">
         <div class="text-secondary-700-light">상세 메뉴</div>
-        <div class="relative w-full rounded-2xl border-primary-700 border shadow-primary">
+        <div class="relative w-full rounded-2xl outline outline-primary-900-light outline-1 text-xs">
           <table class="w-full">
             <thead class="text-secondary-900 h-[50px]">
-              <tr class="bg-primary-700-light">
-                <th class="min-w-[400px] text-start align-middle pl-[26px] rounded-tl-2xl">메뉴</th>
+              <tr class="w-full bg-primary-800-light">
+                <th class="min-w-[250px] text-start align-middle pl-[26px] rounded-tl-2xl">메뉴</th>
                 <th class="text-center align-middle">수량</th>
-                <th class="min-w-[100px] text-end align-middle pr-[40px] rounded-tr-2xl">가격</th>
+                <th class="min-w-[100px] text-end align-middle pr-[26px] rounded-tr-2xl">가격</th>
               </tr>
             </thead>
             <tbody>
               <tr v-for="(menu, menuIndex) in menuInfoList" class="text-center h-[50px]" :key="menuIndex">
-                <td class="min-w-[400px] text-start align-middle pl-[26px]">{{ menu.menuName }}</td>
+                <td class="min-w-[250x] text-start align-middle pl-[26px]">{{ menu.menuName }}</td>
                 <td class="text-center align-middle">{{ prettyMenuNum(menu.menuCount) }}</td>
                 <td class="min-w-[100px] text-end align-middle pr-[26px]">{{ prettyPrice(menu.menuPrice) }}</td>
               </tr>
@@ -150,28 +150,28 @@ onMounted(async () => {
       </div>
 
       <div v-if="note" class="flex flex-col gap-4">
-        <div class="text-secondary-700-light text-xl">메모</div>
+        <div class="text-secondary-700-light text-sm">메모</div>
         <div class="w-full h-24 border-primary-700 border rounded-2xl">
-          <p class="text-secondary-700-light p-6">{{ note }}</p>
+          <p class="text-secondary-700-light p-4 text-sm">{{ note }}</p>
         </div>
       </div>
 
       <!-- Button Group -->
-      <div v-if="selectType === 'ready'" class="flex justify-between items-end gap-[20px] h-[72px]">
-        <button type="submit" class="is-button is-outlined w-[390px] h-[48px]" value="cancel">주문 취소</button>
-        <button type="submit" class="is-button w-[390px] h-[48px]" ref="submit" value="deposit">입금 확인</button>
+      <div v-if="selectType === 'ready'" class="flex justify-between items-end gap-[20px] pt-3">
+        <button type="submit" class="is-button is-outlined font-semibold w-1/2 h-[35px] rounded-2xl text-sm flex items-center justify-center text-primary-900 lg:text-md bg-primary-900cursor-pointer select-none" value="cancel">주문 취소</button>
+        <button type="submit" class="is-button font-semibold w-1/2 h-[35px] rounded-2xl text-sm flex items-center justify-center text-white lg:text-md bg-primary-900cursor-pointer select-none" ref="submit" value="deposit">입금 확인</button>
       </div>
-      <div v-if="selectType === 'finish'" class="flex justify-between items-end gap-[20px] h-[72px]">
-        <button type="submit" class="is-button w-full h-[48px]" ref="submit" value="restore">주문 복구</button>
+      <div v-if="selectType === 'finish'" class="flex justify-between items-end gap-[20px] pt-3">
+        <button type="submit" class="is-button font-semibold w-full h-[35px] rounded-2xl text-sm flex items-center justify-center text-white lg:text-md bg-primary-900cursor-pointer select-none" ref="submit" value="restore">주문 복구</button>
       </div>
       <div
         v-if="selectType === 'complete' || selectType === 'cooking'"
-        class="flex justify-between items-end gap-[20px] h-[72px]"
+        class="flex justify-between items-end gap-[20px] pt-3"
       >
-        <button type="submit" class="is-button w-full h-[48px]" ref="submit" value="complete">조리 완료</button>
+        <button type="submit" class="is-button font-semibold w-full h-[35px] rounded2xl text-sm flex items-center justify-center text-white lg:text-md bg-primary-900cursor-pointer select-none" ref="submit" value="complete">조리 완료</button>
       </div>
-      <div v-if="selectType === 'cancel'" class="flex justify-between items-end gap-[20px] h-[72px]">
-        <button type="submit" class="is-button w-full h-[48px]" ref="submit" value="cancel">주문 취소 복구</button>
+      <div v-if="selectType === 'cancel'" class="flex justify-between items-end gap-[20px] pt-3">
+        <button type="submit" class="is-button font-semibold w-full h-[35px] rounded-2xl text-sm flex items-center justify-center text-white lg:text-md bg-primary-900cursor-pointer select-none" ref="submit" value="cancel">주문 취소 복구</button>
       </div>
     </div>
   </form>

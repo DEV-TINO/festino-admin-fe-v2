@@ -271,7 +271,7 @@ onUnmounted(() => {
       </div>
     </div>
 
-    <div class="flex gap-[10px] overflow-x-auto pb-[40px]">
+    <div class="flex gap-[10px] overflow-x-auto pb-[20px]">
       <button
         type="button"
         class="is-button w-[120px] h-[40px] relative text-sm rounded-[16px]"

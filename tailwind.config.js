@@ -211,6 +211,7 @@ export default {
         primary: {
           900: {
             DEFAULT: 'rgba(0, 115, 240, 0.8)',
+            light: 'rgba(0, 115, 240, 0.16)'
           },
           800: {
             DEFAULT: 'rgba(0, 115, 240, 0.4)',

@@ -46,8 +46,8 @@ onUnmounted(() => {
 
 <template>
   <div class="flex gap-4 items-center">
-    <div class="w-[20px] h-[20px] rounded-full bg-primary-900"></div>
-    <div class="text-lg">조리 중</div>
+    <div class="w-[14px] h-[14px] rounded-full bg-primary-900"></div>
+    <div class="text-md font-semibold">조리 중</div>
   </div>
   <div class="grid 2xl:grid-cols-3 lg:grid-cols-2 place-items-center gap-10">
     <OrderCookingCard
