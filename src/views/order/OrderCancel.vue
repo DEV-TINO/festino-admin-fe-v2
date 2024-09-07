@@ -35,9 +35,11 @@ const updateFilteredMenuList = () => {
   }
 
   if (selectedFilterMenu.value === ORDER_FILTER.table) {
-    filteredList.sort((a, b) => a.tableNum - b.tableNum);
+    filteredList.sort((a, b) => b.tableNum - a.tableNum);
   } else if (selectedFilterMenu.value === ORDER_FILTER.price) {
-    filteredList.sort((a, b) => a.totalPrice - b.totalPrice);
+    filteredList.sort((a, b) => b.totalPrice - a.totalPrice);
+  } else if (selectedFilterMenu.value === ORDER_FILTER.recent) {
+    filteredList.sort((a, b) => b.createAt.localeCompare(a.createAt));
   }
 
   filteredMenuList.value = filteredList;
