@@ -47,7 +47,7 @@ const boothIntroLength = computed(() => boothInfo.value?.boothIntro?.length ?? 0
 const fileUrls = ref([]);
 
 const serviceHours = ref('');
-const type = ref("edit");
+const type = ref('edit');
 
 const handleInputBoothName = (event) => {
   if (isSubmit.value) return;
@@ -62,16 +62,16 @@ const handleInputServiceHours = (event) => {
 const handleInputBoothIntro = (event) => {
   if (isSubmit.value) return;
 
-  const textarea = event.target;
-  const lines = textarea.value.split('\n');
+  // const textarea = event.target;
+  // const lines = textarea.value.split('\n');
 
   // 줄 수가 제한을 초과하면 텍스트를 잘라서 업데이트
-  if (lines.length > 3) {
-    textarea.value = lines.slice(0, 3).join('\n');
-  }
+  // if (lines.length > 3) {
+  //   textarea.value = lines.slice(0, 3).join('\n');
+  // }
 
   // 업데이트된 값을 boothInfo에 적용
-  boothInfo.value.boothIntro = textarea.value;
+  boothInfo.value.boothIntro = event.target.value;
 };
 
 const handleDeleteImage = (id) => {
@@ -104,7 +104,7 @@ const handleClickDeleteMenu = async ({ menuIndex, menuId }) => {
 };
 
 const handleClickSumbit = async (type) => {
-  if(type == "edit") {
+  if (type == 'edit') {
     openLoadingModal();
     if (isSubmit.value) return;
     isSubmit.value = true;
@@ -239,10 +239,9 @@ const handleSelectMenu = (index) => {
 
 const isSelectedMenu = (index) => {
   if (selectedMenuIndex.value !== -1) {
-    if (index === selectedMenuIndex.value) return "border-primary-900";
-    else return "border-primary";
-  }
-  else return "border-primary";
+    if (index === selectedMenuIndex.value) return 'border-primary-900';
+    else return 'border-primary';
+  } else return 'border-primary';
 };
 
 const handleSelectImage = (index) => {
@@ -261,10 +260,9 @@ const handleSelectImage = (index) => {
 
 const isSelectedImage = (index) => {
   if (selectedImageIndex.value !== -1) {
-    if (index === selectedImageIndex.value) return "border-primary-900";
-    else return "border-secondary-300";
-  }
-  else return "border-secondary-300";
+    if (index === selectedImageIndex.value) return 'border-primary-900';
+    else return 'border-secondary-300';
+  } else return 'border-secondary-300';
 };
 
 watch(selectedBoothId, async () => {
@@ -355,18 +353,19 @@ onMounted(async () => {
         <IconBoothListToggle :width="48" :is-active="boothInfo?.isOpen" @click="boothInfo.isOpen = !boothInfo.isOpen" />
       </div>
       <div class="relative flex flex-col gap-[10px] items-start">
-        <div class="font-bold text-base">부스 소개</div>
+        <div class="flex justify-between w-full items-center">
+          <div class="font-bold text-base">부스 소개</div>
+          <div class="text-sm text-secondary-900-light">{{ boothIntroLength }}/2000</div>
+        </div>
         <textarea
           type="text"
           placeholder="부스 소개를 작성해주세요."
-          class="resize-none w-full h-[124px] bg-primary-300-light rounded-3xl text-sm border-none p-5 overflow-hidden placeholder:text-secondary-900-light overflow-y-clip"
-          maxlength="100"
+          class="resize-none w-full h-[200px] bg-primary-300-light rounded-3xl text-sm border-none p-5 placeholder:text-secondary-900-light"
+          maxlength="2000"
           @input="handleInputBoothIntro($event)"
           :value="boothInfo.boothIntro"
           :disabled="isSubmit"
-          rows="3"
-        />
-        <div class="absolute bottom-4 right-5 text-sm text-secondary-900-light">{{ boothIntroLength }}/100</div>
+        ></textarea>
       </div>
       <div class="flex flex-col gap-[10px] items-start">
         <div class="font-bold text-base">부스 사진</div>
@@ -432,12 +431,15 @@ onMounted(async () => {
           <div
             v-for="(menu, index) in menuList"
             :key="menu.menuId"
-            @click = "handleSelectMenu(index)"
+            @click="handleSelectMenu(index)"
             class="w-full h-fit p-[14px] bg-white rounded-3xl border flex flex-col justify-between"
             :class="isSelectedMenu(index)"
           >
             <div class="flex mb-[12px]">
-              <img :src="menu.menuImage" class="rounded-3xl w-[94px] h-[94px] mr-3" />
+              <div
+                class="w-[94px] h-[94px] bg-contain bg-no-repeat bg-center bg-white rounded-xl flex-shrink-0 border-gray-200 border mr-3"
+                :style="setBackgroundImage(menu.menuImage)"
+              ></div>
               <div class="w-full flex flex-col justify-between">
                 <div>
                   <div class="pb-3 pt-[9px] flex justify-between">
@@ -445,7 +447,8 @@ onMounted(async () => {
                       {{ menu.menuName }}
                     </div>
                     <div class="flex">
-                      <div v-if="ADMIN_CATEGORY[boothInfo.adminCategory] === 'night'"
+                      <div
+                        v-if="ADMIN_CATEGORY[boothInfo.adminCategory] === 'night'"
                         class="flex items-center justify-center w-[45px] h-[17px] bg-secondary-300 text-[8px] rounded-full"
                       >
                         {{ MENU_TYPE[menu.menuType] }}
@@ -491,7 +494,8 @@ onMounted(async () => {
               </div>
             </div>
           </div>
-          <div @click="openMobileModal({})"
+          <div
+            @click="openMobileModal({})"
             class="w-full h-[150px] flex flex-col items-center justify-center border-dashed border-2 rounded-3xl bg-primary-300-light"
           >
             <div class="flex flex-col items-center justify-center p-5">
@@ -503,11 +507,7 @@ onMounted(async () => {
       </div>
       <!-- 테이블 커스텀 -->
       <div v-if="ADMIN_CATEGORY[boothInfo.adminCategory] === 'night'" class="flex flex-col w-full">
-        <div
-          class="font-bold text-base pb-2.5"
-        >
-          현재 테이블 개수 : {{ tableNum }}개
-        </div>
+        <div class="font-bold text-base pb-2.5">현재 테이블 개수 : {{ tableNum }}개</div>
         <div class="flex w-full flex-wrap justify-between">
           <div v-for="table in tableNumList" :key="table.tableNumIndex" class="py-2.5 w-[48%]">
             <div class="rounded-xl border border-primary-700 text-sm flex">
@@ -517,16 +517,14 @@ onMounted(async () => {
           </div>
         </div>
         <div class="flex justify-end pt-2.5">
-          <button class="bg-primary-900 text-white px-6 py-2 rounded-xl font-semibold" @click="openCustomTablePopup()">테이블 커스텀</button>
+          <button class="bg-primary-900 text-white px-6 py-2 rounded-xl font-semibold" @click="openCustomTablePopup()">
+            테이블 커스텀
+          </button>
         </div>
       </div>
       <!-- 계좌정보 -->
       <div v-if="ADMIN_CATEGORY[boothInfo.adminCategory] === 'night'" class="flex flex-col gap-[20px] w-full">
-        <div
-          class="font-bold text-base"
-        >
-          계좌 정보
-        </div>
+        <div class="font-bold text-base">계좌 정보</div>
         <div class="flex flex-col gap-[10px]">
           <div class="flex items-center justify-between">
             <div class="text-secondary-700-light text-sm min-w-[100px]">예금주</div>
