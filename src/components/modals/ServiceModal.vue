@@ -10,6 +10,7 @@ import { prettyPrice } from '@/utils/utils';
 import IconDelete from '../icons/IconDelete.vue';
 import IconTrash from '../icons/IconTrash.vue';
 import IconOrderPlus from '../icons/IconOrderPlus.vue';
+import IconOrderMinus from '../icons/IconOrderMinus.vue';
 
 const useBaseModalStore = useBaseModal();
 const useTableDetailStore = useTableDetail();
@@ -455,10 +456,13 @@ onMounted(() => {
                   <div>{{ order.menuName }}</div>
                   <div>{{ prettyPrice(order.menuPrice) }}</div>
                 </div>
-                <div class="w-[100px] h-[30px] bg-primary-800-light flex items-center justify-around rounded-5xl">
-                  <IconTrash />
-                  <div>{{ order.menuCount }}</div>
-                  <IconOrderPlus />
+                <div class="flex gap-3 justify-center items-center">
+                  <div class="w-[100px] h-[30px] bg-primary-800-light flex items-center justify-around rounded-5xl">
+                    <IconOrderMinus class="cursor-pointer" @click="handleClickMenuMinus(tableNum, order)" />
+                    <div>{{ order.menuCount }}</div>
+                    <IconOrderPlus class="cursor-pointer" @click="handleClickMenuPlus(tableNum, order)" />
+                  </div>
+                  <IconTrash class="cursor-pointer" @click="handleClickDeleteOrder(tableNum, order)" />
                 </div>
               </div>
             </div>
@@ -471,7 +475,7 @@ onMounted(() => {
       </div>
 
       <!-- 메모 -->
-      <div class="w-full flex flex-col gap-4">
+      <div class="w-full flex flex-col gap-4 px-1">
         <div class="w-full text-xl">메모</div>
         <textarea
           maxlength="50"
