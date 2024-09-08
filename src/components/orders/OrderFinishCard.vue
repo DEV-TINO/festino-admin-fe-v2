@@ -1,5 +1,4 @@
 <script setup>
-import { ref } from 'vue';
 import { getHourandMinute, prettyDate, prettyMenuNum, prettyPhoneNumber, prettyPrice } from '@/utils/utils';
 import { useOrderPopup } from '@/stores/orders/orderPopup';
 import { useTableDetail } from '@/stores/booths/tableDetail';
@@ -79,7 +78,7 @@ const handleClickOrderRestore = () => {
 <template>
   <div
     v-if="orderStatus != 'realTime'"
-    class="w-full min-w-[350px] max-w-[400px] h-[400px] rounded-3xl flex flex-col justify-between outline outline-1 outline-primary-700"
+    class="w-full min-w-[350px] h-[400px] rounded-3xl flex flex-col justify-between outline outline-1 outline-primary-700"
   >
     <div
       class="flex justify-between w-full h-[73px] items-center px-[28px] text-sm font-semibold bg-success-700 flex-wrap gap-x-2 rounded-t-3xl border-b-1 border-success-700-light"
@@ -137,7 +136,7 @@ const handleClickOrderRestore = () => {
 
   <div
     v-if="orderStatus === 'realTime'"
-    class="w-full min-w-[380px] max-w-[400px] h-[92px] rounded-3xl flex justify-between items-center outline outline-1 outline-primary-700 bg-success-700 px-6"
+    class="w-full min-w-[380px] h-[92px] rounded-3xl flex justify-between items-center outline outline-1 outline-primary-700 bg-success-700 px-6"
   >
     <div class="w-full flex flex-col justify-center text-secondary-700-light font-medium gap-[11px]">
       <div class="flex gap-[11px] items-center">

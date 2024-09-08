@@ -124,7 +124,7 @@ const handleInputServeCount = async (cook, event) => {
 
 <template>
   <div
-    class="w-full min-w-[350px] max-w-[400px] h-[400px] rounded-3xl flex flex-col justify-between outline outline-1 outline-primary-800"
+    class="w-full min-w-[350px] h-[400px] rounded-3xl flex flex-col justify-between outline outline-1 outline-primary-800"
   >
     <div
       class="flex justify-center w-full h-[65px] items-center rounded-t-3xl px-[28px] text-lg font-semibold bg-primary-500 border-b-1 border-primary-800"
@@ -209,8 +209,12 @@ const handleInputServeCount = async (cook, event) => {
     <div
       class="flex justify-between items-center h-[65px] w-full rounded-b-3xl px-[28px] bg-primary-500 text-secondary-700-light"
     >
-      <div class="text-lg">현재 주문 테이블: <b>{{ tableCount }}</b></div>
-      <div class="text-lg">남은 주문 수량: <b>{{ totalRemainCount }}</b></div>
+      <div class="text-lg">
+        현재 주문 테이블: <b>{{ tableCount }}</b>
+      </div>
+      <div class="text-lg">
+        남은 주문 수량: <b>{{ totalRemainCount }}</b>
+      </div>
     </div>
   </div>
   <!-- <div class="w-full min-w-[430px] max-w-[500px] flex justify-end pt-[20px] text-transparent select-none">
