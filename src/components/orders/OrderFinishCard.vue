@@ -136,7 +136,7 @@ const handleClickOrderRestore = () => {
 
   <div
     v-if="orderStatus === 'realTime'"
-    class="w-full min-w-[380px] h-[92px] rounded-3xl flex justify-between items-center outline outline-1 outline-primary-700 bg-success-700 px-6"
+    class="w-full min-w-[350px] h-[92px] rounded-3xl flex justify-between items-center outline outline-1 outline-primary-700 bg-success-700 px-6"
   >
     <div class="w-full flex flex-col justify-center text-secondary-700-light font-medium gap-[11px]">
       <div class="flex gap-[11px] items-center">
