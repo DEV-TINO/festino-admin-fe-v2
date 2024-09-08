@@ -96,7 +96,7 @@ onUnmounted(() => {
 
 <template>
   <div class="w-full flex justify-between gap-[20px] max-3xl:flex-col">
-    <div class="flex flex-col grow gap-4 w-full 2xl:w-fit">
+    <div class="flex flex-col grow gap-4 w-full 3xl:w-fit">
       <div class="flex gap-2 items-center">
         <div class="w-[14px] h-[14px] rounded-full bg-danger"></div>
         <div class="text-md font-semibold">입금 대기</div>
@@ -117,7 +117,7 @@ onUnmounted(() => {
         </div>
       </div>
     </div>
-    <div class="flex flex-col grow gap-4 w-full 2xl:w-fit">
+    <div class="flex flex-col grow gap-4 w-full 3xl:w-fit">
       <div class="flex gap-2 items-center">
         <div class="w-[14px] h-[14px] rounded-full bg-primary-900"></div>
         <div class="text-md font-semibold">조리중</div>
@@ -137,7 +137,7 @@ onUnmounted(() => {
         </div>
       </div>
     </div>
-    <div class="flex flex-col grow gap-4 w-full 2xl:w-fit">
+    <div class="flex flex-col grow gap-4 w-full 3xl:w-fit">
       <div class="flex gap-4 items-center">
         <div class="w-[20px] h-[20px] rounded-full bg-success"></div>
         <div class="text-md font-semibold">조리 완료</div>
