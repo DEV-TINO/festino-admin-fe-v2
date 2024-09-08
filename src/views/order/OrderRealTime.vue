@@ -95,7 +95,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="w-full flex justify-between gap-[20px] flex-wrap">
+  <div class="w-full flex justify-between gap-[20px] max-3xl:flex-col">
     <div class="flex flex-col grow gap-4 w-full 2xl:w-fit">
       <div class="flex gap-2 items-center">
         <div class="w-[14px] h-[14px] rounded-full bg-danger"></div>
@@ -103,7 +103,7 @@ onUnmounted(() => {
         <div v-if="isNewWaitDepositExist" class="text-sm text-danger pl-5">새로운 입금 대기가 들어왔어요!</div>
       </div>
       <div
-        class="min-w-full flex 2xl:flex-col rounded-xl bg-danger-lighter gap-[40px] py-[30px] px-[20px] 2xl:justify-center 2xl:items-center overflow-x-auto 2xl:w-[420px]"
+        class="min-w-full flex 3xl:flex-col rounded-xl bg-danger-lighter gap-[40px] py-[30px] px-[20px] 3xl:justify-center 3xl:items-center overflow-x-auto 3xl:w-[420px]"
       >
         <OrderCard
           type="ready"
@@ -123,7 +123,7 @@ onUnmounted(() => {
         <div class="text-md font-semibold">조리중</div>
       </div>
       <div
-        class="min-w-full flex 2xl:flex-col rounded-xl bg-primary-500 gap-[40px] py-[30px] px-[20px] 2xl:justify-center 2xl:items-center overflow-x-auto 2xl:w-[420px]"
+        class="min-w-full flex 3xl:flex-col rounded-xl bg-primary-500 gap-[40px] py-[30px] px-[20px] 3xl:justify-center 3xl:items-center overflow-x-auto 3xl:w-[420px]"
       >
         <OrderCard
           type="cooking"
@@ -143,7 +143,7 @@ onUnmounted(() => {
         <div class="text-md font-semibold">조리 완료</div>
       </div>
       <div
-        class="min-w-full flex 2xl:flex-col rounded-xl bg-success-500 gap-[20px] py-[30px] px-[20px] 2xl:justify-center 2xl:items-center overflow-x-auto 2xl:w-[420px]"
+        class="min-w-full flex 3xl:flex-col rounded-xl bg-success-500 gap-[40px] py-[30px] px-[20px] 3xl:justify-center 3xl:items-center overflow-x-auto 3xl:w-[420px]"
       >
         <OrderCard
           type="finish"

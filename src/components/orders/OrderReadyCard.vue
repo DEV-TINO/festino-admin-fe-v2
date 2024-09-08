@@ -89,9 +89,9 @@ const handleClickOrderDetail = () => {
       <table class="w-full bg-white relative">
         <thead>
           <tr class="h-[38px] border-b-1 border-primary-300 text-sm">
-            <th class="text-start min-w-[240px] align-middle pl-[28px]">메뉴</th>
+            <th class="text-start min-w-[220px] align-middle pl-[28px]">메뉴</th>
             <th class="min-w-[30px] text-center align-middle">수량</th>
-            <th class="min-w-[100px] text-right align-middle pr-[28px]">가격</th>
+            <th class="min-w-[80px] text-right align-middle pr-[28px]">가격</th>
           </tr>
         </thead>
         <tbody>
