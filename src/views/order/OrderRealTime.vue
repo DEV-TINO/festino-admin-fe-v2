@@ -1,6 +1,7 @@
 <script setup>
 import IconNotFound from '@/components/icons/IconNotFound.vue';
 import OrderCard from '@/components/orders/OrderCard.vue';
+import { useDate } from '@/stores/date';
 import { useBaseOrder } from '@/stores/orders/baseOrder';
 import { useCookingOrder } from '@/stores/orders/cookingOrder';
 import { useDepositOrder } from '@/stores/orders/depositOrder';
@@ -13,6 +14,7 @@ const useBaseOrderStore = useBaseOrder();
 const useDepositOrderStore = useDepositOrder();
 const useCookingOrderStore = useCookingOrder();
 const useFinishOrderStore = useFinishOrder();
+const useDateStore = useDate();
 
 const { getWaitDepositOrderList, initDepositOrder } = useDepositOrderStore;
 const { getCookingOrderList, initCookingOrderList } = useCookingOrderStore;
@@ -22,6 +24,7 @@ const { waitDepositOrderList } = storeToRefs(useDepositOrderStore);
 const { cookingOrderList } = storeToRefs(useCookingOrderStore);
 const { finishOrderList } = storeToRefs(useFinishOrderStore);
 const { boothId } = storeToRefs(useBaseOrderStore);
+const { nowDate } = storeToRefs(useDateStore);
 
 const interval = ref(null);
 const isFirstLoad = ref(true);
@@ -32,15 +35,15 @@ const getAllOrderList = async () => {
   await Promise.allSettled([
     getCookingOrderList({
       boothId: boothId.value,
-      date: 0,
+      date: nowDate.value,
     }),
     getWaitDepositOrderList({
       boothId: boothId.value,
-      date: 0,
+      date: nowDate.value,
     }),
     getFinishOrderList({
       boothId: boothId.value,
-      date: 0,
+      date: nowDate.value,
     }),
   ]);
 };

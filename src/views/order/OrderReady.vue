@@ -8,14 +8,17 @@ import OrderReadyCard from '@/components/orders/OrderReadyCard.vue';
 import { ORDER_FILTER } from '@/utils/constants';
 import IconRefreshVector from '@/components/icons/IconRefreshVector.vue';
 import IconSearch from '@/components/icons/IconSearch.vue';
+import { useDate } from '@/stores/date';
 
 const useDepositOrderStore = useDepositOrder();
 const useBaseOrderStore = useBaseOrder();
+const useDateStore = useDate();
 
 const { getWaitDepositOrderList, initDepositOrder } = useDepositOrderStore;
 
 const { waitDepositOrderList } = storeToRefs(useDepositOrderStore);
 const { boothId } = storeToRefs(useBaseOrderStore);
+const { nowDate } = storeToRefs(useDateStore);
 
 const selectedFilterMenu = ref(ORDER_FILTER['all']);
 const searchMenu = ref('');
@@ -46,7 +49,7 @@ const updateFilteredMenuList = () => {
 const handleClickRefreshButton = async () => {
   await getWaitDepositOrderList({
     boothId: boothId.value,
-    date: 0,
+    date: nowDate.value,
   });
 };
 
@@ -58,7 +61,7 @@ onMounted(async () => {
   await initDepositOrder();
   await getWaitDepositOrderList({
     boothId: boothId.value,
-    date: 0,
+    date: nowDate.value,
   });
 });
 </script>

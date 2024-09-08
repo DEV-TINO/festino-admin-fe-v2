@@ -5,14 +5,17 @@ import { useBaseOrder } from '@/stores/orders/baseOrder';
 import { storeToRefs } from 'pinia';
 import IconNotFound from '@/components/icons/IconNotFound.vue';
 import OrderCookingCard from '@/components/orders/OrderCookingCard.vue';
+import { useDate } from '@/stores/date';
 
 const useCookingOrderStore = useCookingOrder();
 const useBaseOrderStore = useBaseOrder();
+const useDateStore = useDate();
 
 const { getCookingOrderList, initCookingOrderList } = useCookingOrderStore;
 
 const { cookingOrderList } = storeToRefs(useCookingOrderStore);
 const { boothId } = storeToRefs(useBaseOrderStore);
+const { nowDate } = storeToRefs(useDateStore);
 
 const interval = ref(null);
 
@@ -20,7 +23,7 @@ const refreshCookingOrderList = async () => {
   interval.value = setInterval(async () => {
     await getCookingOrderList({
       boothId: boothId.value,
-      date: 0,
+      date: nowDate.value,
     });
   }, 3000);
 };
@@ -34,7 +37,7 @@ onMounted(async () => {
   initCookingOrderList();
   await getCookingOrderList({
     boothId: boothId.value,
-    date: 0,
+    date: nowDate.value,
   });
   refreshCookingOrderList();
 });

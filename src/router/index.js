@@ -1,10 +1,10 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import { useUser } from '@/stores/user';
 import NotFoundView from '../views/error/NotFoundView.vue';
-import { isUUID } from '@/utils/utils';
 
 import BoothListView from '../views/booth/BoothListView.vue';
 import LoginView from '../views/LoginView.vue';
+import { useDate } from '@/stores/date';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -120,6 +120,7 @@ const isMobile = navigator.userAgent.indexOf('iPhone') > -1 || navigator.userAge
 // Auth Guard
 router.beforeEach(async (to, from) => {
   const { isUserVaild, getUserOwnBoothId } = useUser();
+  const { getNowDate } = useDate();
 
   if (publicPages.includes(to.name)) {
     return true;
@@ -132,6 +133,8 @@ router.beforeEach(async (to, from) => {
     if (from.name?.includes('Mobile') || isMobile) return { name: 'MobileLogin' };
     else return { name: 'Login' };
   }
+
+  await getNowDate();
 
   if (adminPages.includes(to.name) && isAdmin) return true;
   else if (adminPages.includes(to.name) && !isAdmin)

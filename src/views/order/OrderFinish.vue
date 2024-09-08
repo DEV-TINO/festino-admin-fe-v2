@@ -8,14 +8,17 @@ import OrderFinishCard from '@/components/orders/OrderFinishCard.vue';
 import IconRefreshVector from '@/components/icons/IconRefreshVector.vue';
 import IconSearch from '@/components/icons/IconSearch.vue';
 import { ORDER_FILTER } from '@/utils/constants';
+import { useDate } from '@/stores/date';
 
 const useFinishOrderStore = useFinishOrder();
 const useBaseOrderStore = useBaseOrder();
+const useDateStore = useDate();
 
 const { getFinishOrderList, initFinishOrderList } = useFinishOrderStore;
 
 const { finishOrderList } = storeToRefs(useFinishOrderStore);
 const { boothId } = storeToRefs(useBaseOrderStore);
+const { nowDate } = storeToRefs(useDateStore);
 
 const selectedFilterMenu = ref(ORDER_FILTER['all']);
 const searchMenu = ref('');
@@ -46,7 +49,7 @@ const updateFilteredMenuList = () => {
 const handleClickRefreshButton = async () => {
   await getFinishOrderList({
     boothId: boothId.value,
-    date: 0,
+    date: nowDate.value,
   });
 };
 
@@ -58,7 +61,7 @@ onMounted(async () => {
   initFinishOrderList();
   await getFinishOrderList({
     boothId: boothId.value,
-    date: 0,
+    date: nowDate.value,
   });
 });
 </script>

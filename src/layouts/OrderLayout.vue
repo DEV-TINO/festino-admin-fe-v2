@@ -15,9 +15,10 @@ import { ORDER_CATEGORY, ORDER_URL, TABLE_FILTER } from '@/utils/constants';
 import { chunkArray, getHourandMinute } from '@/utils/utils';
 import { storeToRefs } from 'pinia';
 import { computed, onMounted, onUnmounted, ref, watch, watchEffect } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+import { useRouter } from 'vue-router';
 import { cloneDeep } from 'lodash';
 import IconRefresh from '@/components/icons/IconRefresh.vue';
+import { useDate } from '@/stores/date';
 
 const useUserStore = useUser();
 const useBoothListStore = useBoothList();
@@ -26,6 +27,7 @@ const useOrderPopupStore = useOrderPopup();
 const useDepositOrderStore = useDepositOrder();
 const useTableDetailStore = useTableDetail();
 const useServiceModalStore = useServiceModal();
+const useDateStore = useDate();
 
 const { getAllBoothList } = useBoothListStore;
 const { setOrderStatus, getAllTableOrders, initBaseOrder } = useBaseOrderStore;
@@ -38,12 +40,12 @@ const { userOwnBoothId, isAdmin } = storeToRefs(useUserStore);
 const { boothList } = storeToRefs(useBoothListStore);
 const { orderCategories, orderStatus, allTableOrders, boothId } = storeToRefs(useBaseOrderStore);
 const { waitDepositOrderList } = storeToRefs(useDepositOrderStore);
+const { nowDate } = storeToRefs(useDateStore);
 
 const orderBoothList = ref([]);
 const chunkedAllTableOrders = ref([]);
 const interval = ref(null);
 const waitDepositInterval = ref(null);
-const route = useRoute();
 const router = useRouter();
 const isNewOrderExist = ref(false);
 const prevOrderList = ref([]);
@@ -103,7 +105,7 @@ const refreshAllTableOrders = async () => {
     if (boothId.value) {
       await getAllTableOrders({
         boothId: boothId.value,
-        date: 0,
+        date: nowDate.value,
       });
     }
   }, 3000);
@@ -119,7 +121,7 @@ const refreshWaitDepositOrderList = async () => {
     if (boothId.value) {
       await getWaitDepositOrderList({
         boothId: boothId.value,
-        date: 0,
+        date: nowDate.value,
       });
     }
   }, 3000);
@@ -175,7 +177,7 @@ const handleClickTableRefresh = async () => {
   clearIntervalAllTableOrders();
   await getAllTableOrders({
     boothId: boothId.value,
-    date: 0,
+    date: nowDate.value,
   });
   refreshAllTableOrders();
 };
@@ -192,7 +194,7 @@ watchEffect(async () => {
   if (boothId.value) {
     await getAllTableOrders({
       boothId: boothId.value,
-      date: 0,
+      date: nowDate.value,
     });
   }
 });

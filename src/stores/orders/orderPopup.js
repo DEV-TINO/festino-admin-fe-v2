@@ -7,10 +7,12 @@ import { useCookingOrder } from '@/stores/orders/cookingOrder';
 import { useDepositOrder } from '@/stores/orders/depositOrder';
 import { useFinishOrder } from '@/stores/orders/finishOrder';
 import { useCancelOrder } from '@/stores/orders/cancelOrder';
+import { useDate } from '../date';
 
 export const useOrderPopup = defineStore('orderPopup', () => {
   const baseModalStore = useBaseModal();
   const baseOrderStore = useBaseOrder();
+  const useDateStore = useDate();
 
   const useDepositOrderStore = useDepositOrder();
   const useCookingOrderStore = useCookingOrder();
@@ -24,6 +26,7 @@ export const useOrderPopup = defineStore('orderPopup', () => {
   const { getCancelOrderList } = useCancelOrderStore;
 
   const { boothId } = storeToRefs(baseOrderStore);
+  const { nowDate } = storeToRefs(useDateStore);
 
   const menuInfoList = ref([]);
   const orderInfo = ref({});
@@ -115,11 +118,11 @@ export const useOrderPopup = defineStore('orderPopup', () => {
           await Promise.allSettled([
             getCancelOrderList({
               boothId: boothId.value,
-              date: 0,
+              date: nowDate.value,
             }),
             getAllTableOrders({
               boothId: boothId.value,
-              date: 0,
+              date: nowDate.value,
             }),
           ]);
         }
@@ -130,7 +133,7 @@ export const useOrderPopup = defineStore('orderPopup', () => {
         } else {
           await getWaitDepositOrderList({
             boothId: boothId.value,
-            date: 0,
+            date: nowDate.value,
           });
         }
       }
@@ -142,15 +145,15 @@ export const useOrderPopup = defineStore('orderPopup', () => {
         await Promise.allSettled([
           getWaitDepositOrderList({
             boothId: boothId.value,
-            date: 0,
+            date: nowDate.value,
           }),
           getCookingOrderList({
             boothId: boothId.value,
-            date: 0,
+            date: nowDate.value,
           }),
           getAllTableOrders({
             boothId: boothId.value,
-            date: 0,
+            date: nowDate.value,
           }),
         ]);
       }
@@ -165,11 +168,11 @@ export const useOrderPopup = defineStore('orderPopup', () => {
         await Promise.allSettled([
           getCookingOrderList({
             boothId: boothId.value,
-            date: 0,
+            date: nowDate.value,
           }),
           getFinishOrderList({
             boothId: boothId.value,
-            date: 0,
+            date: nowDate.value,
           }),
         ]);
       }
@@ -180,11 +183,11 @@ export const useOrderPopup = defineStore('orderPopup', () => {
         await Promise.allSettled([
           getCookingOrderList({
             boothId: boothId.value,
-            date: 0,
+            date: nowDate.value,
           }),
           getAllTableOrders({
             boothId: boothId.value,
-            date: 0,
+            date: nowDate.value,
           }),
         ]);
       } else {
@@ -195,11 +198,11 @@ export const useOrderPopup = defineStore('orderPopup', () => {
         await Promise.allSettled([
           getFinishOrderList({
             boothId: boothId.value,
-            date: 0,
+            date: nowDate.value,
           }),
           getAllTableOrders({
             boothId: boothId.value,
-            date: 0,
+            date: nowDate.value,
           }),
         ]);
       }
