@@ -441,8 +441,11 @@ onMounted(() => {
         <div class="text-xl font-medium">주문 목록</div>
 
         <div class="w-full bg-primary-800-light border-1 border-primary-700 rounded-xl text-secondary-700-light">
-          <div v-for="(orders, tableNum) in orderList" :key="tableNum">
-            <div class="flex justify-between border-b-1 border-primary-200 font-semibold px-3 h-10 items-center">
+          <div v-for="(orders, tableNum, index) in orderList" :key="tableNum">
+            <div
+              class="flex justify-between border-primary-200 font-semibold px-3 h-10 items-center border-b-1"
+              :class="index === 0 ? 'border-t-0' : 'border-t-1'"
+            >
               <div class="text-left">{{ getTableCustomNum(tableNum) }}번 테이블</div>
               <div class="text-right">총 가격 : {{ getTableTotalPrice(orders) }}</div>
             </div>
@@ -450,7 +453,10 @@ onMounted(() => {
               <div
                 v-for="(order, orderIndex) in orders"
                 :key="orderIndex"
-                class="flex justify-between border-b-1 border-primary-200 odd:border-r-1 px-3 min-h-16 h-fit items-center font-medium"
+                class="flex justify-between border-primary-200 odd:border-r-1 px-3 min-h-16 h-fit items-center font-medium border-b-1"
+                :class="{
+                  'border-b-0': Math.ceil((orderIndex + 1) / 2) === Math.ceil(orders.length / 2),
+                }"
               >
                 <div class="flex flex-col">
                   <div>{{ order.menuName }}</div>
@@ -467,7 +473,7 @@ onMounted(() => {
               </div>
             </div>
           </div>
-          <div class="flex justify-between h-[51px] items-center font-semibold px-3">
+          <div class="flex justify-between h-[51px] items-center font-semibold px-3 border-t-1 border-primary-200">
             <div class="text-left">총 가격</div>
             <div class="text-right">{{ prettyPrice(totalPrice) }}</div>
           </div>
