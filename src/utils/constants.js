@@ -127,6 +127,7 @@ export const STATISTICS_TYPE = {
 
 export const ORDER_FILTER = {
   all: '전체보기',
+  recent: '최신순',
   table: '테이블 번호순',
   price: '가격순',
 };
