@@ -39,6 +39,22 @@ const { getCustomTableNum } = useTableDetailStore;
 
 const { boothId } = storeToRefs(useBaseOrderStore);
 
+const getDetailOrder = async (orderId) => {
+  try {
+    const response = await api.get(`/admin/booth/${boothId.value}/order/${orderId}`);
+    const data = response.data;
+
+    if (data.success) {
+      return data.orderInfo;
+    } else {
+      return false;
+    }
+  } catch (error) {
+    console.error(error);
+    return false;
+  }
+};
+
 const isComplete = (cook) => {
   return cook.servedCount === cook.totalCount;
 };
@@ -62,18 +78,23 @@ const patchCookServeCount = async ({ cookId, servedCount, cook }) => {
   }
 };
 
-const handleClickMenuComplete = (cook) => {
+const handleClickMenuComplete = async (cook) => {
   if (!isComplete(cook)) return;
-  openPopup({
-    type: 'cooking',
-    selectCookingInfo: {
-      menuId: props.menuId,
-      menuName: props.menuName,
-      tableCount: props.tableCount,
-      totalRemainCount: props.totalRemainCount,
-      cook: cook,
-    },
-  });
+  const orderInfo = await getDetailOrder(cook.orderId);
+
+  if (orderInfo) {
+    openPopup({
+      type: 'cooking',
+      selectCookingInfo: {
+        menuId: props.menuId,
+        menuName: props.menuName,
+        tableCount: props.tableCount,
+        totalRemainCount: props.totalRemainCount,
+        cook: cook,
+        createAt: orderInfo.createAt,
+      },
+    });
+  }
 };
 
 const debouncedPatchCookServeCount = _.debounce(async (cookId, servedCount, cook) => {

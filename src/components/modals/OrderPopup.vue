@@ -66,7 +66,7 @@ onMounted(async () => {
         <div class="text-secondary-700-light text-sm">조리 완료 확인</div>
         <div class="flex gap-[5px] items-center text-secondary-700-light">
           <IconClock class="w-4 h-4 p-[1px]" />
-          <div class="text-xs">{{ getHourandMinute(orderInfo.createAt) }}</div>
+          <div class="text-xs">{{ getHourandMinute(cookingInfo.createAt) }}</div>
         </div>
         <div class="relative w-full rounded-2xl border-primary-700 border shadow-primary text-xs">
           <table class="w-full">
