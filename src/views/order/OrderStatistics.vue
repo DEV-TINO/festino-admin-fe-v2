@@ -3,7 +3,7 @@ import { useBaseOrder } from '@/stores/orders/baseOrder';
 import { useOrderStatistics } from '@/stores/orders/orderStatistics';
 import { useBoothList } from '@/stores/booths/boothList';
 import { storeToRefs } from 'pinia';
-import { ref, watchEffect, onMounted } from 'vue';
+import { ref, onMounted } from 'vue';
 import StatisticsGraph from '@/views/order/OrderStatisticsGraph.vue';
 import { prettyPrice } from '@/utils/utils';
 import { DATES, STATISTICS_TYPE } from '@/utils/constants';
@@ -104,10 +104,6 @@ const fetchStatistics = async () => {
   isLoading.value = false;
 };
 
-// type이 변경될 때마다 getStatistics 호출
-watchEffect(async () => {
-  await fetchStatistics();
-});
 
 onMounted(async () => {
   await getAllBoothList();
