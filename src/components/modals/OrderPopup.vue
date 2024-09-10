@@ -129,23 +129,28 @@ onMounted(async () => {
       <!-- MenuList -->
       <div v-if="selectType !== 'cooking'" class="w-full flex flex-col gap-4 text-sm">
         <div class="text-secondary-700-light">상세 메뉴</div>
-        <div class="relative w-full rounded-2xl outline outline-primary-900-light outline-1 text-xs">
-          <table class="w-full">
-            <thead class="text-secondary-900 h-[50px]">
-              <tr class="w-full bg-primary-800-light">
-                <th class="min-w-[250px] text-start align-middle pl-[26px] rounded-tl-2xl">메뉴</th>
-                <th class="text-center align-middle">수량</th>
-                <th class="min-w-[100px] text-end align-middle pr-[26px] rounded-tr-2xl">가격</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="(menu, menuIndex) in menuInfoList" class="text-center h-[50px]" :key="menuIndex">
-                <td class="min-w-[250x] text-start align-middle pl-[26px]">{{ menu.menuName }}</td>
-                <td class="text-center align-middle">{{ prettyMenuNum(menu.menuCount) }}</td>
-                <td class="min-w-[100px] text-end align-middle pr-[26px]">{{ prettyPrice(menu.menuPrice) }}</td>
-              </tr>
-            </tbody>
-          </table>
+        <div class="w-full">
+          <div
+            class="overflow-y-scroll max-h-[225px] w-full text-xs outline outline-1 outline-primary-900-light rounded-2xl"
+            id="menuContainer"
+          >
+            <table class="w-full table-fixed">
+              <thead class="sticky top-0 bg-primary-800-light text-secondary-900 h-[50px]">
+                <tr class="w-full">
+                  <th class="min-w-[250px] text-start align-middle pl-[26px] rounded-tl-2xl">메뉴</th>
+                  <th class="text-center align-middle">수량</th>
+                  <th class="min-w-[100px] text-end align-middle pr-[26px] rounded-tr-2xl">가격</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="(menu, menuIndex) in menuInfoList" class="text-center h-[50px]" :key="menuIndex">
+                  <td class="min-w-[250px] text-start align-middle pl-[26px]">{{ menu.menuName }}</td>
+                  <td class="text-center align-middle">{{ prettyMenuNum(menu.menuCount) }}</td>
+                  <td class="min-w-[100px] text-end align-middle pr-[26px]">{{ prettyPrice(menu.menuPrice) }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
 
@@ -158,23 +163,66 @@ onMounted(async () => {
 
       <!-- Button Group -->
       <div v-if="selectType === 'ready'" class="flex justify-between items-end gap-[20px] pt-3">
-        <button type="submit" class="is-button is-outlined font-semibold w-1/2 h-[35px] rounded-2xl text-sm flex items-center justify-center text-primary-900 lg:text-md bg-primary-900cursor-pointer select-none" value="cancel">주문 취소</button>
-        <button type="submit" class="is-button font-semibold w-1/2 h-[35px] rounded-2xl text-sm flex items-center justify-center text-white lg:text-md bg-primary-900cursor-pointer select-none" ref="submit" value="deposit">입금 확인</button>
+        <button
+          type="submit"
+          class="is-button is-outlined font-semibold w-1/2 h-[35px] rounded-2xl text-sm flex items-center justify-center text-primary-900 lg:text-md bg-primary-900cursor-pointer select-none"
+          value="cancel"
+        >
+          주문 취소
+        </button>
+        <button
+          type="submit"
+          class="is-button font-semibold w-1/2 h-[35px] rounded-2xl text-sm flex items-center justify-center text-white lg:text-md bg-primary-900cursor-pointer select-none"
+          ref="submit"
+          value="deposit"
+        >
+          입금 확인
+        </button>
       </div>
       <div v-if="selectType === 'finish'" class="flex justify-between items-end gap-[20px] pt-3">
-        <button type="submit" class="is-button font-semibold w-full h-[35px] rounded-2xl text-sm flex items-center justify-center text-white lg:text-md bg-primary-900cursor-pointer select-none" ref="submit" value="restore">주문 복구</button>
+        <button
+          type="submit"
+          class="is-button font-semibold w-full h-[35px] rounded-2xl text-sm flex items-center justify-center text-white lg:text-md bg-primary-900cursor-pointer select-none"
+          ref="submit"
+          value="restore"
+        >
+          주문 복구
+        </button>
       </div>
       <div
         v-if="selectType === 'complete' || selectType === 'cooking'"
         class="flex justify-between items-end gap-[20px] pt-3"
       >
-        <button type="submit" class="is-button font-semibold w-full h-[35px] rounded2xl text-sm flex items-center justify-center text-white lg:text-md bg-primary-900cursor-pointer select-none" ref="submit" value="complete">조리 완료</button>
+        <button
+          type="submit"
+          class="is-button font-semibold w-full h-[35px] rounded2xl text-sm flex items-center justify-center text-white lg:text-md bg-primary-900cursor-pointer select-none"
+          ref="submit"
+          value="complete"
+        >
+          조리 완료
+        </button>
       </div>
       <div v-if="selectType === 'cancel'" class="flex justify-between items-end gap-[20px] pt-3">
-        <button type="submit" class="is-button font-semibold w-full h-[35px] rounded-2xl text-sm flex items-center justify-center text-white lg:text-md bg-primary-900cursor-pointer select-none" ref="submit" value="cancel">주문 취소 복구</button>
+        <button
+          type="submit"
+          class="is-button font-semibold w-full h-[35px] rounded-2xl text-sm flex items-center justify-center text-white lg:text-md bg-primary-900cursor-pointer select-none"
+          ref="submit"
+          value="cancel"
+        >
+          주문 취소 복구
+        </button>
       </div>
     </div>
   </form>
 </template>
 
-<style lang="scss" scoped></style>
+<style lang="css" scoped>
+#menuContainer {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+#menuContainer::-webkit-scrollbar {
+  display: none;
+}
+</style>
