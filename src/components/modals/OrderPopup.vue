@@ -63,12 +63,12 @@ onMounted(async () => {
 
       <!-- completeInfo -->
       <div v-if="selectType === 'cooking'" class="w-full flex flex-col gap-4">
-        <div class="text-secondary-700-light text-xl">조리 완료 확인</div>
+        <div class="text-secondary-700-light text-sm">조리 완료 확인</div>
         <div class="flex gap-[5px] items-center text-secondary-700-light">
-          <IconClock />
-          <div>{{ getHourandMinute(orderInfo.createAt) }}</div>
+          <IconClock class="w-4 h-4 p-[1px]" />
+          <div class="text-xs">{{ getHourandMinute(orderInfo.createAt) }}</div>
         </div>
-        <div class="relative w-full rounded-2xl border-primary-700 border shadow-primary">
+        <div class="relative w-full rounded-2xl border-primary-700 border shadow-primary text-xs">
           <table class="w-full">
             <thead class="bg-primary-700-light text-secondary-900 h-[50px]">
               <tr>
@@ -137,16 +137,16 @@ onMounted(async () => {
             <table class="w-full table-fixed">
               <thead class="sticky top-0 bg-primary-800-light text-secondary-900 h-[50px]">
                 <tr class="w-full">
-                  <th class="min-w-[250px] text-start align-middle pl-[26px] rounded-tl-2xl">메뉴</th>
-                  <th class="text-center align-middle">수량</th>
-                  <th class="min-w-[100px] text-end align-middle pr-[26px] rounded-tr-2xl">가격</th>
+                  <th class="w-full text-start align-middle pl-[26px] rounded-tl-2xl">메뉴</th>
+                  <th class="text-center align-middle w-[50px]">수량</th>
+                  <th class="w-[100px] align-middle pr-2 rounded-tr-2xl">가격</th>
                 </tr>
               </thead>
               <tbody>
                 <tr v-for="(menu, menuIndex) in menuInfoList" class="text-center h-[50px]" :key="menuIndex">
-                  <td class="min-w-[250px] text-start align-middle pl-[26px]">{{ menu.menuName }}</td>
-                  <td class="text-center align-middle">{{ prettyMenuNum(menu.menuCount) }}</td>
-                  <td class="min-w-[100px] text-end align-middle pr-[26px]">{{ prettyPrice(menu.menuPrice) }}</td>
+                  <td class="w-full text-start align-middle pl-[26px]">{{ menu.menuName }}</td>
+                  <td class="text-center align-middle w-[50px]">{{ prettyMenuNum(menu.menuCount) }}</td>
+                  <td class="w-[100px] align-middle pr-2">{{ prettyPrice(menu.menuPrice) }}</td>
                 </tr>
               </tbody>
             </table>
