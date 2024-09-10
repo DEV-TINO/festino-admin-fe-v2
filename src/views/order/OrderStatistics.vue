@@ -3,7 +3,7 @@ import { useBaseOrder } from '@/stores/orders/baseOrder';
 import { useOrderStatistics } from '@/stores/orders/orderStatistics';
 import { useBoothList } from '@/stores/booths/boothList';
 import { storeToRefs } from 'pinia';
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, watchEffect } from 'vue';
 import StatisticsGraph from '@/views/order/OrderStatisticsGraph.vue';
 import { prettyPrice } from '@/utils/utils';
 import { DATES, STATISTICS_TYPE } from '@/utils/constants';
@@ -103,6 +103,11 @@ const fetchStatistics = async () => {
   });
   isLoading.value = false;
 };
+
+watchEffect(()=>{
+  myBooth.value = boothList.value.find(booth => booth.boothId === boothId.value);
+  fetchStatistics();
+})
 
 
 onMounted(async () => {
