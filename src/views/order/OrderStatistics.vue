@@ -3,7 +3,7 @@ import { useBaseOrder } from '@/stores/orders/baseOrder';
 import { useOrderStatistics } from '@/stores/orders/orderStatistics';
 import { useBoothList } from '@/stores/booths/boothList';
 import { storeToRefs } from 'pinia';
-import { ref, watchEffect, onMounted } from 'vue';
+import { ref, onMounted, watchEffect } from 'vue';
 import StatisticsGraph from '@/views/order/OrderStatisticsGraph.vue';
 import { prettyPrice } from '@/utils/utils';
 import { DATES, STATISTICS_TYPE } from '@/utils/constants';
@@ -23,7 +23,7 @@ const { allOrderStatistics } = storeToRefs(useOrderStatisticsStore);
 
 const month = ref(9);
 const isLoading = ref(false);
-const day = ref(0);
+const day = ref(1);
 const type = ref('all');  // 기본 토글 선택 값을 'all'로 설정
 
 const myBooth = ref('');  // boothId와 일치하는 부스를 저장할 변수
@@ -45,23 +45,23 @@ const currentMonth = new Date().getMonth() + 1;
 const today = new Date().getDate();
 
 const activeDateMap = {
-  11: 0,
-  12: 1,
-  13: 2,
+  11: 1,
+  12: 2,
+  13: 3,
 };
 
 const determineActiveDate = () => {
   if (currentMonth < 9) {
-    return 0;
+    return 1;
   } else if (currentMonth > 9) {
-    return 2;
+    return 3;
   } else {
     if (activeDateMap[today] !== undefined) {
       return activeDateMap[today];
     } else if (today < 11) {
-      return 0;
+      return 1;
     } else {
-      return 2;
+      return 3;
     }
   }
 };
@@ -104,10 +104,11 @@ const fetchStatistics = async () => {
   isLoading.value = false;
 };
 
-// type이 변경될 때마다 getStatistics 호출
-watchEffect(async () => {
-  await fetchStatistics();
-});
+watchEffect(()=>{
+  myBooth.value = boothList.value.find(booth => booth.boothId === boothId.value);
+  fetchStatistics();
+})
+
 
 onMounted(async () => {
   await getAllBoothList();
