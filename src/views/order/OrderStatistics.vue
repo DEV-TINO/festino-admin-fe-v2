@@ -45,23 +45,23 @@ const currentMonth = new Date().getMonth() + 1;
 const today = new Date().getDate();
 
 const activeDateMap = {
-  11: 0,
-  12: 1,
-  13: 2,
+  11: 1,
+  12: 2,
+  13: 3,
 };
 
 const determineActiveDate = () => {
   if (currentMonth < 9) {
-    return 0;
+    return 1;
   } else if (currentMonth > 9) {
-    return 2;
+    return 3;
   } else {
     if (activeDateMap[today] !== undefined) {
       return activeDateMap[today];
     } else if (today < 11) {
-      return 0;
+      return 1;
     } else {
-      return 2;
+      return 3;
     }
   }
 };
