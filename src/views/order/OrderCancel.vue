@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref, watch } from 'vue';
+import { onMounted, ref, watch, watchEffect } from 'vue';
 import { useCancelOrder } from '@/stores/orders/cancelOrder';
 import { useBaseOrder } from '@/stores/orders/baseOrder';
 import { storeToRefs } from 'pinia';
@@ -57,6 +57,13 @@ const handleClickRefreshButton = async () => {
 
 watch([cancelOrderList, selectedFilterMenu, searchMenu], () => {
   updateFilteredMenuList();
+});
+
+watchEffect(async () => {
+  await getCancelOrderList({
+    boothId: boothId.value,
+    date: nowDate.value,
+  });
 });
 
 onMounted(async () => {
