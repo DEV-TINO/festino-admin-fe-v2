@@ -42,7 +42,7 @@ const updateFilteredMenuList = () => {
   } else if (selectedFilterMenu.value === ORDER_FILTER.price) {
     filteredList.sort((a, b) => b.totalPrice - a.totalPrice);
   } else if (selectedFilterMenu.value === ORDER_FILTER.recent) {
-    filteredList.sort((a, b) => b.createAt.localeCompare(a.createAt));
+    filteredList.sort((a, b) => b.finishAt.localeCompare(a.finishAt));
   }
 
   filteredMenuList.value = filteredList;
