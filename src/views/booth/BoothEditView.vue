@@ -703,7 +703,7 @@ onMounted(async () => {
         </div>
 
         <!-- 메뉴 정보 -->
-        <div v-if="ADMIN_CATEGORY[boothInfo.adminCategory] !== 'food'" class="flex flex-col gap-[20px] w-full">
+        <div class="flex flex-col gap-[20px] w-full">
           <div
             class="w-[95px] h-[45px] rounded-xl flex items-center justify-center bg-primary-700 text-primary-900-light text-md font-semibold"
           >
