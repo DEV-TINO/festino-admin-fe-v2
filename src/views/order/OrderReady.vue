@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref, watch } from 'vue';
+import { onMounted, ref, watch, watchEffect } from 'vue';
 import { useDepositOrder } from '@/stores/orders/depositOrder';
 import { useBaseOrder } from '@/stores/orders/baseOrder';
 import { storeToRefs } from 'pinia';
@@ -57,6 +57,15 @@ const handleClickRefreshButton = async () => {
 
 watch([waitDepositOrderList, selectedFilterMenu, searchMenu], () => {
   updateFilteredMenuList();
+});
+
+watchEffect(async () => {
+  if (boothId.value) {
+    await getWaitDepositOrderList({
+      boothId: boothId.value,
+      date: nowDate.value,
+    });
+  }
 });
 
 onMounted(async () => {

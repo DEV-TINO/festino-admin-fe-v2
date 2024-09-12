@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, onUnmounted, ref } from 'vue';
+import { onMounted, onUnmounted, ref, watchEffect } from 'vue';
 import { useCookingOrder } from '@/stores/orders/cookingOrder';
 import { useBaseOrder } from '@/stores/orders/baseOrder';
 import { storeToRefs } from 'pinia';
@@ -27,6 +27,15 @@ const refreshCookingOrderList = async () => {
     });
   }, 3000);
 };
+
+watchEffect(async () => {
+  if (boothId.value) {
+    await getCookingOrderList({
+      boothId: boothId.value,
+      date: nowDate.value,
+    });
+  }
+});
 
 const clearCookingOrderListInterval = () => {
   if (!interval.value) return;

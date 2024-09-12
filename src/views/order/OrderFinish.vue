@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref, watch } from 'vue';
+import { onMounted, ref, watch, watchEffect } from 'vue';
 import { useFinishOrder } from '@/stores/orders/finishOrder';
 import { useBaseOrder } from '@/stores/orders/baseOrder';
 import { storeToRefs } from 'pinia';
@@ -42,7 +42,7 @@ const updateFilteredMenuList = () => {
   } else if (selectedFilterMenu.value === ORDER_FILTER.price) {
     filteredList.sort((a, b) => b.totalPrice - a.totalPrice);
   } else if (selectedFilterMenu.value === ORDER_FILTER.recent) {
-    filteredList.sort((a, b) => b.createAt.localeCompare(a.createAt));
+    filteredList.sort((a, b) => b.finishAt.localeCompare(a.finishAt));
   }
 
   filteredMenuList.value = filteredList;
@@ -57,6 +57,15 @@ const handleClickRefreshButton = async () => {
 
 watch([finishOrderList, selectedFilterMenu, searchMenu], () => {
   updateFilteredMenuList();
+});
+
+watchEffect(async () => {
+  if (boothId.value) {
+    await getFinishOrderList({
+      boothId: boothId.value,
+      date: nowDate.value,
+    });
+  }
 });
 
 onMounted(async () => {
