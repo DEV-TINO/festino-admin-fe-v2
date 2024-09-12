@@ -145,7 +145,7 @@ const handleInputServeCount = async (cook, event) => {
 
 <template>
   <div
-    class="w-full min-w-[350px] h-[400px] rounded-3xl flex flex-col justify-between outline outline-1 outline-primary-800"
+    class="w-full min-w-[350px] h-[400px] rounded-3xl flex flex-col justify-between outline outline-1 outline-primary-800 max-w-[500px]"
   >
     <div
       class="flex justify-center w-full h-[65px] items-center rounded-t-3xl px-[28px] text-lg font-semibold bg-primary-500 border-b-1 border-primary-800"
