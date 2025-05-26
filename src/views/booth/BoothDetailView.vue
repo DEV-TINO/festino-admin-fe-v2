@@ -25,6 +25,7 @@ const useBoothDetailStore = useBoothDetail();
 const useTableDetailStore = useTableDetail();
 
 const { reset, init } = useBoothDetailStore;
+const {getTableList} = useTableDetailStore;
 const { boothInfo, menuList } = storeToRefs(useBoothDetailStore);
 const { tableNum, tableNumList } = storeToRefs(useTableDetailStore);
 
@@ -91,6 +92,8 @@ onMounted(async () => {
   reset();
   if (props.boothId) {
     const condition = await init(props.boothId);
+    await getTableList(props.boothId);
+    
     if (!condition) {
       alert('부스 정보를 불러오는데 실패했습니다.');
       router.push({ name: 'BoothList' });
