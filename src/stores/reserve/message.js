@@ -41,7 +41,7 @@ export const useMessage = defineStore('message', () => {
         },
       });
       if (response.data.success) {
-        customMessageList.value = response.data.customMessageList.map(({ message, messageType }) => ({
+        customMessageList.value = response.data.data.map(({ message, messageType }) => ({
           message,
           messageType,
         }));

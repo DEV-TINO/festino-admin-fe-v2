@@ -39,7 +39,7 @@ export const useReserveList = defineStore('reserveList', () => {
       const data = response.data;
       if (data.success) {
         setReserveList({
-          data: data.data.reservationList,
+          data: data.reservationList,
           type,
         });
       } else {
@@ -50,7 +50,7 @@ export const useReserveList = defineStore('reserveList', () => {
       }
     } catch (error) {
       console.error(error);
-      alertError(error);
+      // alertError(error);
     }
   };
 
