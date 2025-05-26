@@ -41,6 +41,7 @@ const { boothList } = storeToRefs(useBoothListStore);
 const { orderCategories, orderStatus, allTableOrders, boothId } = storeToRefs(useBaseOrderStore);
 const { waitDepositOrderList } = storeToRefs(useDepositOrderStore);
 const { nowDate } = storeToRefs(useDateStore);
+const { tableNumList } = storeToRefs(useTableDetailStore);
 
 const orderBoothList = ref([]);
 const chunkedAllTableOrders = ref([]);
@@ -242,6 +243,7 @@ onMounted(async () => {
   await getTableList(boothId.value);
   refreshAllTableOrders();
   refreshWaitDepositOrderList();
+
 });
 
 onUnmounted(() => {
