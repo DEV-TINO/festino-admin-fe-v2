@@ -2,7 +2,7 @@
 import IconClose from '../icons/IconClose.vue';
 import { useBaseModal } from '@/stores/baseModal';
 import IconRadio from '../icons/IconRadio.vue';
-import { computed, onMounted, ref } from 'vue';
+import { computed, onMounted, ref, watchEffect } from 'vue';
 import { useTableDetail } from '@/stores/booths/tableDetail';
 import { storeToRefs } from 'pinia';
 import { useServiceModal } from '@/stores/orders/serviceModal';
@@ -187,6 +187,11 @@ const getTableTotalPrice = (orders) => {
 onMounted(() => {
   getMenuList();
 });
+
+watchEffect(() => {
+  console.log('[orderList]', orderList.value);
+})
+
 </script>
 <template>
   <div

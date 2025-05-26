@@ -57,7 +57,7 @@ const handleClickSoldOut = async (menu) => {
   const data = response.data;
 
   if (data.success) {
-    menu.isSoldOut = data.soldOutInfo.isSoldOut;
+    menu.isSoldOut = data.data.isSoldOut;
   } else {
     alertError(data.message);
   }
@@ -72,7 +72,7 @@ const handleClickBoothOpen = async () => {
   const data = response.data;
 
   if (data.success) {
-    boothInfo.value.isOpen = data.openInfo.isOpen;
+    boothInfo.value.isOpen = data.data.isOpen;
   } else {
     alertError(data.message);
   }

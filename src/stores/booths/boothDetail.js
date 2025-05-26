@@ -7,6 +7,8 @@ import { useTableDetail } from './tableDetail';
 import { alertError, api } from '@/utils/api';
 import { ADMIN_CATEGORY } from '@/utils/constants';
 
+import _ from 'lodash';
+
 export const useBoothDetail = defineStore('boothDetail', () => {
   const useBoothListStore = useBoothList();
   const { getAllBoothList } = useBoothListStore;
@@ -87,7 +89,7 @@ export const useBoothDetail = defineStore('boothDetail', () => {
       if (ADMIN_CATEGORY[booth.adminCategory] === 'night') {
         const res = await api.get(`/admin/booth/night/${boothId}`);
         if (res.data.success) {
-          boothInfo.value = res.data.boothInfo;
+          boothInfo.value = res.data.data;
         } else {
           alertError(res.data.message);
         }
@@ -108,7 +110,7 @@ export const useBoothDetail = defineStore('boothDetail', () => {
       if (ADMIN_CATEGORY[booth.adminCategory] === 'night') {
         const res = await api.get(`/admin/booth/night/${boothId}`);
         if (res.data.success) {
-          boothInfo.value = res.data.boothInfo;
+          boothInfo.value = res.data.data;
         } else {
           alertError(res.data.message);
         }
@@ -168,10 +170,13 @@ export const useBoothDetail = defineStore('boothDetail', () => {
       const boothData = boothResponse.data;
       const menuData = menuResponse.data;
 
+      console.log('boothData:', boothData)
+      console.log('menuData:', menuData)
+
       if (boothData.success && menuData.success) {
-        boothInfo.value = boothData.boothInfo;
-        menuList.value = menuData.menuList;
-        originalMenuList.value = JSON.parse(JSON.stringify(menuData.menuList));
+        boothInfo.value = boothData.data;
+        menuList.value = menuData.data;
+        originalMenuList.value = _.cloneDeep(menuData.data);
 
         if (boothData.boothInfo?.isOrder) {
           await getTableList(boothId);
@@ -196,7 +201,7 @@ export const useBoothDetail = defineStore('boothDetail', () => {
     try {
       const res = await api.get(`/admin/booth/night/${boothId}`);
       if (res.data.success) {
-        boothInfo.value = res.data.boothInfo;
+        boothInfo.value = res.data.data;
         return true;
       } else {
         alertError(res.data.message);

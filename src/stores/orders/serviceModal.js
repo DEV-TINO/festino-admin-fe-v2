@@ -24,7 +24,7 @@ export const useServiceModal = defineStore('serviceModal', () => {
     try {
       const response = await api.get(`/admin/menu/all/booth/${boothId.value}`);
       if (response.data.success) {
-        menuList.value = response.data.menuList;
+        menuList.value = response.data.data;
       } else {
         menuList.value = [];
         alertError(response.data.message);

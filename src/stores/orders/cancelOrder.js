@@ -13,7 +13,7 @@ export const useCancelOrder = defineStore('cancelOrder', () => {
       const data = response.data;
 
       if (data.success) {
-        cancelOrderList.value = data.cancelList;
+        cancelOrderList.value = data.data;
         return true;
       } else {
         cancelOrderList.value = [];

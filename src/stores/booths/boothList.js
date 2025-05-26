@@ -19,7 +19,7 @@ export const useBoothList = defineStore('boothList', () => {
       const foodData = foodResponse.data;
 
       if (nightData.success && dayData.success && foodData.success)
-        boothList.value = [...nightData.boothList, ...dayData.boothList, ...foodData.boothList];
+        boothList.value = [...nightData.data, ...dayData.data, ...foodData.data];
       else {
         alertError(`${nightData.message}, ${dayData.message}, ${foodData.message}`);
       }

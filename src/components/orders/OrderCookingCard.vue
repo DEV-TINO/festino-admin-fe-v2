@@ -45,7 +45,7 @@ const getDetailOrder = async (orderId) => {
     const data = response.data;
 
     if (data.success) {
-      return data.orderInfo;
+      return data.data;
     } else {
       return false;
     }
@@ -67,7 +67,7 @@ const patchCookServeCount = async ({ cookId, servedCount, cook }) => {
     });
     const data = response.data;
     if (data.success) {
-      cook.servedCount = data.countInfo.servedCount;
+      cook.servedCount = data.data.servedCount;
       return;
     } else {
       return;

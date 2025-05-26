@@ -17,7 +17,7 @@ export const imageUpload = async (file) => {
       },
     });
 
-    return response.data.imageUrl;
+    return response.data.data;
   } catch (error) {
     alertError('Image Upload Error, Please try again!');
     return '';
@@ -37,7 +37,7 @@ export const imagesUpload = async (files) => {
       },
     });
 
-    return response.data.imageUrlList;
+    return response.data.data;
   } catch (error) {
     alertError('Images Upload Error, Please try again!');
     return [];

@@ -214,7 +214,7 @@ const handleClickSubmit = async () => {
         const nightSaveBoothData = nightSaveBoothResponse.data;
 
         if (nightSaveBoothData.success) {
-          newBoothId = nightSaveBoothData.boothId;
+          newBoothId = nightSaveBoothData.data;
         } else {
           alert('부스 정보를 저장하는데 실패했습니다.');
           return;
@@ -231,7 +231,7 @@ const handleClickSubmit = async () => {
         });
         const daySaveBoothData = daySaveBoothResponse.data;
         if (daySaveBoothData.success) {
-          newBoothId = daySaveBoothData.boothId;
+          newBoothId = daySaveBoothData.data;
         } else {
           alert('부스 정보를 저장하는데 실패했습니다.');
           return;
@@ -249,7 +249,7 @@ const handleClickSubmit = async () => {
 
         const foodSaveBoothData = foodSaveBoothResponse.data;
         if (foodSaveBoothData.success) {
-          newBoothId = foodSaveBoothData.boothId;
+          newBoothId = foodSaveBoothData.data;
         } else {
           alert('부스 정보를 저장하는데실패했습니다.');
           return;
@@ -273,7 +273,7 @@ const handleClickSubmit = async () => {
         });
         const nightSaveBoothData = nightSaveBoothResponse.data;
         if (nightSaveBoothData.success) {
-          newBoothId = nightSaveBoothData.boothId;
+          newBoothId = nightSaveBoothData.data;
         } else {
           alert('부스 정보를 저장하는데 실패했습니다.');
           return;
@@ -289,7 +289,7 @@ const handleClickSubmit = async () => {
         });
         const daySaveBoothData = daySaveBoothResponse.data;
         if (daySaveBoothData.success) {
-          newBoothId = daySaveBoothData.boothId;
+          newBoothId = daySaveBoothData.data;
         } else {
           alert('부스 정보를 저장하는데 실패했습니다.');
           return;
@@ -306,7 +306,7 @@ const handleClickSubmit = async () => {
 
         const foodSaveBoothData = foodSaveBoothResponse.data;
         if (foodSaveBoothData.success) {
-          newBoothId = foodSaveBoothData.boothId;
+          newBoothId = foodSaveBoothData.data;
         } else {
           alert('부스 정보를 저장하는데실패했습니다.');
           return;

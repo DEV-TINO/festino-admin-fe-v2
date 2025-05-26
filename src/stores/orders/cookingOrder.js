@@ -13,7 +13,7 @@ export const useCookingOrder = defineStore('cookingOrder', () => {
       const data = response.data;
 
       if (data.success) {
-        cookingOrderList.value = data.cookingList;
+        cookingOrderList.value = data.data;
         return true;
       } else {
         cookingOrderList.value = [];

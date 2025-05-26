@@ -21,7 +21,7 @@ const { boothId } = storeToRefs(useBaseOrderStore);
 const { boothList } = storeToRefs(useBoothListStore);
 const { allOrderStatistics } = storeToRefs(useOrderStatisticsStore);
 
-const month = ref(9);
+const month = ref(5);
 const isLoading = ref(false);
 const day = ref(1);
 const type = ref('all');  // 기본 토글 선택 값을 'all'로 설정
@@ -45,9 +45,9 @@ const currentMonth = new Date().getMonth() + 1;
 const today = new Date().getDate();
 
 const activeDateMap = {
-  11: 1,
-  12: 2,
-  13: 3,
+  26: 1,
+  27: 2,
+  28: 3,
 };
 
 const determineActiveDate = () => {

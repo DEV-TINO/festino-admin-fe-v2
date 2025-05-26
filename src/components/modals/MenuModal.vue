@@ -15,7 +15,8 @@ const { submitModal, closeModal } = useMenuModalStore;
 const { menuInfo } = storeToRefs(useMenuModalStore);
 const { boothInfo } = storeToRefs(boothDetailStore);
 
-const isMainMenu = ref(true);
+// const isMainMenu = ref(true);
+const currentMenuType = ref('MAIN')
 const isSubmit = ref(false);
 const submit = ref(null);
 
@@ -49,7 +50,7 @@ const handleSubmit = () => {
   if (menuInfo.value.menuName === '' || menuInfo.value.menuPrice === '' || menuInfo.value.menuDescription === '') {
     return;
   }
-  menuInfo.value.menuType = isMainMenu.value ? 'MAINMENU' : 'SUBMENU';
+  menuInfo.value.menuType = currentMenuType.value
   submitModal();
   isSubmit.value = false;
 };
@@ -61,7 +62,7 @@ const allowKeyEnter = (event) => {
 };
 
 onMounted(() => {
-  isMainMenu.value = menuInfo.value.menuType === 'MAINMENU';
+  currentMenuType.value = 'MAIN'
   submit.value?.focus();
 });
 </script>
@@ -166,15 +167,21 @@ onMounted(() => {
         <div v-if="ADMIN_CATEGORY[boothInfo.adminCategory] === 'night'" class="flex items-center w-full">
           <div class="w-[80px] shrink-0"></div>
           <div class="flex items-center gap-[28px]">
-            <div class="w-[110px] flex gap-2 cursor-pointer text-sm" @click="isMainMenu = true">
-              <IconRadio :is-active="isMainMenu" />
+            <div class="w-[110px] flex gap-2 cursor-pointer text-sm" @click="currentMenuType = 'MAIN'">
+              <IconRadio :is-active="currentMenuType === 'MAIN'" />
               <div>메인 메뉴</div>
             </div>
           </div>
           <div v-if="ADMIN_CATEGORY[boothInfo.adminCategory] === 'night'" class="flex items-center gap-[28px]">
-            <div class="w-[110px] flex gap-2 cursor-pointer text-sm" @click="isMainMenu = false">
-              <IconRadio :is-active="!isMainMenu" />
+            <div class="w-[110px] flex gap-2 cursor-pointer text-sm" @click="currentMenuType = 'SUB'">
+              <IconRadio :is-active="currentMenuType === 'SUB'" />
               <div>서브 메뉴</div>
+            </div>
+          </div>
+          <div v-if="ADMIN_CATEGORY[boothInfo.adminCategory] === 'night'" class="flex items-center gap-[28px]">
+            <div class="w-[110px] flex gap-2 cursor-pointer text-sm" @click="currentMenuType = 'CALLSERVICE'">
+              <IconRadio :is-active="currentMenuType === 'CALLSERVICE'" />
+              <div>서비스 메뉴</div>
             </div>
           </div>
         </div>

@@ -13,7 +13,7 @@ export const useFinishOrder = defineStore('finishOrder', () => {
       const data = response.data;
 
       if (data.success) {
-        finishOrderList.value = data.finishList;
+        finishOrderList.value = data.data;
         return true;
       } else {
         finishOrderList.value = [];

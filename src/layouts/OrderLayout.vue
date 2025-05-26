@@ -86,7 +86,7 @@ const getDetailOrder = async (orderId) => {
     const data = response.data;
 
     if (data.success) {
-      return data.orderInfo;
+      return data.data;
     } else {
       return false;
     }

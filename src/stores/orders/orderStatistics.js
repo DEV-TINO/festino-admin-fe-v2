@@ -18,7 +18,7 @@ export const useOrderStatistics = defineStore('orderStatistics', () => {
       const data = response.data;
 
       if (data.success) {
-        allOrderStatistics.value = data.statistic;
+        allOrderStatistics.value = data.data;
       } else {
         allOrderStatistics.value = [];
       }

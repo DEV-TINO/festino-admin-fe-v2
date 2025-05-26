@@ -39,7 +39,7 @@ export const useReserveList = defineStore('reserveList', () => {
       const data = response.data;
       if (data.success) {
         setReserveList({
-          data: data.reservationInfo.reservationList,
+          data: data.data.reservationList,
           type,
         });
       } else {

@@ -67,8 +67,9 @@ export const ADMIN_CATEGORY = {
 };
 
 export const MENU_TYPE = {
-  MAINMENU: '메인 메뉴',
-  SUBMENU: '서브 메뉴',
+  MAIN: '메인 메뉴',
+  SUB: '서브 메뉴',
+  CALLSERVICE: '서비스'
 };
 
 export const RESERVE_TYPE = {
@@ -105,9 +106,9 @@ export const ORDER_URL = {
 };
 
 export const DATES = {
-  11: '수',
-  12: '목',
-  13: '금',
+  26: '월',
+  27: '화',
+  28: '수',
 };
 
 export const STATISTICS_TYPE = {

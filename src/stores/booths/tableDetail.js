@@ -22,8 +22,8 @@ export const useTableDetail = defineStore('tableDetail', () => {
     try {
       const res = await api.get(`/admin/order/table/booth/${boothId}`);
       if (res.data.success) {
-        tableNumList.value = res.data.tableNumList;
-        tableNum.value = res.data.tableNumList.length;
+        tableNumList.value = res.data.data;
+        tableNum.value = res.data.data.length;
       } else {
         alertError(`${res.data.message}`);
       }

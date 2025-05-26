@@ -29,7 +29,7 @@ export const useBaseOrder = defineStore('baseOrder', () => {
       const data = response.data;
 
       if (data.success) {
-        allTableOrders.value = data.orderList;
+        allTableOrders.value = data.data;
       } else {
         allTableOrders.value = [];
       }

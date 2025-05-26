@@ -231,7 +231,7 @@ export const useOrderPopup = defineStore('orderPopup', () => {
       if (selectType.value === 'detail' || selectType.value === 'complete') return;
       const orderId = selectType.value === 'cooking' ? cookingInfo.value.cook.orderId : orderInfo.value.orderId;
       const res = await api.get(`/admin/booth/${boothId.value}/order/${orderId}`);
-      note.value = res.data.orderInfo.note;
+      note.value = res.data.data.note;
     } catch (error) {
       console.error(error);
     }

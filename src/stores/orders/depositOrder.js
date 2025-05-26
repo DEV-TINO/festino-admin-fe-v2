@@ -13,7 +13,7 @@ export const useDepositOrder = defineStore('depositOrder', () => {
       const data = response.data;
 
       if (data.success) {
-        waitDepositOrderList.value = data.waitDepositList;
+        waitDepositOrderList.value = data.data;
         return true;
       } else {
         waitDepositOrderList.value = [];

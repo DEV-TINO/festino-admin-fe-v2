@@ -12,7 +12,7 @@ export const useAllOrder = defineStore('allOrder', () => {
       const data = response.data;
 
       if (data.success) {
-        allOrder.value = data.OrderList;
+        allOrder.value = data.data;
         return true;
       } else {
         allOrder.value = [];

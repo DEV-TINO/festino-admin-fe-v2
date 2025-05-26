@@ -36,7 +36,7 @@ export const useUser = defineStore('user', () => {
   const isUserVaild = async () => {
     try {
       const response = await api.post('/admin/user/role');
-      isAdmin.value = response.data.role;
+      isAdmin.value = response.data.data;
       isValidate.value = response.data.success;
       return {
         isAdmin: isAdmin.value,
@@ -59,7 +59,7 @@ export const useUser = defineStore('user', () => {
       const data = response.data;
 
       if (data.success) {
-        userOwnBoothId.value = data.boothId;
+        userOwnBoothId.value = data.data;
         return userOwnBoothId.value;
       } else {
         userOwnBoothId.value = '';
@@ -82,7 +82,7 @@ export const useUser = defineStore('user', () => {
       const data = response.data;
 
       if (data.success) {
-        userOwnBoothId.value = data.boothId;
+        userOwnBoothId.value = data.data;
         return boothId === userOwnBoothId.value;
       } else {
         userOwnBoothId.value = '';
