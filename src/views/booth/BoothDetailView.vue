@@ -430,6 +430,24 @@ onMounted(async () => {
             </div>
           </div>
         </div>
+        <div 
+          v-if="ADMIN_CATEGORY[boothInfo.adminCategory] === 'night'"
+          class="flex gap-6 flex-col"
+        >
+          <div
+            v-if="boothInfo.isTossPay"
+            class="flex gap-2 md:gap-4 items-center flex-wrap"
+          >
+            <div class="text-primary-800 flex items-center justify-center font-semibold text-md">
+              토스페이
+            </div>
+            <div class="relative w-full">
+              <div class="w-full py-3 border border-primary-800 rounded-xl px-[20px] text-sm break-all">
+                {{ boothInfo?.tossPay ?? '' }}
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </form>
   </div>

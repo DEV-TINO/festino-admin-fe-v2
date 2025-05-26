@@ -29,6 +29,8 @@ export const useBoothDetail = defineStore('boothDetail', () => {
     isOpen: true,
     isOrder: true,
     isReservation: true,
+    isTossPay: true,
+    tossPay: '',
     totalReservationNum: 0,
     accountInfo: {
       account: '',

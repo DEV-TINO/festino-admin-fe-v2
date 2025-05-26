@@ -45,6 +45,12 @@ const useReservation = ref(false);
 const useCoupon = ref(false);
 const useOrder = ref(false);
 
+const isTossPay = ref(false);
+
+const toggleTossPay = () => {
+  isTossPay.value = !isTossPay.value;
+};
+
 const handleFileinput = (event) => {
   if (isSubmit.value) return;
   const files = event.target.files;
@@ -197,6 +203,8 @@ const handleClickSubmit = async () => {
     boothImage: boothInfo.value.boothImage,
     location: '',
     isOpen: boothInfo.value.isOpen,
+    isTossPay: boothInfo.value.isTossPay,
+    tossPay: boothInfo.value.tossPay
   };
 
   // Make Booth or Patch
@@ -208,6 +216,7 @@ const handleClickSubmit = async () => {
           boothId: props.boothId,
           isOrder: useOrder.value,
           isReservation: useReservation.value,
+          isTossPay: isTossPay.value,
           accountInfo: boothInfo.value.accountInfo,
         });
 
@@ -388,6 +397,7 @@ onMounted(async () => {
       fileUrls.value = [...boothInfo.value.boothImage];
       serviceHours.value = `${boothInfo.value.openTime} ~ ${boothInfo.value.closeTime}`;
       isOpen.value = boothInfo.value.isOpen;
+      isTossPay.value = boothInfo.value.isTossPay;
 
       if (boothType.value === 'night') {
         useReservation.value = boothInfo.value.isReservation;
@@ -862,6 +872,30 @@ onMounted(async () => {
             <div class="flex items-center justify-center gap-2 flex-shrink-0 cursor-pointer" @click="useOrder = false">
               <IconRadio :is-active="!useOrder" />
               <div class="text-secondary-900 text-sm font-semibold">사용 비동의</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex gap-2 md:gap-4 items-center flex-wrap">
+          <div class="text-primary-800-light-86 flex items-center justify-center font-semibold text-md">
+            토스페이
+          </div>
+          <IconBoothListToggle :isActive="isTossPay" @click="toggleTossPay" />
+
+          <div v-if="isTossPay" class="relative w-full">
+            <input
+              class="w-full h-[45px] border border-gray-500 rounded-xl px-[20px] focus:border-primary-800 text-sm"
+              type="text"
+              maxlength="200"
+              placeholder="토스페이 딥 링크"
+              v-model="boothInfo.tossPay"
+              :disabled="isSubmit"
+            />
+            <div
+              v-if="!boothInfo.tossPay && isSubmit"
+              class="absolute left-0 xl:left-4 top-[52px] text-xs text-red-600"
+            >
+              * 링크를 작성해주세요
             </div>
           </div>
         </div>
