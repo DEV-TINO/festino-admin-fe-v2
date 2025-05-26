@@ -375,7 +375,7 @@ const handleClickSubmit = async () => {
 
   if (ADMIN_CATEGORY[boothInfo.value.adminCategory] === 'night') {
     // const tableDetailResult = await submitTableDetail(props.boothId);
-    if (!tableDetailResult) return;
+    // if (!tableDetailResult) return;
   }
 
   isSubmit.value = false;
