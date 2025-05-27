@@ -34,12 +34,13 @@ export const useReserveList = defineStore('reserveList', () => {
   };
 
   const getReserveList = async ({ boothId, type }) => {
+    console.log('[getReserveList] boothId:', boothId, 'type:', type);
     try {
       const response = await api.get(`/admin/reservation/${type}/booth/${boothId}`);
       const data = response.data;
       if (data.success) {
         setReserveList({
-          data: data.reservationList,
+          data: data.data.reservationList,
           type,
         });
       } else {
@@ -50,7 +51,6 @@ export const useReserveList = defineStore('reserveList', () => {
       }
     } catch (error) {
       console.error(error);
-      // alertError(error);
     }
   };
 
